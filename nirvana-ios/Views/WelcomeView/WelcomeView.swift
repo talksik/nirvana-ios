@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct WelcomeView: View {
+    let screenWidth = UIScreen.main.bounds.width
+    let screenHeight = UIScreen.main.bounds.height
+    
     var body: some View {
         VStack {
             // nav bar
@@ -19,26 +22,27 @@ struct WelcomeView: View {
                     .renderingMode(.original)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .padding(.horizontal, 30)
-                    .padding(.top, 30)
+                
+                Spacer()
                 
                 VStack(alignment: .leading) {
                     
                     Text("Your ")
                         .font(.title)
+                        .foregroundColor(NirvanaColor.black)
                     + Text("minimalist ")
                         .font(.title)
                         .foregroundColor(NirvanaColor.teal)
                     + Text("social media.")
                         .font(.title)
+                        .foregroundColor(NirvanaColor.black)
                     
                     Text("tired of the rat race on insta, tik-tok, snap, meta?")
                         .foregroundColor(Color.gray)
                         .padding(.top, 5)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
-                .frame(maxWidth: .infinity)
-                .padding(.horizontal, 30)
-                .padding(.top, 20)
+                .frame(maxWidth: screenWidth - 20)
                 
                 Spacer()
                 
@@ -51,35 +55,33 @@ struct WelcomeView: View {
                             Text("Start Your Detox")
                                 .bold()
                                 .foregroundColor(NirvanaColor.white)
-                        }
-                    )
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 25)
-                        .background(NirvanaColor.teal)
-                        .clipShape(Capsule())
-        //                        .shadow(color: NirvanaColors.teal, radius: 3, x: 1, y: 2)
-        //                        .cornerRadius(8)
-                
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 25)
+                                .background(NirvanaColor.teal)
+                                .clipShape(Capsule())
+                                .shadow(radius:10)
+                        })
+                        
+                        
                     Button(
                         action: {
-                            print("link to w ebsite learn more clicked")
+                            print("link to website learn more clicked")
                         },
                         label: {
                             Text("Learn More")
                                 .bold()
-                        }
-                    )
+                        })
                         .background(NirvanaColor.bgLightGrey)
 
                     //learn more button to usenirvana.com
                 }
-                .frame(maxWidth: .infinity)
-                .padding(.horizontal, 30)
                 .padding(.top, 20)
+                .frame(maxWidth: 300)
                 
                 Spacer()
             }
             .padding()
+            .frame(maxWidth: screenWidth - 20)
 
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
