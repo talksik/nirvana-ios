@@ -30,50 +30,70 @@ struct ChatsCarouselView: View {
     }
      
     var mainCarouselView: some View {
-        TabView(selection: $selectedUserId) {
-            ForEach(viewModel.carouselUsers) { carouselUser in
-                GeometryReader {proxy in
-                    let minX = proxy.frame(in: .global).minX
-                    let scale = getScale(proxy: proxy)
-                    
-                    Image(carouselUser.profilePictureUrl)
-                        .renderingMode(.original)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .clipShape(Circle())
-                        .shadow(radius: 10)
-                        .rotation3DEffect(.degrees(minX / -10), axis: (x: 0, y: 1, z: 0))
-                        .blur(radius: abs(minX) / 40)
-                        .scaleEffect()
-                        .padding(50)
+        VStack {
+            TabView(selection: $selectedUserId) {
+                ForEach(viewModel.carouselUsers) { carouselUser in
+                    GeometryReader {proxy in
+                        let minX = proxy.frame(in: .global).minX
+                        let scale = getScale(proxy: proxy)
+                        
+                        Image(carouselUser.profilePictureUrl)
+                            .renderingMode(.original)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .clipShape(Circle())
+                            .shadow(radius: 10)
+                            .rotation3DEffect(.degrees(minX / -10), axis: (x: 0, y: 1, z: 0))
+                            .blur(radius: abs(minX) / 40)
+                            .scaleEffect()
+                            .padding(50)
+                    }
+                    .frame(width: UIScreen.main.bounds.width)
+                    .tag(carouselUser.id)
                 }
-                .frame(width: UIScreen.main.bounds.width)
-                .tag(carouselUser.id)
             }
-        }
-        .tabViewStyle(.page(indexDisplayMode: .never))
-        .padding(.vertical, 60)
-        .overlay(
-            ScrollViewReader{proxy in
+            .tabViewStyle(.page(indexDisplayMode: .never))
+            .padding(.top, 50)
+            .onAppear {
+                self.selectedUserId = self.viewModel.carouselUsers.first?.id ?? ""
+            }
+            
+            ScrollViewReader {proxy in
                 ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 15) {
+                    HStack {
                         ForEach(viewModel.carouselUsers) {user in
+                            let isSelected = user.id == self.selectedUserId
+//                            let isLeftOrRight = !isSelected &&
+                            
                             Image(user.profilePictureUrl)
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
-                                .frame(width: 70, height: 60)
                                 .cornerRadius(12)
+                                .clipShape(Circle())
+                                .shadow(radius: 10)
+                                .scaleEffect(isSelected ? 1.2 : 1)
+                                .padding(.all, 16.0)
+                                .id(user.id)
+                                .onTapGesture {
+                                    withAnimation {
+                                        self.selectedUserId = user.id
+                                    }
+                                }
                         }
                     }
-                    .padding()
+                    .frame(maxHeight: 100)
+                    .padding(.leading, UIScreen.main.bounds.width * 0.4)
+                    .padding(.vertical, 20)
                 }
-                .frame(height: 80)
-                .background(Color.blue)
-            },
+                .onChange(of: self.selectedUserId) { _ in
+                    withAnimation {
+                        proxy.scrollTo(self.selectedUserId, anchor: .bottom)
+                    }
+                }
+            }
             
-            alignment: .bottom
-        )
-        
+            Spacer()
+        }
     }
     
     //the bottom navigation of the small profile pictures
