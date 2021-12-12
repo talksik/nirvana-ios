@@ -14,9 +14,7 @@ struct HomeView: View {
             
             ChatsCarouselView()
             
-            FooterControlsView()
-            
-            Spacer()
+            FooterControlsView()            
         }
         .frame(maxWidth:.infinity, maxHeight: .infinity)
         .accentColor(NirvanaColor.teal)

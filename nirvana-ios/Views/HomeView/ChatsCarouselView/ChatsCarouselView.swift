@@ -35,11 +35,10 @@ struct ChatsCarouselView: View {
                             .shadow(radius: 10)
                             .rotation3DEffect(.degrees(minX / -10), axis: (x: 0, y: 1, z: 0))
                             .blur(radius: abs(minX) / 40)
-                            .scaleEffect()
-                            .padding(40)
-                            .frame(maxWidth: UIScreen.main.bounds.width)
-                        
+                            
                     }
+                    .frame(maxWidth: UIScreen.main.bounds.width - 100, maxHeight: UIScreen.main.bounds.height - 200)
+                    .padding(20)
                     .tag(carouselUser.id)
                 }
             }
@@ -51,7 +50,7 @@ struct ChatsCarouselView: View {
             // Bottom navigation carousel
             ScrollViewReader {proxy in
                 ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 20) {
+                    HStack {
                         ForEach(viewModel.carouselUsers) {user in
                             let isSelected = user.id == self.selectedUserId
 //                            let isLeftOrRight = !isSelected &&
@@ -75,12 +74,10 @@ struct ChatsCarouselView: View {
                                         self.selectedUserId = user.id
                                     }
                                 }
-                                .frame(maxHeight: 60)
+                                .padding(20)
                         }
                     }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .padding(.top, 40)
-                    .padding(.horizontal, 40)
+                    .frame(maxHeight: 100)
                     
                 }
                 .onChange(of: self.selectedUserId) { _ in

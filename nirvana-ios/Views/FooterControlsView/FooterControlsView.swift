@@ -27,7 +27,7 @@ struct FooterControlsView: View {
             }
         }
         .frame(maxWidth: .infinity)
-        .padding(.horizontal, 30)
+        .padding()
     }
 }
 
