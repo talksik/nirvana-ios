@@ -24,7 +24,7 @@ struct ChatsCarouselView: View {
                         .blur(radius: abs(minX) / 40)
 
                     Text("\(minX)")
-                }gi
+                }
             }
         }
         .tabViewStyle(.page(indexDisplayMode: .always))
