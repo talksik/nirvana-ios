@@ -8,44 +8,47 @@
 import SwiftUI
 
 struct ChatsCarouselView: View {
+    @StateObject var viewModel:ChatsCarouselViewModel = ChatsCarouselViewModel()
+    
     var body: some View {
         mainCarouselView
     }
      
     var mainCarouselView: some View {
         TabView {
-            ForEach(/*@START_MENU_TOKEN@*/0 ..< 5/*@END_MENU_TOKEN@*/) { item in
+            ForEach(viewModel.carouselUsers) { carouselUser in
                 GeometryReader {proxy in
                     let minX = proxy.frame(in: .global).minX
-
-                    carouselUser
-                        .rotation3DEffect(.degrees(minX / -10), axis: (x: 0, y: 1, z: 0))
-                        .shadow(color: Color("Shadow").opacity(0.3), radius: 10, x:0, y:10)
-                        .blur(radius: abs(minX) / 40)
-
-                    Text("\(minX)")
+                    
+                        Image(carouselUser.profilePictureUrl)
+                            .renderingMode(.original)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .clipShape(Circle())
+                            .shadow(radius: 10)
+                            .padding()
+                            .rotation3DEffect(.degrees(minX / -10), axis: (x: 0, y: 1, z: 0))
+                            .blur(radius: abs(minX) / 40)
+                            
+                    
                 }
             }
         }
         .tabViewStyle(.page(indexDisplayMode: .always))
         .frame(height: 400)
+        .padding(.top, 50)
+        .padding(.horizontal, 30)
+        
     }
     
     //the bottom navigation of the small profile pictures
 //    var navigationCarouselView: some View { }
     
-    var carouselUser: some View {
-        Image("dummy_profile_picture")
-            .renderingMode(.original)
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-            .cornerRadius(0)
-            .clipShape(Circle())
-    }
 }
 
 struct ChatsCarouselView_Previews: PreviewProvider {
     static var previews: some View {
-        ChatsCarouselView()
+        HomeView()
     }
 }
+

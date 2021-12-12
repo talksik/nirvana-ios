@@ -8,6 +8,5 @@
 import Foundation
 
 final class HomeViewModel: ObservableObject {
-    @Published var personalUsers: [User] = []
     
 }

@@ -22,6 +22,7 @@
 		891A160B2765732700B26659 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891A160A2765732700B26659 /* HomeViewModel.swift */; };
 		891A160E27657CEA00B26659 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891A160D27657CEA00B26659 /* User.swift */; };
 		891A1611276590B000B26659 /* ChatsCarouselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891A1610276590B000B26659 /* ChatsCarouselView.swift */; };
+		891A16132765A44300B26659 /* ChatsCarouselViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891A16122765A44300B26659 /* ChatsCarouselViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +43,7 @@
 		891A160A2765732700B26659 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		891A160D27657CEA00B26659 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		891A1610276590B000B26659 /* ChatsCarouselView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsCarouselView.swift; sourceTree = "<group>"; };
+		891A16122765A44300B26659 /* ChatsCarouselViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsCarouselViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -162,6 +164,7 @@
 			isa = PBXGroup;
 			children = (
 				891A1610276590B000B26659 /* ChatsCarouselView.swift */,
+				891A16122765A44300B26659 /* ChatsCarouselViewModel.swift */,
 			);
 			path = ChatsCarouselView;
 			sourceTree = "<group>";
@@ -244,6 +247,7 @@
 				891A15F5276557AB00B26659 /* colors.swift in Sources */,
 				891A15F9276563CA00B26659 /* WelcomeView.swift in Sources */,
 				891A1611276590B000B26659 /* ChatsCarouselView.swift in Sources */,
+				891A16132765A44300B26659 /* ChatsCarouselViewModel.swift in Sources */,
 				891A15E127653A7000B26659 /* nirvana_iosApp.swift in Sources */,
 				891A160127656FB200B26659 /* Footer.swift in Sources */,
 				891A15FF27656F9200B26659 /* HeaderView.swift in Sources */,
