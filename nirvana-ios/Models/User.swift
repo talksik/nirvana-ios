@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-class User: Identifiable {
+struct User: Identifiable, Hashable {
     var id = UUID().uuidString
     
     var profilePictureUrl:String
