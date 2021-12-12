@@ -11,6 +11,17 @@
 		891A15E327653A7000B26659 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891A15E227653A7000B26659 /* ContentView.swift */; };
 		891A15E527653A7100B26659 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 891A15E427653A7100B26659 /* Assets.xcassets */; };
 		891A15E827653A7100B26659 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 891A15E727653A7100B26659 /* Preview Assets.xcassets */; };
+		891A15F12765528700B26659 /* Satisfy-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 891A15F02765528700B26659 /* Satisfy-Regular.ttf */; };
+		891A15F5276557AB00B26659 /* colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891A15F4276557AB00B26659 /* colors.swift */; };
+		891A15F9276563CA00B26659 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891A15F8276563CA00B26659 /* WelcomeView.swift */; };
+		891A15FD276566B800B26659 /* constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891A15FC276566B800B26659 /* constants.swift */; };
+		891A15FF27656F9200B26659 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891A15FE27656F9200B26659 /* HeaderView.swift */; };
+		891A160127656FB200B26659 /* Footer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891A160027656FB200B26659 /* Footer.swift */; };
+		891A160327656FC700B26659 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891A160227656FC700B26659 /* HomeView.swift */; };
+		891A1607276572A800B26659 /* Onboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891A1606276572A800B26659 /* Onboarding.swift */; };
+		891A160B2765732700B26659 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891A160A2765732700B26659 /* HomeViewModel.swift */; };
+		891A160E27657CEA00B26659 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891A160D27657CEA00B26659 /* User.swift */; };
+		891A1611276590B000B26659 /* ChatsCarouselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891A1610276590B000B26659 /* ChatsCarouselView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +30,18 @@
 		891A15E227653A7000B26659 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		891A15E427653A7100B26659 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		891A15E727653A7100B26659 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		891A15F02765528700B26659 /* Satisfy-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Satisfy-Regular.ttf"; sourceTree = "<group>"; };
+		891A15F32765554600B26659 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		891A15F4276557AB00B26659 /* colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = colors.swift; sourceTree = "<group>"; };
+		891A15F8276563CA00B26659 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
+		891A15FC276566B800B26659 /* constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = constants.swift; sourceTree = "<group>"; };
+		891A15FE27656F9200B26659 /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
+		891A160027656FB200B26659 /* Footer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Footer.swift; sourceTree = "<group>"; };
+		891A160227656FC700B26659 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		891A1606276572A800B26659 /* Onboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Onboarding.swift; sourceTree = "<group>"; };
+		891A160A2765732700B26659 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		891A160D27657CEA00B26659 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		891A1610276590B000B26659 /* ChatsCarouselView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsCarouselView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +74,11 @@
 		891A15DF27653A7000B26659 /* nirvana-ios */ = {
 			isa = PBXGroup;
 			children = (
+				891A160C27657CD600B26659 /* Models */,
+				891A1609276572C600B26659 /* Globals */,
+				891A15F62765639B00B26659 /* Views */,
+				891A15F32765554600B26659 /* Info.plist */,
+				891A15F2276552ED00B26659 /* fonts */,
 				891A15E027653A7000B26659 /* nirvana_iosApp.swift */,
 				891A15E227653A7000B26659 /* ContentView.swift */,
 				891A15E427653A7100B26659 /* Assets.xcassets */,
@@ -65,6 +93,77 @@
 				891A15E727653A7100B26659 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		891A15F2276552ED00B26659 /* fonts */ = {
+			isa = PBXGroup;
+			children = (
+				891A15F02765528700B26659 /* Satisfy-Regular.ttf */,
+			);
+			path = fonts;
+			sourceTree = "<group>";
+		};
+		891A15F62765639B00B26659 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				891A16052765726800B26659 /* Templates */,
+				891A16042765725D00B26659 /* WelcomeView */,
+				891A1608276572BB00B26659 /* HomeView */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		891A16042765725D00B26659 /* WelcomeView */ = {
+			isa = PBXGroup;
+			children = (
+				891A15F8276563CA00B26659 /* WelcomeView.swift */,
+			);
+			path = WelcomeView;
+			sourceTree = "<group>";
+		};
+		891A16052765726800B26659 /* Templates */ = {
+			isa = PBXGroup;
+			children = (
+				891A160027656FB200B26659 /* Footer.swift */,
+				891A15FE27656F9200B26659 /* HeaderView.swift */,
+				891A1606276572A800B26659 /* Onboarding.swift */,
+			);
+			path = Templates;
+			sourceTree = "<group>";
+		};
+		891A1608276572BB00B26659 /* HomeView */ = {
+			isa = PBXGroup;
+			children = (
+				891A160F2765909400B26659 /* ChatsCarouselView */,
+				891A160227656FC700B26659 /* HomeView.swift */,
+				891A160A2765732700B26659 /* HomeViewModel.swift */,
+			);
+			path = HomeView;
+			sourceTree = "<group>";
+		};
+		891A1609276572C600B26659 /* Globals */ = {
+			isa = PBXGroup;
+			children = (
+				891A15F4276557AB00B26659 /* colors.swift */,
+				891A15FC276566B800B26659 /* constants.swift */,
+			);
+			path = Globals;
+			sourceTree = "<group>";
+		};
+		891A160C27657CD600B26659 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				891A160D27657CEA00B26659 /* User.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		891A160F2765909400B26659 /* ChatsCarouselView */ = {
+			isa = PBXGroup;
+			children = (
+				891A1610276590B000B26659 /* ChatsCarouselView.swift */,
+			);
+			path = ChatsCarouselView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -125,6 +224,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				891A15F12765528700B26659 /* Satisfy-Regular.ttf in Resources */,
 				891A15E827653A7100B26659 /* Preview Assets.xcassets in Resources */,
 				891A15E527653A7100B26659 /* Assets.xcassets in Resources */,
 			);
@@ -137,8 +237,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				891A1607276572A800B26659 /* Onboarding.swift in Sources */,
 				891A15E327653A7000B26659 /* ContentView.swift in Sources */,
+				891A160327656FC700B26659 /* HomeView.swift in Sources */,
+				891A160B2765732700B26659 /* HomeViewModel.swift in Sources */,
+				891A15F5276557AB00B26659 /* colors.swift in Sources */,
+				891A15F9276563CA00B26659 /* WelcomeView.swift in Sources */,
+				891A1611276590B000B26659 /* ChatsCarouselView.swift in Sources */,
 				891A15E127653A7000B26659 /* nirvana_iosApp.swift in Sources */,
+				891A160127656FB200B26659 /* Footer.swift in Sources */,
+				891A15FF27656F9200B26659 /* HeaderView.swift in Sources */,
+				891A15FD276566B800B26659 /* constants.swift in Sources */,
+				891A160E27657CEA00B26659 /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -271,6 +381,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"nirvana-ios/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "nirvana-ios/Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -299,6 +410,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"nirvana-ios/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "nirvana-ios/Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
