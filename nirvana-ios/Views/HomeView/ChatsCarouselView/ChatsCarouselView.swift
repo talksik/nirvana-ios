@@ -32,7 +32,7 @@ struct ChatsCarouselView: View {
             TabView(selection: $selectedUserId) {
                 ForEach(viewModel.carouselUsers) { carouselUser in
                     GeometryReader {proxy in
-                        let minX = proxy.frame(in: .global).minX
+                        let minX = proxy.frame(in: .local).minX
                         let scale = getScale(proxy: proxy)
                         
                         Image(carouselUser.profilePictureUrl)
@@ -44,14 +44,14 @@ struct ChatsCarouselView: View {
                             .rotation3DEffect(.degrees(minX / -10), axis: (x: 0, y: 1, z: 0))
                             .blur(radius: abs(minX) / 40)
                             .scaleEffect()
-                            .padding(50)
+                            .padding(40)
+                        
                     }
-                    .frame(width: UIScreen.main.bounds.width)
                     .tag(carouselUser.id)
                 }
             }
+            .frame(maxWidth: UIScreen.main.bounds.width * 0.8)
             .tabViewStyle(.page(indexDisplayMode: .never))
-            .padding(.top, 50)
             .onAppear {
                 self.selectedUserId = self.viewModel.carouselUsers.first?.id ?? ""
             }
@@ -59,7 +59,7 @@ struct ChatsCarouselView: View {
             // Bottom navigation carousel
             ScrollViewReader {proxy in
                 ScrollView(.horizontal, showsIndicators: false) {
-                    HStack {
+                    HStack(spacing: 20) {
                         ForEach(viewModel.carouselUsers) {user in
                             let isSelected = user.id == self.selectedUserId
 //                            let isLeftOrRight = !isSelected &&
@@ -67,23 +67,28 @@ struct ChatsCarouselView: View {
                             Image(user.profilePictureUrl)
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
-                                .cornerRadius(12)
                                 .clipShape(Circle())
                                 .shadow(radius: 10)
                                 .scaleEffect(isSelected ? 1 : 0.7)
                                 .blur(radius: isSelected ? 0 : 0.9)
-                                .padding(25)
+//                                .padding(25)
                                 .id(user.id)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 100)
+                                        .strokeBorder(NirvanaColors.teal, lineWidth: 2)
+                                        .opacity(isSelected ? 1 : 0)
+                                )
                                 .onTapGesture {
                                     withAnimation {
                                         self.selectedUserId = user.id
                                     }
                                 }
-                                .frame(minWidth: 100)
+                                .frame(maxHeight: 75)
                         }
                     }
-                    .frame(maxWidth: .infinity, maxHeight: 50)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .padding(.vertical, 40)
+                    .padding(.horizontal, 40)
                     
                 }
                 .onChange(of: self.selectedUserId) { _ in
@@ -92,8 +97,6 @@ struct ChatsCarouselView: View {
                     }
                 }
             }
-            
-            Spacer()
         }
     }
     

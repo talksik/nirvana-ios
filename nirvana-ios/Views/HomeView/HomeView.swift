@@ -14,6 +14,9 @@ struct HomeView: View {
             
             ChatsCarouselView()
             
+            Text("This is the region for the bottom actions")
+                .padding(.vertical, 10)
+            
             Spacer()
         }
         .frame(maxWidth:.infinity, maxHeight: .infinity)
