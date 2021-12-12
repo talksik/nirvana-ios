@@ -9,26 +9,48 @@ import SwiftUI
 
 struct FooterControlsView: View {
     @StateObject var viewModel:FooterControlsViewModel = FooterControlsViewModel()
+    @State private var scaleValue = CGFloat(1)
     
     var body: some View {
         HStack(alignment: .center) {
             Spacer()
             
-            Button {
-                print("Button was pressed!")
-            } label: {
-                var icon:String = viewModel.isRecording ? "waveform" : "mic.fill"
+            Image(systemName: viewModel.isRecording ? "waveform" : "mic.fill")
+                .foregroundColor(.white)
+                .padding()
+                .background(NirvanaColor.teal)
+                .clipShape(Circle())
+                .shadow(radius: 10)
+//                .scaleEffect(self.scaleValue)
+                .onLongPressGesture {
+                    
+                }
+                .animation(.linear(duration:2), value: viewModel.isRecording)
+                .onTapGesture {
+                    viewModel.onStartRecording()
+                    print("tap gesture active")
+                }
+//                .onTapGesture(
+//                    touchBegan: {
+//                    withAnimation {
+//                        self.scaleValue = 1.2
+//                    }
+//
+//                    viewModel.onStartRecording()
+//
+//                    print("long press active")
+//                }, touchEnd: {_ in
+//                    withAnimation {
+//                        self.scaleValue = 1.0
+//                    }
+//
+//                    print("long press not active anymore")
+//                }
                 
-                Image(systemName: icon)
-                    .foregroundColor(.white)
-                    .padding()
-                    .background(NirvanaColor.teal)
-                    .clipShape(Circle())
             }
+            .frame(maxWidth: .infinity)
+            .padding()
         }
-        .frame(maxWidth: .infinity)
-        .padding()
-    }
 }
 
 struct FooterControlsView_Previews: PreviewProvider {
