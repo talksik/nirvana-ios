@@ -70,18 +70,21 @@ struct ChatsCarouselView: View {
                                 .cornerRadius(12)
                                 .clipShape(Circle())
                                 .shadow(radius: 10)
-                                .scaleEffect(isSelected ? 1.2 : 0.7)
-                                .padding(.leading, 30.0)
+                                .scaleEffect(isSelected ? 1 : 0.7)
+                                .blur(radius: isSelected ? 0 : 0.9)
+                                .padding(25)
                                 .id(user.id)
                                 .onTapGesture {
                                     withAnimation {
                                         self.selectedUserId = user.id
                                     }
                                 }
+                                .frame(minWidth: 100)
                         }
                     }
-                    .frame(maxHeight: 50)
-                    .padding(.vertical, 20)
+                    .frame(maxWidth: .infinity, maxHeight: 50)
+                    .padding(.vertical, 40)
+                    
                 }
                 .onChange(of: self.selectedUserId) { _ in
                     withAnimation {
