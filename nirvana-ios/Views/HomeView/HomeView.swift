@@ -14,14 +14,13 @@ struct HomeView: View {
             
             ChatsCarouselView()
             
-            Text("This is the region for the bottom actions")
-                .padding(.vertical, 10)
+            FooterControlsView()
             
             Spacer()
         }
         .frame(maxWidth:.infinity, maxHeight: .infinity)
-        .accentColor(NirvanaColors.teal)
-        .background(NirvanaColors.bgLightGrey)
+        .accentColor(NirvanaColor.teal)
+        .background(NirvanaColor.bgLightGrey)
     }
 }
 

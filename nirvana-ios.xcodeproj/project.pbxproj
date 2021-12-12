@@ -16,13 +16,15 @@
 		891A15F9276563CA00B26659 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891A15F8276563CA00B26659 /* WelcomeView.swift */; };
 		891A15FD276566B800B26659 /* constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891A15FC276566B800B26659 /* constants.swift */; };
 		891A15FF27656F9200B26659 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891A15FE27656F9200B26659 /* HeaderView.swift */; };
-		891A160127656FB200B26659 /* Footer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891A160027656FB200B26659 /* Footer.swift */; };
+		891A160127656FB200B26659 /* FooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891A160027656FB200B26659 /* FooterView.swift */; };
 		891A160327656FC700B26659 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891A160227656FC700B26659 /* HomeView.swift */; };
 		891A1607276572A800B26659 /* Onboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891A1606276572A800B26659 /* Onboarding.swift */; };
 		891A160B2765732700B26659 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891A160A2765732700B26659 /* HomeViewModel.swift */; };
 		891A160E27657CEA00B26659 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891A160D27657CEA00B26659 /* User.swift */; };
 		891A1611276590B000B26659 /* ChatsCarouselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891A1610276590B000B26659 /* ChatsCarouselView.swift */; };
 		891A16132765A44300B26659 /* ChatsCarouselViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891A16122765A44300B26659 /* ChatsCarouselViewModel.swift */; };
+		892179E42765FEB8001E6C60 /* FooterControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892179E32765FEB8001E6C60 /* FooterControlsView.swift */; };
+		892179E62765FECD001E6C60 /* FooterControlsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892179E52765FECD001E6C60 /* FooterControlsViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,13 +39,15 @@
 		891A15F8276563CA00B26659 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 		891A15FC276566B800B26659 /* constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = constants.swift; sourceTree = "<group>"; };
 		891A15FE27656F9200B26659 /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
-		891A160027656FB200B26659 /* Footer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Footer.swift; sourceTree = "<group>"; };
+		891A160027656FB200B26659 /* FooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FooterView.swift; sourceTree = "<group>"; };
 		891A160227656FC700B26659 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		891A1606276572A800B26659 /* Onboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Onboarding.swift; sourceTree = "<group>"; };
 		891A160A2765732700B26659 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		891A160D27657CEA00B26659 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		891A1610276590B000B26659 /* ChatsCarouselView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsCarouselView.swift; sourceTree = "<group>"; };
 		891A16122765A44300B26659 /* ChatsCarouselViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsCarouselViewModel.swift; sourceTree = "<group>"; };
+		892179E32765FEB8001E6C60 /* FooterControlsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FooterControlsView.swift; sourceTree = "<group>"; };
+		892179E52765FECD001E6C60 /* FooterControlsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FooterControlsViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +112,7 @@
 		891A15F62765639B00B26659 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				892179E22765FE93001E6C60 /* FooterControlsView */,
 				891A16052765726800B26659 /* Templates */,
 				891A16042765725D00B26659 /* WelcomeView */,
 				891A1608276572BB00B26659 /* HomeView */,
@@ -126,7 +131,7 @@
 		891A16052765726800B26659 /* Templates */ = {
 			isa = PBXGroup;
 			children = (
-				891A160027656FB200B26659 /* Footer.swift */,
+				891A160027656FB200B26659 /* FooterView.swift */,
 				891A15FE27656F9200B26659 /* HeaderView.swift */,
 				891A1606276572A800B26659 /* Onboarding.swift */,
 			);
@@ -167,6 +172,15 @@
 				891A16122765A44300B26659 /* ChatsCarouselViewModel.swift */,
 			);
 			path = ChatsCarouselView;
+			sourceTree = "<group>";
+		};
+		892179E22765FE93001E6C60 /* FooterControlsView */ = {
+			isa = PBXGroup;
+			children = (
+				892179E32765FEB8001E6C60 /* FooterControlsView.swift */,
+				892179E52765FECD001E6C60 /* FooterControlsViewModel.swift */,
+			);
+			path = FooterControlsView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -244,13 +258,15 @@
 				891A15E327653A7000B26659 /* ContentView.swift in Sources */,
 				891A160327656FC700B26659 /* HomeView.swift in Sources */,
 				891A160B2765732700B26659 /* HomeViewModel.swift in Sources */,
+				892179E62765FECD001E6C60 /* FooterControlsViewModel.swift in Sources */,
 				891A15F5276557AB00B26659 /* colors.swift in Sources */,
 				891A15F9276563CA00B26659 /* WelcomeView.swift in Sources */,
 				891A1611276590B000B26659 /* ChatsCarouselView.swift in Sources */,
 				891A16132765A44300B26659 /* ChatsCarouselViewModel.swift in Sources */,
 				891A15E127653A7000B26659 /* nirvana_iosApp.swift in Sources */,
-				891A160127656FB200B26659 /* Footer.swift in Sources */,
+				891A160127656FB200B26659 /* FooterView.swift in Sources */,
 				891A15FF27656F9200B26659 /* HeaderView.swift in Sources */,
+				892179E42765FEB8001E6C60 /* FooterControlsView.swift in Sources */,
 				891A15FD276566B800B26659 /* constants.swift in Sources */,
 				891A160E27657CEA00B26659 /* User.swift in Sources */,
 			);

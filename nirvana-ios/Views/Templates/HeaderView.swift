@@ -20,7 +20,7 @@ struct HeaderView: View {
                 Image(systemName: "list.bullet.circle")
                     .font(Font.system(.largeTitle))
                     .padding()
-                    .foregroundColor(NirvanaColors.teal)
+                    .foregroundColor(NirvanaColor.teal)
                 
             }
             
@@ -33,7 +33,7 @@ struct HeaderView: View {
                     
                 Text("nirvana")
                     .font(Font.custom("Satisfy-Regular", size: 35))
-                    .foregroundColor(NirvanaColors.teal)
+                    .foregroundColor(NirvanaColor.teal)
                     .multilineTextAlignment(.center)
             }
             
@@ -43,7 +43,7 @@ struct HeaderView: View {
                 Image(systemName: "person.crop.circle.badge.plus")
                     .font(Font.system(.largeTitle))
                     .padding()
-                    .foregroundColor(NirvanaColors.teal)
+                    .foregroundColor(NirvanaColor.teal)
             }
                 
         }

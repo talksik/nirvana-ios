@@ -28,7 +28,7 @@ struct WelcomeView: View {
                         .font(.title)
                     + Text("minimalist ")
                         .font(.title)
-                        .foregroundColor(NirvanaColors.teal)
+                        .foregroundColor(NirvanaColor.teal)
                     + Text("social media.")
                         .font(.title)
                     
@@ -50,12 +50,12 @@ struct WelcomeView: View {
                         label: {
                             Text("Start Your Detox")
                                 .bold()
-                                .foregroundColor(NirvanaColors.white)
+                                .foregroundColor(NirvanaColor.white)
                         }
                     )
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 25)
-                        .background(NirvanaColors.teal)
+                        .background(NirvanaColor.teal)
                         .clipShape(Capsule())
         //                        .shadow(color: NirvanaColors.teal, radius: 3, x: 1, y: 2)
         //                        .cornerRadius(8)
@@ -69,7 +69,7 @@ struct WelcomeView: View {
                                 .bold()
                         }
                     )
-                        .background(NirvanaColors.bgLightGrey)
+                        .background(NirvanaColor.bgLightGrey)
 
                     //learn more button to usenirvana.com
                 }
@@ -83,9 +83,9 @@ struct WelcomeView: View {
 
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .accentColor(NirvanaColors.teal)
-        .background(NirvanaColors.bgLightGrey)
-        //        .background(RadialGradient(gradient: Gradient(colors: [NirvanaColors.teal.opacity(0.1), NirvanaColors.bgLightGrey, NirvanaColors.bgLightGrey]), center: .center, startRadius: 0, endRadius: 200)
+        .accentColor(NirvanaColor.teal)
+        .background(NirvanaColor.bgLightGrey)
+        //        .background(RadialGradient(gradient: Gradient(colors: [NirvanaColor.teal.opacity(0.1), NirvanaColor.bgLightGrey, NirvanaColor.bgLightGrey]), center: .center, startRadius: 0, endRadius: 200)
         //        )
 
     }

@@ -36,7 +36,7 @@ extension UIColor {
     }
 }
 
-final class NirvanaColors {
+final class NirvanaColor {
     static let teal:Color = Color(red: 0.0, green: 0.314, blue: 0.314)
     static let bgLightGrey:Color = Color(red: 0.898, green: 0.898, blue: 0.898)
     static let white: Color = Color.white

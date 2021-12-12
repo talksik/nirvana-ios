@@ -12,14 +12,7 @@ struct ChatsCarouselView: View {
     // current snapped/selected user
     @State var selectedUserId: String = ""
     @State var selectedUser: User?
-    
-    
-    private func getScale(proxy: GeometryProxy) -> CGFloat {
-        let scale:CGFloat = 2
-        
-        return scale
-    }
-    
+
     func getSelectedUser(userId: String) -> User {
         return self.viewModel.carouselUsers.filter{user in
             return user.id == userId
@@ -33,7 +26,6 @@ struct ChatsCarouselView: View {
                 ForEach(viewModel.carouselUsers) { carouselUser in
                     GeometryReader {proxy in
                         let minX = proxy.frame(in: .local).minX
-                        let scale = getScale(proxy: proxy)
                         
                         Image(carouselUser.profilePictureUrl)
                             .renderingMode(.original)
@@ -45,12 +37,12 @@ struct ChatsCarouselView: View {
                             .blur(radius: abs(minX) / 40)
                             .scaleEffect()
                             .padding(40)
+                            .frame(maxWidth: UIScreen.main.bounds.width)
                         
                     }
                     .tag(carouselUser.id)
                 }
             }
-            .frame(maxWidth: UIScreen.main.bounds.width * 0.8)
             .tabViewStyle(.page(indexDisplayMode: .never))
             .onAppear {
                 self.selectedUserId = self.viewModel.carouselUsers.first?.id ?? ""
@@ -75,7 +67,7 @@ struct ChatsCarouselView: View {
                                 .id(user.id)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 100)
-                                        .strokeBorder(NirvanaColors.teal, lineWidth: 2)
+                                        .strokeBorder(NirvanaColor.teal, lineWidth: 2)
                                         .opacity(isSelected ? 1 : 0)
                                 )
                                 .onTapGesture {
@@ -83,11 +75,11 @@ struct ChatsCarouselView: View {
                                         self.selectedUserId = user.id
                                     }
                                 }
-                                .frame(maxHeight: 75)
+                                .frame(maxHeight: 60)
                         }
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .padding(.vertical, 40)
+                    .padding(.top, 40)
                     .padding(.horizontal, 40)
                     
                 }
