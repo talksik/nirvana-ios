@@ -13,9 +13,6 @@ struct ChatsCarouselView: View {
     @State var selectedUserId: String = ""
     @State var selectedUser: User?
     
-    var body: some View {
-        mainCarouselView
-    }
     
     private func getScale(proxy: GeometryProxy) -> CGFloat {
         let scale:CGFloat = 2
@@ -29,8 +26,9 @@ struct ChatsCarouselView: View {
         }[0]
     }
      
-    var mainCarouselView: some View {
+    var body: some View {
         VStack {
+            // main big carousel
             TabView(selection: $selectedUserId) {
                 ForEach(viewModel.carouselUsers) { carouselUser in
                     GeometryReader {proxy in
@@ -58,6 +56,7 @@ struct ChatsCarouselView: View {
                 self.selectedUserId = self.viewModel.carouselUsers.first?.id ?? ""
             }
             
+            // Bottom navigation carousel
             ScrollViewReader {proxy in
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack {
@@ -71,8 +70,8 @@ struct ChatsCarouselView: View {
                                 .cornerRadius(12)
                                 .clipShape(Circle())
                                 .shadow(radius: 10)
-                                .scaleEffect(isSelected ? 1.2 : 1)
-                                .padding(.all, 16.0)
+                                .scaleEffect(isSelected ? 1.2 : 0.7)
+                                .padding(.leading, 30.0)
                                 .id(user.id)
                                 .onTapGesture {
                                     withAnimation {
@@ -81,8 +80,7 @@ struct ChatsCarouselView: View {
                                 }
                         }
                     }
-                    .frame(maxHeight: 100)
-                    .padding(.leading, UIScreen.main.bounds.width * 0.4)
+                    .frame(maxHeight: 50)
                     .padding(.vertical, 20)
                 }
                 .onChange(of: self.selectedUserId) { _ in
