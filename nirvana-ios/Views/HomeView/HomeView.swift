@@ -9,13 +9,14 @@ import SwiftUI
 
 struct HomeView: View {
     var body: some View {
-        VStack {
+        VStack(alignment: .leading, spacing: 0) {
             HeaderView(isAuth:true)
             
             ChatsCarouselView()
             
             FooterControlsView()            
         }
+        .navigationBarHidden(true)
         .frame(maxWidth:.infinity, maxHeight: .infinity)
         .accentColor(NirvanaColor.teal)
         .background(NirvanaColor.bgLightGrey)

@@ -10,3 +10,8 @@ import Foundation
 final class NirvanaConstants {
     static let landingPageUrl: String = "https://usenirvana.com"
 }
+
+enum NavigationViews {
+    case welcomeView
+    case homeView
+}

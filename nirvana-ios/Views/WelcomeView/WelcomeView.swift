@@ -12,7 +12,7 @@ struct WelcomeView: View {
     let screenHeight = UIScreen.main.bounds.height
     
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             // nav bar
             HeaderView()
             
@@ -22,8 +22,6 @@ struct WelcomeView: View {
                     .renderingMode(.original)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                
-                Spacer()
                 
                 VStack(alignment: .leading) {
                     
@@ -41,26 +39,23 @@ struct WelcomeView: View {
                         .foregroundColor(Color.gray)
                         .padding(.top, 5)
                         .fixedSize(horizontal: false, vertical: true)
+                    
+                    Spacer()
                 }
                 .frame(maxWidth: screenWidth - 20)
                 
-                Spacer()
                 
                 VStack(alignment: .center) {
-                    Button(
-                        action: {
-                            print("Start your detox button clicked")
-                        },
-                        label: {
-                            Text("Start Your Detox")
-                                .bold()
-                                .foregroundColor(NirvanaColor.white)
-                                .frame(maxWidth: .infinity)
-                                .padding(.vertical, 25)
-                                .background(NirvanaColor.teal)
-                                .clipShape(Capsule())
-                                .shadow(radius:10)
-                        })
+                    NavigationLink(destination: HomeView()) {
+                        Text("Start Your Detox")
+                            .bold()
+                            .foregroundColor(NirvanaColor.white)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 20)
+                            .background(NirvanaColor.teal)
+                            .clipShape(Capsule())
+                            .shadow(radius:10)
+                    }
                         
                         
                     Button(
@@ -71,27 +66,25 @@ struct WelcomeView: View {
                             Text("Learn More")
                                 .bold()
                         })
-                        .background(NirvanaColor.bgLightGrey)
 
                     //learn more button to usenirvana.com
                 }
                 .padding(.top, 20)
-                .frame(maxWidth: 300)
                 
-                Spacer()
             }
             .padding()
             .frame(maxWidth: screenWidth - 20)
 
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+            Spacer()
+        } // Vstack
         .accentColor(NirvanaColor.teal)
         .background(NirvanaColor.bgLightGrey)
+        .navigationBarTitleDisplayMode(.inline)
         //        .background(RadialGradient(gradient: Gradient(colors: [NirvanaColor.teal.opacity(0.1), NirvanaColor.bgLightGrey, NirvanaColor.bgLightGrey]), center: .center, startRadius: 0, endRadius: 200)
         //        )
-
-    }
-}
+        
+    } // View body
+} // View
 
 
 struct WelcomeView_Previews: PreviewProvider {
