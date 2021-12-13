@@ -9,14 +9,6 @@ import Foundation
 
 
 final class FooterControlsViewModel: ObservableObject {
-    @Published var isRecording: Bool = false
     
-    init() {
-        
-    }
-    
-    func onStartRecording() {
-        self.isRecording = true
-    }
     
 }
