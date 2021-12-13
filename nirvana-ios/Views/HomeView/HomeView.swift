@@ -16,6 +16,7 @@ struct HomeView: View {
             
             FooterControlsView()            
         }
+        .navigationBarHidden(true)
         .frame(maxWidth:.infinity, maxHeight: .infinity)
         .accentColor(NirvanaColor.teal)
         .background(NirvanaColor.bgLightGrey)
