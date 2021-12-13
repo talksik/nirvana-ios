@@ -42,10 +42,6 @@ struct FooterControlsView: View {
                                  anchor: .center)
                     .simultaneousGesture(dragGesture)
             })
-                
-            
-            
-            Text("currently is \(self.isHolding ? "recording": "not recording")")
         }
         .padding()
     }
