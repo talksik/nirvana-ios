@@ -49,8 +49,7 @@ struct OnboardingTemplateView: View {
                 
                 self.bottomActionArea
             }
-            .padding()
-            .frame(maxWidth: screenWidth - 20)
+            .padding(screenWidth * 0.1)
 
             Spacer()
         } //outermost vstack
@@ -73,10 +72,10 @@ struct OnboardingTemplateView: View {
             } else {
                 VStack(alignment: .leading) {
                     
-                    Text(self.mainLeadingActionText!)
+                    Text(self.mainLeadingActionText! + " ")
                         .font(.title)
                         .foregroundColor(NirvanaColor.black)
-                    + Text(self.mainHighlightedActionText!)
+                    + Text(self.mainHighlightedActionText! + " ")
                         .font(.title)
                         .foregroundColor(NirvanaColor.teal)
                     + Text(self.mainTrailingActionText!)
@@ -86,7 +85,6 @@ struct OnboardingTemplateView: View {
                     Text(self.subActionText!)
                         .foregroundColor(Color.gray)
                         .padding(.top, 5)
-                        .fixedSize(horizontal: false, vertical: true)
                     
                     Spacer()
                 }
@@ -98,6 +96,32 @@ struct OnboardingTemplateView: View {
 
 struct OnboardingTemplateView_Previews: PreviewProvider {
     static var previews: some View {
-        OnboardingTemplateView()
+        OnboardingTemplateView(imgName: "undraw_friendship_mni7", mainLeadingActText: "Your", mainHighlightedActText: "minimalist", mainTrailingActText: "social media.", subActText: "Tired of the rat race on the test of th4e best oadf the best?", bottomActArea: AnyView(
+                VStack(alignment: .center) {
+                    NavigationLink(destination: HomeView()) {
+                        Text("Start Your Detox")
+                            .bold()
+                            .foregroundColor(NirvanaColor.white)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 20)
+                            .background(NirvanaColor.teal)
+                            .clipShape(Capsule())
+                            .shadow(radius:10)
+                    }
+                        
+                    Button(
+                        action: {
+                            print("link to website learn more clicked")
+                        },
+                        label: {
+                            Text("Learn More")
+                                .bold()
+                        })
+
+                    //learn more button to usenirvana.com
+                }
+                    .padding(.top, 20)
+                )
+        )
     }
 }

@@ -12,7 +12,7 @@ struct WelcomeView: View {
     let screenHeight = UIScreen.main.bounds.height
     
     var body: some View {
-            OnboardingTemplateView(imgName: "undraw_friendship_mni7", mainLeadingActText: "Your", mainHighlightedActText: "minimalist", mainTrailingActText: "social media.", subActText: "Tired of the rat race?", bottomActArea: AnyView(
+            OnboardingTemplateView(imgName: "undraw_friendship_mni7", mainLeadingActText: "Your", mainHighlightedActText: "minimalist", mainTrailingActText: "social media.", subActText: "Tired of the rat race on insta, snap, tik-tok, \"meta\"?", bottomActArea: AnyView(
                     VStack(alignment: .center) {
                         NavigationLink(destination: HomeView()) {
                             Text("Start Your Detox")
