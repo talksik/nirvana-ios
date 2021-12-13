@@ -47,6 +47,8 @@ struct OnboardingTemplateView: View {
                 
                 self.onboardingActionTextView
                 
+                Spacer()
+                
                 self.bottomActionArea
             }
             .padding(screenWidth * 0.1)

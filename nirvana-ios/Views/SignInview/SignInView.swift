@@ -9,7 +9,34 @@ import SwiftUI
 
 struct SignInView: View {
     var body: some View {
-        Text("asdf")
+        OnboardingTemplateView(hdrText: "Let's get started", imgName: "undraw_enter_uhqk", bottomActArea:
+                    AnyView(
+                        VStack(alignment: .center) {
+                            NavigationLink(destination: HomeView()) {
+                                Text("Sign Up")
+                                    .bold()
+                                    .foregroundColor(NirvanaColor.white)
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.vertical, 20)
+                                    .background(NirvanaColor.teal)
+                                    .clipShape(Capsule())
+                                    .shadow(radius:10)
+                            }
+                                
+                            Button(
+                                action: {
+                                    print("link to website learn more clicked")
+                                },
+                                label: {
+                                    Text("Learn More")
+                                        .bold()
+                            })
+
+                            //learn more button to usenirvana.com
+                        }
+                        .padding(.top, 20)
+                    )
+                )
     }
 }
 
