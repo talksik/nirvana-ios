@@ -43,6 +43,8 @@ struct OnboardingTemplateView: View {
             HeaderView()
             
             VStack {
+                self.onboardingHeaderText
+                
                 self.onboardingImageView
                 
                 self.onboardingActionTextView
@@ -51,7 +53,7 @@ struct OnboardingTemplateView: View {
                 
                 self.bottomActionArea
             }
-            .padding(screenWidth * 0.1)
+            .padding(.horizontal, screenWidth * 0.1)
 
             Spacer()
         } //outermost vstack
@@ -59,6 +61,19 @@ struct OnboardingTemplateView: View {
         .background(NirvanaColor.bgLightGrey)
         .navigationBarTitleDisplayMode(.inline)
     }
+    
+    private var onboardingHeaderText: some View {
+            ZStack {
+                if (self.headerText != nil) {
+                    Text(self.headerText!)
+                        .font(.title)
+                        .fontWeight(.medium)
+                        .foregroundColor(NirvanaColor.teal)
+                        .multilineTextAlignment(.center)
+                }
+            }
+            .padding()
+        }
     
     private var onboardingImageView: some View {
         Image(self.imageName ?? "")
@@ -98,7 +113,7 @@ struct OnboardingTemplateView: View {
 
 struct OnboardingTemplateView_Previews: PreviewProvider {
     static var previews: some View {
-        OnboardingTemplateView(imgName: "undraw_friendship_mni7", mainLeadingActText: "Your", mainHighlightedActText: "minimalist", mainTrailingActText: "social media.", subActText: "Tired of the rat race on the test of th4e best oadf the best?", bottomActArea: AnyView(
+        OnboardingTemplateView(hdrText: "let's get started", imgName: "undraw_friendship_mni7", mainLeadingActText: "Your", mainHighlightedActText: "minimalist", mainTrailingActText: "social media.", subActText: "Tired of the rat race on the test of th4e best oadf the best?", bottomActArea: AnyView(
                 VStack(alignment: .center) {
                     NavigationLink(destination: HomeView()) {
                         Text("Start Your Detox")
