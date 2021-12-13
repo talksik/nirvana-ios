@@ -1,0 +1,6 @@
+framework module Pods_nirvana_ios {
+  umbrella header "Pods-nirvana-ios-umbrella.h"
+
+  export *
+  module * { export * }
+}
