@@ -95,6 +95,7 @@ struct SignInView: View {
                     
                     print(user.displayName ?? "Success!")
                     print(user.photoURL)
+                    print(user.phoneNumber)
                     // User is signed in
                     // ...
                 }
