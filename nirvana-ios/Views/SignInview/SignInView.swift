@@ -59,7 +59,7 @@ struct SignInView: View {
                 )
     }
     
-    func handleLogin(){
+    func handleLogin() {
         //Google sign in
         guard let clientID = FirebaseApp.app()?.options.clientID else { return }
         
