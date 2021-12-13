@@ -31,6 +31,7 @@
 		89288EC9276756DF00E962C4 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 89288EC8276756DF00E962C4 /* FirebaseStorage */; };
 		89288ECB27675B9F00E962C4 /* OnboardingTemplateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89288ECA27675B9F00E962C4 /* OnboardingTemplateView.swift */; };
 		89D99D2E2766FD6B00237814 /* Liquid in Frameworks */ = {isa = PBXBuildFile; productRef = 89D99D2D2766FD6B00237814 /* Liquid */; };
+		89F1386D2767EB19006680ED /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F1386C2767EB19006680ED /* SignInView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -55,6 +56,7 @@
 		892179E52765FECD001E6C60 /* FooterControlsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FooterControlsViewModel.swift; sourceTree = "<group>"; };
 		89288EBF276755DF00E962C4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		89288ECA27675B9F00E962C4 /* OnboardingTemplateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingTemplateView.swift; sourceTree = "<group>"; };
+		89F1386C2767EB19006680ED /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,6 +127,7 @@
 		891A15F62765639B00B26659 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				89F1386B2767EB07006680ED /* SignInview */,
 				892179E22765FE93001E6C60 /* FooterControlsView */,
 				891A16052765726800B26659 /* Templates */,
 				891A16042765725D00B26659 /* WelcomeView */,
@@ -194,6 +197,14 @@
 				892179E52765FECD001E6C60 /* FooterControlsViewModel.swift */,
 			);
 			path = FooterControlsView;
+			sourceTree = "<group>";
+		};
+		89F1386B2767EB07006680ED /* SignInview */ = {
+			isa = PBXGroup;
+			children = (
+				89F1386C2767EB19006680ED /* SignInView.swift */,
+			);
+			path = SignInview;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -293,6 +304,7 @@
 				891A15FF27656F9200B26659 /* HeaderView.swift in Sources */,
 				892179E42765FEB8001E6C60 /* FooterControlsView.swift in Sources */,
 				891A15FD276566B800B26659 /* constants.swift in Sources */,
+				89F1386D2767EB19006680ED /* SignInView.swift in Sources */,
 				891A160E27657CEA00B26659 /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
