@@ -10,19 +10,44 @@ import SwiftUI
 struct FooterControlsView: View {
     @StateObject var viewModel:FooterControlsViewModel = FooterControlsViewModel()
     
-    @GestureState var isPressingRecord: Bool = false
+    @GestureState var isLongPressingRecord: Bool = false
+    @State var isHolding = false
     @State var completedLongPress = false
+    
+    var dragGesture: some Gesture {
+        DragGesture(minimumDistance: 0, coordinateSpace: .local)
+            .onChanged {_ in
+                self.isHolding = true
+                
+                print("started drag")
+                
+            }
+            .onEnded {_ in
+                self.isHolding = false
+                
+                print("ended drag")
+                
+            }
+    }
     
     var longPress: some Gesture {
         LongPressGesture(minimumDuration: 1)
-            .updating($isPressingRecord) { currentState, gestureState,
+            .updating($isLongPressingRecord) { currentState, gestureState,
                     transaction in
                 gestureState = currentState
                 transaction.animation = Animation.easeIn(duration: 2.0)
+                
+                self.isHolding = true
+                
+                print("started long press")
             }
             .onEnded { finished in
                 print(finished)
                 self.completedLongPress = finished
+                
+                self.isHolding = false
+                
+                print("ended long press")
             }
     }
     
@@ -30,16 +55,19 @@ struct FooterControlsView: View {
         HStack(alignment: .center) {
             Spacer()
             
-            Image(systemName: self.isPressingRecord ? "waveform" : "mic.fill")
+            Image(systemName: self.isHolding ? "waveform" : "mic.fill")
                 .foregroundColor(.white)
                 .padding()
                 .background(NirvanaColor.teal)
                 .clipShape(Circle())
                 .shadow(radius: 10)
                 .gesture(longPress)
-                .scaleEffect(x: self.isPressingRecord ? 1.2: 1,
-                             y: self.isPressingRecord ? 1.2: 1,
+                .simultaneousGesture(dragGesture)
+                .scaleEffect(x: self.isHolding ? 1.2: 1,
+                             y: self.isHolding ? 1.2: 1,
                              anchor: .center)
+            
+            Text("currently is \(self.isHolding ? "recording": "not recording")")
         }
         .padding()
     }
