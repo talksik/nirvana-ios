@@ -11,14 +11,14 @@ struct OnboardingTemplateView: View {
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
     
-    private let headerText: String?
-    private let imageName:String?
+    private var headerText: String?
+    private var imageName:String?
     
-    private let mainLeadingActionText:String?
-    private let mainHighlightedActionText:String?
-    private let mainTrailingActionText:String?
+    private var mainLeadingActionText:String?
+    private var mainHighlightedActionText:String?
+    private var mainTrailingActionText:String?
     
-    private let subActionText:String?
+    private var subActionText:String?
     
     private var bottomActionArea:AnyView?
     
@@ -40,31 +40,59 @@ struct OnboardingTemplateView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            // nav bar
             HeaderView()
             
             VStack {
-                // imported image name
+                self.onboardingImageView
                 
+                self.onboardingActionTextView
                 
-                if (self.mainLeadingActionText != nil) { //only show section if leading text there assuming everything is won't be there
-                    
-                }
-                
-                // passed in action area from template user
                 self.bottomActionArea
-                
             }
             .padding()
             .frame(maxWidth: screenWidth - 20)
 
             Spacer()
-        } // Vstack
+        } //outermost vstack
         .accentColor(NirvanaColor.teal)
         .background(NirvanaColor.bgLightGrey)
         .navigationBarTitleDisplayMode(.inline)
-        //        .background(RadialGradient(gradient: Gradient(colors: [NirvanaColor.teal.opacity(0.1), NirvanaColor.bgLightGrey, NirvanaColor.bgLightGrey]), center: .center, startRadius: 0, endRadius: 200)
-        //        )
+    }
+    
+    private var onboardingImageView: some View {
+        Image(self.imageName ?? "")
+            .renderingMode(.original)
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+    }
+    
+    private var onboardingActionTextView: some View {
+        ZStack {
+            if (self.mainLeadingActionText == nil || self.mainHighlightedActionText == nil || self.mainTrailingActionText == nil || self.subActionText == nil) {
+                EmptyView()
+            } else {
+                VStack(alignment: .leading) {
+                    
+                    Text(self.mainLeadingActionText!)
+                        .font(.title)
+                        .foregroundColor(NirvanaColor.black)
+                    + Text(self.mainHighlightedActionText!)
+                        .font(.title)
+                        .foregroundColor(NirvanaColor.teal)
+                    + Text(self.mainTrailingActionText!)
+                        .font(.title)
+                        .foregroundColor(NirvanaColor.black)
+                    
+                    Text(self.subActionText!)
+                        .foregroundColor(Color.gray)
+                        .padding(.top, 5)
+                        .fixedSize(horizontal: false, vertical: true)
+                    
+                    Spacer()
+                }
+                .frame(maxWidth: screenWidth - 20)
+            }
+        }
     }
 }
 
