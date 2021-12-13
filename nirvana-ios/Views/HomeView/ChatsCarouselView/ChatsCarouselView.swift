@@ -27,15 +27,16 @@ struct ChatsCarouselView: View {
                     GeometryReader {proxy in
                         let minX = proxy.frame(in: .local).minX
                         
-                        Image(carouselUser.profilePictureUrl)
-                            .renderingMode(.original)
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .clipShape(Circle())
-                            .shadow(radius: 10)
-                            .rotation3DEffect(.degrees(minX / -10), axis: (x: 0, y: 1, z: 0))
-                            .blur(radius: abs(minX) / 40)
-                            
+                        ZStack {
+                            Image(carouselUser.profilePictureUrl)
+                                .renderingMode(.original)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .clipShape(Circle())
+                                .shadow(radius: 10)
+                                .rotation3DEffect(.degrees(minX / -10), axis: (x: 0, y: 1, z: 0))
+                                .blur(radius: abs(minX) / 40)
+                        }
                     }
                     .frame(maxWidth: UIScreen.main.bounds.width - 100, maxHeight: UIScreen.main.bounds.height - 200)
                     .padding(20)
