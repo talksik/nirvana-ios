@@ -8,15 +8,11 @@
 import SwiftUI
 
 struct HeaderView: View {
-    var isAuthenticated:Bool = false
-    
-    init(isAuth:Bool = false) {
-        self.isAuthenticated = isAuth
-    }
+    @EnvironmentObject var authStore:AuthSessionStore
     
     var body: some View {
         HStack(alignment:.center) {
-            if (self.isAuthenticated) {
+            if self.authStore.sessionState == SessionState.isAuthenticated {
                 Image(systemName: "list.bullet.circle")
                     .font(Font.system(.largeTitle))
                     .padding()
@@ -38,11 +34,13 @@ struct HeaderView: View {
             
             Spacer()
             
-            if (self.isAuthenticated) {
-                Image(systemName: "person.crop.circle.badge.plus")
-                    .font(Font.system(.largeTitle))
+            if self.authStore.sessionState == SessionState.isAuthenticated {
+                RemoteImage(url: "https://avatars.githubusercontent.com/u/41487836")
+                    .background(NirvanaColor.teal)
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 40, height: 40)
+                    .clipShape(Circle())
                     .padding()
-                    .foregroundColor(NirvanaColor.teal)
             }
         }
         .frame(maxWidth: .infinity)
@@ -51,6 +49,6 @@ struct HeaderView: View {
 
 struct HeaderView_Previews: PreviewProvider {
     static var previews: some View {
-        HeaderView(isAuth:true)
+        HeaderView().environmentObject(AuthSessionStore())
     }
 }

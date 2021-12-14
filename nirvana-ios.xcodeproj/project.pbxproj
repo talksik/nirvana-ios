@@ -31,6 +31,7 @@
 		89288EC9276756DF00E962C4 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 89288EC8276756DF00E962C4 /* FirebaseStorage */; };
 		89288ECB27675B9F00E962C4 /* OnboardingTemplateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89288ECA27675B9F00E962C4 /* OnboardingTemplateView.swift */; };
 		89B46E71276893E200B74255 /* AuthSessionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B46E70276893E200B74255 /* AuthSessionStore.swift */; };
+		89BDCDE527695DB900577829 /* RemoteImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89BDCDE427695DB900577829 /* RemoteImage.swift */; };
 		89D99D2E2766FD6B00237814 /* Liquid in Frameworks */ = {isa = PBXBuildFile; productRef = 89D99D2D2766FD6B00237814 /* Liquid */; };
 		89F1386D2767EB19006680ED /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F1386C2767EB19006680ED /* SignInView.swift */; };
 		89F138702767F55F006680ED /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 89F1386F2767F55F006680ED /* GoogleSignIn */; };
@@ -59,6 +60,7 @@
 		89288EBF276755DF00E962C4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		89288ECA27675B9F00E962C4 /* OnboardingTemplateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingTemplateView.swift; sourceTree = "<group>"; };
 		89B46E70276893E200B74255 /* AuthSessionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthSessionStore.swift; sourceTree = "<group>"; };
+		89BDCDE427695DB900577829 /* RemoteImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteImage.swift; sourceTree = "<group>"; };
 		89F1386C2767EB19006680ED /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -174,6 +176,7 @@
 			children = (
 				891A15F4276557AB00B26659 /* colors.swift */,
 				891A15FC276566B800B26659 /* constants.swift */,
+				89BDCDE427695DB900577829 /* RemoteImage.swift */,
 			);
 			path = Globals;
 			sourceTree = "<group>";
@@ -314,6 +317,7 @@
 				89B46E71276893E200B74255 /* AuthSessionStore.swift in Sources */,
 				891A15F9276563CA00B26659 /* WelcomeView.swift in Sources */,
 				891A1611276590B000B26659 /* ChatsCarouselView.swift in Sources */,
+				89BDCDE527695DB900577829 /* RemoteImage.swift in Sources */,
 				891A16132765A44300B26659 /* ChatsCarouselViewModel.swift in Sources */,
 				891A15E127653A7000B26659 /* nirvana_iosApp.swift in Sources */,
 				891A160127656FB200B26659 /* FooterView.swift in Sources */,
