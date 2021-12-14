@@ -7,8 +7,8 @@
 
 import Foundation
 import Firebase
-import FirebaseAuth
 import Combine
+import FirebaseAuth
 
 enum SessionState {
     case isAuthenticated
@@ -39,7 +39,7 @@ final class AuthSessionStore: ObservableObject, SessionStore {
     }
     
     func logOut() {
-        
+        try? Auth.auth().signOut()
     }
     
     func unbind () {
