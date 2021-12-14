@@ -11,6 +11,8 @@ import AuthenticationServices
 import GoogleSignIn
 
 struct SignInView: View {
+    @EnvironmentObject var authSessionStore: AuthSessionStore
+    
     var body: some View {
         OnboardingTemplateView(hdrText: "Let's get started", imgName: "undraw_enter_uhqk", bottomActArea:
                     AnyView(
@@ -55,6 +57,8 @@ struct SignInView: View {
                             
                         }
                         .padding(.top, 20)
+                        .navigationBarHidden(true)
+                        .navigationBarBackButtonHidden(true)
                     )
                 )
     }
@@ -101,11 +105,13 @@ struct SignInView: View {
             }
     }
     
+    
+    
 }
 
 struct SignInView_Previews: PreviewProvider {
     static var previews: some View {
-        SignInView()
+        SignInView().environmentObject(AuthSessionStore())
     }
 }
 
