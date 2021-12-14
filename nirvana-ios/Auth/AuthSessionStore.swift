@@ -39,6 +39,8 @@ final class AuthSessionStore: ObservableObject, SessionStore {
         let clientID = FirebaseApp.app()?.options.clientID
         self.GIDconfig = GIDConfiguration(clientID: clientID!)
         
+        print(clientID)
+        
         self.setupAuthListen()
     }
     
@@ -113,12 +115,15 @@ final class AuthSessionStore: ObservableObject, SessionStore {
             
             if let user = user {
                 // if we have a user, create a new user model
-                print("Got user: \(user)")
+                print("Got user: \(user.displayName!)")
                 self.user = User(
                     _uid: user.uid, _email: user.email, _displayName: user.displayName, _profilePic: user.photoURL, _phoneNumber: user.phoneNumber)
+                
+                self.sessionState = .isAuthenticated
             } else {
                 // if we don't have a user, set our session to nil
                 self.user = nil
+                self.sessionState = .isLoggedOut
             }
         }
     }
