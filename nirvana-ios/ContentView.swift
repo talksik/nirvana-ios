@@ -8,33 +8,27 @@
 import SwiftUI
 
 struct ContentView: View {
-    @EnvironmentObject var authSession: AuthSessionStore
+    @EnvironmentObject var authSessionStore: AuthSessionStore
     
     var body: some View {
         NavigationView {
-            VStack {
-                NavigationLink(destination: WelcomeView()) {
-                    Text("Welcome Page")
+            ZStack {
+                switch self.authSessionStore.sessionState {
+                    case SessionState.isAuthenticated:
+                        HomeView()
+                    case SessionState.isLoggedOut:
+                        WelcomeView()
                 }
+//                NavigationLink("Welcome Page", isActive: self.authSessionStore.sessionState == SessionState.isLoggedOut, WelcomeView())
+//                NavigationLink("HomePage", isActive: self.authSessionStore.sessionState == SessionState.isAuthenticated, destination: HomeView())
                 
-                NavigationLink(destination: HomeView()) {
-                    Text("Home Page")
-                }
-            }
-            .navigationBarTitle("View All Pages", displayMode: .inline)
-        }.onAppear(perform: self.getUser)
-        
-//        .navigationViewStyle(StackNavigationViewStyle())
-//        .environmentObject()//can pass anything to send to all views within navigation view
-    }
-    
-    func getUser () {
-        authSession.listen()
+            }.navigationBarHidden(true)
+        }
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView().environmentObject(AuthSessionStore())
     }
 }

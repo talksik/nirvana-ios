@@ -11,10 +11,12 @@ import GoogleSignIn
 
 @main
 struct nirvana_iosApp: App {
+    @StateObject var authSessionStore: AuthSessionStore = AuthSessionStore()
+    
     @UIApplicationDelegateAdaptor private var appDelegate: AppDelegate
       var body: some Scene {
         WindowGroup {
-          ContentView()
+            ContentView().environmentObject(authSessionStore)
         }
       }
 }

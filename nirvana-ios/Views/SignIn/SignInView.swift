@@ -69,8 +69,8 @@ struct SignInView: View {
         GIDSignIn.sharedInstance.signIn(with: config, presenting: getRootViewController())
             {[self] user, err in
                 
-                if let error = err {
-                    print(err)
+                if err != nil {
+                    print(err!.localizedDescription)
                     return
                 }
                 
@@ -85,8 +85,8 @@ struct SignInView: View {
                                                                accessToken: authentication.accessToken)
                 
                 Auth.auth().signIn(with: credential) { result, error in
-                    if let error = error {
-                        print(error.localizedDescription)
+                    if error != nil {
+                        print(error!.localizedDescription)
                     }
                     
                     guard let user = result?.user else {
@@ -94,8 +94,7 @@ struct SignInView: View {
                     }
                     
                     print(user.displayName ?? "Success!")
-                    print(user.photoURL)
-                    print(user.phoneNumber)
+                    print(user)
                     // User is signed in
                     // ...
                 }
