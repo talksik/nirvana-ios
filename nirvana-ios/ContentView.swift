@@ -11,18 +11,13 @@ struct ContentView: View {
     @EnvironmentObject var authSessionStore: AuthSessionStore
     
     var body: some View {
-        NavigationView {
-            ZStack {
-                switch self.authSessionStore.sessionState {
-                    case SessionState.isAuthenticated:
-                        HomeView()
-                    case SessionState.isLoggedOut:
-                        WelcomeView()
-                }
-//                NavigationLink("Welcome Page", isActive: self.authSessionStore.sessionState == SessionState.isLoggedOut, WelcomeView())
-//                NavigationLink("HomePage", isActive: self.authSessionStore.sessionState == SessionState.isAuthenticated, destination: HomeView())
-                
-            }.navigationBarHidden(true)
+        ZStack {
+            switch self.authSessionStore.sessionState {
+                case SessionState.isAuthenticated:
+                    HomeView()
+                case SessionState.isLoggedOut:
+                    WelcomeView()
+            }
         }
     }
 }

@@ -21,7 +21,6 @@ struct HeaderView: View {
                     .font(Font.system(.largeTitle))
                     .padding()
                     .foregroundColor(NirvanaColor.teal)
-                
             }
             
             Spacer()
@@ -45,7 +44,6 @@ struct HeaderView: View {
                     .padding()
                     .foregroundColor(NirvanaColor.teal)
             }
-                
         }
         .frame(maxWidth: .infinity)
     }

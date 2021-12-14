@@ -64,65 +64,12 @@ struct SignInView: View {
     }
     
     func handleLogin() {
-        //Google sign in
-        guard let clientID = FirebaseApp.app()?.options.clientID else { return }
-        
-        // create google sign in configuration object
-        let config = GIDConfiguration(clientID: clientID)
-        
-        GIDSignIn.sharedInstance.signIn(with: config, presenting: getRootViewController())
-            {[self] user, err in
-                
-                if err != nil {
-                    print(err!.localizedDescription)
-                    return
-                }
-                
-                guard
-                  let authentication = user?.authentication,
-                  let idToken = authentication.idToken
-                else {
-                  return
-                }
-
-                let credential = GoogleAuthProvider.credential(withIDToken: idToken,
-                                                               accessToken: authentication.accessToken)
-                
-                Auth.auth().signIn(with: credential) { result, error in
-                    if error != nil {
-                        print(error!.localizedDescription)
-                    }
-                    
-                    guard let user = result?.user else {
-                        return
-                    }
-                    
-                    print(user.displayName ?? "Success!")
-                    print(user)
-                    // User is signed in
-                    // ...
-                }
-            }
+        self.authSessionStore.signInOrCreateUser()
     }
-    
-    
-    
 }
 
 struct SignInView_Previews: PreviewProvider {
     static var previews: some View {
         SignInView().environmentObject(AuthSessionStore())
-    }
-}
-
-extension View {
-    func getRootViewController() -> UIViewController {
-        guard let screen = UIApplication.shared.connectedScenes.first as? UIWindowScene else { return .init() }
-        
-        guard let root = screen.windows.first?.rootViewController else {
-            return .init()
-        }
-        
-        return root
     }
 }
