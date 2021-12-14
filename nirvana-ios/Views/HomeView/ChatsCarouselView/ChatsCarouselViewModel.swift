@@ -8,15 +8,15 @@
 import Foundation
 
 final class ChatsCarouselViewModel: ObservableObject {
-    @Published var carouselUsers:[User]
+    @Published var carouselUsers:[TestUser]
     
     init() {
         self.carouselUsers = [
-            User(_profilePic: "liam", _firstN: "Liam", _lastN: "Digregorio"),
-            User(_profilePic: "heran", _firstN: "Heran", _lastN: "Patel"),
-            User(_profilePic: "sarth", _firstN: "Sarth", _lastN: "Shah"),
-            User(_profilePic: "kevin", _firstN: "Kevin", _lastN: "Le"),
-            User(_profilePic: "rohan", _firstN: "Rohan", _lastN: "Chadha")
+            TestUser(_profilePic: "liam", _firstN: "Liam", _lastN: "Digregorio"),
+            TestUser(_profilePic: "heran", _firstN: "Heran", _lastN: "Patel"),
+            TestUser(_profilePic: "sarth", _firstN: "Sarth", _lastN: "Shah"),
+            TestUser(_profilePic: "kevin", _firstN: "Kevin", _lastN: "Le"),
+            TestUser(_profilePic: "rohan", _firstN: "Rohan", _lastN: "Chadha")
         ]
     }
 }

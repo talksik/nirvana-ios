@@ -9,6 +9,23 @@ import Foundation
 import SwiftUI
 
 struct User: Identifiable, Hashable {
+    var id:String = UUID().uuidString
+    var email:String?
+    var displayName:String?
+    var profilePictureUrl:URL?
+    var phoneNumber:String?
+    
+    init(_uid:String = UUID().uuidString, _email:String?, _displayName:String?, _profilePic:URL?, _phoneNumber: String?) {
+        self.id = _uid
+        self.email = _email
+        self.profilePictureUrl = _profilePic
+        self.displayName = _displayName
+        self.phoneNumber = _phoneNumber
+    }
+}
+
+
+struct TestUser: Identifiable, Hashable {
     var id = UUID().uuidString
     
     var profilePictureUrl:String

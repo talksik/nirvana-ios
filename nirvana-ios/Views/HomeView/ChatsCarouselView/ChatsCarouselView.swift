@@ -11,9 +11,9 @@ struct ChatsCarouselView: View {
     @StateObject var viewModel:ChatsCarouselViewModel = ChatsCarouselViewModel()
     // current snapped/selected user
     @State var selectedUserId: String = ""
-    @State var selectedUser: User?
+    @State var selectedUser: TestUser?
 
-    func getSelectedUser(userId: String) -> User {
+    func getSelectedUser(userId: String) -> TestUser {
         return self.viewModel.carouselUsers.filter{user in
             return user.id == userId
         }[0]
