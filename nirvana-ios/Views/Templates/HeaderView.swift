@@ -19,8 +19,6 @@ struct HeaderView: View {
                     .resizable()
                     .frame(width: 20.0, height: 32.132)
                     .padding()
-                
-                Spacer()
             }
         } else {
             HStack(alignment:.center) {

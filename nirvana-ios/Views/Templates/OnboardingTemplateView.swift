@@ -53,7 +53,7 @@ struct OnboardingTemplateView: View {
                 
                 self.bottomActionArea
             }
-            .padding(.horizontal, screenWidth * 0.1)
+            .padding(.horizontal, screenWidth * 0.05)
 
             Spacer()
         } //outermost vstack
@@ -105,7 +105,7 @@ struct OnboardingTemplateView: View {
                     
                     Spacer()
                 }
-                .frame(maxWidth: screenWidth - 20)
+                .frame(maxWidth: screenWidth - 10)
             }
         }
     }
