@@ -12,12 +12,13 @@ struct ContentView: View {
     
     var body: some View {
         ZStack {
-            switch self.authSessionStore.sessionState {
-                case SessionState.isAuthenticated:
-                    HomeView()
-                case SessionState.isLoggedOut:
-                    WelcomeView()
-            }
+            ContactsView() // TEMPORARY FOR TESTING
+//            switch self.authSessionStore.sessionState {
+//                case SessionState.isAuthenticated:
+//                    HomeView()
+//                case SessionState.isLoggedOut:
+//                    WelcomeView()
+//            }
         }.animation(.default, value:authSessionStore.sessionState)
     }
 }
