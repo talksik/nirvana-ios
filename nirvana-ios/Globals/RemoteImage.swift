@@ -59,12 +59,16 @@ struct RemoteImage: View {
             return failure
         default:
             if let image = UIImage(data: loader.data) {
+                let averageColor = image.averageColor
+                print("the average color is \(averageColor?.description)")
+                
                 return Image(uiImage: image)
             } else {
                 return failure
             }
         }
     }
+    
 }
 
 struct RemoteImage_Previews: PreviewProvider {

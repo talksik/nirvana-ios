@@ -32,6 +32,7 @@
 		89288ECB27675B9F00E962C4 /* OnboardingTemplateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89288ECA27675B9F00E962C4 /* OnboardingTemplateView.swift */; };
 		89B46E71276893E200B74255 /* AuthSessionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B46E70276893E200B74255 /* AuthSessionStore.swift */; };
 		89BDCDE527695DB900577829 /* RemoteImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89BDCDE427695DB900577829 /* RemoteImage.swift */; };
+		89BDCDE72769616600577829 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89BDCDE62769616600577829 /* UIImage+Extension.swift */; };
 		89D99D2E2766FD6B00237814 /* Liquid in Frameworks */ = {isa = PBXBuildFile; productRef = 89D99D2D2766FD6B00237814 /* Liquid */; };
 		89F1386D2767EB19006680ED /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F1386C2767EB19006680ED /* SignInView.swift */; };
 		89F138702767F55F006680ED /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 89F1386F2767F55F006680ED /* GoogleSignIn */; };
@@ -61,6 +62,7 @@
 		89288ECA27675B9F00E962C4 /* OnboardingTemplateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingTemplateView.swift; sourceTree = "<group>"; };
 		89B46E70276893E200B74255 /* AuthSessionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthSessionStore.swift; sourceTree = "<group>"; };
 		89BDCDE427695DB900577829 /* RemoteImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteImage.swift; sourceTree = "<group>"; };
+		89BDCDE62769616600577829 /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		89F1386C2767EB19006680ED /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -177,6 +179,7 @@
 				891A15F4276557AB00B26659 /* colors.swift */,
 				891A15FC276566B800B26659 /* constants.swift */,
 				89BDCDE427695DB900577829 /* RemoteImage.swift */,
+				89BDCDE62769616600577829 /* UIImage+Extension.swift */,
 			);
 			path = Globals;
 			sourceTree = "<group>";
@@ -324,6 +327,7 @@
 				891A15FF27656F9200B26659 /* HeaderView.swift in Sources */,
 				892179E42765FEB8001E6C60 /* FooterControlsView.swift in Sources */,
 				891A15FD276566B800B26659 /* constants.swift in Sources */,
+				89BDCDE72769616600577829 /* UIImage+Extension.swift in Sources */,
 				89F1386D2767EB19006680ED /* SignInView.swift in Sources */,
 				891A160E27657CEA00B26659 /* User.swift in Sources */,
 			);
