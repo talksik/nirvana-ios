@@ -14,7 +14,7 @@ struct WelcomeView: View {
         NavigationView {
             OnboardingTemplateView(imgName: "undraw_friendship_mni7", mainLeadingActText: "Your", mainHighlightedActText: "minimalist", mainTrailingActText: "social media.", subActText: "Tired of the rat race on insta, snap, tik-tok, \"meta\"?", bottomActArea: AnyView(
                         VStack(alignment: .center) {
-                            NavigationLink(destination: SignInView()) {
+                            NavigationLink(destination: OnboardingTrioView()) {
                                 Text("Start Your Detox")
                                     .bold()
                                     .foregroundColor(NirvanaColor.white)
@@ -43,8 +43,7 @@ struct WelcomeView: View {
                             .padding(.top, 20)
                         )
             )
-            .navigationBarHidden(true)
-        } // navigation view
+        }.navigationBarHidden(true) // navigation view
     } // View body
 } // View
 

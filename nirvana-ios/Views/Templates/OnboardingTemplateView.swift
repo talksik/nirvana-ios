@@ -59,7 +59,7 @@ struct OnboardingTemplateView: View {
         } //outermost vstack
         .accentColor(NirvanaColor.teal)
         .background(NirvanaColor.bgLightGrey)
-        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarHidden(true)
     }
     
     private var onboardingHeaderText: some View {
