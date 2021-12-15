@@ -24,9 +24,17 @@ struct ContactsView: View {
         VStack(spacing: 0) {
             OnboardingTemplateView(imgName: "undraw_grades_re_j7d6", mainLeadingActText: "Add your ", mainHighlightedActText: "closest folks.", mainTrailingActText: "", subActText: "besties, bf or gf, siblings, parents, etc.")
             
-            Rectangle()
-                .strokeBorder(style: StrokeStyle(lineWidth: 4, dash: [10]))
-            
+            Text("Add contacts")
+                .padding()
+                .foregroundColor(NirvanaColor.teal)
+                .overlay(
+                    Rectangle()
+                        .strokeBorder(style: StrokeStyle(lineWidth: 4, dash: [10]))
+                        .foregroundColor(NirvanaColor.teal)
+                )
+                .onTapGesture {
+                    self.contactObj.showContactPicker.toggle()
+                }
         }
         .background(NirvanaColor.bgLightGrey)
         .alert(item: $contactsViewModel.permissionsError) {_ in
