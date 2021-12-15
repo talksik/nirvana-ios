@@ -9,7 +9,7 @@ import SwiftUI
 
 struct HeaderView: View {
     @EnvironmentObject var authStore:AuthSessionStore
-    private var averageColor: UIColor?
+    @State var averageColor: UIColor? = UIColor(NirvanaColor.teal)
     
     var body: some View {
         HStack(alignment:.center) {
@@ -28,12 +28,19 @@ struct HeaderView: View {
                     .clipShape(Circle())
                     .padding()
                     .shadow(radius:5)
-                    .onAppear {
-                        self.setAverageColor()
-                    }
             }
         }
+        .background(Color(self.averageColor!))
         .frame(maxWidth: .infinity)
+        .onAppear{
+            // set background color based on profile picture tint
+            if authStore.sessionState == SessionState.isAuthenticated {
+                if let userPicUrl = authStore.user?.profilePictureUrl {
+                    self.averageColor = NirvanaImage.getAverageColor(url: userPicUrl)
+                }
+//                self.averageColor = NirvanaImage.getAverageColor(url: "https://avatars.githubusercontent.com/u/41487836")
+            }
+        }
     }
     
     private func setAverageColor() {
