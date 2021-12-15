@@ -25,19 +25,10 @@ struct WelcomeView: View {
                                     .shadow(radius:10)
                             }
                                 
-                            Button(
-                                action: {
-                                    print("link to website learn more clicked")
-                                    showLearnMore.toggle()
-                                },
-                                label: {
-                                    Text("Learn More")
-                                        .bold()
-                                })
-                                .sheet(isPresented: $showLearnMore) {
-                                    LearnMoreView()
-                                }
-
+                            Link("Learn More", destination: URL(string: NirvanaConstants.landingPageUrl)!)
+                                .font(.caption)
+                                .foregroundColor(NirvanaColor.teal)
+                            
                             //learn more button to usenirvana.com
                         }
                             .padding(.top, 20)
