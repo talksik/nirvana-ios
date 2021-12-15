@@ -9,7 +9,7 @@ import SwiftUI
 
 struct HeaderView: View {
     @EnvironmentObject var authStore:AuthSessionStore
-    @State var averageColor: UIColor? = UIColor(NirvanaColor.teal)
+    @State var averageColor: UIColor = UIColor(NirvanaColor.teal)
     
     var body: some View {
         HStack(alignment:.center) {
@@ -21,7 +21,7 @@ struct HeaderView: View {
             Spacer()
             
             if self.authStore.sessionState == SessionState.isAuthenticated {
-                RemoteImage(url: "https://avatars.githubusercontent.com/u/41487836")
+                RemoteImage(url: self.authStore.user?.profilePictureUrl?.absoluteString ?? "https://avatars.githubusercontent.com/u/41487836")
                     .background(NirvanaColor.teal)
                     .aspectRatio(contentMode: .fill)
                     .frame(width: 40, height: 40)
@@ -30,15 +30,16 @@ struct HeaderView: View {
                     .shadow(radius:5)
             }
         }
-        .background(Color(self.averageColor!))
+        .background(Color(self.averageColor))
         .frame(maxWidth: .infinity)
         .onAppear{
             // set background color based on profile picture tint
             if authStore.sessionState == SessionState.isAuthenticated {
                 if let userPicUrl = authStore.user?.profilePictureUrl {
-                    self.averageColor = NirvanaImage.getAverageColor(url: userPicUrl)
+                    if let avgColor = NirvanaImage.getAverageColor(url: userPicUrl.absoluteString) {
+                        self.averageColor = avgColor
+                    }
                 }
-//                self.averageColor = NirvanaImage.getAverageColor(url: "https://avatars.githubusercontent.com/u/41487836")
             }
         }
     }

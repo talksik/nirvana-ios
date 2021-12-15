@@ -77,14 +77,21 @@ struct RemoteImage_Previews: PreviewProvider {
 }
 
 class NirvanaImage {
-    static func getAverageColor(url:URL) -> UIColor? {
-        if let data = try? Data(contentsOf: url) {
+    static func getAverageColor(url:String) -> UIColor? {
+        guard let parsedURL = URL(string: url) else {
+            fatalError("Invalid URL: \(url)")
+        }
+        
+        if let data = try? Data(contentsOf: parsedURL) {
             if let image = UIImage(data: data) {
+                print("got the average color of image \(image.averageColor)")
                 return image.averageColor
             } else {
+                print("failed to get image average color")
                 return nil
             }
         }
+        print("failed to get image average color")
         return nil
     }
 }
