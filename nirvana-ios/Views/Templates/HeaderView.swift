@@ -26,12 +26,15 @@ struct HeaderView: View {
                     .aspectRatio(contentMode: .fill)
                     .frame(width: 40, height: 40)
                     .clipShape(Circle())
-                    .padding()
+                    .padding(5)
                     .shadow(radius:5)
             }
         }
-        .background(Color(self.averageColor))
         .frame(maxWidth: .infinity)
+//        .background(Color(self.averageColor)) // color based on user's profilepicture dominant color
+        .background(NirvanaColor.solidBlue)
+        .cornerRadius(100)
+        .padding(.horizontal)
         .onAppear{
             // set background color based on profile picture tint
             if authStore.sessionState == SessionState.isAuthenticated {
