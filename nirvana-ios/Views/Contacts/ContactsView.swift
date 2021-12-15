@@ -39,7 +39,7 @@ private struct IndividualContactView: View {
     var imageName: String
     
     @Namespace private var animation
-    @State var addedUser = false
+    @State var isAddedUser = false
     
     var body: some View {
         HStack(alignment: .center, spacing: 0) {
@@ -49,14 +49,14 @@ private struct IndividualContactView: View {
                 .clipShape(Circle())
                 .frame(width: 40, height: 40)
                 .padding(.trailing, 10)
-            
+                    
             Text(name)
                 .font(.headline)
             
             Spacer()
             
             VStack {
-                if addedUser {
+                if isAddedUser {
                     Label("Added", systemImage: "person.crop.circle.fill.badge.checkmark")
                         .font(.title2)
                         .foregroundColor(NirvanaColor.solidTeal)
@@ -75,9 +75,21 @@ private struct IndividualContactView: View {
                 }
             }.onTapGesture {
                 withAnimation(Animation.interpolatingSpring(stiffness: 300, damping: 30)) {
-                    self.addedUser.toggle()
+                    self.isAddedUser.toggle()
                 }
             }
         }
+    }
+}
+
+struct Shake: GeometryEffect {
+    var amount: CGFloat = 10
+    var shakesPerUnit = 3
+    var animatableData: CGFloat
+
+    func effectValue(size: CGSize) -> ProjectionTransform {
+        ProjectionTransform(CGAffineTransform(translationX:
+            amount * sin(animatableData * .pi * CGFloat(shakesPerUnit)),
+            y: 0))
     }
 }
