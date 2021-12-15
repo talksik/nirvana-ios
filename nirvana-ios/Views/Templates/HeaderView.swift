@@ -10,6 +10,7 @@ import SwiftUI
 struct HeaderView: View {
     @EnvironmentObject var authStore:AuthSessionStore
     @State var averageColor: UIColor = UIColor(NirvanaColor.teal)
+    @State var showingMenu: Bool = false
     
     var body: some View {
         HStack(alignment:.center) {
@@ -27,7 +28,9 @@ struct HeaderView: View {
                     .frame(width: 40, height: 40)
                     .clipShape(Circle())
                     .padding(5)
-                    .shadow(radius:5)
+                    .sheet(isPresented: $showingMenu) {
+                        UserMenuView()
+                    }
             }
         }
         .frame(maxWidth: .infinity)
@@ -35,6 +38,7 @@ struct HeaderView: View {
         .background(NirvanaColor.solidBlue)
         .cornerRadius(100)
         .padding(.horizontal)
+        .shadow(radius: 10)
         .onAppear{
             // set background color based on profile picture tint
             if authStore.sessionState == SessionState.isAuthenticated {

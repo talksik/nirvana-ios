@@ -33,6 +33,7 @@
 		89B46E71276893E200B74255 /* AuthSessionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B46E70276893E200B74255 /* AuthSessionStore.swift */; };
 		89BDCDE527695DB900577829 /* NirvanaImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89BDCDE427695DB900577829 /* NirvanaImage.swift */; };
 		89BDCDE72769616600577829 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89BDCDE62769616600577829 /* UIImage+Extension.swift */; };
+		89BDCDEA27697F9C00577829 /* UserMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89BDCDE927697F9C00577829 /* UserMenu.swift */; };
 		89D99D2E2766FD6B00237814 /* Liquid in Frameworks */ = {isa = PBXBuildFile; productRef = 89D99D2D2766FD6B00237814 /* Liquid */; };
 		89F1386D2767EB19006680ED /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F1386C2767EB19006680ED /* SignInView.swift */; };
 		89F138702767F55F006680ED /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 89F1386F2767F55F006680ED /* GoogleSignIn */; };
@@ -63,6 +64,7 @@
 		89B46E70276893E200B74255 /* AuthSessionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthSessionStore.swift; sourceTree = "<group>"; };
 		89BDCDE427695DB900577829 /* NirvanaImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NirvanaImage.swift; sourceTree = "<group>"; };
 		89BDCDE62769616600577829 /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
+		89BDCDE927697F9C00577829 /* UserMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMenu.swift; sourceTree = "<group>"; };
 		89F1386C2767EB19006680ED /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -166,6 +168,7 @@
 		891A1608276572BB00B26659 /* HomeView */ = {
 			isa = PBXGroup;
 			children = (
+				89BDCDE827697F6100577829 /* UserMenu */,
 				891A160F2765909400B26659 /* ChatsCarouselView */,
 				891A160227656FC700B26659 /* HomeView.swift */,
 				891A160A2765732700B26659 /* HomeViewModel.swift */,
@@ -216,6 +219,14 @@
 				89B46E70276893E200B74255 /* AuthSessionStore.swift */,
 			);
 			path = Auth;
+			sourceTree = "<group>";
+		};
+		89BDCDE827697F6100577829 /* UserMenu */ = {
+			isa = PBXGroup;
+			children = (
+				89BDCDE927697F9C00577829 /* UserMenu.swift */,
+			);
+			path = UserMenu;
 			sourceTree = "<group>";
 		};
 		89F1386B2767EB07006680ED /* SignIn */ = {
@@ -324,6 +335,7 @@
 				891A16132765A44300B26659 /* ChatsCarouselViewModel.swift in Sources */,
 				891A15E127653A7000B26659 /* nirvana_iosApp.swift in Sources */,
 				891A160127656FB200B26659 /* FooterView.swift in Sources */,
+				89BDCDEA27697F9C00577829 /* UserMenu.swift in Sources */,
 				891A15FF27656F9200B26659 /* HeaderView.swift in Sources */,
 				892179E42765FEB8001E6C60 /* FooterControlsView.swift in Sources */,
 				891A15FD276566B800B26659 /* constants.swift in Sources */,
