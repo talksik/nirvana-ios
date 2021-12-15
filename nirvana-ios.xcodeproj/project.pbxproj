@@ -38,6 +38,8 @@
 		89BDCDEF2769B50C00577829 /* ContactsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89BDCDEE2769B50C00577829 /* ContactsView.swift */; };
 		89BDCDF12769E64200577829 /* Firestore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89BDCDF02769E64200577829 /* Firestore.swift */; };
 		89D99D2E2766FD6B00237814 /* Liquid in Frameworks */ = {isa = PBXBuildFile; productRef = 89D99D2D2766FD6B00237814 /* Liquid */; };
+		89F05B9B276A87920002E9C7 /* ContactsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F05B9A276A87920002E9C7 /* ContactsViewModel.swift */; };
+		89F05B9F276A8D360002E9C7 /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F05B9E276A8D360002E9C7 /* Contact.swift */; };
 		89F1386D2767EB19006680ED /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F1386C2767EB19006680ED /* SignInView.swift */; };
 		89F138702767F55F006680ED /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 89F1386F2767F55F006680ED /* GoogleSignIn */; };
 /* End PBXBuildFile section */
@@ -71,6 +73,8 @@
 		89BDCDEB2769918D00577829 /* OnboardingTrioView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingTrioView.swift; sourceTree = "<group>"; };
 		89BDCDEE2769B50C00577829 /* ContactsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsView.swift; sourceTree = "<group>"; };
 		89BDCDF02769E64200577829 /* Firestore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Firestore.swift; sourceTree = "<group>"; };
+		89F05B9A276A87920002E9C7 /* ContactsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsViewModel.swift; sourceTree = "<group>"; };
+		89F05B9E276A8D360002E9C7 /* Contact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
 		89F1386C2767EB19006680ED /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -200,6 +204,7 @@
 			isa = PBXGroup;
 			children = (
 				891A160D27657CEA00B26659 /* User.swift */,
+				89F05B9E276A8D360002E9C7 /* Contact.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -242,6 +247,7 @@
 			isa = PBXGroup;
 			children = (
 				89BDCDEE2769B50C00577829 /* ContactsView.swift */,
+				89F05B9A276A87920002E9C7 /* ContactsViewModel.swift */,
 			);
 			path = Contacts;
 			sourceTree = "<group>";
@@ -341,6 +347,7 @@
 			files = (
 				89BDCDEC2769918D00577829 /* OnboardingTrioView.swift in Sources */,
 				891A15E327653A7000B26659 /* ContentView.swift in Sources */,
+				89F05B9F276A8D360002E9C7 /* Contact.swift in Sources */,
 				891A160327656FC700B26659 /* HomeView.swift in Sources */,
 				891A160B2765732700B26659 /* HomeViewModel.swift in Sources */,
 				892179E62765FECD001E6C60 /* FooterControlsViewModel.swift in Sources */,
@@ -352,6 +359,7 @@
 				891A1611276590B000B26659 /* ChatsCarouselView.swift in Sources */,
 				89BDCDE527695DB900577829 /* NirvanaImage.swift in Sources */,
 				891A16132765A44300B26659 /* ChatsCarouselViewModel.swift in Sources */,
+				89F05B9B276A87920002E9C7 /* ContactsViewModel.swift in Sources */,
 				891A15E127653A7000B26659 /* nirvana_iosApp.swift in Sources */,
 				891A160127656FB200B26659 /* FooterView.swift in Sources */,
 				89BDCDEA27697F9C00577829 /* UserMenu.swift in Sources */,
@@ -497,6 +505,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "nirvana-ios/Info.plist";
+				INFOPLIST_KEY_NSContactsUsageDescription = "Please provide access to build your inner circle 🌱";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -529,6 +538,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "nirvana-ios/Info.plist";
+				INFOPLIST_KEY_NSContactsUsageDescription = "Please provide access to build your inner circle 🌱";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

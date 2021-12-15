@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import Contacts
+import ContactsUI
 
 struct ContactsView: View {
     var testUsers:[TestUser] = [
@@ -16,16 +18,23 @@ struct ContactsView: View {
         TestUser(_profilePic: "rohan", _firstN: "Rohan", _lastN: "Chadha")
     ]
     
+    @ObservedObject var contactsViewModel = ContactsViewModel()
+    
     var body: some View {
-        List {
-            ForEach(testUsers) { user in
-                let fullName = "\(user.firstName) \(user.lastName)"
-                IndividualContactView(name: fullName, imageName: user.profilePictureUrl)
-            }
+        VStack(spacing: 0) {
+            OnboardingTemplateView(imgName: "undraw_grades_re_j7d6", mainLeadingActText: "Add your ", mainHighlightedActText: "closest folks.", mainTrailingActText: "", subActText: "besties, bf or gf, siblings, parents, etc.")
+            
+            Rectangle()
+                .strokeBorder(style: StrokeStyle(lineWidth: 4, dash: [10]))
+            
+        }
+        .background(NirvanaColor.bgLightGrey)
+        .alert(item: $contactsViewModel.permissionsError) {_ in
+            Alert(title: Text("Permissions Needed"),
+                  message: Text(contactsViewModel.permissionsError?.description ?? "unknown error"),
+                  dismissButton: .default(Text("Ok"), action: contactsViewModel.openSettings))
         }
     }
-    
-    
 }
 
 struct ContactsView_Previews: PreviewProvider {
@@ -40,7 +49,7 @@ private struct IndividualContactView: View {
     
     @Namespace private var animation
     @State var isAddedUser = false
-    
+
     var body: some View {
         HStack(alignment: .center, spacing: 0) {
             Image(imageName)
