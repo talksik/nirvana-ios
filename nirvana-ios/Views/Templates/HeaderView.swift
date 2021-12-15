@@ -18,7 +18,11 @@ struct HeaderView: View {
                 Image("undraw_handcrafts_leaf")
                     .resizable()
                     .frame(width: 20.0, height: 32.132)
-                    .padding()
+                
+                Text("nirvana")
+                    .font(Font.custom("Satisfy-Regular", size: 35))
+                    .foregroundColor(NirvanaColor.teal)
+                    .multilineTextAlignment(.center)
             }
         } else {
             HStack(alignment:.center) {
