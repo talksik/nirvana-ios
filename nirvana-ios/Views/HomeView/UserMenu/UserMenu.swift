@@ -8,15 +8,9 @@
 import SwiftUI
 
 struct UserMenuView: View {
-    @Environment(\.dismiss) var dismiss
     
     var body: some View {
-        Button("Press to dismiss") {
-            dismiss()
-        }
-        .font(.title)
-        .padding()
-        .background(Color.black)
+        Text("different menu options")
     }
 }
 
