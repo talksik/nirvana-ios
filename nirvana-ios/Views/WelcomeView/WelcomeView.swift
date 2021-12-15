@@ -42,7 +42,7 @@ struct WelcomeView: View {
                         }
                             .padding(.top, 20)
                         )
-            )
+            ).navigationBarHidden(true)
         }.navigationBarHidden(true) // navigation view
     } // View body
 } // View
