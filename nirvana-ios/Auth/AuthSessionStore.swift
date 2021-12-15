@@ -39,7 +39,7 @@ final class AuthSessionStore: ObservableObject, SessionStore {
         let clientID = FirebaseApp.app()?.options.clientID
         self.GIDconfig = GIDConfiguration(clientID: clientID!)
         
-        print(clientID)
+        print("the google client id: prolly shouldn't be printing this: \(clientID)")
         
         self.setupAuthListen()
     }

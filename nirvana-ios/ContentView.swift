@@ -18,7 +18,7 @@ struct ContentView: View {
                 case SessionState.isLoggedOut:
                     WelcomeView()
             }
-        }
+        }.animation(.default, value:authSessionStore.sessionState)
     }
 }
 
