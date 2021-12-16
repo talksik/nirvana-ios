@@ -61,6 +61,16 @@ struct InnerCircleView: View {
         }
     }
     
+    // magiv variables for grid
+    private static let size: CGFloat = 100
+    private static let spacingBetweenColumns: CGFloat = 16
+    private static let spacingBetweenRows: CGFloat = 16
+    private static let totalColumns: Int = 10
+    
+    let gridItems: [GridItem] = Array(
+        repeating: GridItem(.fixed(size), spacing: spacingBetweenColumns, alignment: .center),
+        count: totalColumns)
+    
     private var content: some View {
         VStack(alignment: .leading, spacing: 0) {
             // header
@@ -72,11 +82,65 @@ struct InnerCircleView: View {
 //                .frame(width: universalSize.width * 0.75)
 //                .frame(maxWidth: .infinity)
 //                .blur(radius: 8)
+            GeometryReader {proxy in
+                let localValues = proxy.frame(in: .local)
+                
+                
+                ScrollView([.horizontal, .vertical], showsIndicators: false) {
+                    LazyVGrid(
+                        columns: gridItems,
+                        alignment: .center,
+                        spacing: Self.spacingBetweenRows
+                    ) {
+                        ForEach(1..<60) { value in
+                            VStack(alignment: .center) {
+                                Image("Artboards_Diversity_Avatars_by_Netguru-\(value)")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(height: Self.size)
+                                    .background(Color.white.opacity(0.5))
+                                    .cornerRadius(100)
+                                    .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 20)
+                                    .scaleEffect(0.5)
+                                    .offset(
+                                        x: honeycombOffSetX(value),
+                                        y: 0
+                                    )
+                                    
+                                    
+                                
+//                                Text("local min x: \(localValues.minX)")
+//                                    .font(.caption)
+//                                Text("local min x: \(localValues.minY)")
+//                                    .font(.caption)
+                            }
+                        }
+                    }
+                }
+                .foregroundColor(Color.blue)
+                .frame(maxWidth: .infinity)
+            }
+            
                 
             // navigation/footer
             
             Spacer()
         }
+    }
+    
+    private func getScale(_ value: Int) -> CGFloat {
+        
+    }
+    
+    private func honeycombOffSetX(_ value: Int) -> CGFloat {
+        let rowNumber = value / Self.totalColumns
+        
+        // make every even row have the honeycomb offset
+        if rowNumber % 2 == 0 {
+            return Self.size / 2 + Self.spacingBetweenColumns / 2 // account for the column spacing from before
+        }
+        
+        return 0
     }
     
     private var header: some View {
