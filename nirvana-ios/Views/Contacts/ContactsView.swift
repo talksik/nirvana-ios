@@ -18,27 +18,36 @@ struct ContactsView: View {
         TestUser(_profilePic: "rohan", _firstN: "Rohan", _lastN: "Chadha")
     ]
     
-    @ObservedObject var contactsViewModel = ContactsViewModel()
+    @State var showPicker = false
+    @State var selectedContact: CNContact?
     
     var body: some View {
-        VStack(spacing: 0) {
+        VStack(alignment: .trailing, spacing: 0) {
             OnboardingTemplateView(imgName: "undraw_grades_re_j7d6", mainLeadingActText: "Add your ", mainHighlightedActText: "closest folks.", mainTrailingActText: "", subActText: "besties, bf or gf, siblings, parents, etc.")
             
-            Text("Add contacts")
-                .padding()
-                .foregroundColor(NirvanaColor.teal)
-                .overlay(
-                    Rectangle()
-                        .strokeBorder(style: StrokeStyle(lineWidth: 4, dash: [10]))
-                        .foregroundColor(NirvanaColor.teal)
-                )
+            Button(action: {
+                self.showPicker = true
+            }, label: {
+                Label("Add Contacts", systemImage: "plus.circle")
+                    .frame(width: 50, height: 50, alignment: .center)
+                    .labelStyle(.iconOnly)
+                    .font(.largeTitle)
+                    .foregroundColor(NirvanaColor.white)
+                    .background(NirvanaColor.teal)
+                    .padding(.vertical, 20)
+                    .clipShape(Circle())
+                    .shadow(radius:10)
+            })
+            
+            Text(selectedContact != nil ? "Selected: \((selectedContact?.familyName)!) \((selectedContact?.givenName)!)" : "Nothing selected".localized)
+            
+            Spacer()
         }
+        .sheet(isPresented: self.$showPicker) {
+                ContactPickerView(showPicker: self.$showPicker, selectedContact: self.$selectedContact)
+            }
+        .padding()
         .background(NirvanaColor.bgLightGrey)
-        .alert(item: $contactsViewModel.permissionsError) {_ in
-            Alert(title: Text("Permissions Needed"),
-                  message: Text(contactsViewModel.permissionsError?.description ?? "unknown error"),
-                  dismissButton: .default(Text("Ok"), action: contactsViewModel.openSettings))
-        }
     }
 }
 

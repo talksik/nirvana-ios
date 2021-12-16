@@ -9,60 +9,58 @@ import Foundation
 import Contacts
 import SwiftUI
 
-final public class ContactsViewModel : ObservableObject {
-    @Published var contacts : [Contact] = []
-    @Published var permissionsError: PermissionsError? = .none
+class ContactsViewModel : ObservableObject {
+    @Published var showPermissionAlert = false
+    
+    let store: CNContactStore
+    let keys: [CNKeyDescriptor]
     
     init() {
-        self.permissions()
+        store = CNContactStore()
+        
+        keys = [CNContactImageDataKey as CNKeyDescriptor,
+                CNContactPhoneNumbersKey as CNKeyDescriptor,
+                CNContactEmailAddressesKey as CNKeyDescriptor,
+                CNContactFormatter.descriptorForRequiredKeys(for: .fullName)]
     }
     
     func openSettings() {
-        self.permissionsError = .none
-        guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
-        if UIApplication.shared.canOpenURL(settingsURL) { UIApplication.shared.open(settingsURL)}
+            guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
+            if UIApplication.shared.canOpenURL(settingsURL) { UIApplication.shared.open(settingsURL)}
     }
     
-    private func fetchContacts() {
-        //remove all current contacts from vm
-        contacts.removeAll()
+    func requestAccess() {
+        store.requestAccess(for: .contacts) {
+            (granted, error) in
+            return
+        }
+        // TODO do something useful with completionHandler
+    }
+
+    func fetchContacts(sortOrder: CNContactSortOrder = .userDefault) -> [CNContact] {
+        let authStatus = CNContactStore.authorizationStatus(for: .contacts)
+        if authStatus == .notDetermined {
+            requestAccess()
+        } else if authStatus == .restricted {
+            // TODO prompt user that app is useless without access to contacts
+            self.showPermissionAlert = true
+        }
         
-        let store = CNContactStore()
+        let fetchRequest = CNContactFetchRequest(keysToFetch: keys)
+        fetchRequest.sortOrder = sortOrder
+        
+        var fetchedContacts = [CNContact]()
         
         do {
-            let predicate = CNContact.predicateForContacts(matchingName: "sarth")
-            //specific contact details: ex: name, email, etc.
-            let keysToFetch = [CNContactGivenNameKey, CNContactFamilyNameKey] as [CNKeyDescriptor]
-
-            let contacts = try store.unifiedContacts(matching: predicate, keysToFetch: keysToFetch)
-            
-            print("Fetched contacts: \(contacts)")
-        } catch {
-            print("Failed to fetch contacts, error: \(error)")
-            // Handle the error
-            self.permissionsError = .fetchError(error)
-        }
-    }
-    
-    private func permissions() {
-        switch CNContactStore.authorizationStatus(for: .contacts) {
-        case.authorized:
-            print("fetching contacts")
-            fetchContacts()
-        case .notDetermined, .restricted, .denied:
-            CNContactStore().requestAccess(for: .contacts) {granted, error in
-                switch granted {
-                case true:
-                    self.fetchContacts()
-                case false:
-                    DispatchQueue.main.async {
-                        print("unable to get contacts")
-                        self.permissionsError = .userError
-                    }
-                }
+            try store.enumerateContacts(with: fetchRequest) {
+                (contact, stop) in
+                fetchedContacts.append(contact)
             }
-        default:
-            fatalError("Unknown Error!")
+        } catch  {
+            print("Unable to fetch contacts. \(error)")
+            
         }
+        
+        return fetchedContacts
     }
 }
