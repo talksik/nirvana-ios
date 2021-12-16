@@ -49,6 +49,7 @@ struct InnerCircleView: View {
                     .animation(
                         Animation.linear(duration: 12).repeatForever(autoreverses: false)
                     )
+    
             }
             .ignoresSafeArea(.all)
             
@@ -62,21 +63,37 @@ struct InnerCircleView: View {
     
     var content: some View {
         VStack(alignment: .leading, spacing: 0) {
-            HStack {
+            HStack(alignment: .center) {
                 Image("undraw_handcrafts_leaf")
                     .resizable()
                     .frame(width: 20.0, height: 32.132)
+                    .padding(.leading, 20)
                 
-                Text("nirvana")
-                    .font(Font.custom("Satisfy-Regular", size: 35))
-                    .foregroundColor(NirvanaColor.teal)
-                    .multilineTextAlignment(.center)
+                Spacer()
+                
+                Menu {
+                    Button("Log out") {
+                        print("log out button clicked")
+                    }
+                    Button("Friends") {
+                        print("manage friends page")
+                    }
+                } label: {
+                    RemoteImage(url: "https://avatars.githubusercontent.com/u/41487836")
+                        .background(NirvanaColor.teal)
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 40, height: 40)
+                        .clipShape(Circle())
+                        .padding(5)
+                }
+                
             }
             .frame(maxWidth: .infinity)
             .background(Color.white.opacity(0.35))
             .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
-            .shadow(color: Color.black.opacity(0.1), radius: 30, x: 0, y: 20)
+            .shadow(color: Color.black.opacity(0.25), radius: 30, x: 0, y: 20)
             .padding(.horizontal)
+            
             
             
             Spacer()
