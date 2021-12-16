@@ -26,7 +26,7 @@ struct InnerCircleView: View {
                 LinearGradient(gradient: Gradient(
                     colors: [NirvanaColor.white.opacity(0), NirvanaColor.white.opacity(1.0)]), startPoint: .bottom, endPoint: .top)
                 
-                getWave(peakPercentage: 0.4, troughPercentage: 0.65, peakAltercation: baseLineY + 150, troughAltercation: baseLineY - 90)
+                getWave(peakPercentage: 0.4, troughPercentage: 0.65, peakAltercation: baseLineY + 100, troughAltercation: baseLineY - 90)
                     .foregroundColor(NirvanaColor.dimTeal.opacity(0.5))
                     .blur(radius:2)
                     .offset(x: self.animateWaves ? -1*universalSize.width : 0)
@@ -61,43 +61,62 @@ struct InnerCircleView: View {
         }
     }
     
-    var content: some View {
+    private var content: some View {
         VStack(alignment: .leading, spacing: 0) {
-            HStack(alignment: .center) {
-                Image("undraw_handcrafts_leaf")
-                    .resizable()
-                    .frame(width: 20.0, height: 32.132)
-                    .padding(.leading, 20)
-                
-                Spacer()
-                
-                Menu {
-                    Button("Log out") {
-                        print("log out button clicked")
-                    }
-                    Button("Friends") {
-                        print("manage friends page")
-                    }
-                } label: {
-                    RemoteImage(url: "https://avatars.githubusercontent.com/u/41487836")
-                        .background(NirvanaColor.teal)
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: 40, height: 40)
-                        .clipShape(Circle())
-                        .padding(5)
-                }
-                
-            }
-            .frame(maxWidth: .infinity)
-            .background(Color.white.opacity(0.35))
-            .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
-            .shadow(color: Color.black.opacity(0.25), radius: 30, x: 0, y: 20)
-            .padding(.horizontal)
+            // header
+            header
             
-            
+            // main communication hub
+//            Circle()
+//                .foregroundColor(Color.white.opacity(0.5))
+//                .frame(width: universalSize.width * 0.75)
+//                .frame(maxWidth: .infinity)
+//                .blur(radius: 8)
+                
+            // navigation/footer
             
             Spacer()
         }
+    }
+    
+    private var header: some View {
+        HStack(alignment: .center) {
+            Image("undraw_handcrafts_leaf")
+                .resizable()
+                .frame(width: 20.0, height: 32.132)
+                .padding(.leading, 20)
+            
+            Spacer()
+            
+            Text("nirvana")
+                .font(Font.custom("Satisfy-Regular", size: 28))
+                .foregroundColor(NirvanaColor.teal)
+                .multilineTextAlignment(.center)
+            
+            Spacer()
+            
+            Menu {
+                Button("Log out") {
+                    print("log out button clicked")
+                }
+                Button("Friends") {
+                    print("manage friends page")
+                }
+            } label: {
+                RemoteImage(url: "https://avatars.githubusercontent.com/u/41487836")
+                    .background(NirvanaColor.teal)
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 40, height: 40)
+                    .clipShape(Circle())
+                    .padding(5)
+            }
+            
+        }
+        .frame(maxWidth: .infinity)
+        .background(Color.white.opacity(0.5))
+        .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
+        .shadow(color: Color.black.opacity(0.25), radius: 30, x: 0, y: 20)
+        .padding(.horizontal)
     }
     
     private func getWave(peakPercentage: Double, troughPercentage: Double, peakAltercation: CGFloat, troughAltercation: CGFloat) -> Path {
