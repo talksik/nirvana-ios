@@ -15,18 +15,6 @@ struct InnerCircleView: View {
     
     var body: some View {
         ZStack {
-            VStack {
-                HStack {
-                    Image("undraw_handcrafts_leaf")
-                        .resizable()
-                        .frame(width: 20.0, height: 32.132)
-                    
-                    Text("nirvana")
-                        .font(Font.custom("Satisfy-Regular", size: 35))
-                        .foregroundColor(NirvanaColor.teal)
-                        .multilineTextAlignment(.center)
-                }
-            }
             // background
             ZStack {
                 AngularGradient(
@@ -62,11 +50,37 @@ struct InnerCircleView: View {
                         Animation.linear(duration: 12).repeatForever(autoreverses: false)
                     )
             }
+            .ignoresSafeArea(.all)
+            
+            // content
+            content
         }
         .onAppear() {
             self.animateWaves = true
         }
-        .ignoresSafeArea(.all)
+    }
+    
+    var content: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            HStack {
+                Image("undraw_handcrafts_leaf")
+                    .resizable()
+                    .frame(width: 20.0, height: 32.132)
+                
+                Text("nirvana")
+                    .font(Font.custom("Satisfy-Regular", size: 35))
+                    .foregroundColor(NirvanaColor.teal)
+                    .multilineTextAlignment(.center)
+            }
+            .frame(maxWidth: .infinity)
+            .background(Color.white.opacity(0.35))
+            .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
+            .shadow(color: Color.black.opacity(0.1), radius: 30, x: 0, y: 20)
+            .padding(.horizontal)
+            
+            
+            Spacer()
+        }
     }
     
     private func getWave(peakPercentage: Double, troughPercentage: Double, peakAltercation: CGFloat, troughAltercation: CGFloat) -> Path {
