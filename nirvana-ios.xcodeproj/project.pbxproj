@@ -39,7 +39,6 @@
 		89BDCDEC2769918D00577829 /* OnboardingTrioView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89BDCDEB2769918D00577829 /* OnboardingTrioView.swift */; };
 		89BDCDEF2769B50C00577829 /* ContactsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89BDCDEE2769B50C00577829 /* ContactsView.swift */; };
 		89BDCDF12769E64200577829 /* Firestore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89BDCDF02769E64200577829 /* Firestore.swift */; };
-		89D99D2E2766FD6B00237814 /* Liquid in Frameworks */ = {isa = PBXBuildFile; productRef = 89D99D2D2766FD6B00237814 /* Liquid */; };
 		89F05B9B276A87920002E9C7 /* ContactsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F05B9A276A87920002E9C7 /* ContactsViewModel.swift */; };
 		89F05B9F276A8D360002E9C7 /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F05B9E276A8D360002E9C7 /* Contact.swift */; };
 		89F05BA4276ACC060002E9C7 /* ContactService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F05BA3276ACC060002E9C7 /* ContactService.swift */; };
@@ -95,7 +94,6 @@
 				89288EC5276756DF00E962C4 /* FirebaseAuth in Frameworks */,
 				89288EC7276756DF00E962C4 /* FirebaseDatabase in Frameworks */,
 				89288EC9276756DF00E962C4 /* FirebaseStorage in Frameworks */,
-				89D99D2E2766FD6B00237814 /* Liquid in Frameworks */,
 				89F138702767F55F006680ED /* GoogleSignIn in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -304,7 +302,6 @@
 			);
 			name = "nirvana-ios";
 			packageProductDependencies = (
-				89D99D2D2766FD6B00237814 /* Liquid */,
 				89288EC2276756DF00E962C4 /* FirebaseAnalytics */,
 				89288EC4276756DF00E962C4 /* FirebaseAuth */,
 				89288EC6276756DF00E962C4 /* FirebaseDatabase */,
@@ -341,7 +338,6 @@
 			);
 			mainGroup = 891A15D427653A7000B26659;
 			packageReferences = (
-				89D99D2C2766FD6B00237814 /* XCRemoteSwiftPackageReference "liquid" */,
 				89288EC1276756DF00E962C4 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				89F1386E2767F55F006680ED /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 				89BCABE0276B3CB0009E9B10 /* XCRemoteSwiftPackageReference "swiftui-navigation-stack" */,
@@ -630,14 +626,6 @@
 				minimumVersion = 1.0.0;
 			};
 		};
-		89D99D2C2766FD6B00237814 /* XCRemoteSwiftPackageReference "liquid" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/maustinstar/liquid";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.0.2;
-			};
-		};
 		89F1386E2767F55F006680ED /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/google/GoogleSignIn-iOS.git";
@@ -673,11 +661,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 89BCABE0276B3CB0009E9B10 /* XCRemoteSwiftPackageReference "swiftui-navigation-stack" */;
 			productName = NavigationStack;
-		};
-		89D99D2D2766FD6B00237814 /* Liquid */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 89D99D2C2766FD6B00237814 /* XCRemoteSwiftPackageReference "liquid" */;
-			productName = Liquid;
 		};
 		89F1386F2767F55F006680ED /* GoogleSignIn */ = {
 			isa = XCSwiftPackageProductDependency;

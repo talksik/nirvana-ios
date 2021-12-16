@@ -110,15 +110,6 @@
         }
       },
       {
-        "package": "Liquid",
-        "repositoryURL": "https://github.com/maustinstar/liquid",
-        "state": {
-          "branch": null,
-          "revision": "9123b9d1fb24c8273c989924b4e889f07629a26b",
-          "version": "0.0.2"
-        }
-      },
-      {
         "package": "nanopb",
         "repositoryURL": "https://github.com/firebase/nanopb.git",
         "state": {
