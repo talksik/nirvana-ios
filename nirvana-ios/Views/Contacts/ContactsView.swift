@@ -32,9 +32,6 @@ struct ContactsView: View {
                         .strokeBorder(style: StrokeStyle(lineWidth: 4, dash: [10]))
                         .foregroundColor(NirvanaColor.teal)
                 )
-                .onTapGesture {
-                    self.contactObj.showContactPicker.toggle()
-                }
         }
         .background(NirvanaColor.bgLightGrey)
         .alert(item: $contactsViewModel.permissionsError) {_ in
