@@ -128,15 +128,6 @@
         }
       },
       {
-        "package": "NavigationKit",
-        "repositoryURL": "https://github.com/rebeloper/NavigationKit.git",
-        "state": {
-          "branch": null,
-          "revision": "9fc0dea7c57c6671c087f23361d7fe3493ffaa1c",
-          "version": "0.4.10"
-        }
-      },
-      {
         "package": "Promises",
         "repositoryURL": "https://github.com/google/promises.git",
         "state": {
@@ -152,6 +143,15 @@
           "branch": null,
           "revision": "7e2c5f3cbbeea68e004915e3a8961e20bd11d824",
           "version": "1.18.0"
+        }
+      },
+      {
+        "package": "NavigationStack",
+        "repositoryURL": "https://github.com/matteopuc/swiftui-navigation-stack.git",
+        "state": {
+          "branch": null,
+          "revision": "be0db68ed0d84ed543bf8f7600a1f84de015f753",
+          "version": "1.0.4"
         }
       }
     ]

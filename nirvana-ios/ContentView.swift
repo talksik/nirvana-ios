@@ -12,7 +12,7 @@ struct ContentView: View {
     
     var body: some View {
         ZStack {
-            ContactsView() // TEMPORARY FOR TESTING
+//            ContactsView() // TEMPORARY FOR TESTING
 //            switch self.authSessionStore.sessionState {
 //                case SessionState.isAuthenticated:
 //                    HomeView()
