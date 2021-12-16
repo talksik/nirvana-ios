@@ -67,6 +67,8 @@ struct InnerCircleView: View {
     private static let spacingBetweenRows: CGFloat = 16
     private static let totalColumns: Int = 10
     
+    @State private var selectedUserIndex = 0
+    
     let gridItems: [GridItem] = Array(
         repeating: GridItem(.fixed(size), spacing: spacingBetweenColumns, alignment: .center),
         count: totalColumns)
@@ -101,11 +103,28 @@ struct InnerCircleView: View {
                                     .background(Color.white.opacity(0.5))
                                     .cornerRadius(100)
                                     .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 20)
-                                    .scaleEffect(0.5)
+                                    .scaleEffect(value == selectedUserIndex ? 1 : 0.75)
                                     .offset(
                                         x: honeycombOffSetX(value),
                                         y: 0
                                     )
+                                    .onTapGesture {
+                                        self.selectedUserIndex = value
+                                        
+                                        print("the selected item is: \(value)")
+                                        
+                                        let rowNumber = value / Self.totalColumns // 10 / 10
+                                        
+                                        print("the rownumber is: \(rowNumber)")
+                                                                    
+                                        // make every even row have the honeycomb offset
+                                        if rowNumber % 2 == 0 {
+                                            print("the offset is \(Self.size / 2 + Self.spacingBetweenColumns / 2 )") // account for the column spacing from before
+                                        } else {
+                                            print("there is no offset")
+                                        }
+                                    }
+                                    .animation(Animation.spring(), value: selectedUserIndex)
                                     
                                     
                                 
@@ -129,14 +148,14 @@ struct InnerCircleView: View {
     }
     
     private func getScale(_ value: Int) -> CGFloat {
-        
+        return 2
     }
     
     private func honeycombOffSetX(_ value: Int) -> CGFloat {
-        let rowNumber = value / Self.totalColumns
+        let rowNumber = ceil(Double(value) / Double(Self.totalColumns)) // round up
         
         // make every even row have the honeycomb offset
-        if rowNumber % 2 == 0 {
+        if Int(rowNumber) % 2 == 0 {
             return Self.size / 2 + Self.spacingBetweenColumns / 2 // account for the column spacing from before
         }
         
