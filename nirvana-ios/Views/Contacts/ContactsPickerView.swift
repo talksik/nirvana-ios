@@ -10,7 +10,9 @@ import Contacts
 
 struct ContactPickerView: View {
     @Binding var showPicker: Bool
+    // updates the parent view for it to do something with the new contact
     @Binding var selectedContact: CNContact?
+    
     var contacts: [String: [CNContact]] = loadContactsGrouped()
     
     var body: some View {

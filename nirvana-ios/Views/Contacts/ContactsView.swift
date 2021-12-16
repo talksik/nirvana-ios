@@ -28,7 +28,7 @@ struct ContactsView: View {
             Button(action: {
                 self.showPicker = true
             }, label: {
-                Label("Add Contacts", systemImage: "plus.circle")
+                Label("Add Contacts", systemImage: "plus")
                     .frame(width: 50, height: 50, alignment: .center)
                     .labelStyle(.iconOnly)
                     .font(.largeTitle)
