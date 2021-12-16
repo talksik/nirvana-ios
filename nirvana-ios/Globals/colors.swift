@@ -45,6 +45,7 @@ final class NirvanaColor {
     static let light:Color = Color(hex: "2a416a")
     static let orangy:Color = Color(hex: "305955")
     static let solidTeal:Color = Color(hex: "258786")
-    static let dimTeal:Color = Color(hex: "ca7558")
+    static let dimTeal:Color = Color(hex: "66b2b2")
     static let solidBlue:Color = Color(hex: "9ec2b6")
+    
 }
