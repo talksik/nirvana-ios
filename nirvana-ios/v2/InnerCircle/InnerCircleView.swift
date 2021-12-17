@@ -9,6 +9,7 @@ import SwiftUI
 
 struct InnerCircleView: View {
     let universalSize = UIScreen.main.bounds
+    // y position of where waves should start
     let baseLineY = UIScreen.main.bounds.height * 0.95
     
     @State var animateWaves = false
@@ -83,7 +84,7 @@ struct InnerCircleView: View {
     
     // magic variables for grid
     // TODO: change the number of columns based on the number of items
-    private static var numberOfItems: Int = 50
+    private static var numberOfItems: Int = 10
     private static let size: CGFloat = 80
     private static let spacingBetweenColumns: CGFloat = 10
     private static let spacingBetweenRows: CGFloat = 10
@@ -108,6 +109,14 @@ struct InnerCircleView: View {
                     ForEach(1..<Self.numberOfItems + 1) { value in
                         GeometryReader {gridProxy in
                             let posRelToGrid = gridProxy.frame(in: .global) // relative to the entire lazygrid
+                            
+                            // TESTING
+                            let positionOfCurrentItem = CGPoint(x: gridProxy.frame(in: .global).midX, y: gridProxy.frame(in: .global).midY)
+                            let currItemDistFromCenter = Self.distanceBetweenPoints(p1: positionOfCurrentItem, p2: center)
+                            
+                            Text("dist: \(currItemDistFromCenter)")
+                                .font(.caption)
+                                .foregroundColor(Color.black)
                             
                             Image("Artboards_Diversity_Avatars_by_Netguru-\(value)")
                                 .resizable()
@@ -145,7 +154,8 @@ struct InnerCircleView: View {
     private let small:CGFloat = 0.8
     private let supersmall:CGFloat = 0.7
     
-    private let center: CGPoint = CGPoint(x: UIScreen.main.bounds.size.width*0.5,y: UIScreen.main.bounds.size.height*0.5)
+    private let center: CGPoint = CGPoint(x: UIScreen.main.bounds.width*0.5,y: UIScreen.main.bounds.height*0.5)
+    private let oldCenter: CGPoint = CGPoint(x: UIScreen.main.bounds.size.width*0.5,y: UIScreen.main.bounds.size.height*0.5)
     
     // getting the proxy of an individual item
     // and decoding into a scale that the item should take
@@ -272,7 +282,7 @@ struct InnerCircleView_Previews: PreviewProvider {
     }
 }
 
-
+//
 //struct Axes : View {
 //    var body: some View {
 //        GeometryReader { geometry in
