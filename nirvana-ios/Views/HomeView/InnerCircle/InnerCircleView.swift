@@ -71,11 +71,12 @@ struct InnerCircleView: View {
 //                .frame(width:universalSize.width*0.65, height: universalSize.height*0.3)
             
             // header
-            ZStack(alignment: .top) {
-                //TODO: find a better solution than hacking it like this
-                Color.clear
-                
+            VStack(alignment: .leading) {
                 header
+                
+                bubbleNavigation
+                
+                Spacer()
             }
             
 //            Path { path in
@@ -111,6 +112,56 @@ struct InnerCircleView: View {
         .onAppear() {
             self.animateWaves = true
         }
+    }
+    
+    var bubbleNavigation : some View {
+        HStack(alignment: .center) {
+            Button {
+                
+            } label: {
+                Label("circle", systemImage: "peacesign")
+                    .font(.caption2)
+                    .foregroundColor(Color.black)
+                    .padding(.vertical, 10)
+                    .padding(.horizontal, 8)
+                    .background(
+                        RoundedRectangle(cornerRadius: 20, style: .continuous)
+                            .fill(Color.teal.opacity(0.1))
+                    ).overlay(
+                        RoundedRectangle(cornerRadius: 20, style: .continuous)
+                            .strokeBorder(Color.white.opacity(01), lineWidth: 1)
+                    )
+            }
+            
+            Button {
+                
+            } label: {
+                Label("groups", systemImage: "rectangle.3.group")
+                    .font(.caption2)
+                    .foregroundColor(Color.black)
+                    .padding(.vertical, 10)
+                    .padding(.horizontal, 8)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 20, style: .continuous)
+                            .strokeBorder(Color.white.opacity(1), lineWidth: 1)
+                    )
+            }
+            
+            Button {
+                
+            } label: {
+                Label("work", systemImage: "suitcase")
+                    .font(.caption2)
+                    .foregroundColor(Color.black)
+                    .padding(.vertical, 10)
+                    .padding(.horizontal, 8)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 20, style: .continuous)
+                            .strokeBorder(Color.white.opacity(1), lineWidth: 1)
+                    )
+            }
+        }
+        .padding(.horizontal)
     }
     
     // magic variables for grid
