@@ -14,7 +14,7 @@ struct InnerCircleView: View {
     @State var animateWaves = false
     
     var body: some View {
-        ZStack {
+        ZStack(alignment: .top) {
             // background
             ZStack {
                 AngularGradient(
@@ -54,7 +54,12 @@ struct InnerCircleView: View {
             .ignoresSafeArea(.all)
             
             // content
-            content
+            gridContent
+            
+            // header
+            ZStack(alignment: .top) {
+                header
+            }
         }
         .onAppear() {
             self.animateWaves = true
@@ -63,8 +68,8 @@ struct InnerCircleView: View {
     
     // magiv variables for grid
     private static let size: CGFloat = 100
-    private static let spacingBetweenColumns: CGFloat = 16
-    private static let spacingBetweenRows: CGFloat = 16
+    private static let spacingBetweenColumns: CGFloat = 10
+    private static let spacingBetweenRows: CGFloat = 10
     private static let totalColumns: Int = 10
     private var numberOfItems: Int = 59
     
@@ -76,90 +81,60 @@ struct InnerCircleView: View {
         repeating: GridItem(.fixed(size), spacing: spacingBetweenColumns, alignment: .center),
         count: totalColumns)
     
-    private var content: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            // header
-            header
-            
-            // main communication hub
-//            Circle()
-//                .foregroundColor(Color.white.opacity(0.5))
-//                .frame(width: universalSize.width * 0.75)
-//                .frame(maxWidth: .infinity)
-//                .blur(radius: 8)
-                
-            ScrollViewReader {scrollReaderValue in
-                ScrollView([.horizontal, .vertical], showsIndicators: false) {
-                    LazyVGrid(
-                        columns: gridItems,
-                        alignment: .center,
-                        spacing: Self.spacingBetweenRows
-                    ) {
-                        
-                        ForEach(1..<60) { value in
-                            GeometryReader {gridProxy in
-                                let posRelToGrid = gridProxy.frame(in: .global) // relative to the entire lazygrid
-                                
-                                Image("Artboards_Diversity_Avatars_by_Netguru-\(value)")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .background(Color.white.opacity(0.5))
-                                    .cornerRadius(100)
-                                    .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 20)
-//                                    .scaleEffect(
-//                                        scale(
-//                                            x: isEvenRow(value) ? gridProxy.frame(in: .global).midX + gridProxy.size.width/2 :
-//                                                gridProxy.frame(in: .global).midX,
-//                                            y: gridProxy.frame(in: .global).midY,
-//                                            value: value%43
-//                                        )
-//                                    )
-                                    .offset(
-                                        x: honeycombOffSetX(value),
-                                        y: 0
-                                    )
-                                    .onTapGesture {
-                                        self.selectedUserIndex = value
-                                        
-                                        print("the selected item is: \(value)")
-                                        
-                                        let rowNumber = value / Self.totalColumns // 10 / 10
-                                        
-                                        print("the rownumber is: \(rowNumber)")
-                                                                    
-                                        // make every even row have the honeycomb offset
-                                        if rowNumber % 2 == 0 {
-                                            print("the offset is \(Self.size / 2 + Self.spacingBetweenColumns / 2 )") // account for the column spacing from before
-                                        } else {
-                                            print("there is no offset")
-                                        }
+    private var gridContent: some View {
+        // main communication hub
+        ScrollViewReader {scrollReaderValue in
+            ScrollView([.horizontal, .vertical], showsIndicators: false) {
+                LazyVGrid(
+                    columns: gridItems,
+                    alignment: .center,
+                    spacing: Self.spacingBetweenRows
+                ) {
+                    
+                    ForEach(1..<60) { value in
+                        GeometryReader {gridProxy in
+                            let posRelToGrid = gridProxy.frame(in: .global) // relative to the entire lazygrid
+                            
+                            Image("Artboards_Diversity_Avatars_by_Netguru-\(value)")
+                                .resizable()
+                                .scaledToFit()
+                                .background(Color.white.opacity(0.5))
+                                .cornerRadius(100)
+                                .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 20)
+                                .scaleEffect(self.selectedUserIndex == value ? 1 : 0.75)
+                                .offset(
+                                    x: honeycombOffSetX(value),
+                                    y: 0
+                                )
+                                .onTapGesture {
+                                    self.selectedUserIndex = value
+                                    
+                                    print("the selected item is: \(value)")
+                                    
+                                    let rowNumber = value / Self.totalColumns // 10 / 10
+                                    
+                                    print("the rownumber is: \(rowNumber)")
+                                                                
+                                    // make every even row have the honeycomb offset
+                                    if rowNumber % 2 == 0 {
+                                        print("the offset is \(Self.size / 2 + Self.spacingBetweenColumns / 2 )") // account for the column spacing from before
+                                    } else {
+                                        print("there is no offset")
                                     }
-                                    .animation(Animation.spring(), value: selectedUserIndex)
-                            } // geometry reader
-                            .id(value) // id for scrollviewreader
-                            .frame(height: Self.size)
-                        }
-                    } // lazyvgrid
-                    .padding(.trailing, Self.size / 2 + Self.spacingBetweenColumns / 2)
-                }// scrollview
-                .onAppear {
-                    scrollReaderValue.scrollTo(self.numberOfItems / 2)
-                }
-            } // scrollview reader
-            
-            
-            // navigation/footer
-            
-            Spacer()
-        }
-    }
-    
-    private func isEvenRow(_ value: Int) -> Bool {
-        return (value / gridItems.count) % 2 == 0
-    }
-    
-    private func slope(p1: CGPoint, p2: CGPoint) -> CGFloat {
-        return (p2.y - p1.y)/(p2.x - p1.x)
+                                }
+                                .animation(Animation.spring(), value: selectedUserIndex)
+                        } // geometry reader
+                        .id(value) // id for scrollviewreader
+                        .frame(height: Self.size)
+                    }
+                } // lazyvgrid
+                .padding(.trailing, Self.size / 2 + Self.spacingBetweenColumns / 2) // because of the offset of last column
+                .padding(.top, Self.size / 2 + Self.spacingBetweenRows / 2) // because we are going under the nav bar
+            }// scrollview
+            .onAppear {
+                scrollReaderValue.scrollTo(self.numberOfItems / 2)
+            }
+        } // scrollview reader
     }
     
     private func distanceBetweenPoints(p1: CGPoint, p2: CGPoint) -> CGFloat {
@@ -172,70 +147,6 @@ struct InnerCircleView: View {
             )
         )
     }
-    
-    func offsetY(proxy: GeometryProxy, factor: CGFloat) -> CGFloat {
-            let y = proxy.frame(in: .global).midY
-
-            if y < frameSize.y {
-                return abs(y - frameSize.y) * factor
-            }
-
-            return -abs(y - frameSize.y) * factor
-
-        }
-
-        func offset(a: CGFloat, b: CGFloat, factor: CGFloat) -> CGFloat {
-            return abs(a - b) * factor
-        }
-
-        func distance2(x: CGFloat, y: CGFloat, value: Int) -> CGFloat {
-            //Fix crash with Slope
-            let m = (frameSize.y - y)/(frameSize.x - x)
-
-
-            let angle = abs(atan(m) * 180 / .pi)
-
-
-            //print("Angle: ", angle, apps[value])
-            //print("Slope: ", m, apps[value])
-            let ipadAngle: CGFloat = 35
-
-            if angle > ipadAngle {
-                let y2 = (y > frameSize.y) ? frameSize.y*2 : 0
-                let x2 = (y2 - y)/m + x
-                //print(apps[value], x2, y2)
-                return distance3(x: x2, y: y2, value: value)
-            } else {
-                let x2 = (x > frameSize.x) ? frameSize.x*2 : 0
-                let y2 = m * (x2 - x) + y
-                //print(apps[value], x2, y2)
-                return distance3(x: x2, y: y2, value: value)
-            }
-        }
-
-        func distance3(x: CGFloat, y: CGFloat, value: Int) -> CGFloat {
-            let xDist = abs(x - frameSize.x)
-            let yDist = abs(y - frameSize.y)
-
-            return CGFloat(sqrt(xDist * xDist + yDist * yDist))
-        }
-    
-    
-    func scale(x: CGFloat, y: CGFloat, value: Int) -> CGFloat {
-            let xDist = abs(x - frameSize.x)
-            let yDist = abs(y - frameSize.y)
-
-            let maxDistanceToCenter = distance2(x: x, y: y, value: value)//CGFloat(sqrt(frameSize.x * frameSize.x + frameSize.y * frameSize.y))
-            let result = CGFloat(sqrt(xDist * xDist + yDist * yDist))
-
-            //print("distance: \(apps[value]) ", result)
-            //print("center: \(apps[value]) ", maxDistanceToCenter)
-            let total = min(abs(result - maxDistanceToCenter), maxDistanceToCenter*0.7)
-
-            let finalResult = total/(maxDistanceToCenter) * 1.4
-
-            return finalResult
-        }
     
     private func honeycombOffSetX(_ value: Int) -> CGFloat {
         let rowNumber = ceil(Double(value) / Double(Self.totalColumns)) // round up
