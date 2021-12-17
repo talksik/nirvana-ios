@@ -254,11 +254,6 @@ struct InnerCircleView: View {
                 .frame(width: 20.0, height: 32.132)
                 .padding(.leading, 20)
             
-            Text("nirvana")
-                .font(Font.custom("Satisfy-Regular", size: 28))
-                .foregroundColor(NirvanaColor.teal)
-                .multilineTextAlignment(.center)
-            
             Spacer()
             
             Image(systemName: "message.and.waveform")
