@@ -77,22 +77,22 @@ struct InnerCircleView: View {
                 header
             }
             
-//            Path { path in
-//
-//                //draw the axes
-//                path.move(to: CGPoint(x:0, y:universalSize.height*0.5 ))
-//
-//                path.addLine(to: CGPoint(x:universalSize.width, y: universalSize.height*0.5))
-//
-//                path.move(to: CGPoint(x:universalSize.width*0.5, y:0 ))
-//
-//                path.addLine(to: CGPoint(x:universalSize.width * 0.5, y: universalSize.height))
-//
-//
-//                //draw the acceptance boxes
-//            }
-//            .stroke(Color.black)
-//            .edgesIgnoringSafeArea(.all)
+            Path { path in
+
+                //draw the axes
+                path.move(to: CGPoint(x:0, y:universalSize.height*0.5 ))
+
+                path.addLine(to: CGPoint(x:universalSize.width, y: universalSize.height*0.5))
+
+                path.move(to: CGPoint(x:universalSize.width*0.5, y:0 ))
+
+                path.addLine(to: CGPoint(x:universalSize.width * 0.5, y: universalSize.height))
+
+
+                //TODO: draw the acceptance boxes
+            }
+            .stroke(Color.black)
+            .edgesIgnoringSafeArea(.all)
         }
         .onAppear() {
             self.animateWaves = true
@@ -133,18 +133,15 @@ struct InnerCircleView: View {
                     // TODO: why did I start at 1? for the image name? just decrease count for that specifically
                     ForEach(1..<Self.numberOfItems + 1) { value in
                         GeometryReader {gridProxy in
-                            let posRelToGrid = gridProxy.frame(in: .global) // relative to the entire lazygrid
+                            let posRelToGrid = gridProxy.frame(in: .global) // relative to the entire screen
+                            let midX = getRowNumber(value) % 2 == 0 ? posRelToGrid.midX + (Self.size / 2) + (Self.spacingBetweenColumns / 2) : posRelToGrid.midX
+                            let midY = posRelToGrid.midY
                             
-                            // TESTING
-//                            Text("xdelta: \(abs(posRelToGrid.midX - self.center.x)) ydelta \(abs(posRelToGrid.midY - self.center.y))")
-//                                .font(.caption)
-//                                .foregroundColor(Color.black)
-                            
-                            
-//                            Text("x: \(positionOfCurrentItem.x) y: \(positionOfCurrentItem.y)")
-//                                .font(.caption)
-//                                .foregroundColor(Color.black)
-                            
+                            // TESTING
+                            Text("x: \(midX) y: \(midY)")
+                                .font(.caption)
+                                .foregroundColor(Color.black)
+                            //
                             Image("Artboards_Diversity_Avatars_by_Netguru-\(value)")
                                 .resizable()
                                 .scaledToFit()
@@ -179,47 +176,20 @@ struct InnerCircleView: View {
     // getting the proxy of an individual item
     // and decoding into a scale that the item should take
     private func getScale(proxy: GeometryProxy, itemNumber: Int) -> CGFloat {
-        // Old impplementation
-//        let innerCircleRadius = Self.distanceBetweenPoints(
-//            p1: center,
-//            p2: CGPoint(x: universalSize.width*0.65, y: universalSize.height*0.3)
-//        )
-//
-//        let outerCircleRadius = Self.distanceBetweenPoints(
-//            p1: center,
-//            p2: CGPoint(x: universalSize.width*0.75, y: universalSize.height*0.15)
-//        )
-//
-//        // TODO: if it's an even row, then offset the x of the position...TESTING
-//        var positionOfCurrentItem = CGPoint(x: proxy.frame(in: .global).midX, y: proxy.frame(in: .global).midY)
-//        if getRowNumber(itemNumber) % 2 == 0 { // if it's an even row, ofset the x
-//            positionOfCurrentItem.x += Self.size / 2 + Self.spacingBetweenColumns / 2
-//        }
-//
-//        let currItemDistFromCenter = Self.distanceBetweenPoints(p1: positionOfCurrentItem, p2: center)
-//
-//        if currItemDistFromCenter <= innerCircleRadius {
-//            return CGFloat(big)
-//        } else if currItemDistFromCenter <= outerCircleRadius {
-//            return CGFloat(medium)
-//        } else {
-//            return CGFloat(small)
-//        }
-        // implementation using radius checks
         
         let posRelToGrid = proxy.frame(in: .global) // relative to the entire screen
-        let midX = getRowNumber(itemNumber) % 2 == 0 ? posRelToGrid.midX + Self.size / 2 + Self.spacingBetweenColumns / 2 : posRelToGrid.midX
+        let midX = getRowNumber(itemNumber) % 2 == 0 ? posRelToGrid.midX + (Self.size / 2) + (Self.spacingBetweenColumns / 2) : posRelToGrid.midX
         let midY = posRelToGrid.midY
         
         let xdelta = abs(midX - self.center.x)
         let ydelta = abs(midY - self.center.y)
         
-        let innerCircleXAcceptance = Self.size
-        let innerCircleYAcceptance = Self.size
-        let outerRingXAcceptance = self.universalSize.width * 0.8
-        let outerRingYAcceptance = self.universalSize.height * 0.6
-        let wayOutRingXAcceptance = self.universalSize.width * 0.95
-        let wayOutRingYAcceptance = self.universalSize.height * 0.75
+        let innerCircleXAcceptance = Self.size * 0.75
+        let innerCircleYAcceptance = Self.size * 0.75
+        let outerRingXAcceptance = self.universalSize.width * 0.4
+        let outerRingYAcceptance = self.universalSize.height * 0.3
+        let wayOutRingXAcceptance = self.universalSize.width * 0.425
+        let wayOutRingYAcceptance = self.universalSize.height * 0.375
         
         if xdelta <= innerCircleXAcceptance && ydelta < innerCircleYAcceptance {
             return big
