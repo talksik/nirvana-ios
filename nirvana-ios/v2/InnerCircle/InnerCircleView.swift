@@ -77,22 +77,22 @@ struct InnerCircleView: View {
                 header
             }
             
-            Path { path in
-
-                //draw the axes
-                path.move(to: CGPoint(x:0, y:universalSize.height*0.5 ))
-
-                path.addLine(to: CGPoint(x:universalSize.width, y: universalSize.height*0.5))
-
-                path.move(to: CGPoint(x:universalSize.width*0.5, y:0 ))
-
-                path.addLine(to: CGPoint(x:universalSize.width * 0.5, y: universalSize.height))
-
-
-                //TODO: draw the acceptance boxes
-            }
-            .stroke(Color.black)
-            .edgesIgnoringSafeArea(.all)
+//            Path { path in
+//
+//                //draw the axes
+//                path.move(to: CGPoint(x:0, y:universalSize.height*0.5 ))
+//
+//                path.addLine(to: CGPoint(x:universalSize.width, y: universalSize.height*0.5))
+//
+//                path.move(to: CGPoint(x:universalSize.width*0.5, y:0 ))
+//
+//                path.addLine(to: CGPoint(x:universalSize.width * 0.5, y: universalSize.height))
+//
+//
+//                //TODO: draw the acceptance boxes
+//            }
+//            .stroke(Color.black)
+//            .edgesIgnoringSafeArea(.all)
         }
         .onAppear() {
             self.animateWaves = true
@@ -105,7 +105,7 @@ struct InnerCircleView: View {
     private static let size: CGFloat = 80
     private static let spacingBetweenColumns: CGFloat = 10
     private static let spacingBetweenRows: CGFloat = 10
-    private static let totalColumns: Int = Int(log2(Double(Self.numberOfItems)))
+    private static let totalColumns: Int = Int(log2(Double(Self.numberOfItems))) + 1 // scaling the circles
     
     @State private var selectedUserIndex = 0
     
@@ -133,15 +133,6 @@ struct InnerCircleView: View {
                     // TODO: why did I start at 1? for the image name? just decrease count for that specifically
                     ForEach(1..<Self.numberOfItems + 1) { value in
                         GeometryReader {gridProxy in
-                            let posRelToGrid = gridProxy.frame(in: .global) // relative to the entire screen
-                            let midX = getRowNumber(value) % 2 == 0 ? posRelToGrid.midX + (Self.size / 2) + (Self.spacingBetweenColumns / 2) : posRelToGrid.midX
-                            let midY = posRelToGrid.midY
-                            
-                            // TESTING
-                            Text("x: \(midX) y: \(midY)")
-                                .font(.caption)
-                                .foregroundColor(Color.black)
-                            //
                             Image("Artboards_Diversity_Avatars_by_Netguru-\(value)")
                                 .resizable()
                                 .scaledToFit()
@@ -153,15 +144,18 @@ struct InnerCircleView: View {
                                     x: honeycombOffSetX(value),
                                     y: 0
                                 )
-                                .onTapGesture {
-                                    self.selectedUserIndex = value
-                                    
-                                    print("the selected item is: \(value)")
-                                }
                         } // geometry reader
                         .id(value) // id for scrollviewreader
-                        .animation(Animation.spring())
                         .frame(height: Self.size)
+                        .onTapGesture {
+                            self.selectedUserIndex = value
+                            
+                            withAnimation(Animation.spring()) {
+                                scrollReaderValue.scrollTo(value, anchor: .top)
+                            }
+                            print("the selected item is: \(value)")
+                        }
+                        .animation(Animation.spring())
                     }
                 } // lazyvgrid
                 .padding(.trailing, Self.size / 2 + Self.spacingBetweenColumns / 2) // because of the offset of last column
