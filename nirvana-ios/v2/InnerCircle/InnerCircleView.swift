@@ -136,7 +136,7 @@ struct InnerCircleView: View {
                             Image("Artboards_Diversity_Avatars_by_Netguru-\(value + 1)")
                                 .resizable()
                                 .scaledToFit()
-                                .background(Color.white.opacity(0.5))
+                                .background(Color.white.opacity(0.4))
                                 .cornerRadius(100)
                                 .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 20)
                                 .scaleEffect(scale)
