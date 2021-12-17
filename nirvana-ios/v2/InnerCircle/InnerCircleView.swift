@@ -99,7 +99,7 @@ struct InnerCircleView: View {
                                 .background(Color.white.opacity(0.5))
                                 .cornerRadius(100)
                                 .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 20)
-                                .scaleEffect(getScale(proxy: gridProxy))
+//                                .scaleEffect(getScale(proxy: gridProxy))
                                 .offset(
                                     x: honeycombOffSetX(value),
                                     y: 0
@@ -109,7 +109,7 @@ struct InnerCircleView: View {
                                     
                                     print("the selected item is: \(value)")
                                     
-                                    let rowNumber = value / Self.totalColumns // 10 / 10
+                                    let rowNumber = (value + Self.totalColumns - 1) // 10 / 10
                                     
                                     print("the rownumber is: \(rowNumber)")
                                                                 
@@ -179,10 +179,16 @@ struct InnerCircleView: View {
     }
     
     private func honeycombOffSetX(_ value: Int) -> CGFloat {
-        let rowNumber = ceil(Double(value) / Double(Self.totalColumns)) // round up
+        var rowNumber = value / Self.totalColumns
+        
+        // if it is the last column, hard code make it still part of the current row
+        // as the above doesn't do it properly
+        if value % Self.totalColumns == 0 {
+            rowNumber -= 1
+        }
         
         // make every even row have the honeycomb offset
-        if Int(rowNumber) % 2 == 0 {
+        if rowNumber % 2 == 0 {
             return Self.size / 2 + Self.spacingBetweenColumns / 2 // account for the column spacing from before
         }
         
@@ -260,3 +266,15 @@ struct InnerCircleView_Previews: PreviewProvider {
         InnerCircleView()
     }
 }
+
+
+//struct Axes : View {
+//    var body: some View {
+//        GeometryReader { geometry in
+//            Path {path in
+//                path.move(to: CGPoint(x: geometry.frame(in: .global).maxX, y: geometry.))
+//
+//            }
+//        }
+//    }
+//}
