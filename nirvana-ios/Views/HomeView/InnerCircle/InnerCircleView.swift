@@ -36,7 +36,8 @@ struct InnerCircleView: View {
                     .blur(radius:2)
                     .offset(x: self.animateWaves ? -1*universalSize.width : 0)
                     .animation(
-                        Animation.linear(duration: 20).repeatForever(autoreverses: false)
+                        Animation.linear(duration: 20).repeatForever(autoreverses: false),
+                        value: self.animateWaves
                     )
                 
                 getWave(peakPercentage: 0.2, troughPercentage: 0.75, peakAltercation: baseLineY - 50, troughAltercation: baseLineY + 100)
@@ -44,7 +45,8 @@ struct InnerCircleView: View {
                     .blur(radius:2)
                     .offset(x: self.animateWaves ? -1*universalSize.width : 0)
                     .animation(
-                        Animation.linear(duration: 10).repeatForever(autoreverses: false)
+                        Animation.linear(duration: 10).repeatForever(autoreverses: false),
+                        value: self.animateWaves
                     )
                 
                 getWave(peakPercentage: 0.25, troughPercentage: 0.75, peakAltercation: baseLineY + 70, troughAltercation: baseLineY - 100)
@@ -52,7 +54,8 @@ struct InnerCircleView: View {
                     .blur(radius:2)
                     .offset(x: self.animateWaves ? -1*universalSize.width : 0)
                     .animation(
-                        Animation.linear(duration: 12).repeatForever(autoreverses: false)
+                        Animation.linear(duration: 12).repeatForever(autoreverses: false),
+                        value: self.animateWaves
                     )
     
             }
@@ -219,7 +222,7 @@ struct InnerCircleView: View {
     
     // magic variables for grid
     // TODO: change the number of columns based on the number of items
-    private static var numberOfItems: Int = 20
+    private static var numberOfItems: Int = 5
     private static let size: CGFloat = UIScreen.main.bounds.height*0.15 // scaling with screen size
     private static let spacingBetweenColumns: CGFloat = 0
     private static let spacingBetweenRows: CGFloat = 0
