@@ -101,7 +101,7 @@ struct InnerCircleView: View {
     
     // magic variables for grid
     // TODO: change the number of columns based on the number of items
-    private static var numberOfItems: Int = 15
+    private static var numberOfItems: Int = 20
     private static let size: CGFloat = 80
     private static let spacingBetweenColumns: CGFloat = 0
     private static let spacingBetweenRows: CGFloat = 0
@@ -130,11 +130,10 @@ struct InnerCircleView: View {
                     alignment: .center,
                     spacing: Self.spacingBetweenRows
                 ) {
-                    // TODO: why did I start at 1? for the image name? just decrease count for that specifically
-                    ForEach(1..<Self.numberOfItems + 1) { value in
+                    ForEach(0..<Self.numberOfItems) { value in
                         GeometryReader {gridProxy in
                             let scale = getScale(proxy: gridProxy, itemNumber: value)
-                            Image("Artboards_Diversity_Avatars_by_Netguru-\(value)")
+                            Image("Artboards_Diversity_Avatars_by_Netguru-\(value + 1)")
                                 .resizable()
                                 .scaledToFit()
                                 .background(Color.white.opacity(0.5))
@@ -209,15 +208,7 @@ struct InnerCircleView: View {
     }
     //get row number given a value/item number in the list
     private func getRowNumber(_ value: Int) -> Int {
-        var rowNumber = value / Self.totalColumns
-        
-        // if it is the last column, hard code make it still part of the current row
-        // as the above doesn't do it properly
-        if value % Self.totalColumns == 0 {
-            rowNumber -= 1
-        }
-        
-        return rowNumber
+        return value / Self.totalColumns
     }
     private func honeycombOffSetX(_ value: Int) -> CGFloat {
         let rowNumber = self.getRowNumber(value)
