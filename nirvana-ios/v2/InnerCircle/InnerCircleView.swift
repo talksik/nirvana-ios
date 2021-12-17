@@ -245,9 +245,10 @@ struct InnerCircleView: View {
                     print("manage friends page")
                 }
             } label: {
-                RemoteImage(url: "https://avatars.githubusercontent.com/u/41487836")
-                    .background(NirvanaColor.teal)
-                    .aspectRatio(contentMode: .fill)
+                Image("Artboards_Diversity_Avatars_by_Netguru-51")
+                    .resizable()
+                    .scaledToFit()
+                    .background(NirvanaColor.teal.opacity(0.1))
                     .frame(width: 40, height: 40)
                     .clipShape(Circle())
                     .padding(5)
