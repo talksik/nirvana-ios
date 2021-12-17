@@ -100,18 +100,11 @@ struct InnerCircleView: View {
 //            .stroke(Color.black)
 //            .edgesIgnoringSafeArea(.all)
             
-            ZStack(alignment: .bottom) {
-                //TODO: find a better solution than hacking it like this
-                Color.clear
-                
-                HStack(alignment: .center) {
-                    Spacer()
-                    
-                    FooterControlsView()
-                }
-                .padding()
+            if self.selectedUserIndex != nil {
+                footerNavigation
+                    .transition(AnyTransition.move(edge: Edge.bottom))
+                    .animation(Animation.interactiveSpring())
             }
-           
         }
         .onAppear() {
             self.animateWaves = true
@@ -122,6 +115,42 @@ struct InnerCircleView: View {
                 self.usersWithNewMessage = [1, 5, 10]
             }
         }
+    }
+    
+    var footerNavigation: some View {
+        ZStack(alignment:.bottomTrailing) {
+            VStack(alignment:.center) {
+                Spacer()
+                
+                HStack {
+                    if self.selectedUserIndex != nil {
+                        Image("Artboards_Diversity_Avatars_by_Netguru-\(self.selectedUserIndex! + 1)")
+                            .resizable()
+                            .scaledToFit()
+                            .background(NirvanaColor.teal.opacity(0.1))
+                            .frame(width: 40, height: 40)
+                            .clipShape(Circle())
+                            .padding(5)
+                    }
+                    
+                    VStack (alignment: .leading) {
+                        Text("Sarth Shah")
+                            .font(.footnote)
+                        Text("sent 20 minutes")
+                            .font(.caption)
+                    }
+                    .foregroundColor(NirvanaColor.light)
+                    
+                    Spacer()
+                }
+                .frame(maxWidth: .infinity, maxHeight: 60) // 60 is the height of the footer control big circle
+                .background(Color.white.opacity(0.5))
+                .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
+                .shadow(color: Color.black.opacity(0.25), radius: 30, x: 0, y: 20)
+            }
+            FooterControlsView()
+        }
+        .padding()
     }
     
     var bubbleNavigation : some View {
@@ -177,12 +206,12 @@ struct InnerCircleView: View {
     // magic variables for grid
     // TODO: change the number of columns based on the number of items
     private static var numberOfItems: Int = 20
-    private static let size: CGFloat = UIScreen.main.bounds.height*0.12 // scaling with screen size
+    private static let size: CGFloat = UIScreen.main.bounds.height*0.15 // scaling with screen size
     private static let spacingBetweenColumns: CGFloat = 0
     private static let spacingBetweenRows: CGFloat = 0
     private static let totalColumns: Int = Int(log2(Double(Self.numberOfItems))) // scaling the circles and calculating column count
     
-    @State private var selectedUserIndex = 0
+    @State private var selectedUserIndex: Int? = nil
     
     // TODO: change the size to adaptive or something to make outer ring items shrink their overall size and fit better
     let gridItems: [GridItem] = Array(
@@ -234,7 +263,14 @@ struct InnerCircleView: View {
                         .id(value) // id for scrollviewreader
                         .frame(height: Self.size)
                         .onTapGesture {
-                            self.selectedUserIndex = value
+                            withAnimation {
+                                // if user had previously selected user, put nil as a toggle
+                                if self.selectedUserIndex == value {
+                                    self.selectedUserIndex = nil
+                                } else {
+                                    self.selectedUserIndex = value
+                                }
+                            }
                             
                             print("the selected item is: \(value)")
                         }
@@ -273,6 +309,7 @@ struct InnerCircleView: View {
         
         // if this user that we are rendering
         // has a new message for us
+        // TODO: too much memory usage doing this across the board
         if self.usersWithNewMessage.contains(itemNumber) {
             return big + 0.2
         }
