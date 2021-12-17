@@ -66,6 +66,7 @@ struct InnerCircleView: View {
     private static let spacingBetweenColumns: CGFloat = 16
     private static let spacingBetweenRows: CGFloat = 16
     private static let totalColumns: Int = 10
+    private var numberOfItems: Int = 59
     
     let frameSize: CGPoint = CGPoint(x: UIScreen.main.bounds.size.width*0.5,y: UIScreen.main.bounds.size.height*0.5)
     
@@ -87,59 +88,65 @@ struct InnerCircleView: View {
 //                .frame(maxWidth: .infinity)
 //                .blur(radius: 8)
                 
-            ScrollView([.horizontal, .vertical], showsIndicators: false) {
-                LazyVGrid(
-                    columns: gridItems,
-                    alignment: .center,
-                    spacing: Self.spacingBetweenRows
-                ) {
-                    
-                    ForEach(1..<60) { value in
-                        GeometryReader {gridProxy in
-                            let posRelToGrid = gridProxy.frame(in: .global) // relative to the entire lazygrid
-                            
-                            Image("Artboards_Diversity_Avatars_by_Netguru-\(value)")
-                                .resizable()
-                                .scaledToFit()
-                                .background(Color.white.opacity(0.5))
-                                .cornerRadius(100)
-                                .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 20)
-                                .scaleEffect(
-                                    scale(
-                                        x: isEvenRow(value) ? gridProxy.frame(in: .global).midX + gridProxy.size.width/2 :
-                                            gridProxy.frame(in: .global).midX,
-                                        y: gridProxy.frame(in: .global).midY,
-                                        value: value%43
+            ScrollViewReader {scrollReaderValue in
+                ScrollView([.horizontal, .vertical], showsIndicators: false) {
+                    LazyVGrid(
+                        columns: gridItems,
+                        alignment: .center,
+                        spacing: Self.spacingBetweenRows
+                    ) {
+                        
+                        ForEach(1..<60) { value in
+                            GeometryReader {gridProxy in
+                                let posRelToGrid = gridProxy.frame(in: .global) // relative to the entire lazygrid
+                                
+                                Image("Artboards_Diversity_Avatars_by_Netguru-\(value)")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .background(Color.white.opacity(0.5))
+                                    .cornerRadius(100)
+                                    .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 20)
+//                                    .scaleEffect(
+//                                        scale(
+//                                            x: isEvenRow(value) ? gridProxy.frame(in: .global).midX + gridProxy.size.width/2 :
+//                                                gridProxy.frame(in: .global).midX,
+//                                            y: gridProxy.frame(in: .global).midY,
+//                                            value: value%43
+//                                        )
+//                                    )
+                                    .offset(
+                                        x: honeycombOffSetX(value),
+                                        y: 0
                                     )
-                                )
-                                .offset(
-                                    x: honeycombOffSetX(value),
-                                    y: 0
-                                )
-                                .onTapGesture {
-                                    self.selectedUserIndex = value
-                                    
-                                    print("the selected item is: \(value)")
-                                    
-                                    let rowNumber = value / Self.totalColumns // 10 / 10
-                                    
-                                    print("the rownumber is: \(rowNumber)")
-                                                                
-                                    // make every even row have the honeycomb offset
-                                    if rowNumber % 2 == 0 {
-                                        print("the offset is \(Self.size / 2 + Self.spacingBetweenColumns / 2 )") // account for the column spacing from before
-                                    } else {
-                                        print("there is no offset")
+                                    .onTapGesture {
+                                        self.selectedUserIndex = value
+                                        
+                                        print("the selected item is: \(value)")
+                                        
+                                        let rowNumber = value / Self.totalColumns // 10 / 10
+                                        
+                                        print("the rownumber is: \(rowNumber)")
+                                                                    
+                                        // make every even row have the honeycomb offset
+                                        if rowNumber % 2 == 0 {
+                                            print("the offset is \(Self.size / 2 + Self.spacingBetweenColumns / 2 )") // account for the column spacing from before
+                                        } else {
+                                            print("there is no offset")
+                                        }
                                     }
-                                }
-                                .animation(Animation.spring(), value: selectedUserIndex)
-                            
+                                    .animation(Animation.spring(), value: selectedUserIndex)
+                            } // geometry reader
+                            .id(value) // id for scrollviewreader
+                            .frame(height: Self.size)
                         }
-                        .frame(height: Self.size)
-                    }
-                } // lazyvgrid
-                .padding(.trailing, Self.size / 2 + Self.spacingBetweenColumns / 2)
-            } // scrollview
+                    } // lazyvgrid
+                    .padding(.trailing, Self.size / 2 + Self.spacingBetweenColumns / 2)
+                }// scrollview
+                .onAppear {
+                    scrollReaderValue.scrollTo(self.numberOfItems / 2)
+                }
+            } // scrollview reader
+            
             
             // navigation/footer
             
