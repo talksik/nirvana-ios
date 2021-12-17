@@ -194,7 +194,7 @@ struct InnerCircleView: View {
             } label: {
                 Label("groups", systemImage: "rectangle.3.group")
                     .font(.caption2)
-                    .foregroundColor(Color.black)
+                    .foregroundColor(Color.gray)
                     .padding(.vertical, 10)
                     .padding(.horizontal, 8)
                     .overlay(
@@ -208,7 +208,7 @@ struct InnerCircleView: View {
             } label: {
                 Label("work", systemImage: "suitcase")
                     .font(.caption2)
-                    .foregroundColor(Color.black)
+                    .foregroundColor(Color.gray)
                     .padding(.vertical, 10)
                     .padding(.horizontal, 8)
                     .overlay(
@@ -222,7 +222,8 @@ struct InnerCircleView: View {
     
     // magic variables for grid
     // TODO: change the number of columns based on the number of items
-    private static var numberOfItems: Int = 5
+    // TODO: make the top left person or one horizontal person be in the center of screen...makes the top honeycomb pop
+    private static var numberOfItems: Int = 12
     private static let size: CGFloat = UIScreen.main.bounds.height*0.15 // scaling with screen size
     private static let spacingBetweenColumns: CGFloat = 0
     private static let spacingBetweenRows: CGFloat = 0
@@ -240,6 +241,7 @@ struct InnerCircleView: View {
     private let small:CGFloat = 0.5
     private let supersmall:CGFloat = 0.3
     
+    // TODO: centered honeycomb + side: maybe have two honeycombs: one in the center of 7 people and then everyone else surrounding 
     // TODO: maybe make our "center" offset to a little to the top left to make it more honeycomb from top left
     private let center: CGPoint = CGPoint(x: UIScreen.main.bounds.width*0.5,y: UIScreen.main.bounds.height*0.5)
     
@@ -338,10 +340,10 @@ struct InnerCircleView: View {
         let xdelta = abs(midX - self.center.x)
         let ydelta = abs(midY - self.center.y)
         
-        let innerCircleXAcceptance = Self.size
+        let innerCircleXAcceptance = Self.size * 0.75
         let innerCircleYAcceptance = Self.size * 0.75
         let outerRingXAcceptance = self.universalSize.width * 0.4
-        let outerRingYAcceptance = self.universalSize.height * 0.3
+        let outerRingYAcceptance = self.universalSize.height * 0.25
         let wayOutRingXAcceptance = self.universalSize.width * 0.425
         let wayOutRingYAcceptance = self.universalSize.height * 0.375
         
