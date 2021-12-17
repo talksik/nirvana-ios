@@ -6,15 +6,19 @@
 //
 
 import SwiftUI
+import NavigationStack
 
 struct WelcomeView: View {
     @State var showLearnMore = false
+    @EnvironmentObject private var navigationStack: NavigationStack
     
     var body: some View {
         OnboardingTemplateView(imgName: "undraw_friendship_mni7", mainLeadingActText: "Your", mainHighlightedActText: "minimalist", mainTrailingActText: "social media.", subActText: "Tired of the rat race on insta, snap, tik-tok, \"meta\"?", bottomActArea: AnyView(
                     VStack(alignment: .center) {
                         Button {
                             print("going to the sign in page")
+                            
+                            self.navigationStack.push(PhoneVerificationView())
                         } label: {
                             Text("Start Your Detox")
                                 .bold()
