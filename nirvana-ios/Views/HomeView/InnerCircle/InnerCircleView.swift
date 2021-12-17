@@ -113,6 +113,8 @@ struct InnerCircleView: View {
         }
     }
     
+    // TODO: do cool animations with this footer background fill in while
+    // recording or playing a message
     var footerNavigation: some View {
         ZStack(alignment:.bottomTrailing) {
             VStack(alignment:.center) {
@@ -140,6 +142,14 @@ struct InnerCircleView: View {
                     }
                     
                     Spacer()
+                    
+                    Label("Replay", systemImage: "repeat.1.circle.fill")
+                        .font(.title2)
+                        .labelStyle(.iconOnly)
+                        .foregroundColor(Color.orange)
+                    
+                    
+                    Spacer(minLength: 65)
                 }
                 .frame(maxWidth: .infinity, maxHeight: 60) // 60 is the height of the footer control big circle
                 .background(Color.white.opacity(0.5))
@@ -331,6 +341,7 @@ struct InnerCircleView: View {
         let outerRingYAcceptance = self.universalSize.height * 0.3
         let wayOutRingXAcceptance = self.universalSize.width * 0.425
         let wayOutRingYAcceptance = self.universalSize.height * 0.375
+        
         
         if xdelta <= innerCircleXAcceptance && ydelta < innerCircleYAcceptance {
             return big
