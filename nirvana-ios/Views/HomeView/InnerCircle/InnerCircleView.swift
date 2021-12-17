@@ -136,7 +136,7 @@ struct InnerCircleView: View {
                     .padding(.horizontal, 8)
                     .background(
                         RoundedRectangle(cornerRadius: 20, style: .continuous)
-                            .fill(Color.teal.opacity(0.1))
+                            .fill(Color.teal.opacity(0.5))
                     ).overlay(
                         RoundedRectangle(cornerRadius: 20, style: .continuous)
                             .strokeBorder(Color.white.opacity(01), lineWidth: 1)
@@ -177,7 +177,7 @@ struct InnerCircleView: View {
     // magic variables for grid
     // TODO: change the number of columns based on the number of items
     private static var numberOfItems: Int = 20
-    private static let size: CGFloat = 80
+    private static let size: CGFloat = UIScreen.main.bounds.height*0.15
     private static let spacingBetweenColumns: CGFloat = 0
     private static let spacingBetweenRows: CGFloat = 0
     private static let totalColumns: Int = Int(log2(Double(Self.numberOfItems))) // scaling the circles and calculating column count
@@ -198,6 +198,8 @@ struct InnerCircleView: View {
     
     private var gridContent: some View {
         // main communication hub
+        // TODO: client side, sort the honeycomb from top left to bottom right
+        // based on most close friends to least
         ScrollViewReader {scrollReaderValue in
             ScrollView([.horizontal, .vertical], showsIndicators: false) {
                 LazyVGrid(
@@ -233,20 +235,19 @@ struct InnerCircleView: View {
                         .onTapGesture {
                             self.selectedUserIndex = value
                             
-                            withAnimation(Animation.spring()) {
-                                scrollReaderValue.scrollTo(value, anchor: .bottomTrailing)
-                            }
                             print("the selected item is: \(value)")
                         }
                         .animation(Animation.easeInOut(duration: 2).repeatForever(autoreverses: true), value: self.usersWithNewMessage)
-                        .animation(Animation.spring(), value: self.selectedUserIndex)
+                        .animation(Animation.spring())
                     }
                 } // lazyvgrid
                 .padding(.trailing, Self.size / 2 + Self.spacingBetweenColumns / 2) // because of the offset of last column
                 .padding(.top, Self.size / 2 + Self.spacingBetweenRows / 2) // because we are going under the nav bar
             }// scrollview
             .onAppear {
-                scrollReaderValue.scrollTo(Self.numberOfItems / 2)
+                //TODO: was causing problems so commenting out
+                //may not need anymore with bottom nav activation
+//                scrollReaderValue.scrollTo(Self.numberOfItems / 2)
             }
         } // scrollview reader
     }
