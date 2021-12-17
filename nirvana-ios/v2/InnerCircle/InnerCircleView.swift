@@ -67,13 +67,11 @@ struct InnerCircleView: View {
     }
     
     // magiv variables for grid
-    private static let size: CGFloat = 100
+    private static let size: CGFloat = 80
     private static let spacingBetweenColumns: CGFloat = 10
     private static let spacingBetweenRows: CGFloat = 10
-    private static let totalColumns: Int = 10
-    private var numberOfItems: Int = 59
-    
-    let frameSize: CGPoint = CGPoint(x: UIScreen.main.bounds.size.width*0.5,y: UIScreen.main.bounds.size.height*0.5)
+    private static let totalColumns: Int = 3
+    private var numberOfItems: Int = 10
     
     @State private var selectedUserIndex = 0
     
@@ -91,7 +89,7 @@ struct InnerCircleView: View {
                     spacing: Self.spacingBetweenRows
                 ) {
                     
-                    ForEach(1..<60) { value in
+                    ForEach(1..<11) { value in
                         GeometryReader {gridProxy in
                             let posRelToGrid = gridProxy.frame(in: .global) // relative to the entire lazygrid
                             
@@ -101,7 +99,7 @@ struct InnerCircleView: View {
                                 .background(Color.white.opacity(0.5))
                                 .cornerRadius(100)
                                 .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 20)
-                                .scaleEffect(self.selectedUserIndex == value ? 1 : 0.75)
+                                .scaleEffect(getScale(proxy: gridProxy))
                                 .offset(
                                     x: honeycombOffSetX(value),
                                     y: 0
@@ -122,9 +120,9 @@ struct InnerCircleView: View {
                                         print("there is no offset")
                                     }
                                 }
-                                .animation(Animation.spring(), value: selectedUserIndex)
                         } // geometry reader
                         .id(value) // id for scrollviewreader
+                        .animation(Animation.spring())
                         .frame(height: Self.size)
                     }
                 } // lazyvgrid
@@ -137,7 +135,39 @@ struct InnerCircleView: View {
         } // scrollview reader
     }
     
-    private func distanceBetweenPoints(p1: CGPoint, p2: CGPoint) -> CGFloat {
+    private let big:CGFloat = 1.2
+    private let medium:CGFloat = 1
+    private let small:CGFloat = 0.65
+    private let supersmall:CGFloat = 0.2
+    
+    private let center: CGPoint = CGPoint(x: UIScreen.main.bounds.size.width*0.5,y: UIScreen.main.bounds.size.height*0.5)
+    
+    // getting the proxy of an individual item
+    // and decoding into a scale that the item should take
+    private func getScale(proxy: GeometryProxy) -> CGFloat {
+        let innerCircleRadius = Self.distanceBetweenPoints(
+            p1: center,
+            p2: CGPoint(x: universalSize.width*0.65, y: universalSize.height*0.3)
+        )
+        
+        let outerCircleRadius = Self.distanceBetweenPoints(
+            p1: center,
+            p2: CGPoint(x: universalSize.width*0.75, y: universalSize.height*0.15)
+        )
+        
+        let positionOfCurrentItem = CGPoint(x: proxy.frame(in: .global).midX, y: proxy.frame(in: .global).midY)
+        let currItemDistFromCenter = Self.distanceBetweenPoints(p1: positionOfCurrentItem, p2: center)
+        
+        if currItemDistFromCenter <= innerCircleRadius {
+            return CGFloat(big)
+        } else if currItemDistFromCenter <= outerCircleRadius {
+            return CGFloat(medium)
+        } else {
+            return CGFloat(small)
+        }
+    }
+    
+    private static func distanceBetweenPoints(p1: CGPoint, p2: CGPoint) -> CGFloat {
         let xDist = abs(p2.x - p1.x)
         let yDist = abs(p2.y - p2.y)
         
