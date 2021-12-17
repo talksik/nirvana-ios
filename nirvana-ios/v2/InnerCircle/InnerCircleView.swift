@@ -77,20 +77,22 @@ struct InnerCircleView: View {
                 header
             }
             
-            Path { path in
-                path.move(to: CGPoint(x:0, y:universalSize.height*0.5 ))
-                          
-                path.addLine(to: CGPoint(x:universalSize.width, y: universalSize.height*0.5))
-                
-                path.move(to: CGPoint(x:universalSize.width*0.5, y:0 ))
-                
-                path.addLine(to: CGPoint(x:universalSize.width * 0.5, y: universalSize.height))
-                
-            }
-            .stroke(Color.black)
-            .edgesIgnoringSafeArea(.all)
-            
-            Text("center: \(universalSize.width * 0.5), \(universalSize.height*0.5)")
+//            Path { path in
+//
+//                //draw the axes
+//                path.move(to: CGPoint(x:0, y:universalSize.height*0.5 ))
+//
+//                path.addLine(to: CGPoint(x:universalSize.width, y: universalSize.height*0.5))
+//
+//                path.move(to: CGPoint(x:universalSize.width*0.5, y:0 ))
+//
+//                path.addLine(to: CGPoint(x:universalSize.width * 0.5, y: universalSize.height))
+//
+//
+//                //draw the acceptance boxes
+//            }
+//            .stroke(Color.black)
+//            .edgesIgnoringSafeArea(.all)
         }
         .onAppear() {
             self.animateWaves = true
@@ -99,7 +101,7 @@ struct InnerCircleView: View {
     
     // magic variables for grid
     // TODO: change the number of columns based on the number of items
-    private static var numberOfItems: Int = 10
+    private static var numberOfItems: Int = 15
     private static let size: CGFloat = 80
     private static let spacingBetweenColumns: CGFloat = 10
     private static let spacingBetweenRows: CGFloat = 10
@@ -107,14 +109,15 @@ struct InnerCircleView: View {
     
     @State private var selectedUserIndex = 0
     
+    // TODO: change the size to adaptive or something to make outer ring items shrink their overall size and fit better
     let gridItems: [GridItem] = Array(
         repeating: GridItem(.fixed(size), spacing: spacingBetweenColumns, alignment: .center),
         count: totalColumns)
     
     private let big:CGFloat = 1.1
-    private let medium:CGFloat = 1
-    private let small:CGFloat = 0.8
-    private let supersmall:CGFloat = 0.7
+    private let medium:CGFloat = 0.8
+    private let small:CGFloat = 0.5
+    private let supersmall:CGFloat = 0.2
     
     private let center: CGPoint = CGPoint(x: UIScreen.main.bounds.width*0.5,y: UIScreen.main.bounds.height*0.5)
     
@@ -127,19 +130,20 @@ struct InnerCircleView: View {
                     alignment: .center,
                     spacing: Self.spacingBetweenRows
                 ) {
-                    
+                    // TODO: why did I start at 1? for the image name? just decrease count for that specifically
                     ForEach(1..<Self.numberOfItems + 1) { value in
                         GeometryReader {gridProxy in
                             let posRelToGrid = gridProxy.frame(in: .global) // relative to the entire lazygrid
                             
                             // TESTING
-                            var positionOfCurrentItem = CGPoint(x: self.getRowNumber(value) % 2 == 0 ? gridProxy.frame(in: .global).midX + Self.size / 2 + Self.spacingBetweenColumns / 2 : gridProxy.frame(in: .global).midX, y: gridProxy.frame(in: .global).midY)
+//                            Text("xdelta: \(abs(posRelToGrid.midX - self.center.x)) ydelta \(abs(posRelToGrid.midY - self.center.y))")
+//                                .font(.caption)
+//                                .foregroundColor(Color.black)
                             
-                            let currItemDistFromCenter = Self.distanceBetweenPoints(p1: positionOfCurrentItem, p2: center)
                             
-                            Text("dist: \(currItemDistFromCenter) x: \(positionOfCurrentItem.x) y: \(positionOfCurrentItem.y)")
-                                .font(.caption)
-                                .foregroundColor(Color.black)
+//                            Text("x: \(positionOfCurrentItem.x) y: \(positionOfCurrentItem.y)")
+//                                .font(.caption)
+//                                .foregroundColor(Color.black)
                             
                             Image("Artboards_Diversity_Avatars_by_Netguru-\(value)")
                                 .resizable()
@@ -175,31 +179,56 @@ struct InnerCircleView: View {
     // getting the proxy of an individual item
     // and decoding into a scale that the item should take
     private func getScale(proxy: GeometryProxy, itemNumber: Int) -> CGFloat {
-        let innerCircleRadius = Self.distanceBetweenPoints(
-            p1: center,
-            p2: CGPoint(x: universalSize.width*0.65, y: universalSize.height*0.3)
-        )
+        // Old impplementation
+//        let innerCircleRadius = Self.distanceBetweenPoints(
+//            p1: center,
+//            p2: CGPoint(x: universalSize.width*0.65, y: universalSize.height*0.3)
+//        )
+//
+//        let outerCircleRadius = Self.distanceBetweenPoints(
+//            p1: center,
+//            p2: CGPoint(x: universalSize.width*0.75, y: universalSize.height*0.15)
+//        )
+//
+//        // TODO: if it's an even row, then offset the x of the position...TESTING
+//        var positionOfCurrentItem = CGPoint(x: proxy.frame(in: .global).midX, y: proxy.frame(in: .global).midY)
+//        if getRowNumber(itemNumber) % 2 == 0 { // if it's an even row, ofset the x
+//            positionOfCurrentItem.x += Self.size / 2 + Self.spacingBetweenColumns / 2
+//        }
+//
+//        let currItemDistFromCenter = Self.distanceBetweenPoints(p1: positionOfCurrentItem, p2: center)
+//
+//        if currItemDistFromCenter <= innerCircleRadius {
+//            return CGFloat(big)
+//        } else if currItemDistFromCenter <= outerCircleRadius {
+//            return CGFloat(medium)
+//        } else {
+//            return CGFloat(small)
+//        }
+        // implementation using radius checks
         
-        let outerCircleRadius = Self.distanceBetweenPoints(
-            p1: center,
-            p2: CGPoint(x: universalSize.width*0.75, y: universalSize.height*0.15)
-        )
+        let posRelToGrid = proxy.frame(in: .global) // relative to the entire screen
+        let midX = getRowNumber(itemNumber) % 2 == 0 ? posRelToGrid.midX + Self.size / 2 + Self.spacingBetweenColumns / 2 : posRelToGrid.midX
+        let midY = posRelToGrid.midY
         
-        // TODO: if it's an even row, then offset the x of the position...TESTING
-        var positionOfCurrentItem = CGPoint(x: proxy.frame(in: .global).midX, y: proxy.frame(in: .global).midY)
-        if getRowNumber(itemNumber) % 2 == 0 { // if it's an even row, ofset the x
-            positionOfCurrentItem.x += Self.size / 2 + Self.spacingBetweenColumns / 2
+        let xdelta = abs(midX - self.center.x)
+        let ydelta = abs(midY - self.center.y)
+        
+        let innerCircleXAcceptance = Self.size
+        let innerCircleYAcceptance = Self.size
+        let outerRingXAcceptance = self.universalSize.width * 0.8
+        let outerRingYAcceptance = self.universalSize.height * 0.6
+        let wayOutRingXAcceptance = self.universalSize.width * 0.95
+        let wayOutRingYAcceptance = self.universalSize.height * 0.75
+        
+        if xdelta <= innerCircleXAcceptance && ydelta < innerCircleYAcceptance {
+            return big
+        } else if xdelta <= outerRingXAcceptance && ydelta < outerRingYAcceptance {
+            return medium
+        } else if xdelta <= wayOutRingXAcceptance && ydelta < wayOutRingYAcceptance {
+            return small
         }
-        
-        let currItemDistFromCenter = Self.distanceBetweenPoints(p1: positionOfCurrentItem, p2: center)
-        
-        if currItemDistFromCenter <= innerCircleRadius {
-            return CGFloat(big)
-        } else if currItemDistFromCenter <= outerCircleRadius {
-            return CGFloat(medium)
-        } else {
-            return CGFloat(small)
-        }
+        return supersmall
     }
     
     private static func distanceBetweenPoints(p1: CGPoint, p2: CGPoint) -> CGFloat {
