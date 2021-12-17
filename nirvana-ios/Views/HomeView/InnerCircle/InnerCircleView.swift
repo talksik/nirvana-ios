@@ -14,6 +14,10 @@ struct InnerCircleView: View {
     
     @State var animateWaves = false
     
+    // TESTING
+    // users who will have a thumping thing because they sent a message
+    @State var usersWithNewMessage: [Int] = []
+    
     var body: some View {
         ZStack {
             // background
@@ -111,6 +115,12 @@ struct InnerCircleView: View {
         }
         .onAppear() {
             self.animateWaves = true
+            
+            // TESTING
+            // fake like these users sent a message to view
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                self.usersWithNewMessage = [1, 5, 10]
+            }
         }
     }
     
@@ -121,7 +131,7 @@ struct InnerCircleView: View {
             } label: {
                 Label("circle", systemImage: "peacesign")
                     .font(.caption2)
-                    .foregroundColor(Color.black)
+                    .foregroundColor(Color.white)
                     .padding(.vertical, 10)
                     .padding(.horizontal, 8)
                     .background(
@@ -199,11 +209,10 @@ struct InnerCircleView: View {
                         GeometryReader {gridProxy in
                             let scale = getScale(proxy: gridProxy, itemNumber: value)
                             
-                            ZStack {
+                            ZStack(alignment: .topTrailing) {
                                 Circle()
-                                    .foregroundColor(value == self.selectedUserIndex ? NirvanaColor.dimTeal.opacity(0.4) : Color.white.opacity(0.4)) // different color for a selected user
+                                    .foregroundColor(self.getBubbleTint(userIndex: value)) // different color for a selected user
                                     .blur(radius: 8)
-                                    
                                     .cornerRadius(100)
                                     
                                 Image("Artboards_Diversity_Avatars_by_Netguru-\(value + 1)")
@@ -229,7 +238,8 @@ struct InnerCircleView: View {
                             }
                             print("the selected item is: \(value)")
                         }
-                        .animation(Animation.spring())
+                        .animation(Animation.easeInOut(duration: 2).repeatForever(autoreverses: true), value: self.usersWithNewMessage)
+                        .animation(Animation.spring(), value: self.selectedUserIndex)
                     }
                 } // lazyvgrid
                 .padding(.trailing, Self.size / 2 + Self.spacingBetweenColumns / 2) // because of the offset of last column
@@ -240,12 +250,28 @@ struct InnerCircleView: View {
             }
         } // scrollview reader
     }
+     
+    private func getBubbleTint(userIndex: Int) -> Color {
+        if (userIndex == self.selectedUserIndex) { // user clicked on this user
+            return NirvanaColor.dimTeal.opacity(0.4)
+        } else if self.usersWithNewMessage.contains(userIndex) { // this user has a message
+            return Color.orange.opacity(0.8)
+        }
+      
+        return Color.white.opacity(0.4)
+    }
     
     // getting the proxy of an individual item
     // and decoding into a scale that the item should take
     private func getScale(proxy: GeometryProxy, itemNumber: Int) -> CGFloat {
         // if this user is selected
         if itemNumber == self.selectedUserIndex {
+            return big + 0.2
+        }
+        
+        // if this user that we are rendering
+        // has a new message for us
+        if self.usersWithNewMessage.contains(itemNumber) {
             return big + 0.2
         }
         
