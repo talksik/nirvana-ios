@@ -58,13 +58,13 @@ struct InnerCircleView: View {
             gridContent
             
             // inner circle
-            Rectangle()
-                .foregroundColor(Color.white.opacity(0.5))
-                .frame(width:universalSize.width*0.65, height: universalSize.height*0.3)
-            // outer circle
-            Rectangle()
-                .foregroundColor(Color.white.opacity(0.5))
-                .frame(width:universalSize.width*0.75, height: universalSize.height*0.15)
+//            Rectangle()
+//                .foregroundColor(Color.white.opacity(0.5))
+//                .frame(width:universalSize.width*0.65, height: universalSize.height*0.3)
+//            // outer circle
+//            Rectangle()
+//                .foregroundColor(Color.white.opacity(0.5))
+//                .frame(width:universalSize.width*0.75, height: universalSize.height*0.15)
             //way out circle
 //            Ellipse()
 //                .foregroundColor(Color.white)
@@ -76,6 +76,21 @@ struct InnerCircleView: View {
                 
                 header
             }
+            
+            Path { path in
+                path.move(to: CGPoint(x:0, y:universalSize.height*0.5 ))
+                          
+                path.addLine(to: CGPoint(x:universalSize.width, y: universalSize.height*0.5))
+                
+                path.move(to: CGPoint(x:universalSize.width*0.5, y:0 ))
+                
+                path.addLine(to: CGPoint(x:universalSize.width * 0.5, y: universalSize.height))
+                
+            }
+            .stroke(Color.black)
+            .edgesIgnoringSafeArea(.all)
+            
+            Text("center: \(universalSize.width * 0.5), \(universalSize.height*0.5)")
         }
         .onAppear() {
             self.animateWaves = true
@@ -96,6 +111,13 @@ struct InnerCircleView: View {
         repeating: GridItem(.fixed(size), spacing: spacingBetweenColumns, alignment: .center),
         count: totalColumns)
     
+    private let big:CGFloat = 1.1
+    private let medium:CGFloat = 1
+    private let small:CGFloat = 0.8
+    private let supersmall:CGFloat = 0.7
+    
+    private let center: CGPoint = CGPoint(x: UIScreen.main.bounds.width*0.5,y: UIScreen.main.bounds.height*0.5)
+    
     private var gridContent: some View {
         // main communication hub
         ScrollViewReader {scrollReaderValue in
@@ -111,10 +133,11 @@ struct InnerCircleView: View {
                             let posRelToGrid = gridProxy.frame(in: .global) // relative to the entire lazygrid
                             
                             // TESTING
-                            let positionOfCurrentItem = CGPoint(x: gridProxy.frame(in: .global).midX, y: gridProxy.frame(in: .global).midY)
+                            var positionOfCurrentItem = CGPoint(x: self.getRowNumber(value) % 2 == 0 ? gridProxy.frame(in: .global).midX + Self.size / 2 + Self.spacingBetweenColumns / 2 : gridProxy.frame(in: .global).midX, y: gridProxy.frame(in: .global).midY)
+                            
                             let currItemDistFromCenter = Self.distanceBetweenPoints(p1: positionOfCurrentItem, p2: center)
                             
-                            Text("dist: \(currItemDistFromCenter)")
+                            Text("dist: \(currItemDistFromCenter) x: \(positionOfCurrentItem.x) y: \(positionOfCurrentItem.y)")
                                 .font(.caption)
                                 .foregroundColor(Color.black)
                             
@@ -124,7 +147,7 @@ struct InnerCircleView: View {
                                 .background(Color.white.opacity(0.5))
                                 .cornerRadius(100)
                                 .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 20)
-                                .scaleEffect(getScale(proxy: gridProxy))
+                                .scaleEffect(getScale(proxy: gridProxy, itemNumber: value))
                                 .offset(
                                     x: honeycombOffSetX(value),
                                     y: 0
@@ -149,17 +172,9 @@ struct InnerCircleView: View {
         } // scrollview reader
     }
     
-    private let big:CGFloat = 1.1
-    private let medium:CGFloat = 1
-    private let small:CGFloat = 0.8
-    private let supersmall:CGFloat = 0.7
-    
-    private let center: CGPoint = CGPoint(x: UIScreen.main.bounds.width*0.5,y: UIScreen.main.bounds.height*0.5)
-    private let oldCenter: CGPoint = CGPoint(x: UIScreen.main.bounds.size.width*0.5,y: UIScreen.main.bounds.size.height*0.5)
-    
     // getting the proxy of an individual item
     // and decoding into a scale that the item should take
-    private func getScale(proxy: GeometryProxy) -> CGFloat {
+    private func getScale(proxy: GeometryProxy, itemNumber: Int) -> CGFloat {
         let innerCircleRadius = Self.distanceBetweenPoints(
             p1: center,
             p2: CGPoint(x: universalSize.width*0.65, y: universalSize.height*0.3)
@@ -170,7 +185,12 @@ struct InnerCircleView: View {
             p2: CGPoint(x: universalSize.width*0.75, y: universalSize.height*0.15)
         )
         
-        let positionOfCurrentItem = CGPoint(x: proxy.frame(in: .global).midX, y: proxy.frame(in: .global).midY)
+        // TODO: if it's an even row, then offset the x of the position...TESTING
+        var positionOfCurrentItem = CGPoint(x: proxy.frame(in: .global).midX, y: proxy.frame(in: .global).midY)
+        if getRowNumber(itemNumber) % 2 == 0 { // if it's an even row, ofset the x
+            positionOfCurrentItem.x += Self.size / 2 + Self.spacingBetweenColumns / 2
+        }
+        
         let currItemDistFromCenter = Self.distanceBetweenPoints(p1: positionOfCurrentItem, p2: center)
         
         if currItemDistFromCenter <= innerCircleRadius {
@@ -192,8 +212,8 @@ struct InnerCircleView: View {
             )
         )
     }
-    
-    private func honeycombOffSetX(_ value: Int) -> CGFloat {
+    //get row number given a value/item number in the list
+    private func getRowNumber(_ value: Int) -> Int {
         var rowNumber = value / Self.totalColumns
         
         // if it is the last column, hard code make it still part of the current row
@@ -201,6 +221,11 @@ struct InnerCircleView: View {
         if value % Self.totalColumns == 0 {
             rowNumber -= 1
         }
+        
+        return rowNumber
+    }
+    private func honeycombOffSetX(_ value: Int) -> CGFloat {
+        let rowNumber = self.getRowNumber(value)
         
         // make every even row have the honeycomb offset
         if rowNumber % 2 == 0 {
