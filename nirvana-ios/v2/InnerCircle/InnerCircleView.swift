@@ -103,21 +103,21 @@ struct InnerCircleView: View {
     // TODO: change the number of columns based on the number of items
     private static var numberOfItems: Int = 15
     private static let size: CGFloat = 80
-    private static let spacingBetweenColumns: CGFloat = 10
-    private static let spacingBetweenRows: CGFloat = 10
-    private static let totalColumns: Int = Int(log2(Double(Self.numberOfItems))) + 1 // scaling the circles
+    private static let spacingBetweenColumns: CGFloat = 0
+    private static let spacingBetweenRows: CGFloat = 0
+    private static let totalColumns: Int = Int(log2(Double(Self.numberOfItems))) // scaling the circles and calculating column count
     
     @State private var selectedUserIndex = 0
     
     // TODO: change the size to adaptive or something to make outer ring items shrink their overall size and fit better
     let gridItems: [GridItem] = Array(
-        repeating: GridItem(.fixed(size), spacing: spacingBetweenColumns, alignment: .center),
+        repeating: GridItem(.fixed(Self.size), spacing: spacingBetweenColumns, alignment: .center),
         count: totalColumns)
     
-    private let big:CGFloat = 1.1
-    private let medium:CGFloat = 0.8
+    private let big:CGFloat = 1
+    private let medium:CGFloat = 0.85
     private let small:CGFloat = 0.5
-    private let supersmall:CGFloat = 0.2
+    private let supersmall:CGFloat = 0.3
     
     private let center: CGPoint = CGPoint(x: UIScreen.main.bounds.width*0.5,y: UIScreen.main.bounds.height*0.5)
     
@@ -133,17 +133,19 @@ struct InnerCircleView: View {
                     // TODO: why did I start at 1? for the image name? just decrease count for that specifically
                     ForEach(1..<Self.numberOfItems + 1) { value in
                         GeometryReader {gridProxy in
+                            let scale = getScale(proxy: gridProxy, itemNumber: value)
                             Image("Artboards_Diversity_Avatars_by_Netguru-\(value)")
                                 .resizable()
                                 .scaledToFit()
                                 .background(Color.white.opacity(0.5))
                                 .cornerRadius(100)
                                 .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 20)
-                                .scaleEffect(getScale(proxy: gridProxy, itemNumber: value))
+                                .scaleEffect(scale)
                                 .offset(
                                     x: honeycombOffSetX(value),
                                     y: 0
                                 )
+                                .padding(scale * 5)
                         } // geometry reader
                         .id(value) // id for scrollviewreader
                         .frame(height: Self.size)
