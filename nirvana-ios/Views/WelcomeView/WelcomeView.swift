@@ -33,7 +33,7 @@ struct WelcomeView: View {
                             
                         Link("Learn More", destination: URL(string: NirvanaConstants.landingPageUrl)!)
                             .font(.caption)
-                            .foregroundColor(NirvanaColor.white)
+                            .foregroundColor(NirvanaColor.teal)
                         
                         //learn more button to usenirvana.com
                     }

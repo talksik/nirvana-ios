@@ -11,6 +11,7 @@ import NavigationStack
 // user can type in a phone number and then receive a text
 struct PhoneVerificationView: View {
     @State var phoneNumber = ""
+    @State var ccode = "+1"
     @EnvironmentObject private var navigationStack: NavigationStack
     
     var body: some View {
@@ -20,18 +21,32 @@ struct PhoneVerificationView: View {
             OnboardingTemplateView(hdrText: "Let's get you verified", imgName: "undraw_my_password_d-6-kg", bottomActArea: AnyView(
                 VStack {
                     HStack {
-                        TextField("enter phone number", text: $phoneNumber)
-                            .background(Color.white.opacity(0.5))
+                        Text(ccode)
+                            .padding()
+                            .background(.ultraThinMaterial)
+                            .clipShape(Circle())
+                            .shadow(color: Color.black.opacity(0.3), radius: 20, x: 0, y: 20)
                         
                         TextField("enter phone number", text: $phoneNumber)
-                            .background(Color.white.opacity(0.5))
+                            .padding()
+                            .background(.ultraThinMaterial)
+                            .clipShape(Capsule())
+                            .keyboardType(.decimalPad)
+                            .frame(maxWidth: .infinity)
+                            .shadow(color: Color.black.opacity(0.3), radius: 20, x: 0, y: 20)
+                            .font(.caption)
+                        
+                        Spacer()
                     }
                     .padding(.vertical, 20)
                     
                     Button {
                         print("send verification")
                         
-                        self.navigationStack.pop() // goes back to welcome screen
+                        // do auth stuff
+                        // then async send to next page
+                        self.navigationStack.push(PhoneVerificationCodeView()) // verify code page
+                        
                     } label: {
                         Text("Send Verification")
                             .bold()
@@ -49,6 +64,7 @@ struct PhoneVerificationView: View {
             Button {
                 print("going back to last page")
                 
+                self.navigationStack.pop() // goes back to welcome screen
             } label: {
                 Label("Back", systemImage: "chevron.left")
                     .labelStyle(.iconOnly)
