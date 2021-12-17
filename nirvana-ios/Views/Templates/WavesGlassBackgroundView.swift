@@ -18,8 +18,8 @@ struct WavesGlassBackgroundView: View {
         ZStack {
             AngularGradient(
                 gradient: Gradient(
-                    colors: [NirvanaColor.solidBlue, NirvanaColor.dimTeal, Color.orange, NirvanaColor.solidBlue]),
-                center: .center,
+                    colors: [NirvanaColor.solidBlue, NirvanaColor.dimTeal, Color.orange.opacity(0.4), NirvanaColor.teal.opacity(0.5), NirvanaColor.teal.opacity(0.3), NirvanaColor.solidTeal.opacity(0.3), NirvanaColor.solidBlue]),
+                center: .bottom,
                 angle: .degrees(120))
              
             LinearGradient(gradient: Gradient(

@@ -38,28 +38,31 @@ struct OnboardingTemplateView: View {
         self.bottomActionArea = bottomActArea
     }
     
-    var body: some View {
-        VStack(spacing: 0) {
-            HeaderView()
+    var body: some View {        
+        ZStack {
+            WavesGlassBackgroundView()
             
-            VStack {
-                self.onboardingHeaderText
+            VStack(spacing: 0) {
+                HeaderView()
                 
-                self.onboardingImageView
-                
-                self.onboardingActionTextView
-                
-                Spacer()
-                
-                self.bottomActionArea
-            }
-            .padding(.horizontal, screenWidth * 0.05)
+                VStack {
+                    self.onboardingHeaderText
+                    
+                    self.onboardingImageView
+                    
+                    self.onboardingActionTextView
+                    
+                    Spacer()
+                    
+                    self.bottomActionArea
+                }
+                .padding(.horizontal, screenWidth * 0.05)
 
-            Spacer()
-        } //outermost vstack
-        .accentColor(NirvanaColor.teal)
-        .background(NirvanaColor.bgLightGrey)
-        .navigationBarHidden(true)
+                Spacer()
+            } //outermost vstack
+            .accentColor(NirvanaColor.teal)
+            .navigationBarHidden(true)
+        }
     }
     
     private var onboardingHeaderText: some View {
@@ -139,6 +142,6 @@ struct OnboardingTemplateView_Previews: PreviewProvider {
                 }
                     .padding(.top, 20)
                 )
-        )
+        ).environmentObject(AuthSessionStore())
     }
 }

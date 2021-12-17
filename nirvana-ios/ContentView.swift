@@ -6,19 +6,20 @@
 //
 
 import SwiftUI
+import NavigationStack
 
 struct ContentView: View {
     @EnvironmentObject var authSessionStore: AuthSessionStore
     
     var body: some View {
-        ZStack {
+        NavigationStackView {
             switch self.authSessionStore.sessionState {
                 case SessionState.isAuthenticated:
                     HomeView()
                 case SessionState.isLoggedOut:
                     WelcomeView()
             }
-        }.animation(.default, value:authSessionStore.sessionState)
+        }
     }
 }
 

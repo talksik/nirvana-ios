@@ -11,30 +11,31 @@ struct WelcomeView: View {
     @State var showLearnMore = false
     
     var body: some View {
-        NavigationView {
-            OnboardingTemplateView(imgName: "undraw_friendship_mni7", mainLeadingActText: "Your", mainHighlightedActText: "minimalist", mainTrailingActText: "social media.", subActText: "Tired of the rat race on insta, snap, tik-tok, \"meta\"?", bottomActArea: AnyView(
-                        VStack(alignment: .center) {
-                            NavigationLink(destination: OnboardingTrioView()) {
-                                Text("Start Your Detox")
-                                    .bold()
-                                    .foregroundColor(NirvanaColor.white)
-                                    .frame(maxWidth: .infinity)
-                                    .padding(.vertical, 20)
-                                    .background(NirvanaColor.teal)
-                                    .clipShape(Capsule())
-                                    .shadow(radius:10)
-                            }
-                                
-                            Link("Learn More", destination: URL(string: NirvanaConstants.landingPageUrl)!)
-                                .font(.caption)
-                                .foregroundColor(NirvanaColor.teal)
-                            
-                            //learn more button to usenirvana.com
+        OnboardingTemplateView(imgName: "undraw_friendship_mni7", mainLeadingActText: "Your", mainHighlightedActText: "minimalist", mainTrailingActText: "social media.", subActText: "Tired of the rat race on insta, snap, tik-tok, \"meta\"?", bottomActArea: AnyView(
+                    VStack(alignment: .center) {
+                        Button {
+                            print("going to the sign in page")
+                        } label: {
+                            Text("Start Your Detox")
+                                .bold()
+                                .foregroundColor(NirvanaColor.white)
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 20)
+                                .background(NirvanaColor.teal)
+                                .clipShape(Capsule())
+                                .shadow(radius:10)
                         }
-                            .padding(.top, 20)
-                        )
-            ).navigationBarHidden(true)
-        }.navigationBarHidden(true) // navigation view
+                       
+                            
+                        Link("Learn More", destination: URL(string: NirvanaConstants.landingPageUrl)!)
+                            .font(.caption)
+                            .foregroundColor(NirvanaColor.white)
+                        
+                        //learn more button to usenirvana.com
+                    }
+                        .padding(.top, 20)
+                    )
+        )
     } // View body
 } // View
 

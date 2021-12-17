@@ -10,9 +10,6 @@ import SwiftUI
 struct InnerCircleView: View {
     let universalSize = UIScreen.main.bounds
     
-    
-    
-    
     // TESTING
     // users who will have a thumping thing because they sent a message
     @State var usersWithNewMessage: [Int] = []

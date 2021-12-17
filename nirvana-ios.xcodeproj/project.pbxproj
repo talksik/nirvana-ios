@@ -158,14 +158,13 @@
 		891A15F62765639B00B26659 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				89BCABEE276D2DD6009E9B10 /* PhoneVerification */,
 				89BDCDED2769B3EB00577829 /* Contacts */,
 				89F1386B2767EB07006680ED /* SignIn */,
 				892179E22765FE93001E6C60 /* FooterControlsView */,
 				891A16052765726800B26659 /* Templates */,
 				891A16042765725D00B26659 /* WelcomeView */,
 				891A1608276572BB00B26659 /* HomeView */,
-				89BCABEA276D2A07009E9B10 /* PhoneVerificationView.swift */,
-				89BCABEC276D2B05009E9B10 /* WavesGlassBackgroundView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -184,6 +183,7 @@
 			children = (
 				891A15FE27656F9200B26659 /* HeaderView.swift */,
 				89288ECA27675B9F00E962C4 /* OnboardingTemplateView.swift */,
+				89BCABEC276D2B05009E9B10 /* WavesGlassBackgroundView.swift */,
 			);
 			path = Templates;
 			sourceTree = "<group>";
@@ -246,6 +246,14 @@
 				89BCABE6276B3D64009E9B10 /* InnerCircleViewModel.swift */,
 			);
 			path = InnerCircle;
+			sourceTree = "<group>";
+		};
+		89BCABEE276D2DD6009E9B10 /* PhoneVerification */ = {
+			isa = PBXGroup;
+			children = (
+				89BCABEA276D2A07009E9B10 /* PhoneVerificationView.swift */,
+			);
+			path = PhoneVerification;
 			sourceTree = "<group>";
 		};
 		89BDCDE827697F6100577829 /* UserMenu */ = {
