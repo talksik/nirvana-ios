@@ -14,7 +14,7 @@ struct InnerCircleView: View {
     @State var animateWaves = false
     
     var body: some View {
-        ZStack(alignment: .top) {
+        ZStack {
             // background
             ZStack {
                 AngularGradient(
@@ -56,8 +56,23 @@ struct InnerCircleView: View {
             // content
             gridContent
             
+            // inner circle
+            Rectangle()
+                .foregroundColor(Color.white.opacity(0.5))
+                .frame(width:universalSize.width*0.65, height: universalSize.height*0.3)
+            // outer circle
+            Rectangle()
+                .foregroundColor(Color.white.opacity(0.5))
+                .frame(width:universalSize.width*0.75, height: universalSize.height*0.15)
+            //way out circle
+//            Ellipse()
+//                .foregroundColor(Color.white)
+//                .frame(width:universalSize.width*0.65, height: universalSize.height*0.3)
+            
             // header
             ZStack(alignment: .top) {
+                Color.clear
+                
                 header
             }
         }
@@ -66,12 +81,13 @@ struct InnerCircleView: View {
         }
     }
     
-    // magiv variables for grid
+    // magic variables for grid
+    // TODO: change the number of columns based on the number of items
+    private static var numberOfItems: Int = 50
     private static let size: CGFloat = 80
     private static let spacingBetweenColumns: CGFloat = 10
     private static let spacingBetweenRows: CGFloat = 10
-    private static let totalColumns: Int = 3
-    private var numberOfItems: Int = 10
+    private static let totalColumns: Int = Int(log2(Double(Self.numberOfItems)))
     
     @State private var selectedUserIndex = 0
     
@@ -89,7 +105,7 @@ struct InnerCircleView: View {
                     spacing: Self.spacingBetweenRows
                 ) {
                     
-                    ForEach(1..<11) { value in
+                    ForEach(1..<Self.numberOfItems + 1) { value in
                         GeometryReader {gridProxy in
                             let posRelToGrid = gridProxy.frame(in: .global) // relative to the entire lazygrid
                             
@@ -99,7 +115,7 @@ struct InnerCircleView: View {
                                 .background(Color.white.opacity(0.5))
                                 .cornerRadius(100)
                                 .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 20)
-//                                .scaleEffect(getScale(proxy: gridProxy))
+                                .scaleEffect(getScale(proxy: gridProxy))
                                 .offset(
                                     x: honeycombOffSetX(value),
                                     y: 0
@@ -108,17 +124,6 @@ struct InnerCircleView: View {
                                     self.selectedUserIndex = value
                                     
                                     print("the selected item is: \(value)")
-                                    
-                                    let rowNumber = (value + Self.totalColumns - 1) // 10 / 10
-                                    
-                                    print("the rownumber is: \(rowNumber)")
-                                                                
-                                    // make every even row have the honeycomb offset
-                                    if rowNumber % 2 == 0 {
-                                        print("the offset is \(Self.size / 2 + Self.spacingBetweenColumns / 2 )") // account for the column spacing from before
-                                    } else {
-                                        print("there is no offset")
-                                    }
                                 }
                         } // geometry reader
                         .id(value) // id for scrollviewreader
@@ -130,15 +135,15 @@ struct InnerCircleView: View {
                 .padding(.top, Self.size / 2 + Self.spacingBetweenRows / 2) // because we are going under the nav bar
             }// scrollview
             .onAppear {
-                scrollReaderValue.scrollTo(self.numberOfItems / 2)
+                scrollReaderValue.scrollTo(Self.numberOfItems / 2)
             }
         } // scrollview reader
     }
     
-    private let big:CGFloat = 1.2
+    private let big:CGFloat = 1.1
     private let medium:CGFloat = 1
-    private let small:CGFloat = 0.65
-    private let supersmall:CGFloat = 0.2
+    private let small:CGFloat = 0.8
+    private let supersmall:CGFloat = 0.7
     
     private let center: CGPoint = CGPoint(x: UIScreen.main.bounds.size.width*0.5,y: UIScreen.main.bounds.size.height*0.5)
     
