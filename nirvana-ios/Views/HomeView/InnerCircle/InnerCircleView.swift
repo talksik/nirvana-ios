@@ -142,19 +142,27 @@ struct InnerCircleView: View {
                     ForEach(0..<Self.numberOfItems) { value in
                         GeometryReader {gridProxy in
                             let scale = getScale(proxy: gridProxy, itemNumber: value)
-                            Image("Artboards_Diversity_Avatars_by_Netguru-\(value + 1)")
-                                .resizable()
-                                .scaledToFit()
-                                .background(Color.white.opacity(0.4))
-                                .cornerRadius(100)
-                                .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 20)
-                                .scaleEffect(scale)
-                                .offset(
-                                    x: honeycombOffSetX(value),
-                                    y: 0
-                                )
-                                .padding(scale * 5)
+                            
+                            ZStack {
+                                Circle()
+                                    .foregroundColor(Color.white.opacity(0.4))
+                                    .blur(radius: 8)
+                                    
+                                    .cornerRadius(100)
+                                    
+                                Image("Artboards_Diversity_Avatars_by_Netguru-\(value + 1)")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 20)
+                            }
+                            .scaleEffect(scale)
+                            .padding(scale * 5)
+                            
                         } // geometry reader
+                        .offset(
+                            x: honeycombOffSetX(value),
+                            y: 0
+                        )
                         .id(value) // id for scrollviewreader
                         .frame(height: Self.size)
                         .onTapGesture {
