@@ -145,7 +145,7 @@ struct InnerCircleView: View {
                             
                             ZStack {
                                 Circle()
-                                    .foregroundColor(Color.white.opacity(0.4))
+                                    .foregroundColor(value == self.selectedUserIndex ? NirvanaColor.dimTeal.opacity(0.4) : Color.white.opacity(0.4)) // different color for a selected user
                                     .blur(radius: 8)
                                     
                                     .cornerRadius(100)
@@ -169,7 +169,7 @@ struct InnerCircleView: View {
                             self.selectedUserIndex = value
                             
                             withAnimation(Animation.spring()) {
-                                scrollReaderValue.scrollTo(value, anchor: .top)
+                                scrollReaderValue.scrollTo(value, anchor: .bottomTrailing)
                             }
                             print("the selected item is: \(value)")
                         }
@@ -188,6 +188,10 @@ struct InnerCircleView: View {
     // getting the proxy of an individual item
     // and decoding into a scale that the item should take
     private func getScale(proxy: GeometryProxy, itemNumber: Int) -> CGFloat {
+        // if this user is selected
+        if itemNumber == self.selectedUserIndex {
+            return big + 0.2
+        }
         
         let posRelToGrid = proxy.frame(in: .global) // relative to the entire screen
         let midX = getRowNumber(itemNumber) % 2 == 0 ? posRelToGrid.midX + (Self.size / 2) + (Self.spacingBetweenColumns / 2) : posRelToGrid.midX
