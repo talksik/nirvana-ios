@@ -103,7 +103,7 @@ struct InnerCircleView: View {
             if self.selectedUserIndex != nil {
                 footerNavigation
                     .transition(AnyTransition.move(edge: Edge.bottom))
-                    .animation(Animation.interactiveSpring())
+                    .animation(Animation.default)
             }
         }
         .onAppear() {
@@ -136,10 +136,11 @@ struct InnerCircleView: View {
                     VStack (alignment: .leading) {
                         Text("Sarth Shah")
                             .font(.footnote)
-                        Text("sent 20 minutes")
+                            .foregroundColor(NirvanaColor.light)
+                        Text("sent 20 minutes ago")
                             .font(.caption)
+                            .foregroundColor(.gray)
                     }
-                    .foregroundColor(NirvanaColor.light)
                     
                     Spacer()
                 }
@@ -148,6 +149,7 @@ struct InnerCircleView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
                 .shadow(color: Color.black.opacity(0.25), radius: 30, x: 0, y: 20)
             }
+            
             FooterControlsView()
         }
         .padding()
