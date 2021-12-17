@@ -99,13 +99,48 @@ struct InnerCircleView: View {
                 //TODO: find a better solution than hacking it like this
                 Color.clear
                 
-                FooterControlsView()
+                footer
             }
            
         }
         .onAppear() {
             self.animateWaves = true
         }
+    }
+    
+    var footer : some View {
+        ZStack {
+            HStack {
+                Image(systemName: "house.fill")
+                    .frame(maxWidth: .infinity)
+                    .frame(width: 40, height: 40)
+                    .foregroundColor(NirvanaColor.white)
+                    .padding(5)
+                    .background(NirvanaColor.teal.opacity(0.1))
+                    .clipShape(Circle())
+                Spacer()
+                Image(systemName: "rectangle.3.group.fill")
+                    .frame(maxWidth: .infinity)
+                    .frame(width: 40, height: 40)
+                    .foregroundColor(NirvanaColor.teal)
+                Spacer()
+                Image(systemName: "suitcase.fill")
+                    .frame(maxWidth: .infinity)
+                    .frame(width: 40, height: 40)
+                    .foregroundColor(NirvanaColor.teal)
+            }
+            .frame(maxWidth: .infinity, maxHeight: 50)
+            .background(Color.white.opacity(0.5))
+            .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
+            .shadow(color: Color.black.opacity(0.25), radius: 30, x: 0, y: 20)
+            .padding()
+            
+            
+            FooterControlsView()
+                .offset(x: 0, y: -25)
+        }
+        
+        
     }
     
     // magic variables for grid
