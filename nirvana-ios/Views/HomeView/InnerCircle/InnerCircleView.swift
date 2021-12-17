@@ -177,7 +177,7 @@ struct InnerCircleView: View {
     // magic variables for grid
     // TODO: change the number of columns based on the number of items
     private static var numberOfItems: Int = 20
-    private static let size: CGFloat = UIScreen.main.bounds.height*0.15
+    private static let size: CGFloat = UIScreen.main.bounds.height*0.12 // scaling with screen size
     private static let spacingBetweenColumns: CGFloat = 0
     private static let spacingBetweenRows: CGFloat = 0
     private static let totalColumns: Int = Int(log2(Double(Self.numberOfItems))) // scaling the circles and calculating column count
@@ -194,6 +194,7 @@ struct InnerCircleView: View {
     private let small:CGFloat = 0.5
     private let supersmall:CGFloat = 0.3
     
+    // TODO: maybe make our "center" offset to a little to the top left to make it more honeycomb from top left
     private let center: CGPoint = CGPoint(x: UIScreen.main.bounds.width*0.5,y: UIScreen.main.bounds.height*0.5)
     
     private var gridContent: some View {
