@@ -72,6 +72,7 @@ struct InnerCircleView: View {
             
             // header
             ZStack(alignment: .top) {
+                //TODO: find a better solution than hacking it like this
                 Color.clear
                 
                 header
@@ -93,6 +94,14 @@ struct InnerCircleView: View {
 //            }
 //            .stroke(Color.black)
 //            .edgesIgnoringSafeArea(.all)
+            
+            ZStack(alignment: .bottom) {
+                //TODO: find a better solution than hacking it like this
+                Color.clear
+                
+                FooterControlsView()
+            }
+           
         }
         .onAppear() {
             self.animateWaves = true
@@ -179,7 +188,7 @@ struct InnerCircleView: View {
         let xdelta = abs(midX - self.center.x)
         let ydelta = abs(midY - self.center.y)
         
-        let innerCircleXAcceptance = Self.size * 0.75
+        let innerCircleXAcceptance = Self.size
         let innerCircleYAcceptance = Self.size * 0.75
         let outerRingXAcceptance = self.universalSize.width * 0.4
         let outerRingYAcceptance = self.universalSize.height * 0.3
@@ -228,14 +237,16 @@ struct InnerCircleView: View {
                 .frame(width: 20.0, height: 32.132)
                 .padding(.leading, 20)
             
-            Spacer()
-            
             Text("nirvana")
                 .font(Font.custom("Satisfy-Regular", size: 28))
                 .foregroundColor(NirvanaColor.teal)
                 .multilineTextAlignment(.center)
             
             Spacer()
+            
+            Image(systemName: "message.and.waveform")
+                .foregroundColor(Color.red.opacity(1))
+                .font(.title2)
             
             Menu {
                 Button("Log out") {
