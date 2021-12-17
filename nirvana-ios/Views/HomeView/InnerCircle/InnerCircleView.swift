@@ -100,11 +100,7 @@ struct InnerCircleView: View {
 //            .stroke(Color.black)
 //            .edgesIgnoringSafeArea(.all)
             
-            if self.selectedUserIndex != nil {
-                footerNavigation
-                    .transition(AnyTransition.move(edge: Edge.bottom))
-                    .animation(Animation.default)
-            }
+            footerNavigation
         }
         .onAppear() {
             self.animateWaves = true
@@ -133,6 +129,7 @@ struct InnerCircleView: View {
                             .padding(5)
                     }
                     
+                    
                     VStack (alignment: .leading) {
                         Text("Sarth Shah")
                             .font(.footnote)
@@ -153,6 +150,11 @@ struct InnerCircleView: View {
             FooterControlsView()
         }
         .padding()
+        .offset(
+            x:0,
+            y:self.selectedUserIndex == nil ? 150 : 0
+        )
+        .animation(Animation.spring(), value: self.selectedUserIndex)
     }
     
     var bubbleNavigation : some View {
