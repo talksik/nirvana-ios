@@ -12,6 +12,7 @@ final class PhoneVerificationViewModel : ObservableObject  {
 }
 
 extension String {
+    // custom function to give (949)920-0392 and get out the right thing
     func applyPatternOnNumbers(pattern: String, replacementCharacter: Character) -> String {
         var pureNumber = self.replacingOccurrences( of: "[^0-9]", with: "", options: .regularExpression)
         for index in 0 ..< pattern.count {

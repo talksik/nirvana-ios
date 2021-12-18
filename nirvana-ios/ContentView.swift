@@ -15,7 +15,7 @@ struct ContentView: View {
         NavigationStackView {
             switch self.authSessionStore.sessionState {
                 case SessionState.isAuthenticated:
-                    HomeView()
+                    InnerCircleView()
                 case SessionState.isLoggedOut:
                     WelcomeView()
             }
