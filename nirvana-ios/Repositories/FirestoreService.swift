@@ -16,6 +16,6 @@ class FirestoreService {
         case user_friends = "user_friends" // associating a user to
     }
     
-    private var db = Firestore.firestore()
+//    private var db = Firestore.firestore()
     
 }

@@ -168,7 +168,6 @@
 			children = (
 				89AD5576276DEA9D001658E0 /* LogoHeader */,
 				89AD5571276DD77D001658E0 /* SplashView */,
-				89AD5570276DBBD4001658E0 /* New Group */,
 				89BCABEE276D2DD6009E9B10 /* PhoneVerification */,
 				89BDCDED2769B3EB00577829 /* Contacts */,
 				89F1386B2767EB07006680ED /* SignIn */,
@@ -248,13 +247,6 @@
 				892179E52765FECD001E6C60 /* FooterControlsViewModel.swift */,
 			);
 			path = FooterControlsView;
-			sourceTree = "<group>";
-		};
-		89AD5570276DBBD4001658E0 /* New Group */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "New Group";
 			sourceTree = "<group>";
 		};
 		89AD5571276DD77D001658E0 /* SplashView */ = {

@@ -16,7 +16,6 @@ final class PhoneVerificationViewModel : ObservableObject  {
     }
     
     
-    public func 
 }
 
 extension String {
