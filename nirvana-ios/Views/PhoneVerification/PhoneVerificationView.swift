@@ -22,6 +22,8 @@ struct PhoneVerificationView: View {
     @State var toastText = ""
     @State var toastSubMessage = ""
     
+    @State var isLoading = false
+    
     // TODO: format the input so that it shows the parentheses and stuff (949)923-0445
     var body: some View {
         ZStack(alignment: .topLeading) {
@@ -62,50 +64,71 @@ struct PhoneVerificationView: View {
                     }
                     .padding(.vertical, 20)
                     
-                    Button {
-                        let concatPhoneNumber = "+"+self.ccode+self.phoneNumber
-                        
-                        // do auth stuff from firebase
-                        PhoneAuthProvider.provider()
-                          .verifyPhoneNumber(concatPhoneNumber, uiDelegate: nil) { verificationID, error in
-                              // problem verifying number showing alert...maybe fake number or something from user
-                              if error != nil {
-                                  self.toastText = "⚠️ Please try again."
-                                  self.toastSubMessage = "There was an issue validating your phone number"
-                                  self.showToast.toggle()
-                                  
-                                  print((error?.localizedDescription)!)
-                                  
-                                  return
-                              }
-                              
-                              print("sending sms")
-                              
-                              // TODO: Sign in using the verificationID and the code sent to the user
-                              // if there is no user with the phone number, then create one
-                              
-                              UserDefaults.standard.set(verificationID, forKey: "authVerificationID")
-                              
-                              // then async send to next page
-                              // TODO: coming back after function end and then having 1 second before hitting this...need to use async and combine and all of that to make sure that the main thread is not affected and it's all smooth
-                              self.navigationStack.push(PhoneVerificationCodeView()) // verify code page
-                          }
-                    } label: {
-                        VStack {
-                            Text("Send Verification")
-                                .fontWeight(.heavy)
-                                .foregroundColor(NirvanaColor.white)
-                                .frame(maxWidth: .infinity)
-                                .padding(.vertical, 20)
-                                .background(self.phoneNumber.count == 10 ? NirvanaColor.teal : Color.white.opacity(0.2)) // show dull button if didn't enter full phone number
-                                .clipShape(Capsule())
-                                .shadow(radius:10)
-                                .animation(.default)
+                    // did they input a 10 digit number?
+                    if self.phoneNumber.count == 10 {
+                        Button {
+                            let concatPhoneNumber = "+"+self.ccode+self.phoneNumber
                             
-                            Text("You might receive an SMS message for verification and standard rates apply.")
-                                .font(.footnote)
-                                .foregroundColor(Color.gray)
+                            //show loading screen
+                            self.isLoading.toggle()
+                            
+                            DispatchQueue.main.async {
+                                print("sending sms and/or redirecting")
+                                
+                                // do auth stuff from firebase
+                                PhoneAuthProvider.provider()
+                                  .verifyPhoneNumber(concatPhoneNumber, uiDelegate: nil) { verificationID, error in
+                                      // got a response...done loading... either error to show or next page
+                                      self.isLoading.toggle()
+                                      
+                                      // problem verifying number showing alert...maybe fake number or something from user
+                                      if error != nil {
+                                          self.toastText = "⚠️ Please try again."
+                                          self.toastSubMessage = "There was an issue validating your phone number"
+                                          self.showToast.toggle()
+                                          
+                                          print((error?.localizedDescription)!)
+                                          
+                                          return
+                                      }
+                                      
+                                      // TODO: Sign in using the verificationID and the code sent to the user
+                                      // if there is no user with the phone number, then create one
+                                      
+                                      UserDefaults.standard.set(verificationID, forKey: "authVerificationID")
+                                      
+                                      // then async send to next page
+                                      // TODO: coming back after function end and then having 1 second before hitting this...need to use async and combine and all of that to make sure that the main thread is not affected and it's all smooth
+                                      self.navigationStack.push(PhoneVerificationCodeView()) // verify code page
+                                  }
+                            }
+                            
+                        } label: {
+                            VStack {
+                                Text("Send Verification")
+                                    .fontWeight(.heavy)
+                                    .foregroundColor(Color.white)
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.vertical, 20)
+                                    .background(NirvanaColor.teal) // show dull button if didn't enter full phone number
+                                    .clipShape(Capsule())
+                                    .shadow(radius:10)
+                                    .animation(.default)
+                                
+                                Text("You might receive an SMS message for verification and standard rates apply.")
+                                    .font(.footnote)
+                                    .foregroundColor(Color.black.opacity(0.5))
+                            }
                         }
+                    } else {
+                        Text("Send Verification")
+                            .foregroundColor(Color.white.opacity(0.2))
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 20)
+                            .background(Color.white.opacity(0.2)) // show dull button if didn't enter full phone number
+                            .clipShape(Capsule())
+                            .shadow(radius:10)
+                            .animation(.default)
                     }
                 }
             ))
@@ -121,11 +144,16 @@ struct PhoneVerificationView: View {
                     .foregroundColor(NirvanaColor.teal)
                     .padding()
             }
+            
+            
+            if self.isLoading {
+                SplashView()
+            }
+            
+            SplashView()
         }
         .alert(self.toastText, isPresented: self.$showToast) {
-            
             Button("OK", role: ButtonRole.cancel) { }
-            
         } message: {
             Text(self.toastSubMessage)
         }
@@ -149,6 +177,8 @@ struct PhoneVerificationCodeView: View {
     @State var toastText = ""
     @State var toastSubMessage = ""
     
+    @State var isLoading = false
+    
     var body: some View {
         ZStack(alignment: .topLeading) {
             Color.clear
@@ -161,7 +191,7 @@ struct PhoneVerificationCodeView: View {
                         .clipShape(Capsule())
                         .keyboardType(.decimalPad)
                         .shadow(color: Color.black.opacity(0.3), radius: 20, x: 0, y: 20)
-                        .font(.subheadline)
+                        .font(.largeTitle)
                         .multilineTextAlignment(.center)
                         .padding(.vertical)
 //                        .onReceive(Just(self.$verificationCode)) { newValue in
@@ -172,60 +202,80 @@ struct PhoneVerificationCodeView: View {
 //                            }
 //                        }
                     
-                    Button {
-                        print("verify code")
-                        
-                        // do auth stuff
-                        
-                        // get it from the previous screen but from storage
-                        let verificationID = UserDefaults.standard.string(forKey: "authVerificationID")
-                        
-                        if verificationID == nil {
-                            self.toastText = "There was an error validating your code."
-                            self.showToast.toggle()
-                        }
-                        // if we got a value, then continue with verifying their code
-                        let credential = PhoneAuthProvider.provider().credential(
-                          withVerificationID: verificationID!,
-                          verificationCode: self.verificationCode
-                        )
-                        
-                        // firebase will now verify the credential
-                        Auth.auth().signIn(with: credential) { (res, err) in
-                            if err != nil {
-                                self.toastText = "⚠️ Error with Verification"
-                                self.toastSubMessage = "Code is invalid. Please try again or re-enter your phone number in the previous page."
+                    if self.verificationCode.count == 6 {
+                        Button {
+                            print("started verification process of code")
+                            // show loading screen
+                            self.isLoading.toggle()
+                            
+                            
+                            // get it from the previous screen but from storage
+                            let verificationID = UserDefaults.standard.string(forKey: "authVerificationID")
+                            
+                            if verificationID == nil {
+                                self.toastText = "There was an error validating your code."
                                 self.showToast.toggle()
-                                
-                                print((err?.localizedDescription)!)
-                                return
                             }
                             
-                            //setting in key storage
-                            UserDefaults.standard.set(true, forKey: "authVerificationID")
-                            
-                            //TODO: is the auth listener going to find that this person signed in? idk test it
-                            
-                            // firebase either created a new user or is giving back an existing user's id
-                            let userId = res?.user.uid
-                            let userPhoneNumber = res?.user.phoneNumber
-                            print("user id that was authenticated is: \(userId)")
-                            print("user id that was authenticated is: \(userPhoneNumber)")
-                        
-                            
-                            // then sending to next page
-                            self.navigationStack.push(PhoneVerificationCodeView()) // verify code page
+                            // TESTING: let it do it's thing but don't ruin the ui main thread
+                            DispatchQueue.main.async {
+                                // if we got a value, then continue with verifying their code
+                                let credential = PhoneAuthProvider.provider().credential(
+                                  withVerificationID: verificationID!,
+                                  verificationCode: self.verificationCode
+                                )
+                                
+                                // firebase will now verify the credential
+                                Auth.auth().signIn(with: credential) { (res, err) in
+                                    // done with the response here, turn off loading screen
+                                    self.isLoading.toggle()
+                                    
+                                    if err != nil {
+                                        self.toastText = "⚠️ Error with Verification"
+                                        self.toastSubMessage = "Code is invalid. Please try again or re-enter your phone number in the previous page."
+                                        self.showToast.toggle()
+                                        
+                                        print((err?.localizedDescription)!)
+                                        return
+                                    }
+                                    
+                                    //setting in key storage
+                                    UserDefaults.standard.set(true, forKey: "authVerificationID")
+                                    
+                                    //TODO: is the auth listener going to find that this person signed in? idk test it
+                                    
+                                    // firebase either created a new user or is giving back an existing user's id
+                                    let userId = res?.user.uid
+                                    let userPhoneNumber = res?.user.phoneNumber
+                                    print("user id that was authenticated is: \(userId)")
+                                    print("user id that was authenticated is: \(userPhoneNumber)")
+                                
+                                    
+                                    // then sending to next page
+                                    self.navigationStack.push(PhoneVerificationCodeView()) // verify code page
+                                }
+                            }
+                        } label: {
+                            Text("Verify")
+                                .bold()
+                                .foregroundColor(NirvanaColor.white)
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 20)
+                                .background(NirvanaColor.teal)
+                                .clipShape(Capsule())
+                                .shadow(radius:10)
                         }
-                    } label: {
-                        Text("Send Verification")
-                            .bold()
-                            .foregroundColor(NirvanaColor.white)
+                    } else {
+                        Text("Verify")
+                            .foregroundColor(Color.white.opacity(0.2))
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 20)
-                            .background(NirvanaColor.teal)
+                            .background(Color.white.opacity(0.2)) // show dull button if didn't enter full phone number
                             .clipShape(Capsule())
                             .shadow(radius:10)
+                            .animation(.default)
                     }
+                    
                 }
             ))
             
@@ -239,6 +289,10 @@ struct PhoneVerificationCodeView: View {
                     .labelStyle(.iconOnly)
                     .foregroundColor(NirvanaColor.teal)
                     .padding()
+            }
+            
+            if self.isLoading {
+                SplashView()
             }
         }
         .alert(self.toastText, isPresented: self.$showToast) {
