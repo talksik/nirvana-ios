@@ -29,7 +29,6 @@
 		89288EC7276756DF00E962C4 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 89288EC6276756DF00E962C4 /* FirebaseDatabase */; };
 		89288EC9276756DF00E962C4 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 89288EC8276756DF00E962C4 /* FirebaseStorage */; };
 		89288ECB27675B9F00E962C4 /* OnboardingTemplateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89288ECA27675B9F00E962C4 /* OnboardingTemplateView.swift */; };
-		89AD556F276D63E4001658E0 /* PopupView in Frameworks */ = {isa = PBXBuildFile; productRef = 89AD556E276D63E4001658E0 /* PopupView */; };
 		89B46E71276893E200B74255 /* AuthSessionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B46E70276893E200B74255 /* AuthSessionStore.swift */; };
 		89BCABE2276B3CB0009E9B10 /* NavigationStack in Frameworks */ = {isa = PBXBuildFile; productRef = 89BCABE1276B3CB0009E9B10 /* NavigationStack */; };
 		89BCABE5276B3D58009E9B10 /* InnerCircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89BCABE4276B3D58009E9B10 /* InnerCircleView.swift */; };
@@ -97,7 +96,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				89288EC3276756DF00E962C4 /* FirebaseAnalytics in Frameworks */,
-				89AD556F276D63E4001658E0 /* PopupView in Frameworks */,
 				89BCABE2276B3CB0009E9B10 /* NavigationStack in Frameworks */,
 				89288EC5276756DF00E962C4 /* FirebaseAuth in Frameworks */,
 				89288EC7276756DF00E962C4 /* FirebaseDatabase in Frameworks */,
@@ -319,7 +317,6 @@
 				89288EC8276756DF00E962C4 /* FirebaseStorage */,
 				89F1386F2767F55F006680ED /* GoogleSignIn */,
 				89BCABE1276B3CB0009E9B10 /* NavigationStack */,
-				89AD556E276D63E4001658E0 /* PopupView */,
 			);
 			productName = "nirvana-ios";
 			productReference = 891A15DD27653A7000B26659 /* nirvana-ios.app */;
@@ -353,7 +350,6 @@
 				89288EC1276756DF00E962C4 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				89F1386E2767F55F006680ED /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 				89BCABE0276B3CB0009E9B10 /* XCRemoteSwiftPackageReference "swiftui-navigation-stack" */,
-				89AD556D276D63E4001658E0 /* XCRemoteSwiftPackageReference "PopupView" */,
 			);
 			productRefGroup = 891A15DE27653A7000B26659 /* Products */;
 			projectDirPath = "";
@@ -634,14 +630,6 @@
 				minimumVersion = 8.0.0;
 			};
 		};
-		89AD556D276D63E4001658E0 /* XCRemoteSwiftPackageReference "PopupView" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/exyte/PopupView";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
-			};
-		};
 		89BCABE0276B3CB0009E9B10 /* XCRemoteSwiftPackageReference "swiftui-navigation-stack" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/matteopuc/swiftui-navigation-stack.git";
@@ -680,11 +668,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 89288EC1276756DF00E962C4 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseStorage;
-		};
-		89AD556E276D63E4001658E0 /* PopupView */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 89AD556D276D63E4001658E0 /* XCRemoteSwiftPackageReference "PopupView" */;
-			productName = PopupView;
 		};
 		89BCABE1276B3CB0009E9B10 /* NavigationStack */ = {
 			isa = XCSwiftPackageProductDependency;

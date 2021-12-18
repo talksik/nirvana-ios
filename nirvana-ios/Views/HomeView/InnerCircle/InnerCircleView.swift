@@ -216,7 +216,6 @@ struct InnerCircleView: View {
                             }
                             .scaleEffect(scale)
                             .padding(scale * 5)
-                            
                         } // geometry reader
                         .offset(
                             x: honeycombOffSetX(value),

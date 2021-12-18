@@ -44,6 +44,7 @@ final class AuthSessionStore: ObservableObject, SessionStore {
         self.setupAuthListen()
     }
     
+    // MARK: OLD for google sign in with link
     func signInOrCreateUser() {
         if GIDSignIn.sharedInstance.currentUser == nil {
             guard
@@ -76,6 +77,7 @@ final class AuthSessionStore: ObservableObject, SessionStore {
         }
     }
     
+    // MARK: OLD for google sign in with link
     func firebaseAuth(withCredentials authCred: AuthCredential) {
         Auth.auth().signIn(with: authCred) { result, error in
             if error != nil {
@@ -113,12 +115,14 @@ final class AuthSessionStore: ObservableObject, SessionStore {
         self.handler = Auth.auth().addStateDidChangeListener { (auth, user) in
             print("auth listener activated")
             
+            // get the user from the auth table in firebase auth
             if let user = user {
                 // if we have a user, create a new user model
-                print("Got user: \(user.displayName!)")
-                self.user = User(
-                    _uid: user.uid, _email: user.email, _displayName: user.displayName, _profilePic: user.photoURL, _phoneNumber: user.phoneNumber)
+                print("Got user: \(user.uid)")
+                print("phone number: \(user.phoneNumber!)")
                 
+                // TODO: go to firestore and get full user document for the current authenticated user
+                // and have this in environment for all pages to access without having to fetch all the time
                 self.sessionState = .isAuthenticated
             } else {
                 // if we don't have a user, set our session to nil

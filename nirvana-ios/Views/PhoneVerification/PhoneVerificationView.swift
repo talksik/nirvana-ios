@@ -8,8 +8,6 @@
 import SwiftUI
 import NavigationStack
 import Combine
-// TODO: maybe this is useless and just do my own toasts and alerts
-import PopupView
 import Firebase
 import FirebaseAuth
 
@@ -169,7 +167,7 @@ struct PhoneVerificationCodeView: View {
                         print("verify code")
                         
                         // do auth stuff
-                                                
+                        
                         // get it from the previous screen but from storage
                         let verificationID = UserDefaults.standard.string(forKey: "authVerificationID")
                         
@@ -191,14 +189,21 @@ struct PhoneVerificationCodeView: View {
                                 return
                             }
                             
+                            //setting in key storage
                             UserDefaults.standard.set(true, forKey: "authVerificationID")
                             
+                            //TODO: is the auth listener going to find that this person signed in? idk test it
+                            
+                            // firebase either created a new user or is giving back an existing user's id
+                            let userId = res?.user.uid
+                            let userPhoneNumber = res?.user.phoneNumber
+                            print("user id that was authenticated is: \(userId)")
+                            print("user id that was authenticated is: \(userPhoneNumber)")
+                        
+                            
+                            // then sending to next page
+                            self.navigationStack.push(PhoneVerificationCodeView()) // verify code page
                         }
-                        
-                        // then async send to next page
-                        self.navigationStack.push(PhoneVerificationCodeView()) // verify code page
-                    
-                        
                     } label: {
                         Text("Send Verification")
                             .bold()
