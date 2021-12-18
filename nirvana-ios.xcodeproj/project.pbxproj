@@ -372,7 +372,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 891A15D827653A7000B26659 /* Build configuration list for PBXProject "``````````````````````" */;
+			buildConfigurationList = 891A15D827653A7000B26659 /* Build configuration list for PBXProject "nirvana-ios" */;
 			compatibilityVersion = "Xcode 13.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -640,7 +640,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		891A15D827653A7000B26659 /* Build configuration list for PBXProject "``````````````````````" */ = {
+		891A15D827653A7000B26659 /* Build configuration list for PBXProject "nirvana-ios" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				891A15E927653A7100B26659 /* Debug */,
