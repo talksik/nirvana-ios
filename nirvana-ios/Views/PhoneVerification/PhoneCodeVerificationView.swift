@@ -92,14 +92,16 @@ struct PhoneCodeVerificationView: View {
                                 //setting in key storage
                                 UserDefaults.standard.set(true, forKey: "authVerificationID")
                                 
-                                //TODO: is the auth listener going to find that this person signed in? idk test it
-                                
                                 // firebase either created a new user or is giving back an existing user's id
                                 let userId = res?.user.uid
                                 let userPhoneNumber = res?.user.phoneNumber
                                 print("user id that was authenticated is: \(userId)")
                                 print("user id that was authenticated is: \(userPhoneNumber)")
-                            
+                                
+                                // get user from firestore using the firebase userid given,
+                                // if not there, create
+                                
+                                
                                 
                                 // then sending to next page
                                 self.navigationStack.push(OnboardingTrioView()) // verify code page

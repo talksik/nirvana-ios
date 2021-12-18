@@ -13,31 +13,10 @@ final class PhoneVerificationViewModel : ObservableObject  {
     public func verifyPhoneAndSendSMS(phoneNumber: String) {
         // TODO: do some string validation here
         // do auth stuff from firebase
-        PhoneAuthProvider.provider()
-          .verifyPhoneNumber(phoneNumber, uiDelegate: nil) { verificationID, error in
-              print("firebase auth done, now running my callback")
-              
-              // got a response...done loading... either error to show or next page
-//              self.isLoading.toggle()
-              
-              // problem verifying number showing alert...maybe fake number or something from user
-              if error != nil {
-//                  self.toastText = "⚠️ Please try again."
-//                  self.toastSubMessage = "There was an issue validating your phone number"
-//                  self.showToast.toggle()
-                  
-                  print((error?.localizedDescription)!)
-                  
-                  return
-              }
-              
-              // use this in the next screen to verify with the code provided
-              UserDefaults.standard.set(verificationID, forKey: "authVerificationID")
-              
-//              self.navigationStack.push(PhoneCodeVerificationView()) // verify code page
-          }
     }
     
+    
+    public func 
 }
 
 extension String {
