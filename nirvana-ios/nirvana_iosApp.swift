@@ -28,21 +28,29 @@ struct nirvana_iosApp: App {
 
 class AppDelegate: NSObject, UIApplicationDelegate {
       func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-        FirebaseApp.configure()
-        return true
+          print("Colors application is starting up. ApplicationDelegate didFinishLaunchingWithOptions.")
+            
+          print("initialized Firebase")
+          FirebaseApp.configure()
+          return true
       }
     
-        func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-            print("\(#function)")
-            Auth.auth().setAPNSToken(deviceToken, type: .sandbox)
-          }
+      func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+          print("\(#function)")
+          //MARK: add this when I have APN setup through app
+          // gets the APN token so that firebase can send notifications to app
+//          Auth.auth().setAPNSToken(deviceToken, type: .sandbox)
+      }
       
       func application(_ application: UIApplication, didReceiveRemoteNotification notification: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+            print("did receive remote notification")
             print("\(#function)")
-            if Auth.auth().canHandleNotification(notification) {
-              completionHandler(.noData)
-              return
-            }
+          //MARK: add this when I have APN setup through app
+//            if Auth.auth().canHandleNotification(notification) {
+//              completionHandler(.noData)
+//              return
+//            }
+          
       }
     
     // For iOS 9+
@@ -50,7 +58,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         // MARK: turned off google sign in link in for phone below
         //        return GIDSignIn.sharedInstance.handle(url)
         
-        // if the user can be handled by google auth, then it will do so
+        // if the url has to do with phone auth, then it will do so
         if Auth.auth().canHandle(url) {
           return true
         }

@@ -19,7 +19,8 @@ struct PhoneVerificationView: View {
     
     // Alert settings
     @State var showToast = false
-    @State var toastText = "🇺🇸 Only U.S. supported, more countries coming soon!"
+    @State var toastText = ""
+    @State var toastSubMessage = ""
     
     // TODO: format the input so that it shows the parentheses and stuff (949)923-0445
     var body: some View {
@@ -62,25 +63,31 @@ struct PhoneVerificationView: View {
                     .padding(.vertical, 20)
                     
                     Button {
-                        print("send sms")
-                                                
                         let concatPhoneNumber = "+"+self.ccode+self.phoneNumber
-                        // do auth stuff from firebase
                         
+                        // do auth stuff from firebase
                         PhoneAuthProvider.provider()
                           .verifyPhoneNumber(concatPhoneNumber, uiDelegate: nil) { verificationID, error in
                               // problem verifying number showing alert...maybe fake number or something from user
                               if error != nil {
-                                  self.toastText = (error?.localizedDescription)!
+                                  self.toastText = "⚠️ Please try again."
+                                  self.toastSubMessage = "There was an issue validating your phone number"
                                   self.showToast.toggle()
+                                  
+                                  print((error?.localizedDescription)!)
+                                  
                                   return
                               }
-                              // Sign in using the verificationID and the code sent to the user
-                              // ...
+                              
+                              print("sending sms")
+                              
+                              // TODO: Sign in using the verificationID and the code sent to the user
+                              // if there is no user with the phone number, then create one
                               
                               UserDefaults.standard.set(verificationID, forKey: "authVerificationID")
                               
                               // then async send to next page
+                              // TODO: coming back after function end and then having 1 second before hitting this...need to use async and combine and all of that to make sure that the main thread is not affected and it's all smooth
                               self.navigationStack.push(PhoneVerificationCodeView()) // verify code page
                           }
                     } label: {
@@ -97,7 +104,7 @@ struct PhoneVerificationView: View {
                             
                             Text("You might receive an SMS message for verification and standard rates apply.")
                                 .font(.footnote)
-                                .foregroundColor(Color.black.opacity(0.7))
+                                .foregroundColor(Color.gray)
                         }
                     }
                 }
@@ -115,11 +122,12 @@ struct PhoneVerificationView: View {
                     .padding()
             }
         }
-        .alert(isPresented: self.$showToast) {
-            Alert(
-                title: Text(self.toastText),
-                dismissButton: .default(Text("Got it!"))
-                )
+        .alert(self.toastText, isPresented: self.$showToast) {
+            
+            Button("OK", role: ButtonRole.cancel) { }
+            
+        } message: {
+            Text(self.toastSubMessage)
         }
     }
 }
@@ -138,7 +146,8 @@ struct PhoneVerificationCodeView: View {
     
     // Alert settings
     @State var showToast = false
-    @State var toastText = "There was an error in verifying your account"
+    @State var toastText = ""
+    @State var toastSubMessage = ""
     
     var body: some View {
         ZStack(alignment: .topLeading) {
@@ -181,11 +190,14 @@ struct PhoneVerificationCodeView: View {
                           verificationCode: self.verificationCode
                         )
                         
-                        // firebase will now verify the put together credential
+                        // firebase will now verify the credential
                         Auth.auth().signIn(with: credential) { (res, err) in
                             if err != nil {
-                                self.toastText = (err?.localizedDescription)!
+                                self.toastText = "⚠️ Error with Verification"
+                                self.toastSubMessage = "Code is invalid. Please try again or re-enter your phone number in the previous page."
                                 self.showToast.toggle()
+                                
+                                print((err?.localizedDescription)!)
                                 return
                             }
                             
@@ -229,11 +241,12 @@ struct PhoneVerificationCodeView: View {
                     .padding()
             }
         }
-        .alert(isPresented: self.$showToast) {
-            Alert(
-                title: Text(self.toastText),
-                dismissButton: .default(Text("Got it!"))
-                )
+        .alert(self.toastText, isPresented: self.$showToast) {
+            
+            Button("OK", role: ButtonRole.cancel) { }
+            
+        } message: {
+            Text(self.toastSubMessage)
         }
     }
 }
