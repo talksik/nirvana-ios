@@ -7,7 +7,7 @@
 
 import Foundation
 import Firebase
-import FirebaseStorage
+import FirebaseFirestore
 
 class FirestoreService {
     enum Collections: String {
