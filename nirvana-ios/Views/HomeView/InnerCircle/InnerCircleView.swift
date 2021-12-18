@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct InnerCircleView: View {
+    @EnvironmentObject var authSessionStore: AuthSessionStore
+    
     let universalSize = UIScreen.main.bounds
     
     // TESTING
@@ -341,6 +343,8 @@ struct InnerCircleView: View {
             Menu {
                 Button("Log out") {
                     print("log out button clicked")
+                    
+                    authSessionStore.logOut()
                 }
                 Button("Friends") {
                     print("manage friends page")
@@ -366,7 +370,7 @@ struct InnerCircleView: View {
 
 struct InnerCircleView_Previews: PreviewProvider {
     static var previews: some View {
-        InnerCircleView()
+        InnerCircleView().environmentObject(AuthSessionStore())
     }
 }
 

@@ -13,12 +13,16 @@ struct ContentView: View {
     
     var body: some View {
         NavigationStackView {
-            switch self.authSessionStore.sessionState {
-                case SessionState.isAuthenticated:
-                    InnerCircleView()
-                case SessionState.isLoggedOut:
-                    WelcomeView()
-            }
+            // MARK: temporary
+            PhoneVerificationView()
+            
+            // TODO: remove this commenting to enable natural user flow
+//            switch self.authSessionStore.sessionState {
+//                case SessionState.isAuthenticated:
+//                    InnerCircleView()
+//                case SessionState.isLoggedOut:
+//                    WelcomeView()
+//            }
         }
     }
 }
