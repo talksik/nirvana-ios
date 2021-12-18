@@ -39,10 +39,11 @@ struct PhoneVerificationView: View {
                             .font(.subheadline)
                             .onTapGesture {
                                 // tell people that we only support the United States
+                                self.toastText = "🇺🇸 Only U.S. supported, more countries coming soon!"
                                 self.showToast.toggle()
                             }
                         
-                        TextField("(949) 292 - 2192", text: $phoneNumber)
+                        TextField("(650) 555 - 1234", text: $phoneNumber)
                             .padding()
                             .background(.ultraThinMaterial)
                             .clipShape(Capsule())
@@ -116,16 +117,11 @@ struct PhoneVerificationView: View {
                     .padding()
             }
         }
-        .popup(isPresented: self.$showToast, type: .toast, position: .bottom, autohideIn: 2) {
-            VStack {
-                Text(self.toastText)
-                    .padding()
-                    .background(.ultraThinMaterial)
-                    .cornerRadius(30)
-                    .font(.caption)
-                    .foregroundColor(Color.red)
-            }
-            .padding()
+        .alert(isPresented: self.$showToast) {
+            Alert(
+                title: Text(self.toastText),
+                dismissButton: .default(Text("Got it!"))
+                )
         }
     }
 }
@@ -231,7 +227,6 @@ struct PhoneVerificationCodeView: View {
         .alert(isPresented: self.$showToast) {
             Alert(
                 title: Text(self.toastText),
-                message: Text("Go back and try again or re-enter phone number."),
                 dismissButton: .default(Text("Got it!"))
                 )
         }
