@@ -102,7 +102,7 @@ struct PhoneCodeVerificationView: View {
                             
                                 
                                 // then sending to next page
-                                self.navigationStack.push(PhoneVerificationView()) // verify code page
+                                self.navigationStack.push(OnboardingTrioView()) // verify code page
                             }
                             
                         } label: {

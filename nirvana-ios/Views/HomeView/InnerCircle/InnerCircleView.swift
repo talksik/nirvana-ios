@@ -6,9 +6,12 @@
 //
 
 import SwiftUI
+import NavigationStack
 
 struct InnerCircleView: View {
     @EnvironmentObject var authSessionStore: AuthSessionStore
+    @EnvironmentObject var navigationStack: NavigationStack
+    
     
     let universalSize = UIScreen.main.bounds
     
@@ -344,7 +347,11 @@ struct InnerCircleView: View {
                 Button("Log out") {
                     print("log out button clicked")
                     
-                    authSessionStore.logOut()
+                    // have this send it
+                    self.authSessionStore.logOut()
+                    
+                    // once logged out, then the listener will listen and change the page but we will go there first
+                    self.navigationStack.push(ContentView())
                 }
                 Button("Friends") {
                     print("manage friends page")

@@ -6,8 +6,11 @@
 //
 
 import SwiftUI
+import NavigationStack
 
 struct OnboardingTrioView: View {
+    @EnvironmentObject var navigationStack: NavigationStack
+    
     var body: some View {
         TabView {
             OnboardingTemplateView(imgName: "undraw_through_the_park_lxnl", mainLeadingActText: "The path to living in the ", mainHighlightedActText: "present moment.", mainTrailingActText: "", subActText: "No more dopamine inducing  news feeds. No profiles so no anxiety about the past or what others think.")
@@ -16,7 +19,9 @@ struct OnboardingTrioView: View {
             
             OnboardingTemplateView(imgName: "undraw_connection_b-38-q", mainLeadingActText: "Be picky about your ", mainHighlightedActText: "inner circle.", mainTrailingActText: "", subActText: "You are who you hang out with. Maximum 8 people in your inner circle.", bottomActArea: AnyView(
                     VStack {
-                        NavigationLink(destination: SignInView()) {
+                        Button {
+                            self.navigationStack.push(ContactsView())
+                        } label: {
                             Text("Start Your Detox")
                                 .bold()
                                 .foregroundColor(NirvanaColor.white)
@@ -25,13 +30,7 @@ struct OnboardingTrioView: View {
                                 .background(NirvanaColor.teal)
                                 .clipShape(Capsule())
                                 .shadow(radius:10)
-                        }
-                                   
-                        NavigationLink(destination: WelcomeView()) {
-                            Text("Go Back")
-                                .bold()
-                                .foregroundColor(NirvanaColor.teal)
-                        }
+                        }                             
                     }.padding(.bottom, 20)
                 )
             )
