@@ -6,15 +6,16 @@
 //
 
 import Foundation
+import FirebaseFirestoreSwift
 
-public struct Messages: Codable {
-    let id: String
-    let senderId: String
-    let receiverId: String
+struct Messages: Identifiable, Codable {
+    @DocumentID var id: String?
+    var senderId: String
+    var receiverId: String
     
-    let sentTimestamp:Date
-    let listenedTimestamp:Date
-    let audioDataUrl:String
+    @ServerTimestamp var sentTimestamp:Date?
+    @ServerTimestamp var listenedToTimestamp:Date?
+    var audioDataUrl:String?
 }
 
 

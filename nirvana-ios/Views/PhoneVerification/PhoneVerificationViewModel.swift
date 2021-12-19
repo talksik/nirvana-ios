@@ -9,26 +9,31 @@ import Foundation
 import FirebaseAuth
 
 final class PhoneVerificationViewModel : ObservableObject  {
+    private var firestoreService = FirestoreService()
+    // TODO: add alert message handler here that publishes changes
     
     public func verifyPhoneAndSendSMS(phoneNumber: String) {
         // TODO: do some string validation here
         // do auth stuff from firebase
+        
+        
     }
     
-    
-}
-
-extension String {
-    // custom function to give (949)920-0392 and get out the right thing
-    func applyPatternOnNumbers(pattern: String, replacementCharacter: Character) -> String {
-        var pureNumber = self.replacingOccurrences( of: "[^0-9]", with: "", options: .regularExpression)
-        for index in 0 ..< pattern.count {
-            guard index < pureNumber.count else { return pureNumber }
-            let stringIndex = String.Index(utf16Offset: index, in: pattern)
-            let patternCharacter = pattern[stringIndex]
-            guard patternCharacter != replacementCharacter else { continue }
-            pureNumber.insert(patternCharacter, at: stringIndex)
+    public func createOrUpdateUser(userId: String, phoneNumber: String) {
+        // TODO: set all in a transaction or batch write
+        
+        // get user - 1 result set cost
+        var user = firestoreService.getUser(userId: userId)
+        print("user that was received from get: \(user?.id)")
+        
+        if user == nil {// if empty, create user - 1 result set cost..prolly higher cost
+            let newOrExistingUser = User(id: userId, phoneNumber: phoneNumber)
+            firestoreService.createUser(user: newOrExistingUser)
+        } else { // if not, change last logged in value
+            // assign to nil so that server can fill it in
+            user!.lastLoggedInTimestamp = nil
+            
+            let _ = firestoreService.updateUser(user: user!)
         }
-        return pureNumber
     }
 }

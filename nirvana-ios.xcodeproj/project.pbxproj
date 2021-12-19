@@ -64,6 +64,8 @@
 		89F18AE6276E881900115B1E /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 89F18AE5276E881900115B1E /* FirebaseStorage */; };
 		89F18AE8276E881900115B1E /* FirebaseStorageCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 89F18AE7276E881900115B1E /* FirebaseStorageCombine-Community */; };
 		89F18AEA276E881900115B1E /* FirebaseStorageSwift-Beta in Frameworks */ = {isa = PBXBuildFile; productRef = 89F18AE9276E881900115B1E /* FirebaseStorageSwift-Beta */; };
+		89F18AEC276E92BF00115B1E /* CustomExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F18AEB276E92BF00115B1E /* CustomExtensions.swift */; };
+		89F18AEE276EB55C00115B1E /* ServiceState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F18AED276EB55C00115B1E /* ServiceState.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -109,6 +111,8 @@
 		89F05BA3276ACC060002E9C7 /* ContactService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactService.swift; sourceTree = "<group>"; };
 		89F05BA5276ACD830002E9C7 /* ContactsPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsPickerView.swift; sourceTree = "<group>"; };
 		89F1386C2767EB19006680ED /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
+		89F18AEB276E92BF00115B1E /* CustomExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomExtensions.swift; sourceTree = "<group>"; };
+		89F18AED276EB55C00115B1E /* ServiceState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceState.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -245,6 +249,7 @@
 				891A15FC276566B800B26659 /* constants.swift */,
 				89BDCDE427695DB900577829 /* NirvanaImage.swift */,
 				89BDCDE62769616600577829 /* UIImage+Extension.swift */,
+				89F18AEB276E92BF00115B1E /* CustomExtensions.swift */,
 			);
 			path = Globals;
 			sourceTree = "<group>";
@@ -305,6 +310,7 @@
 			isa = PBXGroup;
 			children = (
 				89AD557B276DF86A001658E0 /* FirestoreService.swift */,
+				89F18AED276EB55C00115B1E /* ServiceState.swift */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -479,6 +485,8 @@
 				891A16132765A44300B26659 /* ChatsCarouselViewModel.swift in Sources */,
 				89F05B9B276A87920002E9C7 /* ContactsViewModel.swift in Sources */,
 				89AD5573276DD790001658E0 /* SplashView.swift in Sources */,
+				89F18AEC276E92BF00115B1E /* CustomExtensions.swift in Sources */,
+				89F18AEE276EB55C00115B1E /* ServiceState.swift in Sources */,
 				891A15E127653A7000B26659 /* nirvana_iosApp.swift in Sources */,
 				89BCABED276D2B05009E9B10 /* WavesGlassBackgroundView.swift in Sources */,
 				89F05BA6276ACD830002E9C7 /* ContactsPickerView.swift in Sources */,

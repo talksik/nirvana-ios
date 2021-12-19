@@ -6,18 +6,28 @@
 //
 
 import Foundation
-import SwiftUI
+import FirebaseFirestoreSwift
 
-public struct User: Codable {
-    let id: String
-    let firstName: String
-    let lastName: String?
-    let phoneNumber: String?
-    let emailAddress:String?
-    let avatar:String?
+struct User: Identifiable, Codable {
+    @DocumentID var id: String?
+    var firstName: String?
+    var lastName: String?
+    var phoneNumber: String?
+    var emailAddress:String?
+    var avatar:String?
 
-    let lastLoggedInTimestamp: Date
-    let createdTimestamp: Date
+    @ServerTimestamp var lastLoggedInTimestamp: Date?
+    @ServerTimestamp var createdTimestamp: Date?
+    
+    enum CodingKeys: String, CodingKey {
+        case firstName
+        case lastName
+        case phoneNumber
+        case emailAddress
+        case avatar
+        case lastLoggedInTimestamp
+        case createdTimestamp
+    }
 }
 
 struct TestUser: Identifiable, Hashable {

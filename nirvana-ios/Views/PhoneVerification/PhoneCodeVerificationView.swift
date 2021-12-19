@@ -12,6 +12,7 @@ import Firebase
 import FirebaseAuth
 
 struct PhoneCodeVerificationView: View {
+    @ObservedObject private var phoneverificationViewModel = PhoneVerificationViewModel()
     @EnvironmentObject private var navigationStack: NavigationStack
     
     @State var verificationCode = ""
@@ -98,10 +99,17 @@ struct PhoneCodeVerificationView: View {
                                 print("user id that was authenticated is: \(userId)")
                                 print("user id that was authenticated is: \(userPhoneNumber)")
                                 
-                                // get user from firestore using the firebase userid given,
-                                // if not there, create
+                                // if for some reason firebase couldn't get basic user details
+                                if userId == nil || userPhoneNumber == nil {
+                                    self.toastText = "⚠️ Error with Verification"
+                                    self.toastSubMessage = "Code is invalid. Please try again or re-enter your phone number in the previous page."
+                                    self.showToast.toggle()
+                                    
+                                    print((err?.localizedDescription)!)
+                                    return
+                                }
                                 
-                                
+                                self.phoneverificationViewModel.createOrUpdateUser(userId: userId!, phoneNumber: userPhoneNumber!)
                                 
                                 // then sending to next page
                                 self.navigationStack.push(OnboardingTrioView()) // verify code page
