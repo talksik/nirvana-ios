@@ -48,6 +48,7 @@ struct RouterView: View {
             } else {
                 // go to welcome page at which point they can go and follow the programmatic
                 // line to the sigin and so on and so forth
+                self.navigationStack.push(WelcomeView())
             }
         }
     }
