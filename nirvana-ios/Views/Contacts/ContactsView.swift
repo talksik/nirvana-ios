@@ -8,8 +8,11 @@
 import SwiftUI
 import Contacts
 import ContactsUI
+import NavigationStack
 
 struct ContactsView: View {
+    @EnvironmentObject var navigationStack : NavigationStack
+    
     var testUsers:[TestUser] = [
         TestUser(_profilePic: "liam", _firstN: "Liam", _lastN: "Digregorio"),
         TestUser(_profilePic: "heran", _firstN: "Heran", _lastN: "Patel"),
@@ -40,6 +43,12 @@ struct ContactsView: View {
             })
             
             Text(selectedContact != nil ? "Selected: \((selectedContact?.familyName)!) \((selectedContact?.givenName)!)" : "Nothing selected".localized)
+            
+            Button {
+                self.navigationStack.push(InnerCircleView())
+            } label: {
+                Text("go to hub")
+            }
             
             Spacer()
         }

@@ -55,7 +55,7 @@ struct PhoneCodeVerificationView: View {
                             print("started verification process of code")
                             
                             //disable focused textfield
-                            self.focusedInputField.toggle()
+                            self.focusedInputField = false
                             
                             // show loading screen
                             self.isLoading.toggle()

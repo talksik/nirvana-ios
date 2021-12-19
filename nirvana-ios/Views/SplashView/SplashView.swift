@@ -19,14 +19,17 @@ struct SplashView: View {
                     .foregroundColor(Color.white)
                     .scaleEffect(self.scale)
                     .animation(.easeIn(duration: 2).repeatForever(autoreverses: true))
+                    .ignoresSafeArea(.keyboard)
             }
+            .ignoresSafeArea(.keyboard)
         }
         .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
         .background(NirvanaColor.teal)
         .onAppear {
             self.scale = 1.3
         }
-        .ignoresSafeArea(.all)
+        .ignoresSafeArea(.keyboard)
+        .edgesIgnoringSafeArea(.all)
     }
 }
 

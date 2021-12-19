@@ -36,7 +36,7 @@ class FirestoreService {
     
     func createUser(user: User) {
         do {
-            let _ = try db.collection(Collection.users.rawValue).addDocument(from: user)
+            let _ = try db.collection(Collection.users.rawValue).document(user.id!).setData(from: user)
         } catch {
             print("error in creating user \(error.localizedDescription)")
         }

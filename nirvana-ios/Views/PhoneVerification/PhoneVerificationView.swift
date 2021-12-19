@@ -79,7 +79,7 @@ struct PhoneVerificationView: View {
                             let concatPhoneNumber = "+"+self.ccode+self.phoneNumber
                             
                             //disable focused textfield...important: draw the focus field out first and then the loading screen
-                            self.focusedInputField.toggle()
+                            self.focusedInputField = false
                             
                             //show loading screen
                             self.isLoading.toggle()

@@ -6,10 +6,17 @@
 //
 
 import SwiftUI
+import NavigationStack
 
 struct EditProfileView: View {
+    @EnvironmentObject var navigationStack: NavigationStack
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Button {
+            self.navigationStack.push(ContactsView())
+        } label: {
+            
+        }
     }
 }
 

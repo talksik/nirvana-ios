@@ -66,6 +66,7 @@
 		89F18AEA276E881900115B1E /* FirebaseStorageSwift-Beta in Frameworks */ = {isa = PBXBuildFile; productRef = 89F18AE9276E881900115B1E /* FirebaseStorageSwift-Beta */; };
 		89F18AEC276E92BF00115B1E /* CustomExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F18AEB276E92BF00115B1E /* CustomExtensions.swift */; };
 		89F18AEE276EB55C00115B1E /* ServiceState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F18AED276EB55C00115B1E /* ServiceState.swift */; };
+		89F18AF1276ECAA300115B1E /* RouterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F18AF0276ECAA300115B1E /* RouterView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -113,6 +114,7 @@
 		89F1386C2767EB19006680ED /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		89F18AEB276E92BF00115B1E /* CustomExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomExtensions.swift; sourceTree = "<group>"; };
 		89F18AED276EB55C00115B1E /* ServiceState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceState.swift; sourceTree = "<group>"; };
+		89F18AF0276ECAA300115B1E /* RouterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouterView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -197,6 +199,7 @@
 		891A15F62765639B00B26659 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				89F18AEF276ECA9600115B1E /* Router */,
 				89AD5576276DEA9D001658E0 /* LogoHeader */,
 				89AD5571276DD77D001658E0 /* SplashView */,
 				89AD5570276DBBD4001658E0 /* EditProfile */,
@@ -369,6 +372,14 @@
 			path = SignIn;
 			sourceTree = "<group>";
 		};
+		89F18AEF276ECA9600115B1E /* Router */ = {
+			isa = PBXGroup;
+			children = (
+				89F18AF0276ECAA300115B1E /* RouterView.swift */,
+			);
+			path = Router;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -486,6 +497,7 @@
 				89F05B9B276A87920002E9C7 /* ContactsViewModel.swift in Sources */,
 				89AD5573276DD790001658E0 /* SplashView.swift in Sources */,
 				89F18AEC276E92BF00115B1E /* CustomExtensions.swift in Sources */,
+				89F18AF1276ECAA300115B1E /* RouterView.swift in Sources */,
 				89F18AEE276EB55C00115B1E /* ServiceState.swift in Sources */,
 				891A15E127653A7000B26659 /* nirvana_iosApp.swift in Sources */,
 				89BCABED276D2B05009E9B10 /* WavesGlassBackgroundView.swift in Sources */,

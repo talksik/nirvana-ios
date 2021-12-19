@@ -40,7 +40,7 @@ struct OnboardingTemplateView: View {
     
     var body: some View {        
         ZStack {
-            // TODO: CAREFUL...this needs to be on top if any view is using this subview...otherwise elements will be dimmed and placed beneath this background
+            // CAREFUL...this needs to be on top if any view is using this subview...otherwise elements will be dimmed and placed beneath this background
             WavesGlassBackgroundView()
             
             VStack(spacing: 0) {
