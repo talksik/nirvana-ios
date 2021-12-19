@@ -34,12 +34,16 @@ final class AuthSessionStore: ObservableObject, SessionStore {
     
     private var handler: AuthStateDidChangeListenerHandle?
     
+    private var firestoreService: FirestoreService = FirestoreService()
+    
     init() {
         // create google sign in configuration object
         let clientID = FirebaseApp.app()?.options.clientID
         self.GIDconfig = GIDConfiguration(clientID: clientID!)
         
         print("the google client id: prolly shouldn't be printing this: \(clientID)")
+        
+        
         
         self.setupAuthListen()
     }
@@ -112,23 +116,38 @@ final class AuthSessionStore: ObservableObject, SessionStore {
     
     func setupAuthListen() {
         // monitor authentication changes using firebase
-        self.handler = Auth.auth().addStateDidChangeListener { (auth, user) in
+        self.handler = Auth.auth().addStateDidChangeListener { [weak self] res, user in
             print("auth listener activated")
+            
+            guard let self = self else { return }
+         
             
             // get the user from the auth table in firebase auth
             if let user = user {
                 // if we have a user, create a new user model
-                print("Got user: \(user.uid)")
-                print("phone number: \(user.phoneNumber!)")
+                print("auth listener: Got user: \(user.uid)")
+                print("auth listener: phone number: \(user.phoneNumber!)")
                 
                 // TODO: go to firestore and get full user document for the current authenticated user
                 // and have this in environment for all pages to access without having to fetch all the time
+                
+                self.getAndSetEnvironmentUserDetails(userId: user.uid)
+                
                 self.sessionState = .isAuthenticated
             } else {
                 // if we don't have a user, set our session to nil
                 self.user = nil
                 self.sessionState = .isLoggedOut
             }
+        }
+    }
+    
+    private func getAndSetEnvironmentUserDetails(userId: String) {
+        let firestoreUser: User? = self.firestoreService.getUser(userId: userId)
+        
+        // if we get a user back, then set this to our instance to allow UI to get published with all user details
+        if firestoreUser != nil {
+            self.user = firestoreUser
         }
     }
 }

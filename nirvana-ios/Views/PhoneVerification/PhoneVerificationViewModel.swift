@@ -10,7 +10,8 @@ import FirebaseAuth
 
 final class PhoneVerificationViewModel : ObservableObject  {
     private var firestoreService = FirestoreService()
-    // TODO: add alert message handler here that publishes changes
+    
+    // TODO: add alert message handler here that publishes changes to ui based on business logic errors
     
     public func verifyPhoneAndSendSMS(phoneNumber: String) {
         // TODO: do some string validation here

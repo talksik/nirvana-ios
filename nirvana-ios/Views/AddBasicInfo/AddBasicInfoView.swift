@@ -16,6 +16,11 @@ struct AddBasicInfoView: View {
     
     @State var selectedAvatarIndex: Int = 0
     
+    var columns: [GridItem] =
+    Array(
+        repeating: GridItem(.fixed(100), spacing: 0, alignment: .center),
+        count: 5)
+    
     var body: some View {
         ZStack {
             // bg
@@ -40,30 +45,39 @@ struct AddBasicInfoView: View {
                 // header logo area
                 LogoHeaderView()
                 
-                Text("Let's Build Your Profile")
-                    .font(.title)
-                    .fontWeight(.medium)
-                    .foregroundColor(NirvanaColor.teal)
-                    .multilineTextAlignment(.center)
+                // action text
+                VStack(alignment: .leading) {
+                    Text("Let's Build A Profile")
+                        .font(.title)
+                        .fontWeight(.medium)
+                        .foregroundColor(NirvanaColor.teal)
+                        .multilineTextAlignment(.center)
+                    
+                    Text("Select an avatar you like, then input your first and last name! You can always change this later.")
+                        .font(.subheadline)
+                        .foregroundColor(Color.black.opacity(0.7))
+                }
+                .padding()
                 
                 // Horizontal scroll view to allow user to select the avatar he or she wants
-                ScrollView(.horizontal, showsIndicators: false) {
-                    LazyHStack {
+                ScrollView([.horizontal, .vertical], showsIndicators: false) {
+                    LazyVGrid(columns: columns) {
                         ForEach(0..<Avatars.avatarSystemNames.count) { index in
                             Image(Avatars.avatarSystemNames[index])
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 100, height: 100, alignment: .center)
-                                .blur(radius: self.selectedAvatarIndex == index ? 0 : 4)
+                                .blur(radius: self.selectedAvatarIndex == index ? 0 : 1)
+                                .scaleEffect(self.selectedAvatarIndex == index ? 1.3 : 1)
                                 .onTapGesture {
                                     print("selected another avatar: \(index)")
                                     
                                     self.selectedAvatarIndex = index
                                 }
+                                .animation(.spring())
                         }
-                    }
+                    }.padding(.top, 20)
                 }
-                .padding()
                                 
                 // input first and last name
                 VStack {
@@ -88,10 +102,17 @@ struct AddBasicInfoView: View {
                 
                 
                 Spacer()
-                
+                                
                 // button to save information
                 Button {
+                    print("saving information")
                     
+                    // activate loading splashscreen
+                    
+                    // let view model do work of saving to firestore
+                    
+                    // note: I need these updated attributes to be listened to when loading the circle hub next
+                    // but maybe just change the data in cache and no need to re-fetch
                 } label: {
                     Text("Save")
                         .fontWeight(.heavy)
@@ -102,6 +123,8 @@ struct AddBasicInfoView: View {
                         .clipShape(Capsule())
                         .shadow(radius:10)
                 }
+                .offset(x: 0, y: self.firstName.count == 0 || self.lastName.count == 0 ? 200 : 0)
+                .animation(.spring())
                 .padding()
             }
             .frame(maxHeight: .infinity)
