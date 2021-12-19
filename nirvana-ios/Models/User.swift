@@ -10,8 +10,7 @@ import FirebaseFirestoreSwift
 
 struct User: Identifiable, Codable {
     @DocumentID var id: String? = UUID().uuidString
-    var firstName: String?
-    var lastName: String?
+    var nickname: String?
     var phoneNumber: String?
     var emailAddress:String?
     var avatar:String?
@@ -20,8 +19,7 @@ struct User: Identifiable, Codable {
     @ServerTimestamp var createdTimestamp: Date?
     
     enum CodingKeys: String, CodingKey {
-        case firstName
-        case lastName
+        case nickname
         case phoneNumber
         case emailAddress
         case avatar
