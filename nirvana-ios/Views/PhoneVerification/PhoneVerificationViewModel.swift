@@ -27,8 +27,9 @@ final class PhoneVerificationViewModel : ObservableObject  {
         print("user that was received from get: \(user?.id)")
         
         if user == nil {// if empty, create user - 1 result set cost..prolly higher cost
-            let newOrExistingUser = User(id: userId, phoneNumber: phoneNumber)
-            firestoreService.createUser(user: newOrExistingUser)
+            print("creating new user with id: \(userId)")
+            let newUser = User(id: userId, phoneNumber: phoneNumber)
+            firestoreService.createUser(user: newUser)
         } else { // if not, change last logged in value
             // assign to nil so that server can fill it in
             user!.lastLoggedInTimestamp = nil
