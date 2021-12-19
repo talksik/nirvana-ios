@@ -105,6 +105,11 @@ struct AddBasicInfoView: View {
                                 
                 // button to save information
                 Button {
+                    if self.firstName.count == 0 || self.lastName.count == 0 {
+                        print("do nothing...user didn't input anything...maybe show an alert")
+                        return
+                    }
+                    
                     print("saving information")
                     
                     // activate loading splashscreen
@@ -119,12 +124,11 @@ struct AddBasicInfoView: View {
                         .foregroundColor(Color.white)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 20)
-                        .background(NirvanaColor.teal)
+                        .background(self.firstName.count == 0 || self.lastName.count == 0 ? Color.white.opacity(0.3) : NirvanaColor.teal)
                         .clipShape(Capsule())
                         .shadow(radius:10)
                 }
-                .offset(x: 0, y: self.firstName.count == 0 || self.lastName.count == 0 ? 200 : 0)
-                .animation(.spring())
+                .animation(.default)
                 .padding()
             }
             .frame(maxHeight: .infinity)

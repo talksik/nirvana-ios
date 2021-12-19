@@ -147,7 +147,10 @@ final class AuthSessionStore: ObservableObject, SessionStore {
         
         // if we get a user back, then set this to our instance to allow UI to get published with all user details
         if firestoreUser != nil {
-            self.user = firestoreUser
+            // TODO: prolly useless since we never set up a background thread for the rest of this code before
+            DispatchQueue.main.async {
+                self.user = firestoreUser
+            }
         }
     }
 }
