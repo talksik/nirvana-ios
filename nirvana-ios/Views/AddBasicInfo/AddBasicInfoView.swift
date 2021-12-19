@@ -78,9 +78,9 @@ struct AddBasicInfoView: View {
                     }.padding(.top, 20)
                 }
                                 
-                // input first and last name
+                // input nickname
                 VStack {
-                    TextField("Username", text: self.$username)
+                    TextField("Nickname", text: self.$username)
                         .padding()
                         .background(.ultraThinMaterial)
                         .clipShape(Capsule())
@@ -89,9 +89,9 @@ struct AddBasicInfoView: View {
                         .font(.subheadline)
                         .multilineTextAlignment(.center)
                         
-                    Text("First name works just fine for now.")
+                    Text("What does your mom or friends call you?")
                         .font(.footnote)
-                        .foregroundColor(Color.black.opacity(0.4))
+                        .foregroundColor(Color.black.opacity(0.7))
                 
                 }
                 .padding()
