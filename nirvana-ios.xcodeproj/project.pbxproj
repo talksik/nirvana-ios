@@ -28,7 +28,6 @@
 		89AD5573276DD790001658E0 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AD5572276DD790001658E0 /* SplashView.swift */; };
 		89AD5575276DE724001658E0 /* PhoneCodeVerificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AD5574276DE724001658E0 /* PhoneCodeVerificationView.swift */; };
 		89AD5578276DEAB3001658E0 /* LogoHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AD5577276DEAB3001658E0 /* LogoHeaderView.swift */; };
-		89AD557A276DF7C5001658E0 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AD5579276DF7C5001658E0 /* EditProfileView.swift */; };
 		89AD557C276DF86A001658E0 /* FirestoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AD557B276DF86A001658E0 /* FirestoreService.swift */; };
 		89B46E71276893E200B74255 /* AuthSessionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B46E70276893E200B74255 /* AuthSessionStore.swift */; };
 		89BCABE2276B3CB0009E9B10 /* NavigationStack in Frameworks */ = {isa = PBXBuildFile; productRef = 89BCABE1276B3CB0009E9B10 /* NavigationStack */; };
@@ -67,6 +66,7 @@
 		89F18AEC276E92BF00115B1E /* CustomExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F18AEB276E92BF00115B1E /* CustomExtensions.swift */; };
 		89F18AEE276EB55C00115B1E /* ServiceState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F18AED276EB55C00115B1E /* ServiceState.swift */; };
 		89F18AF1276ECAA300115B1E /* RouterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F18AF0276ECAA300115B1E /* RouterView.swift */; };
+		89F18AF5276ECF2A00115B1E /* AddBasicInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F18AF4276ECF2A00115B1E /* AddBasicInfoView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -93,7 +93,6 @@
 		89AD5572276DD790001658E0 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		89AD5574276DE724001658E0 /* PhoneCodeVerificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneCodeVerificationView.swift; sourceTree = "<group>"; };
 		89AD5577276DEAB3001658E0 /* LogoHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoHeaderView.swift; sourceTree = "<group>"; };
-		89AD5579276DF7C5001658E0 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 		89AD557B276DF86A001658E0 /* FirestoreService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreService.swift; sourceTree = "<group>"; };
 		89B46E70276893E200B74255 /* AuthSessionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthSessionStore.swift; sourceTree = "<group>"; };
 		89BCABE4276B3D58009E9B10 /* InnerCircleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InnerCircleView.swift; sourceTree = "<group>"; };
@@ -115,6 +114,7 @@
 		89F18AEB276E92BF00115B1E /* CustomExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomExtensions.swift; sourceTree = "<group>"; };
 		89F18AED276EB55C00115B1E /* ServiceState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceState.swift; sourceTree = "<group>"; };
 		89F18AF0276ECAA300115B1E /* RouterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouterView.swift; sourceTree = "<group>"; };
+		89F18AF4276ECF2A00115B1E /* AddBasicInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddBasicInfoView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -199,10 +199,11 @@
 		891A15F62765639B00B26659 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				89F18AF3276ECF1800115B1E /* AddBasicInfo */,
+				89F18AF2276ECD5D00115B1E /* IntroView */,
 				89F18AEF276ECA9600115B1E /* Router */,
 				89AD5576276DEA9D001658E0 /* LogoHeader */,
 				89AD5571276DD77D001658E0 /* SplashView */,
-				89AD5570276DBBD4001658E0 /* EditProfile */,
 				89BCABEE276D2DD6009E9B10 /* PhoneVerification */,
 				89BDCDED2769B3EB00577829 /* Contacts */,
 				89F1386B2767EB07006680ED /* SignIn */,
@@ -220,7 +221,6 @@
 			isa = PBXGroup;
 			children = (
 				891A15F8276563CA00B26659 /* WelcomeView.swift */,
-				89BDCDEB2769918D00577829 /* OnboardingTrioView.swift */,
 			);
 			path = WelcomeView;
 			sourceTree = "<group>";
@@ -283,14 +283,6 @@
 				892179E52765FECD001E6C60 /* FooterControlsViewModel.swift */,
 			);
 			path = FooterControlsView;
-			sourceTree = "<group>";
-		};
-		89AD5570276DBBD4001658E0 /* EditProfile */ = {
-			isa = PBXGroup;
-			children = (
-				89AD5579276DF7C5001658E0 /* EditProfileView.swift */,
-			);
-			path = EditProfile;
 			sourceTree = "<group>";
 		};
 		89AD5571276DD77D001658E0 /* SplashView */ = {
@@ -378,6 +370,22 @@
 				89F18AF0276ECAA300115B1E /* RouterView.swift */,
 			);
 			path = Router;
+			sourceTree = "<group>";
+		};
+		89F18AF2276ECD5D00115B1E /* IntroView */ = {
+			isa = PBXGroup;
+			children = (
+				89BDCDEB2769918D00577829 /* OnboardingTrioView.swift */,
+			);
+			path = IntroView;
+			sourceTree = "<group>";
+		};
+		89F18AF3276ECF1800115B1E /* AddBasicInfo */ = {
+			isa = PBXGroup;
+			children = (
+				89F18AF4276ECF2A00115B1E /* AddBasicInfoView.swift */,
+			);
+			path = AddBasicInfo;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -476,7 +484,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				89AD557A276DF7C5001658E0 /* EditProfileView.swift in Sources */,
 				89BDCDEC2769918D00577829 /* OnboardingTrioView.swift in Sources */,
 				891A15E327653A7000B26659 /* ContentView.swift in Sources */,
 				89F05B9F276A8D360002E9C7 /* Contact.swift in Sources */,
@@ -510,6 +517,7 @@
 				892179E42765FEB8001E6C60 /* FooterControlsView.swift in Sources */,
 				891A15FD276566B800B26659 /* constants.swift in Sources */,
 				89BCABE5276B3D58009E9B10 /* InnerCircleView.swift in Sources */,
+				89F18AF5276ECF2A00115B1E /* AddBasicInfoView.swift in Sources */,
 				89BCABF0276D53C4009E9B10 /* PhoneVerificationViewModel.swift in Sources */,
 				89BDCDE72769616600577829 /* UIImage+Extension.swift in Sources */,
 				89F1386D2767EB19006680ED /* SignInView.swift in Sources */,

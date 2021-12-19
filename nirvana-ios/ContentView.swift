@@ -14,7 +14,7 @@ struct ContentView: View {
     // welcome -> phone verification -> phone code verification -> onboarding trio -> first, last, avatar picker -> add contacts -> hub
     var body: some View {
         NavigationStackView {
-            PhoneVerificationView()
+            AddBasicInfoView()
             // TODO: remove this commenting to enable natural user flow
 //            switch self.authSessionStore.sessionState {
 //                case SessionState.isAuthenticated:
