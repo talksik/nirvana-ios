@@ -11,8 +11,7 @@ import NavigationStack
 struct AddBasicInfoView: View {
     @EnvironmentObject var navigationStack : NavigationStack
     
-    @State var firstName =  ""
-    @State var lastName = ""
+    @State var username =  ""
     
     @State var selectedAvatarIndex: Int = 0
     
@@ -53,7 +52,7 @@ struct AddBasicInfoView: View {
                         .foregroundColor(NirvanaColor.teal)
                         .multilineTextAlignment(.center)
                     
-                    Text("Select an avatar you like, then input your first and last name! You can always change this later.")
+                    Text("Select an avatar you like, then make a username! You can always change this later.")
                         .font(.subheadline)
                         .foregroundColor(Color.black.opacity(0.7))
                 }
@@ -81,7 +80,7 @@ struct AddBasicInfoView: View {
                                 
                 // input first and last name
                 VStack {
-                    TextField("First Name", text: self.$firstName)
+                    TextField("Username", text: self.$username)
                         .padding()
                         .background(.ultraThinMaterial)
                         .clipShape(Capsule())
@@ -89,14 +88,11 @@ struct AddBasicInfoView: View {
                         .shadow(color: Color.black.opacity(0.3), radius: 20, x: 0, y: 20)
                         .font(.subheadline)
                         .multilineTextAlignment(.center)
-                    TextField("Last Name", text: self.$lastName)
-                        .padding()
-                        .background(.ultraThinMaterial)
-                        .clipShape(Capsule())
-                        .keyboardType(.phonePad)
-                        .shadow(color: Color.black.opacity(0.3), radius: 20, x: 0, y: 20)
-                        .font(.subheadline)
-                        .multilineTextAlignment(.center)
+                        
+                    Text("First name works just fine for now.")
+                        .font(.footnote)
+                        .foregroundColor(Color.black.opacity(0.4))
+                
                 }
                 .padding()
                 
@@ -105,7 +101,7 @@ struct AddBasicInfoView: View {
                                 
                 // button to save information
                 Button {
-                    if self.firstName.count == 0 || self.lastName.count == 0 {
+                    if self.username.count == 0 {
                         print("do nothing...user didn't input anything...maybe show an alert")
                         return
                     }
@@ -124,7 +120,7 @@ struct AddBasicInfoView: View {
                         .foregroundColor(Color.white)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 20)
-                        .background(self.firstName.count == 0 || self.lastName.count == 0 ? Color.white.opacity(0.3) : NirvanaColor.teal)
+                        .background(self.username.count == 0 ? Color.white.opacity(0.3) : NirvanaColor.teal)
                         .clipShape(Capsule())
                         .shadow(radius:10)
                 }
