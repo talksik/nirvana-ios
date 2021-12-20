@@ -12,6 +12,8 @@ struct CircleNavigationView: View {
     @EnvironmentObject var navigationStack: NavigationStack
     @EnvironmentObject var authSessionStore: AuthSessionStore
     
+    @Binding var sheetView: SheetView?
+    
     var body: some View {
         HStack(alignment: .center) {
             Menu {
@@ -23,7 +25,8 @@ struct CircleNavigationView: View {
                 }
                 
                 Button {
-                    self.navigationStack.push(ContactsView())
+                    print("going to show contacts now")
+                    self.sheetView = .contacts
                 } label: {
                     Label("add peeps", systemImage: "person.2.wave.2")
                         .foregroundColor(NirvanaColor.teal)
@@ -141,6 +144,6 @@ struct CircleNavigationView: View {
 
 struct CircleNavigationView_Previews: PreviewProvider {
     static var previews: some View {
-        CircleNavigationView().environmentObject(AuthSessionStore(isPreview: true))
+        CircleNavigationView(sheetView: .constant(SheetView.contacts)).environmentObject(AuthSessionStore(isPreview: true))
     }
 }

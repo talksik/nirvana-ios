@@ -53,7 +53,7 @@ struct ContactsView: View {
             Spacer()
         }
         .sheet(isPresented: self.$showPicker) {
-                ContactPickerView(showPicker: self.$showPicker, selectedContact: self.$selectedContact)
+//                ContactPickerView(showPicker: self.$showPicker, selectedContact: self.$selectedContact)
             }
         .padding()
         .background(NirvanaColor.bgLightGrey)

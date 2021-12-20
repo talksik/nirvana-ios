@@ -8,9 +8,17 @@
 import SwiftUI
 import NavigationStack
 
+enum SheetView : Identifiable {
+    var id: Self { self }
+    case contacts
+    case inbox
+}
+
 struct InnerCircleView: View {
     @EnvironmentObject var authSessionStore: AuthSessionStore
     @EnvironmentObject var navigationStack: NavigationStack
+    
+    @State var sheetView: SheetView? = nil
     
     let universalSize = UIScreen.main.bounds
     
@@ -25,12 +33,20 @@ struct InnerCircleView: View {
             // header
             VStack(alignment: .leading) {
                 
-                CircleNavigationView()
+                CircleNavigationView(sheetView: self.$sheetView)
                 
                 Spacer()
             }
             
             CircleFooterView()
+        }
+        .sheet(item: self.$sheetView) {page in
+            switch page {
+            case SheetView.contacts:
+                ContactsPickerView()
+            case SheetView.inbox:
+                OnboardingTrioView()// test one for now
+            }
         }
         .onAppear() {
         }

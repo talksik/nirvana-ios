@@ -16,7 +16,7 @@ struct CircleGridView: View {
     
     // magic variables for grid
     // TODO: make the top left person or one horizontal person be in the center of screen...makes the top honeycomb pop
-    private static var numberOfItems: Int = 59
+    private static var numberOfItems: Int = 12
     private static let size: CGFloat = UIScreen.main.bounds.height*0.15 // scaling with screen size
     private static let spacingBetweenColumns: CGFloat = 0
     private static let spacingBetweenRows: CGFloat = 0

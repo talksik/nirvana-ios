@@ -12,17 +12,11 @@ import SwiftUI
 class ContactsViewModel : ObservableObject {
     @Published var showPermissionAlert = false
     
-    let store: CNContactStore
-    let keys: [CNKeyDescriptor]
-    
-    init() {
-        store = CNContactStore()
-        
-        keys = [CNContactImageDataKey as CNKeyDescriptor,
-                CNContactPhoneNumbersKey as CNKeyDescriptor,
-                CNContactEmailAddressesKey as CNKeyDescriptor,
-                CNContactFormatter.descriptorForRequiredKeys(for: .fullName)]
-    }
+    let store: CNContactStore = CNContactStore()
+    let keys: [CNKeyDescriptor] = [CNContactImageDataKey as CNKeyDescriptor,
+                                   CNContactPhoneNumbersKey as CNKeyDescriptor,
+                                   CNContactEmailAddressesKey as CNKeyDescriptor,
+                                   CNContactFormatter.descriptorForRequiredKeys(for: .fullName)]
     
     func openSettings() {
             guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
@@ -30,19 +24,20 @@ class ContactsViewModel : ObservableObject {
     }
     
     func requestAccess() {
-        store.requestAccess(for: .contacts) {
-            (granted, error) in
+        
+        store.requestAccess(for: .contacts) {(granted, error) in
+            // TODO: do something useful with completionHandler
             return
         }
-        // TODO do something useful with completionHandler
     }
 
     func fetchContacts(sortOrder: CNContactSortOrder = .userDefault) -> [CNContact] {
         let authStatus = CNContactStore.authorizationStatus(for: .contacts)
+        
         if authStatus == .notDetermined {
             requestAccess()
         } else if authStatus == .restricted {
-            // TODO prompt user that app is useless without access to contacts
+            // TODO: prompt user that app is useless without access to contacts
             self.showPermissionAlert = true
         }
         

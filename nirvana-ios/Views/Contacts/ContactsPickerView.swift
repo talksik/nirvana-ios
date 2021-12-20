@@ -8,10 +8,11 @@
 import SwiftUI
 import Contacts
 
-struct ContactPickerView: View {
-    @Binding var showPicker: Bool
+struct ContactsPickerView: View {
+    @Environment(\.dismiss) var dismiss
+    
     // updates the parent view for it to do something with the new contact
-    @Binding var selectedContact: CNContact?
+    @State var selectedContact: CNContact?
     
     var contacts: [String: [CNContact]] = loadContactsGrouped()
     
@@ -22,14 +23,17 @@ struct ContactPickerView: View {
                 ForEach(keys.sorted(), id: \.self) { key in
                     Section(header: Text(key)) {
                         ForEach(contacts[key] ?? [CNContact](), id: \.identifier) { contact in
-                            ContactRow(contact: contact, showPicker: self.$showPicker, selectedContact: self.$selectedContact)
+                            ContactRow(contact: contact, selectedContact: self.$selectedContact)
                         }
                     }
                 }
             }
             .listStyle(GroupedListStyle())
             .navigationTitle("All Contacts".localized)
-            .navigationBarItems(trailing: Button(action: {self.showPicker = false}, label: {
+            .navigationBarItems(trailing: Button(action: {
+                dismiss()
+                
+            }, label: {
                 Text("Cancel".localized)
             }))
         }
@@ -43,6 +47,8 @@ struct ContactPickerView: View {
             return String(contact.familyName.first ?? "?")
         }
         
+        print(group)
+        
         return group
     }
 }
@@ -50,7 +56,6 @@ struct ContactPickerView: View {
 
 struct ContactRow: View {
     var contact: CNContact
-    @Binding var showPicker: Bool
     @Binding var selectedContact: CNContact?
     
     var body: some View {
@@ -67,7 +72,6 @@ struct ContactRow: View {
     
     func selectContact() {
         self.selectedContact = self.contact
-        self.showPicker = false
     }
 }
 
