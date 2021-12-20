@@ -12,7 +12,6 @@ struct InnerCircleView: View {
     @EnvironmentObject var authSessionStore: AuthSessionStore
     @EnvironmentObject var navigationStack: NavigationStack
     
-    
     let universalSize = UIScreen.main.bounds
     
     // TESTING
@@ -355,7 +354,6 @@ struct InnerCircleView: View {
                 Button("Log out") {
                     print("log out button clicked")
                     
-                    // have this send it
                     self.authSessionStore.logOut()
                     
                     // once logged out, then the listener will listen and router view will take care of us thereafter

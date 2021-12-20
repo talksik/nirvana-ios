@@ -69,6 +69,7 @@ struct AddBasicInfoView: View {
                                 .frame(width: 100, height: 100, alignment: .center)
                                 .blur(radius: self.selectedAvatarIndex == index ? 0 : 1)
                                 .scaleEffect(self.selectedAvatarIndex == index ? 1.3 : 1)
+                                .background(self.selectedAvatarIndex == index ? Color.white.opacity(0.3) : Color.clear)
                                 .onTapGesture {
                                     print("selected another avatar: \(index)")
                                     
@@ -105,9 +106,7 @@ struct AddBasicInfoView: View {
                     print("attempting to save information")
                     var updatedUser = self.authSessionStore.user
                     updatedUser?.avatar = Avatars.avatarSystemNames[self.selectedAvatarIndex]
-                    updatedUser?.nickname = self.nickname
-                    
-                    // TODO: I need these updated attributes to be listened to when loading the circle hub next
+                    updatedUser?.nickname = self.nickname                    
                     
                     if updatedUser != nil {
                         self.addInfoViewModel.updateUser(currUser: updatedUser!)

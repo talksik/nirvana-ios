@@ -53,7 +53,7 @@ struct OnboardingTrioView: View {
                 Spacer()
                 
                 Button {
-                    
+                    self.navigationStack.push(AddBasicInfoView())
                 } label: {
                     Text("Skip")
                         .foregroundColor(NirvanaColor.dimTeal)
