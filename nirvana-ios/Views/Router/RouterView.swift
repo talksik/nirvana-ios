@@ -31,21 +31,20 @@ struct RouterView: View {
     
     var body: some View {
         SplashView()
-        .onAppear() {
-            print(authSessionStore)
-            print("figuring out where to send the user based on \(self.authSessionStore)")
-            if authSessionStore.sessionState == SessionState.isAuthenticated {
-                if let user = authSessionStore.user {
-                    // evaluate where the user should go based on how much data he has
-                    
-                    // user is authenticated but has never picked a username or avatar
-                    if user.nickname != nil && user.avatar != nil {
-                        self.navigationStack.push(OnboardingTrioView())
-                    } else {// user is existing user for a year -> signs in is pushed nicely right to hub
-                        self.navigationStack.push(InnerCircleView())
-                    }
+        .onReceive(self.authSessionStore.$user) {updatedUserFromAuth in // observing user because takes longer to get the user details than see updates to sessionstate and we need the user for the logic below
+            print("figuring out where to send the user based on state: \(self.authSessionStore.sessionState)")
+            if self.authSessionStore.sessionState == SessionState.isAuthenticated && updatedUserFromAuth != nil {
+                print("user stored in authsession store: \(updatedUserFromAuth)")
+                // evaluate where the user should go based on how much data he has
+                
+                // user is authenticated but has never picked a username or avatar
+                if updatedUserFromAuth?.nickname != nil && updatedUserFromAuth?.avatar != nil {
+                    self.navigationStack.push(OnboardingTrioView())
+                } else {// user is existing user/up and running user -> signs in is pushed nicely right to hub
+                    self.navigationStack.push(InnerCircleView())
                 }
             } else {
+                print("sending user to welcome view")
                 // go to welcome page at which point they can go and follow the programmatic
                 // line to the sigin and so on and so forth
                 self.navigationStack.push(WelcomeView())

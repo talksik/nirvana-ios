@@ -121,35 +121,28 @@ final class AuthSessionStore: ObservableObject, SessionStore {
             
             guard let self = self else { return }
          
+            self.sessionState = user == nil ? SessionState.isLoggedOut : SessionState.isAuthenticated
             
             // get the user from the auth table in firebase auth
-            if let user = user {
+            if let uid = user?.uid {
                 // if we have a user, create a new user model
-                print("auth listener: Got user: \(user.uid)")
-                print("auth listener: phone number: \(user.phoneNumber!)")
+                print("auth listener: Got user: \(uid)")
+                print("auth listener: phone number: \(user?.phoneNumber)")
                 
-                // TODO: go to firestore and get full user document for the current authenticated user
-                // and have this in environment for all pages to access without having to fetch all the time
-                
-                self.getAndSetEnvironmentUserDetails(userId: user.uid)
+                // get user from firestore and store in environment
+                self.firestoreService.getUser(userId: uid) {[weak self] firestoreUser in
+                    // if we get a user back, then set this to our authsessionstore for our views
+                    print("user from firestore in auth listener: \(firestoreUser)")
+                    if firestoreUser != nil {
+                        self?.user = firestoreUser
+                    }
+                }
                 
                 self.sessionState = .isAuthenticated
             } else {
                 // if we don't have a user, set our session to nil
                 self.user = nil
                 self.sessionState = .isLoggedOut
-            }
-        }
-    }
-    
-    private func getAndSetEnvironmentUserDetails(userId: String) {
-        self.firestoreService.getUser(userId: userId) {firestoreUser in
-            // if we get a user back, then set this to our instance to allow UI to get published with all user details
-            if firestoreUser != nil {
-                // TODO: prolly useless since we never set up a background thread for the rest of this code before
-                DispatchQueue.main.async {
-                    self.user = firestoreUser
-                }
             }
         }
     }
