@@ -20,15 +20,14 @@ struct CircleFooterView: View {
                 Spacer()
                 
                 HStack {
-                    if self.selectedUserIndex != nil {
-                        Image("Artboards_Diversity_Avatars_by_Netguru-\(self.selectedUserIndex! + 1)")
-                            .resizable()
-                            .scaledToFit()
-                            .background(NirvanaColor.teal.opacity(0.1))
-                            .frame(width: 40, height: 40)
-                            .clipShape(Circle())
-                            .padding(5)
-                    }
+                    Image("Artboards_Diversity_Avatars_by_Netguru-1")
+                        .resizable()
+                        .scaledToFit()
+                        .background(NirvanaColor.teal.opacity(0.1))
+                        .frame(width: 40, height: 40)
+                        .clipShape(Circle())
+                        .padding(5)
+                    
                     
                     
                     VStack (alignment: .leading) {
@@ -59,11 +58,11 @@ struct CircleFooterView: View {
             FooterControlsView()
         }
         .padding()
-        .offset(
-            x:0,
-            y:self.selectedUserIndex == nil ? 150 : 0
-        )
-        .animation(Animation.spring(), value: self.selectedUserIndex)
+//        .offset(
+//            x:0,
+//            y:self.selectedUserIndex == nil ? 150 : 0
+//        )
+//        .animation(Animation.spring(), value: self.selectedUserIndex)
     }
 }
 

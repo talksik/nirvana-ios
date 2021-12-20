@@ -31,6 +31,7 @@
 		894E80C327702E5900624B72 /* AddBasicInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 894E80C227702E5800624B72 /* AddBasicInfoViewModel.swift */; };
 		896CE6FE27707E6B00DB474E /* CircleNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896CE6FD27707E6B00DB474E /* CircleNavigationView.swift */; };
 		896CE7002770847400DB474E /* CircleFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896CE6FF2770847400DB474E /* CircleFooterView.swift */; };
+		896CE7022770892F00DB474E /* CircleGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896CE7012770892F00DB474E /* CircleGridView.swift */; };
 		89AD5573276DD790001658E0 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AD5572276DD790001658E0 /* SplashView.swift */; };
 		89AD5575276DE724001658E0 /* PhoneCodeVerificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AD5574276DE724001658E0 /* PhoneCodeVerificationView.swift */; };
 		89AD5578276DEAB3001658E0 /* LogoHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AD5577276DEAB3001658E0 /* LogoHeaderView.swift */; };
@@ -101,6 +102,7 @@
 		894E80C227702E5800624B72 /* AddBasicInfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddBasicInfoViewModel.swift; sourceTree = "<group>"; };
 		896CE6FD27707E6B00DB474E /* CircleNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleNavigationView.swift; sourceTree = "<group>"; };
 		896CE6FF2770847400DB474E /* CircleFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleFooterView.swift; sourceTree = "<group>"; };
+		896CE7012770892F00DB474E /* CircleGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleGridView.swift; sourceTree = "<group>"; };
 		89AD5572276DD790001658E0 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		89AD5574276DE724001658E0 /* PhoneCodeVerificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneCodeVerificationView.swift; sourceTree = "<group>"; };
 		89AD5577276DEAB3001658E0 /* LogoHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoHeaderView.swift; sourceTree = "<group>"; };
@@ -337,6 +339,7 @@
 				89BCABE6276B3D64009E9B10 /* InnerCircleViewModel.swift */,
 				896CE6FD27707E6B00DB474E /* CircleNavigationView.swift */,
 				896CE6FF2770847400DB474E /* CircleFooterView.swift */,
+				896CE7012770892F00DB474E /* CircleGridView.swift */,
 			);
 			path = InnerCircle;
 			sourceTree = "<group>";
@@ -536,6 +539,7 @@
 				89BCABED276D2B05009E9B10 /* WavesGlassBackgroundView.swift in Sources */,
 				89F05BA6276ACD830002E9C7 /* ContactsPickerView.swift in Sources */,
 				8904DEC8277055E90071E6CA /* OnboardingTrioView.swift in Sources */,
+				896CE7022770892F00DB474E /* CircleGridView.swift in Sources */,
 				89BDCDEA27697F9C00577829 /* UserMenu.swift in Sources */,
 				89BCABE7276B3D64009E9B10 /* InnerCircleViewModel.swift in Sources */,
 				89AD557C276DF86A001658E0 /* FirestoreService.swift in Sources */,
