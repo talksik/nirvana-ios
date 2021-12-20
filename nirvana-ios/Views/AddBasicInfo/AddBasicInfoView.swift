@@ -63,13 +63,15 @@ struct AddBasicInfoView: View {
                 ScrollView([.horizontal, .vertical], showsIndicators: false) {
                     LazyVGrid(columns: columns) {
                         ForEach(0..<Avatars.avatarSystemNames.count) { index in
-                            Image(Avatars.avatarSystemNames[index])
+                            Image(Avatars.avatarSystemNames[index])                                
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 100, height: 100, alignment: .center)
                                 .blur(radius: self.selectedAvatarIndex == index ? 0 : 1)
                                 .scaleEffect(self.selectedAvatarIndex == index ? 1.3 : 1)
+                                .padding()
                                 .background(self.selectedAvatarIndex == index ? Color.white.opacity(0.3) : Color.clear)
+                                .clipShape(Circle())
                                 .onTapGesture {
                                     print("selected another avatar: \(index)")
                                     
