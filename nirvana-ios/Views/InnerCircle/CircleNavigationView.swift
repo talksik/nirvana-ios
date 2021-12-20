@@ -15,7 +15,7 @@ struct CircleNavigationView: View {
     var body: some View {
         HStack(alignment: .center) {
             Menu {
-                Button {
+                Button(role: .destructive) {
                     print("manage inbox")
                 } label: {
                     Label("inbox", systemImage: "envelope.badge")
@@ -39,7 +39,7 @@ struct CircleNavigationView: View {
                 Button {
                     self.navigationStack.push(OnboardingTrioView())
                 } label: {
-                    Label("Why?", systemImage: "sun.min")
+                    Label("why?", systemImage: "leaf")
                         .foregroundColor(NirvanaColor.teal)
                 }
                 
@@ -50,11 +50,11 @@ struct CircleNavigationView: View {
                    }
                     
                 } label: {
-                    Label("why?", systemImage: "leaf")
+                    Label("about us", systemImage: "globe.americas")
                         .foregroundColor(NirvanaColor.teal)
                 }
                 
-                Button {
+                Button(role: .destructive) {
                     print("log out button clicked")
                     
                     self.authSessionStore.logOut()
@@ -84,7 +84,6 @@ struct CircleNavigationView: View {
                         .clipShape(Circle())
                         .padding(5)
                 }
-                
             }
             
             ScrollView(.horizontal) {
