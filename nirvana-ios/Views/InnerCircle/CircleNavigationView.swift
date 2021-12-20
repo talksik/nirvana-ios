@@ -15,21 +15,56 @@ struct CircleNavigationView: View {
     var body: some View {
         HStack(alignment: .center) {
             Menu {
-                Button("Edit Profile") {
+                Button {
+                    print("manage inbox")
+                } label: {
+                    Label("inbox", systemImage: "envelope.badge")
+                        .foregroundColor(NirvanaColor.teal)
+                }
+                
+                Button {
+                    self.navigationStack.push(ContactsView())
+                } label: {
+                    Label("add peeps", systemImage: "person.2.wave.2")
+                        .foregroundColor(NirvanaColor.teal)
+                }
+                
+                Button {
                     self.navigationStack.push(AddBasicInfoView())
+                } label: {
+                    Label("profile", systemImage: "person.crop.circle")
+                        .foregroundColor(NirvanaColor.teal)
                 }
                 
-                Button("Friends") {
-                    print("manage friends page")
+                Button {
+                    self.navigationStack.push(OnboardingTrioView())
+                } label: {
+                    Label("Why?", systemImage: "sun.min")
+                        .foregroundColor(NirvanaColor.teal)
                 }
                 
-                Button("Log out") {
+                Button {
+                    print("navigate to usenirvana.com")
+                    if let url = URL(string: "https://usenirvana.com") {
+                       UIApplication.shared.open(url)
+                   }
+                    
+                } label: {
+                    Label("why?", systemImage: "leaf")
+                        .foregroundColor(NirvanaColor.teal)
+                }
+                
+                Button {
                     print("log out button clicked")
                     
                     self.authSessionStore.logOut()
                     
                     // once logged out, then the listener will listen and router view will take care of us thereafter
+                } label: {
+                    Label("log out", systemImage: "rectangle.portrait.and.arrow.right")
+                        .foregroundColor(NirvanaColor.teal)
                 }
+                
             } label: {
                 if self.authSessionStore.user?.avatar == nil {
                     Image("Artboards_Diversity_Avatars_by_Netguru-1")
@@ -107,6 +142,6 @@ struct CircleNavigationView: View {
 
 struct CircleNavigationView_Previews: PreviewProvider {
     static var previews: some View {
-        CircleNavigationView()
+        CircleNavigationView().environmentObject(AuthSessionStore(isPreview: true))
     }
 }
