@@ -28,31 +28,13 @@ struct InnerCircleView: View {
             
             // header
             VStack(alignment: .leading) {
-                header
                 
-                bubbleNavigation
+                CircleNavigationView()
                 
                 Spacer()
             }
             
-//            Path { path in
-//
-//                //draw the axes
-//                path.move(to: CGPoint(x:0, y:universalSize.height*0.5 ))
-//
-//                path.addLine(to: CGPoint(x:universalSize.width, y: universalSize.height*0.5))
-//
-//                path.move(to: CGPoint(x:universalSize.width*0.5, y:0 ))
-//
-//                path.addLine(to: CGPoint(x:universalSize.width * 0.5, y: universalSize.height))
-//
-//
-//                //TODO: draw the acceptance boxes
-//            }
-//            .stroke(Color.black)
-//            .edgesIgnoringSafeArea(.all)
-            
-            footerNavigation
+            CircleFooterView()
         }
         .onAppear() {            
             // TESTING
@@ -63,112 +45,7 @@ struct InnerCircleView: View {
         }
     }
     
-    // TODO: do cool animations with this footer background fill in while
-    // recording or playing a message
-    var footerNavigation: some View {
-        ZStack(alignment:.bottomTrailing) {
-            VStack(alignment:.center) {
-                Spacer()
-                
-                HStack {
-                    if self.selectedUserIndex != nil {
-                        Image("Artboards_Diversity_Avatars_by_Netguru-\(self.selectedUserIndex! + 1)")
-                            .resizable()
-                            .scaledToFit()
-                            .background(NirvanaColor.teal.opacity(0.1))
-                            .frame(width: 40, height: 40)
-                            .clipShape(Circle())
-                            .padding(5)
-                    }
-                    
-                    
-                    VStack (alignment: .leading) {
-                        Text("Sarth Shah")
-                            .font(.footnote)
-                            .foregroundColor(NirvanaColor.light)
-                        Text("sent 20 minutes ago")
-                            .font(.caption)
-                            .foregroundColor(.gray)
-                    }
-                    
-                    Spacer()
-                    
-                    Label("Replay", systemImage: "repeat.1.circle.fill")
-                        .font(.title2)
-                        .labelStyle(.iconOnly)
-                        .foregroundColor(Color.orange)
-                    
-                    
-                    Spacer(minLength: 65)
-                }
-                .frame(maxWidth: .infinity, maxHeight: 60) // 60 is the height of the footer control big circle
-                .background(Color.white.opacity(0.5))
-                .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
-                .shadow(color: Color.black.opacity(0.25), radius: 30, x: 0, y: 20)
-            }
-            
-            FooterControlsView()
-        }
-        .padding()
-        .offset(
-            x:0,
-            y:self.selectedUserIndex == nil ? 150 : 0
-        )
-        .animation(Animation.spring(), value: self.selectedUserIndex)
-    }
-    
-    var bubbleNavigation : some View {
-        HStack(alignment: .center) {
-            Button {
-                
-            } label: {
-                Label("circle", systemImage: "peacesign")
-                    .font(.caption2)
-                    .foregroundColor(Color.white)
-                    .padding(.vertical, 10)
-                    .padding(.horizontal, 8)
-                    .background(
-                        RoundedRectangle(cornerRadius: 20, style: .continuous)
-                            .fill(Color.teal.opacity(0.5))
-                    ).overlay(
-                        RoundedRectangle(cornerRadius: 20, style: .continuous)
-                            .strokeBorder(Color.white.opacity(01), lineWidth: 1)
-                    )
-            }
-            
-            Button {
-                
-            } label: {
-                Label("groups", systemImage: "rectangle.3.group")
-                    .font(.caption2)
-                    .foregroundColor(Color.gray)
-                    .padding(.vertical, 10)
-                    .padding(.horizontal, 8)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 20, style: .continuous)
-                            .strokeBorder(Color.white.opacity(1), lineWidth: 1)
-                    )
-            }
-            
-            Button {
-                
-            } label: {
-                Label("work", systemImage: "suitcase")
-                    .font(.caption2)
-                    .foregroundColor(Color.gray)
-                    .padding(.vertical, 10)
-                    .padding(.horizontal, 8)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 20, style: .continuous)
-                            .strokeBorder(Color.white.opacity(1), lineWidth: 1)
-                    )
-            }
-        }
-        .padding(.horizontal)
-    }
-    
     // magic variables for grid
-    // TODO: change the number of columns based on the number of items
     // TODO: make the top left person or one horizontal person be in the center of screen...makes the top honeycomb pop
     private static var numberOfItems: Int = 12
     private static let size: CGFloat = UIScreen.main.bounds.height*0.15 // scaling with screen size
@@ -327,53 +204,6 @@ struct InnerCircleView: View {
         }
         
         return 0
-    }
-    
-    private var header: some View {
-        HStack(alignment: .center) {
-            Image("undraw_handcrafts_leaf")
-                .resizable()
-                .frame(width: 20.0, height: 32.132)
-                .padding(.leading, 20)
-            
-            Spacer()
-            
-            Image(systemName: "message.and.waveform")
-                .foregroundColor(Color.red.opacity(1))
-                .font(.title2)
-            
-            Menu {
-                Button("Edit Profile") {
-                    self.navigationStack.push(AddBasicInfoView())
-                }
-                
-                Button("Friends") {
-                    print("manage friends page")
-                }
-                
-                Button("Log out") {
-                    print("log out button clicked")
-                    
-                    self.authSessionStore.logOut()
-                    
-                    // once logged out, then the listener will listen and router view will take care of us thereafter
-                }
-            } label: {
-                Image("Artboards_Diversity_Avatars_by_Netguru-51")
-                    .resizable()
-                    .scaledToFit()
-                    .background(NirvanaColor.teal.opacity(0.1))
-                    .frame(width: 40, height: 40)
-                    .clipShape(Circle())
-                    .padding(5)
-            }
-            
-        }
-        .frame(maxWidth: .infinity)
-        .background(Color.white.opacity(0.5))
-        .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
-        .shadow(color: Color.black.opacity(0.25), radius: 30, x: 0, y: 20)
-        .padding(.horizontal)
     }
 }
 
