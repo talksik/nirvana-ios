@@ -89,6 +89,10 @@ struct CircleGridView: View {
                             
                             print("the selected item is: \(value)")
                         }
+                        .onLongPressGesture { // haptics for recording
+                            let impactHeavy = UIImpactFeedbackGenerator(style: .heavy)
+                            impactHeavy.impactOccurred()
+                        }
 //                        .animation(Animation.easeInOut(duration: 2).repeatForever(autoreverses: true), value: self.usersWithNewMessage)
                         .animation(Animation.spring())
                     }
