@@ -143,13 +143,13 @@ final class AuthSessionStore: ObservableObject, SessionStore {
     }
     
     private func getAndSetEnvironmentUserDetails(userId: String) {
-        let firestoreUser: User? = self.firestoreService.getUser(userId: userId)
-        
-        // if we get a user back, then set this to our instance to allow UI to get published with all user details
-        if firestoreUser != nil {
-            // TODO: prolly useless since we never set up a background thread for the rest of this code before
-            DispatchQueue.main.async {
-                self.user = firestoreUser
+        self.firestoreService.getUser(userId: userId) {firestoreUser in
+            // if we get a user back, then set this to our instance to allow UI to get published with all user details
+            if firestoreUser != nil {
+                // TODO: prolly useless since we never set up a background thread for the rest of this code before
+                DispatchQueue.main.async {
+                    self.user = firestoreUser
+                }
             }
         }
     }

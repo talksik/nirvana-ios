@@ -24,19 +24,24 @@ final class PhoneVerificationViewModel : ObservableObject  {
         // TODO: set all in a transaction or batch write
         
         // get user - 1 result set cost
-        var user = firestoreService.getUser(userId: userId)
-        print("user that was received from get: \(user?.id)")
-        
-        if user == nil {// if empty, create user - 1 result set cost..prolly higher cost
-            print("creating new user with id: \(userId)")
-            let newUser = User(id: userId, phoneNumber: phoneNumber)
-            print("verify the id stayed the same: \(newUser.id)")
-            firestoreService.createUser(user: newUser)
-        } else { // if not, change last logged in value
-            // assign to nil so that server can fill it in
-            user!.lastLoggedInTimestamp = nil
+        self.firestoreService.getUser(userId: userId) {[weak self] resultingUser in
+            print("user that was received from get: \(resultingUser?.id)")
             
-            let _ = firestoreService.updateUser(user: user!)
+            
+            if resultingUser == nil {// if empty, create user - 1 result set cost..prolly higher cost
+                print("creating new user with id: \(userId)")
+                let newUser = User(id: userId, phoneNumber: phoneNumber)
+                print("verify the id stayed the same: \(newUser.id)")
+                self?.firestoreService.createUser(user: newUser)
+            } else { // if not, change last logged in value
+                var user = resultingUser
+                
+                // assign to nil so that server can fill it in
+                user!.lastLoggedInTimestamp = nil
+                
+                let res = self?.firestoreService.updateUser(user: user!)
+                print(res)
+            }
         }
     }
 }

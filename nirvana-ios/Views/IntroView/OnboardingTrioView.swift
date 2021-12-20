@@ -14,7 +14,7 @@ struct OnboardingTrioView: View {
     var body: some View {
         VStack {
             TabView {
-                OnboardingTemplateView(imgName: "undraw_through_the_park_lxnl", mainLeadingActText: "Be", mainHighlightedActText: "yourself", mainTrailingActText: "again.", subActText: "No more consuming endless feeds, media, fomo, anxiety...focus on you and be more present.")
+                OnboardingTemplateView(imgName: "undraw_through_the_park_lxnl", mainLeadingActText: "Be", mainHighlightedActText: "yourself", mainTrailingActText: "again.", subActText: "No more endless feeds, media, fomo, anxiety...focus on you and be more present.")
                 
                 OnboardingTemplateView(imgName: "undraw_connection_b-38-q", mainLeadingActText: "Be picky about your ", mainHighlightedActText: "inner circle.", mainTrailingActText: "", subActText: "You are who you hang out with. We kept things minimal because less is more...and we care.")
                 

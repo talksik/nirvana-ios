@@ -18,20 +18,18 @@ class FirestoreService {
     
     private var db = Firestore.firestore()
     
-    func getUser(userId: String) -> User? {
+    func getUser(userId: String, completion: @escaping((_ user: User?) -> ())) {
         let docRef = db.collection(Collection.users.rawValue).document(userId)
 
-        var user:User? = nil
-        
         docRef.getDocument { (document, error) in
             if let document = document, document.exists {
-                user = try? document.data(as: User.self)
+                let returnedUser = try? document.data(as: User.self)
+                completion(returnedUser)
             } else {
-                user = nil
+                print("user doesn't exist")
+                completion(nil)
             }
         }
-        
-        return user
     }
     
     func createUser(user: User) {
