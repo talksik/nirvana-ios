@@ -344,17 +344,21 @@ struct InnerCircleView: View {
                 .font(.title2)
             
             Menu {
+                Button("Edit Profile") {
+                    self.navigationStack.push(AddBasicInfoView())
+                }
+                
+                Button("Friends") {
+                    print("manage friends page")
+                }
+                
                 Button("Log out") {
                     print("log out button clicked")
                     
                     // have this send it
                     self.authSessionStore.logOut()
                     
-                    // once logged out, then the listener will listen and change the page but we will go there first
-                    self.navigationStack.push(ContentView())
-                }
-                Button("Friends") {
-                    print("manage friends page")
+                    // once logged out, then the listener will listen and router view will take care of us thereafter
                 }
             } label: {
                 Image("Artboards_Diversity_Avatars_by_Netguru-51")

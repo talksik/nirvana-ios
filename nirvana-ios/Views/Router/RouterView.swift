@@ -35,19 +35,24 @@ struct RouterView: View {
             if self.authSessionStore.user != nil {
                 if self.authSessionStore.user?.nickname == nil && self.authSessionStore.user?.avatar == nil {
                     OnboardingTrioView()
+                        .transition(.slide)
                 } else {// user is existing user/up and running user -> signs in is pushed nicely right to hub
                     InnerCircleView()
+                        .transition(.slide)
                 }
             } else {
                 OnboardingTrioView()
+                    .transition(.slide)
             }
             
         } else if self.authSessionStore.sessionState == SessionState.isLoggedOut {
             // go to welcome page at which point they can go and follow the programmatic
             // line to the sigin and so on and so forth
             WelcomeView()
+                .transition(.slide)
         } else {
             SplashView()
+                .transition(.slide)
         }
     }
 }

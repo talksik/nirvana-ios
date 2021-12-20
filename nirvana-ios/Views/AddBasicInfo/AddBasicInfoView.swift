@@ -90,7 +90,7 @@ struct AddBasicInfoView: View {
                         .font(.subheadline)
                         .multilineTextAlignment(.center)
                         
-                    Text("What does your friends call you?")
+                    Text("What do your friends call you?")
                         .font(.footnote)
                         .foregroundColor(Color.black.opacity(0.7))
                 
@@ -128,6 +128,13 @@ struct AddBasicInfoView: View {
                 .padding()
             }
             .frame(maxHeight: .infinity)
+        }
+        .onAppear {
+            // get current user nickname and avatar if they have one
+            self.nickname = self.authSessionStore.user?.nickname ?? ""
+            if self.authSessionStore.user?.avatar != nil { // if user has previously selected an avatar
+                self.selectedAvatarIndex = Avatars.avatarSystemNames.firstIndex(of: (self.authSessionStore.user?.avatar)!) ?? 0 // 0 in case the system names doesn't have it anymore
+            }
         }
         //TODO: hook up the alert with the view model
 //        .alert(isPresented: Binding<Bool>(

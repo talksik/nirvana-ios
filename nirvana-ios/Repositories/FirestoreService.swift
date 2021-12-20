@@ -18,6 +18,25 @@ class FirestoreService {
     
     private var db = Firestore.firestore()
     
+    func getUserRealtime(userId: String, completion: @escaping((_ user: User?) -> ())) {
+        db.collection(Collection.users.rawValue).document(userId).addSnapshotListener { documentSnapshot, error in
+            guard let document = documentSnapshot else {
+                print("Error fetching getting user realtime listener: \(error!)")
+                completion(nil)
+                return
+            }
+            
+            guard let updatedOrNewUser = try? document.data(as: User.self)
+            else {
+                completion(nil)
+                print("Document data was empty. tried fetching updated user document in firestore service")
+                return
+            }
+            // up to date user
+            completion(updatedOrNewUser)
+        }
+    }
+    
     func getUser(userId: String, completion: @escaping((_ user: User?) -> ())) {
         let docRef = db.collection(Collection.users.rawValue).document(userId)
 

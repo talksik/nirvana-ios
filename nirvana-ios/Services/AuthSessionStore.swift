@@ -116,7 +116,6 @@ final class AuthSessionStore: ObservableObject, SessionStore {
     
     func setupAuthListen() {
         // monitor authentication changes using firebase
-        print("let's see what user looks like in authsession at at the start: \(self.user)")
         self.handler = Auth.auth().addStateDidChangeListener { [weak self] res, user in
             print("auth listener activated")
             
@@ -130,13 +129,11 @@ final class AuthSessionStore: ObservableObject, SessionStore {
                 print("auth listener: Got user: \(uid)")
                 print("auth listener: phone number: \(user?.phoneNumber)")
                 
-                // get user from firestore and store in environment
-                self.firestoreService.getUser(userId: uid) {[weak self] firestoreUser in
-                    // if we get a user back, then set this to our authsessionstore for our views
-                    print("user from firestore in auth listener: \(firestoreUser)")
-                    if firestoreUser != nil {
-                        self?.user = firestoreUser
-                        print("lets see if authsessionstore user is being set: \(self?.user)")
+                // when we have a user get signed in, we can activate the listener for fetching the user's data to keep our auth session store always up to date for all of the ui
+                self.firestoreService.getUserRealtime(userId: uid) {[weak self] realtimeUpdatedUser in
+                    if realtimeUpdatedUser != nil {
+                        print("up to date user: \(realtimeUpdatedUser)")
+                        self?.user = realtimeUpdatedUser
                     }
                 }
             } else {

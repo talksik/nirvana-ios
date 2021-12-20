@@ -41,6 +41,8 @@ class AddBasicInfoViewModel : ObservableObject {
         
         // save in firestore
         self.firestoreService.updateUser(user: currUser) {res in
+            print(res)
+            
             switch res {
             case .success:
                 self.state = .successful
