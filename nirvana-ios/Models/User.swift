@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Firebase
 import FirebaseFirestoreSwift
 
 struct User: Identifiable, Codable {
@@ -18,14 +19,16 @@ struct User: Identifiable, Codable {
     @ServerTimestamp var lastLoggedInTimestamp: Date?
     @ServerTimestamp var createdTimestamp: Date?
     
-    enum CodingKeys: String, CodingKey {
-        case nickname
-        case phoneNumber
-        case emailAddress
-        case avatar
-        case lastLoggedInTimestamp
-        case createdTimestamp
-    }
+    // careful, if using codingkeys, you have to mapping every attribute thereafter
+//    enum CodingKeys: String, CodingKey {
+//        case id
+//        case nickname
+//        case phoneNumber
+//        case emailAddress
+//        case avatar
+//        case lastLoggedInTimestamp
+//        case createdTimestamp
+//    }
 }
 
 struct TestUser: Identifiable, Hashable {

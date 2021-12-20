@@ -116,6 +116,7 @@ final class AuthSessionStore: ObservableObject, SessionStore {
     
     func setupAuthListen() {
         // monitor authentication changes using firebase
+        print("let's see what user looks like in authsession at at the start: \(self.user)")
         self.handler = Auth.auth().addStateDidChangeListener { [weak self] res, user in
             print("auth listener activated")
             
@@ -135,10 +136,9 @@ final class AuthSessionStore: ObservableObject, SessionStore {
                     print("user from firestore in auth listener: \(firestoreUser)")
                     if firestoreUser != nil {
                         self?.user = firestoreUser
+                        print("lets see if authsessionstore user is being set: \(self?.user)")
                     }
                 }
-                
-                self.sessionState = .isAuthenticated
             } else {
                 // if we don't have a user, set our session to nil
                 self.user = nil
