@@ -39,8 +39,9 @@ final class PhoneVerificationViewModel : ObservableObject  {
                 // assign to nil so that server can fill it in
                 user!.lastLoggedInTimestamp = nil
                 
-                let res = self?.firestoreService.updateUser(user: user!)
-                print(res)
+                self?.firestoreService.updateUser(user: user!) {res in
+                    print(res)
+                }
             }
         }
     }

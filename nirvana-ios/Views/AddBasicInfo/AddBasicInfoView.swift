@@ -10,9 +10,10 @@ import NavigationStack
 
 struct AddBasicInfoView: View {
     @EnvironmentObject var navigationStack : NavigationStack
+    @EnvironmentObject var authSessionStore: AuthSessionStore
+    @ObservedObject var addInfoViewModel: AddBasicInfoViewModel = AddBasicInfoViewModel()
     
-    @State var username =  ""
-    
+    @State var nickname =  ""
     @State var selectedAvatarIndex: Int = 0
     
     var columns: [GridItem] =
@@ -80,7 +81,7 @@ struct AddBasicInfoView: View {
                                 
                 // input nickname
                 VStack {
-                    TextField("Nickname", text: self.$username)
+                    TextField("Nickname", text: self.$nickname)
                         .padding()
                         .background(.ultraThinMaterial)
                         .clipShape(Capsule())
@@ -89,7 +90,7 @@ struct AddBasicInfoView: View {
                         .font(.subheadline)
                         .multilineTextAlignment(.center)
                         
-                    Text("What does your mom or friends call you?")
+                    Text("What does your friends call you?")
                         .font(.footnote)
                         .foregroundColor(Color.black.opacity(0.7))
                 
@@ -101,26 +102,25 @@ struct AddBasicInfoView: View {
                                 
                 // button to save information
                 Button {
-                    if self.username.count == 0 {
-                        print("do nothing...user didn't input anything...maybe show an alert")
-                        return
+                    print("attempting to save information")
+                    var updatedUser = self.authSessionStore.user
+                    updatedUser?.avatar = Avatars.avatarSystemNames[self.selectedAvatarIndex]
+                    updatedUser?.nickname = self.nickname
+                    
+                    // TODO: I need these updated attributes to be listened to when loading the circle hub next
+                    
+                    if updatedUser != nil {
+                        self.addInfoViewModel.updateUser(currUser: updatedUser!)
                     }
                     
-                    print("saving information")
-                    
-                    // activate loading splashscreen
-                    
-                    // let view model do work of saving to firestore
-                    
-                    // note: I need these updated attributes to be listened to when loading the circle hub next
-                    // but maybe just change the data in cache and no need to re-fetch
+                    self.navigationStack.push(InnerCircleView())
                 } label: {
                     Text("Save")
                         .fontWeight(.heavy)
                         .foregroundColor(Color.white)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 20)
-                        .background(self.username.count == 0 ? Color.white.opacity(0.3) : NirvanaColor.teal)
+                        .background(self.nickname.count == 0 ? Color.white.opacity(0.3) : NirvanaColor.teal)
                         .clipShape(Capsule())
                         .shadow(radius:10)
                 }
@@ -129,6 +129,13 @@ struct AddBasicInfoView: View {
             }
             .frame(maxHeight: .infinity)
         }
+        //TODO: hook up the alert with the view model
+//        .alert(isPresented: Binding<Bool>(
+//            get: { self.addInfoViewModel.state == ProfileRegistrationState.failed},
+//            set: { _ in self.addInfoViewModel.state = ProfileRegistrationState.na }
+//        )) {
+//            Alert(title: Text("Important message"), message: Text("Wear sunscreen"), dismissButton: .default(Text("Got it!")))
+//        }
     }
 }
 

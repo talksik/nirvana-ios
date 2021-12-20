@@ -27,6 +27,7 @@
 		89288ECB27675B9F00E962C4 /* OnboardingTemplateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89288ECA27675B9F00E962C4 /* OnboardingTemplateView.swift */; };
 		894E80BE276ED7A700624B72 /* avatars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 894E80BD276ED7A700624B72 /* avatars.swift */; };
 		894E80C1276EFD0500624B72 /* AudioPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 894E80C0276EFD0400624B72 /* AudioPlayerView.swift */; };
+		894E80C327702E5900624B72 /* AddBasicInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 894E80C227702E5800624B72 /* AddBasicInfoViewModel.swift */; };
 		89AD5573276DD790001658E0 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AD5572276DD790001658E0 /* SplashView.swift */; };
 		89AD5575276DE724001658E0 /* PhoneCodeVerificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AD5574276DE724001658E0 /* PhoneCodeVerificationView.swift */; };
 		89AD5578276DEAB3001658E0 /* LogoHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AD5577276DEAB3001658E0 /* LogoHeaderView.swift */; };
@@ -94,6 +95,7 @@
 		89288ECA27675B9F00E962C4 /* OnboardingTemplateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingTemplateView.swift; sourceTree = "<group>"; };
 		894E80BD276ED7A700624B72 /* avatars.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = avatars.swift; sourceTree = "<group>"; };
 		894E80C0276EFD0400624B72 /* AudioPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerView.swift; sourceTree = "<group>"; };
+		894E80C227702E5800624B72 /* AddBasicInfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddBasicInfoViewModel.swift; sourceTree = "<group>"; };
 		89AD5572276DD790001658E0 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		89AD5574276DE724001658E0 /* PhoneCodeVerificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneCodeVerificationView.swift; sourceTree = "<group>"; };
 		89AD5577276DEAB3001658E0 /* LogoHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoHeaderView.swift; sourceTree = "<group>"; };
@@ -398,6 +400,7 @@
 			isa = PBXGroup;
 			children = (
 				89F18AF4276ECF2A00115B1E /* AddBasicInfoView.swift */,
+				894E80C227702E5800624B72 /* AddBasicInfoViewModel.swift */,
 			);
 			path = AddBasicInfo;
 			sourceTree = "<group>";
@@ -507,6 +510,7 @@
 				89BCABEB276D2A09009E9B10 /* PhoneVerificationView.swift in Sources */,
 				892179E62765FECD001E6C60 /* FooterControlsViewModel.swift in Sources */,
 				891A15F5276557AB00B26659 /* colors.swift in Sources */,
+				894E80C327702E5900624B72 /* AddBasicInfoViewModel.swift in Sources */,
 				89288ECB27675B9F00E962C4 /* OnboardingTemplateView.swift in Sources */,
 				89F05BA4276ACC060002E9C7 /* ContactService.swift in Sources */,
 				89B46E71276893E200B74255 /* AuthSessionStore.swift in Sources */,
