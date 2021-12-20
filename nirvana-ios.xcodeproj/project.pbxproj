@@ -32,6 +32,7 @@
 		896CE6FE27707E6B00DB474E /* CircleNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896CE6FD27707E6B00DB474E /* CircleNavigationView.swift */; };
 		896CE7002770847400DB474E /* CircleFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896CE6FF2770847400DB474E /* CircleFooterView.swift */; };
 		896CE7022770892F00DB474E /* CircleGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896CE7012770892F00DB474E /* CircleGridView.swift */; };
+		896CE7052770AE5D00DB474E /* InboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896CE7042770AE5D00DB474E /* InboxView.swift */; };
 		89AD5573276DD790001658E0 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AD5572276DD790001658E0 /* SplashView.swift */; };
 		89AD5575276DE724001658E0 /* PhoneCodeVerificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AD5574276DE724001658E0 /* PhoneCodeVerificationView.swift */; };
 		89AD5578276DEAB3001658E0 /* LogoHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AD5577276DEAB3001658E0 /* LogoHeaderView.swift */; };
@@ -103,6 +104,7 @@
 		896CE6FD27707E6B00DB474E /* CircleNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleNavigationView.swift; sourceTree = "<group>"; };
 		896CE6FF2770847400DB474E /* CircleFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleFooterView.swift; sourceTree = "<group>"; };
 		896CE7012770892F00DB474E /* CircleGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleGridView.swift; sourceTree = "<group>"; };
+		896CE7042770AE5D00DB474E /* InboxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InboxView.swift; sourceTree = "<group>"; };
 		89AD5572276DD790001658E0 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		89AD5574276DE724001658E0 /* PhoneCodeVerificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneCodeVerificationView.swift; sourceTree = "<group>"; };
 		89AD5577276DEAB3001658E0 /* LogoHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoHeaderView.swift; sourceTree = "<group>"; };
@@ -211,6 +213,7 @@
 		891A15F62765639B00B26659 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				896CE7032770AE3400DB474E /* Inbox */,
 				894E80BF276EFCF500624B72 /* AudioPlayer */,
 				89F18AF3276ECF1800115B1E /* AddBasicInfo */,
 				89F18AF2276ECD5D00115B1E /* OnBoarding */,
@@ -305,6 +308,14 @@
 				894E80C0276EFD0400624B72 /* AudioPlayerView.swift */,
 			);
 			path = AudioPlayer;
+			sourceTree = "<group>";
+		};
+		896CE7032770AE3400DB474E /* Inbox */ = {
+			isa = PBXGroup;
+			children = (
+				896CE7042770AE5D00DB474E /* InboxView.swift */,
+			);
+			path = Inbox;
 			sourceTree = "<group>";
 		};
 		89AD5571276DD77D001658E0 /* SplashView */ = {
@@ -513,6 +524,7 @@
 				891A15E327653A7000B26659 /* ContentView.swift in Sources */,
 				896CE7002770847400DB474E /* CircleFooterView.swift in Sources */,
 				894E80BE276ED7A700624B72 /* avatars.swift in Sources */,
+				896CE7052770AE5D00DB474E /* InboxView.swift in Sources */,
 				89F05B9F276A8D360002E9C7 /* Contact.swift in Sources */,
 				891A160327656FC700B26659 /* HomeView.swift in Sources */,
 				891A160B2765732700B26659 /* HomeViewModel.swift in Sources */,

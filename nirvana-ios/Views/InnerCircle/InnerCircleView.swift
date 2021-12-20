@@ -45,8 +45,11 @@ struct InnerCircleView: View {
             case SheetView.contacts:
                 ContactsPickerView()
             case SheetView.inbox:
-                OnboardingTrioView()// test one for now
+                InboxView()// test one for now
+            default:
+                Text("asdf")
             }
+            
         }
         .onAppear() {
         }

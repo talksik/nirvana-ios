@@ -19,6 +19,7 @@ struct CircleNavigationView: View {
             Menu {
                 Button(role: .destructive) {
                     print("manage inbox")
+                    self.sheetView = .inbox
                 } label: {
                     Label("inbox", systemImage: "envelope.badge")
                         .foregroundColor(NirvanaColor.teal)
