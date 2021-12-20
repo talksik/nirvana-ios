@@ -74,19 +74,19 @@ class ContactsViewModel : ObservableObject {
                     
                     
                     self.firestoreService.getUserByPhoneNumber(phoneNumber: contactNumber) {[weak self] returnedUser in
-                        print(returnedUser)
                         DispatchQueue.main.async {
                             if returnedUser == nil {
                                 // do nothing, keep contactsVm object user property nil
+                                contactVm.isExisting = false
                             } else {
                                 // adding user details if this contact is existing user
                                 contactVm.user = returnedUser
+                                contactVm.isExisting = true
                             }
                             
                             self?.contacts.append(contactVm)
                         }
                     }
-                    
                 }
             }
         } catch  {
@@ -102,4 +102,5 @@ struct ContactsViewModelContact : Identifiable {
     var user: User?
     var cnName: String
     var cnPhoneNumber: String
+    var isExisting: Bool = false
 }

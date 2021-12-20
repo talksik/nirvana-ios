@@ -22,8 +22,8 @@ struct FindFriendsView: View {
         NavigationView {
             // list with search bar
             List {
-                ForEach(contactsVM.contacts) { contact in
-                    Text(contact.cnName)
+                ForEach(contactsVM.contacts.sorted { $0.isExisting && !$1.isExisting }) { contact in
+                    
                 }
             }
             .searchable(text: $searchQuery)
