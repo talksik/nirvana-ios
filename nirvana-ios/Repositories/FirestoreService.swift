@@ -50,6 +50,28 @@ class FirestoreService {
             }
         }
     }
+
+    func getUserByPhoneNumber(phoneNumber: String, completion: @escaping((_ user: User?) -> ())) {
+        // TODO: validation here as well to verify that phone number string is even valid
+        db.collection(Collection.users.rawValue).whereField("phoneNumber", isEqualTo: phoneNumber)
+            .getDocuments() { (querySnapshot, err) in
+                if let err = err {
+                    print("Error getting documents: \(err)")
+                    completion(nil)
+                } else {
+                    if !(querySnapshot?.isEmpty)! {
+                        print("existing user found!!!!: \(querySnapshot?.documents)")
+
+                        for document in querySnapshot!.documents {
+                            let returnedUser = try? document.data(as: User.self)
+                            completion(returnedUser)
+                        }
+                    } else {
+                        completion(nil)
+                    }
+                }
+        }
+    }
     
     func createUser(user: User) {
         do {

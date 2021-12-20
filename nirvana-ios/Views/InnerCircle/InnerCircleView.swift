@@ -18,7 +18,7 @@ struct InnerCircleView: View {
     @EnvironmentObject var authSessionStore: AuthSessionStore
     @EnvironmentObject var navigationStack: NavigationStack
     
-    @State var sheetView: SheetView? = nil
+    @State var sheetView: SheetView? = .contacts
     
     let universalSize = UIScreen.main.bounds
     
@@ -43,7 +43,7 @@ struct InnerCircleView: View {
         .sheet(item: self.$sheetView) {page in
             switch page {
             case SheetView.contacts:
-                ContactsPickerView()
+                FindFriendsView()
             case SheetView.inbox:
                 InboxView()// test one for now
             default:
