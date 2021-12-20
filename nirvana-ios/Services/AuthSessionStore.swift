@@ -36,14 +36,19 @@ final class AuthSessionStore: ObservableObject, SessionStore {
     
     private var firestoreService: FirestoreService = FirestoreService()
     
+    init(isPreview: Bool) {
+        let fakeUser = User(id: UUID().uuidString, nickname: "arjunya", phoneNumber: "+19302919293")
+        self.user = User()
+        let clientID = FirebaseApp.app()?.options.clientID
+        self.GIDconfig = GIDConfiguration(clientID: clientID!)
+    }
+    
     init() {
         // create google sign in configuration object
         let clientID = FirebaseApp.app()?.options.clientID
         self.GIDconfig = GIDConfiguration(clientID: clientID!)
         
         print("the google client id: prolly shouldn't be printing this: \(clientID)")
-        
-        
         
         self.setupAuthListen()
     }

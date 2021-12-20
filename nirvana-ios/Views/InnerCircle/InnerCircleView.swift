@@ -379,7 +379,7 @@ struct InnerCircleView: View {
 
 struct InnerCircleView_Previews: PreviewProvider {
     static var previews: some View {
-        InnerCircleView().environmentObject(AuthSessionStore())
+        InnerCircleView().environmentObject(AuthSessionStore(isPreview: true))
     }
 }
 
