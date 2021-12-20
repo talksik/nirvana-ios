@@ -94,19 +94,20 @@ struct OnboardingTemplateView: View {
                 VStack(alignment: .leading) {
                     
                     Text(self.mainLeadingActionText! + " ")
-                        .font(.title)
+                        .font(.largeTitle)
                         .foregroundColor(NirvanaColor.black)
                         .fontWeight(.medium)
                     + Text(self.mainHighlightedActionText! + " ")
-                        .font(.title)
+                        .font(.largeTitle)
                         .foregroundColor(NirvanaColor.teal)
                         .fontWeight(.medium)
                     + Text(self.mainTrailingActionText!)
-                        .font(.title)
+                        .font(.largeTitle)
                         .foregroundColor(NirvanaColor.black)
                         .fontWeight(.medium)
                     
                     Text(self.subActionText!)
+                        .font(.headline)
                         .foregroundColor(Color.black.opacity(0.7))
                         .padding(.top, 5)
                     

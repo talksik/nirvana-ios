@@ -7,9 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8904DEC2277054A80071E6CA /* Onboarding_One.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8904DEC1277054A80071E6CA /* Onboarding_One.swift */; };
-		8904DEC4277054C50071E6CA /* Onboarding_Two.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8904DEC3277054C50071E6CA /* Onboarding_Two.swift */; };
-		8904DEC6277054E10071E6CA /* Onboarding_Three.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8904DEC5277054E10071E6CA /* Onboarding_Three.swift */; };
 		8904DEC8277055E90071E6CA /* OnboardingTrioView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8904DEC7277055E90071E6CA /* OnboardingTrioView.swift */; };
 		891A15E127653A7000B26659 /* nirvana_iosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891A15E027653A7000B26659 /* nirvana_iosApp.swift */; };
 		891A15E327653A7000B26659 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891A15E227653A7000B26659 /* ContentView.swift */; };
@@ -76,9 +73,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		8904DEC1277054A80071E6CA /* Onboarding_One.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Onboarding_One.swift; sourceTree = "<group>"; };
-		8904DEC3277054C50071E6CA /* Onboarding_Two.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Onboarding_Two.swift; sourceTree = "<group>"; };
-		8904DEC5277054E10071E6CA /* Onboarding_Three.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Onboarding_Three.swift; sourceTree = "<group>"; };
 		8904DEC7277055E90071E6CA /* OnboardingTrioView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingTrioView.swift; sourceTree = "<group>"; };
 		891A15DD27653A7000B26659 /* nirvana-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "nirvana-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		891A15E027653A7000B26659 /* nirvana_iosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = nirvana_iosApp.swift; sourceTree = "<group>"; };
@@ -398,9 +392,6 @@
 			isa = PBXGroup;
 			children = (
 				8904DEC7277055E90071E6CA /* OnboardingTrioView.swift */,
-				8904DEC1277054A80071E6CA /* Onboarding_One.swift */,
-				8904DEC3277054C50071E6CA /* Onboarding_Two.swift */,
-				8904DEC5277054E10071E6CA /* Onboarding_Three.swift */,
 			);
 			path = OnBoarding;
 			sourceTree = "<group>";
@@ -520,7 +511,6 @@
 				891A15F5276557AB00B26659 /* colors.swift in Sources */,
 				894E80C327702E5900624B72 /* AddBasicInfoViewModel.swift in Sources */,
 				89288ECB27675B9F00E962C4 /* OnboardingTemplateView.swift in Sources */,
-				8904DEC4277054C50071E6CA /* Onboarding_Two.swift in Sources */,
 				89F05BA4276ACC060002E9C7 /* ContactService.swift in Sources */,
 				89B46E71276893E200B74255 /* AuthSessionStore.swift in Sources */,
 				891A15F9276563CA00B26659 /* WelcomeView.swift in Sources */,
@@ -550,8 +540,6 @@
 				89F18AF5276ECF2A00115B1E /* AddBasicInfoView.swift in Sources */,
 				89BCABF0276D53C4009E9B10 /* PhoneVerificationViewModel.swift in Sources */,
 				89BDCDE72769616600577829 /* UIImage+Extension.swift in Sources */,
-				8904DEC6277054E10071E6CA /* Onboarding_Three.swift in Sources */,
-				8904DEC2277054A80071E6CA /* Onboarding_One.swift in Sources */,
 				89F1386D2767EB19006680ED /* SignInView.swift in Sources */,
 				89BDCDF12769E64200577829 /* Messages.swift in Sources */,
 				891A160E27657CEA00B26659 /* User.swift in Sources */,
