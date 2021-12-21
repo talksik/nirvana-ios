@@ -20,7 +20,7 @@ class AddBasicInfoViewModel : ObservableObject {
     
     // - get user data current data
     // - save user selections
-    func updateUser(currUser: User) {
+    func updateUser(currUser: User, completion: @escaping () -> Void) {
         // validations
         // make sure nickname is less than 25 characters for now
         
@@ -28,14 +28,17 @@ class AddBasicInfoViewModel : ObservableObject {
         
         if currUser.nickname == nil || currUser.avatar == nil {
             self.state = .failed("Please make sure to select avatar and nickname 🙏")
+            completion()
             return
         }
         if currUser.nickname!.count > 25 {
             self.state = .failed("Please use a simpler nickname less than 25 characters 🙏")
+            completion()
             return
         }
         if !Avatars.avatarSystemNames.contains(currUser.avatar!) {
             self.state = .failed("Invalid avatar selected!")
+            completion()
             return
         }
         
@@ -49,6 +52,8 @@ class AddBasicInfoViewModel : ObservableObject {
             case .error(let error):
                 self.state = .failed(error.description)
             }
+            
+            completion()
         }
     }
 }

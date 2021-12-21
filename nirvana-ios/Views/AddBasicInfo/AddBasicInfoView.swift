@@ -104,16 +104,17 @@ struct AddBasicInfoView: View {
 
                 // button to save information
                 Button {
-                    print("attempting to save information")
                     var updatedUser = self.authSessionStore.user
                     updatedUser?.avatar = Avatars.avatarSystemNames[self.selectedAvatarIndex]
                     updatedUser?.nickname = self.nickname                    
                     
-                    if updatedUser != nil {
-                        self.addInfoViewModel.updateUser(currUser: updatedUser!)
-                    }
+                    print("attempting to save information \(updatedUser)")
                     
-                    self.navigationStack.push(InnerCircleView())
+                    if updatedUser != nil {
+                        self.addInfoViewModel.updateUser(currUser: updatedUser!) {
+                            self.navigationStack.push(InnerCircleView())
+                        }
+                    }                    
                 } label: {
                     Text("Save")
                         .fontWeight(.heavy)
