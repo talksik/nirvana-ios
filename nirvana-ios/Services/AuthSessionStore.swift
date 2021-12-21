@@ -283,7 +283,7 @@ extension AuthSessionStore {
         // order: sent time should make it easy to add to dict
         // limit: because each user should have most 12 friends and so would at most need 24 messages to show turns and all that...save myself from hackers here
         // TODO: use the indexes I created
-        db.collection("messages").whereField("receiverId", isEqualTo: userId).limit(to: 100)
+        db.collection("messages").whereField("receiverId", isEqualTo: userId).whereField("listenCount", isLessThanOrEqualTo: 1).limit(to: 100)
             .addSnapshotListener { querySnapshot, error in
                 guard let documents = querySnapshot?.documents else {
                     print("Error fetching messages: \(error!)")

@@ -107,9 +107,7 @@ class FirestoreService {
     func getFirestoreServerTimestamp() -> FieldValue {
         return FieldValue.serverTimestamp()
     }
-    
-    
-    
+        
     func createOrUpdateUserFriends(userFriend: UserFriends, completion: @escaping((_ state: ServiceState) -> ()))  {
         do {
             let userFriendCollection = db.collection(Collection.userFriends.rawValue)
