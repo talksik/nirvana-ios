@@ -6,17 +6,29 @@
 //
 
 import Foundation
+import FirebaseFirestore
+import Firebase
 import FirebaseFirestoreSwift
 
 struct Message: Identifiable, Codable {
-    @DocumentID var id: String?
+    @DocumentID var id: String? = UUID().uuidString
+    var receiverId: String
     var senderId: String
     var listenCount: Int
-    var hasListened: Bool? = false
     var audioDataUrl:String?
     
     @ServerTimestamp var sentTimestamp:Date?
     @ServerTimestamp var firstListenTimestamp:Date?
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case receiverId
+        case senderId
+        case listenCount
+        case audioDataUrl
+        case sentTimestamp
+        case firstListenTimestamp
+    }
 }
 
 

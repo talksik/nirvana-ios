@@ -283,26 +283,35 @@ extension AuthSessionStore {
         // order: sent time should make it easy to add to dict
         // limit: because each user should have most 12 friends and so would at most need 24 messages to show turns and all that...save myself from hackers here
         // TODO: use the indexes I created
-        db.collection("messages").whereField("receiverId", isEqualTo: userId).whereField("listenCount", isLessThanOrEqualTo: 1).limit(to: 100)
+        db.collection("messages").whereField("receiverId", isEqualTo: userId).order(by: "sentTimestamp").limit(to: 100)
             .addSnapshotListener { querySnapshot, error in
                 guard let documents = querySnapshot?.documents else {
                     print("Error fetching messages: \(error!)")
                     return
                 }
-                for document in querySnapshot!.documents {
-                    // decode and add to arr and dic
-                    let currMessage:Message? = try? document.data(as: Message.self)
+                print("got all messages relevant")
+                
+                self.messagesArr = documents.compactMap { (queryDocumentSnapshot) -> Message? in
+                    
+                    let currMessage = try? queryDocumentSnapshot.data(as: Message.self)
+                    print("new message received! \(queryDocumentSnapshot.data())")
                     
                     if currMessage != nil { // not really possible but just check
                         // if the user doesn't exist for the dictionary, then add it
                         // this means it's most likely someone new (never had user_friend relationship before) messaging for the user's inbox
                         // TODO: prolly want to make a call to get this sender user details for the inbox
+                        
                         if self.friendMessagesDict[currMessage!.senderId] == nil {
                             self.friendMessagesDict[currMessage!.senderId] = [currMessage!]
                         } else {
                             self.friendMessagesDict[currMessage!.senderId]?.append(currMessage!)
                         }
                     }
+                    else {
+                        print("unable to unwrap message")
+                    }
+                    
+                    return currMessage
                 }
                 
                 // TODO: optimize later
