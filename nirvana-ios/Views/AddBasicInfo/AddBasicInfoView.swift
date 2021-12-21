@@ -106,7 +106,7 @@ struct AddBasicInfoView: View {
                 Button {
                     var updatedUser = self.authSessionStore.user
                     updatedUser?.avatar = Avatars.avatarSystemNames[self.selectedAvatarIndex]
-                    updatedUser?.nickname = self.nickname                    
+                    updatedUser?.nickname = self.nickname
                     
                     print("attempting to save information \(updatedUser)")
                     
@@ -114,7 +114,7 @@ struct AddBasicInfoView: View {
                         self.addInfoViewModel.updateUser(currUser: updatedUser!) {
                             self.navigationStack.push(InnerCircleView())
                         }
-                    }                    
+                    }
                 } label: {
                     Text("Save")
                         .fontWeight(.heavy)

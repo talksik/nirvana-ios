@@ -75,7 +75,7 @@ class FirestoreService {
     
     func createUser(user: User, completion: @escaping((_ state: ServiceState) -> ()))  {
         do {
-            let _ = try db.collection(Collection.users.rawValue).addDocument(from: user)
+            let _ = try db.collection(Collection.users.rawValue).document(user.id!).setData(from: user)
             
             completion(ServiceState.success("user created"))
         } catch {
