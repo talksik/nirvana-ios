@@ -20,19 +20,20 @@ final class PhoneVerificationViewModel : ObservableObject  {
         
     }
     
-    public func createOrUpdateUser(userId: String, phoneNumber: String) {
+    public func createOrUpdateUser(userId: String, phoneNumber: String, completion: @escaping((_ res: ServiceState?) -> ())) {
         // TODO: set all in a transaction or batch write
         
         // get user - 1 result set cost
         self.firestoreService.getUser(userId: userId) {[weak self] resultingUser in
             print("user that was received from get: \(resultingUser?.id)")
-            
-            
+                        
             if resultingUser == nil {// if empty, create user - 1 result set cost..prolly higher cost
                 print("creating new user with id: \(userId)")
                 let newUser = User(id: userId, phoneNumber: phoneNumber)
                 print("verify the id stayed the same: \(newUser.id)")
-                self?.firestoreService.createUser(user: newUser)
+                self?.firestoreService.createUser(user: newUser) { res in
+                    completion(res)
+                }
             } else { // if not, change last logged in value
                 var user = resultingUser
                 
@@ -40,7 +41,7 @@ final class PhoneVerificationViewModel : ObservableObject  {
                 user!.lastLoggedInTimestamp = nil
                 
                 self?.firestoreService.updateUser(user: user!) {res in
-                    print(res)
+                    completion(res)
                 }
             }
         }

@@ -79,10 +79,8 @@ struct PhoneCodeVerificationView: View {
                             // TODO: bug one: not navigating after creating user...two: creating user with a random Id
                             // firebase will now verify the credential
                             Auth.auth().signIn(with: credential) { (res, err) in
-                                // done with the response here, turn off loading screen
-                                self.isLoading.toggle()
-                                
                                 if err != nil {
+                                    self.isLoading.toggle()
                                     self.toastText = "⚠️ Error with Verification"
                                     self.toastSubMessage = "Code is invalid. Please try again or re-enter your phone number in the previous page."
                                     self.showToast.toggle()
@@ -102,6 +100,7 @@ struct PhoneCodeVerificationView: View {
                                 
                                 // if for some reason firebase couldn't get auth details
                                 if userId == nil || userPhoneNumber == nil {
+                                    self.isLoading.toggle()
                                     self.toastText = "⚠️ Error with Verification"
                                     self.toastSubMessage = "Code is invalid. Please try again or re-enter your phone number in the previous page."
                                     self.showToast.toggle()
@@ -110,10 +109,23 @@ struct PhoneCodeVerificationView: View {
                                     return
                                 }
                                 
-                                self.phoneverificationViewModel.createOrUpdateUser(userId: userId!, phoneNumber: userPhoneNumber!)
-                                
-                                // then sending to next page
-                                self.navigationStack.push(OnboardingTrioView())
+                                self.phoneverificationViewModel.createOrUpdateUser(userId: userId!, phoneNumber: userPhoneNumber!) {res in
+                                    switch res {
+                                    case .success(let msg):
+                                        // then sending to next page
+                                        self.navigationStack.push(OnboardingTrioView())
+                                        return
+                                    case .error(let error):
+                                        self.isLoading.toggle()
+                                        self.toastText = "⚠️ Error with Verification"
+                                        self.toastSubMessage = "Code is invalid. Please try again or re-enter your phone number in the previous page."
+                                        self.showToast.toggle()
+                                        
+                                        print((err?.localizedDescription)!)
+                                        return
+                                    default: break
+                                    }
+                                }
                             }
                             
                         } label: {

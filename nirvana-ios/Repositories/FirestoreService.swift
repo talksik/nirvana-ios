@@ -73,11 +73,14 @@ class FirestoreService {
         }
     }
     
-    func createUser(user: User) {
+    func createUser(user: User, completion: @escaping((_ state: ServiceState) -> ()))  {
         do {
             let _ = try db.collection(Collection.users.rawValue).addDocument(from: user)
+            
+            completion(ServiceState.success("user created"))
         } catch {
-            print("error in creating user \(error.localizedDescription)")
+            print("error in updating user \(error.localizedDescription)")
+            completion(ServiceState.error(ServiceError(description: error.localizedDescription)))
         }
     }
     
@@ -90,7 +93,7 @@ class FirestoreService {
                 completion(ServiceState.error(ServiceError(description: "No user id given to firestore service")))
             }
         } catch {
-            print("error in creating user \(error.localizedDescription)")
+            print("error in updating user \(error.localizedDescription)")
             completion(ServiceState.error(ServiceError(description: error.localizedDescription)))
         }
     }
