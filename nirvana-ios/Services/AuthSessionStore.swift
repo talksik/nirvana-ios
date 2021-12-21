@@ -143,6 +143,12 @@ final class AuthSessionStore: ObservableObject, SessionStore {
                         }
                     }
                 }
+                
+                // TODO: listener for getting user's sent and received messages
+                
+                // TODO: listener for getting user's circle members
+                
+                
             } else {
                 // if we don't have a user, set our session to nil
                 self.user = nil

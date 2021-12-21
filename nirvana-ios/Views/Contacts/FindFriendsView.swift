@@ -20,7 +20,7 @@ struct FindFriendsView: View {
     
     var body: some View {
         NavigationView {
-            // list with search bar
+            // TODO: add search bar + have secondary sort
             List {
                 ForEach(contactsVM.contacts.sorted { $0.isExisting && !$1.isExisting }) { contact in
                     ListContactRow(contact: contact)
@@ -47,6 +47,8 @@ struct FindFriendsView_Previews: PreviewProvider {
     }
 }
 
+
+
 struct ListContactRow: View {
     var contact: ContactsViewModelContact
     
@@ -56,6 +58,7 @@ struct ListContactRow: View {
     
     var body: some View {
         if contact.isExisting { // add to circle
+            // TODO: check if this contact is already in user's circle
             HStack(alignment: .center, spacing: 0) {
                 Image(contact.user?.avatar ?? Avatars.avatarSystemNames[1])
                     .resizable()
@@ -99,6 +102,15 @@ struct ListContactRow: View {
                 Button {
                     print("inviting user now")
                     // text message to him/her
+                    
+                    if contact.cnPhoneNumber != nil {
+                        let sms: String = "sms://\(contact.cnPhoneNumber)&body=Join me on Nirvana! I sent you a message there! https://usenirvana.com"
+                        let strUrl: String = sms.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+                        
+                        UIApplication.shared.open(URL(string: strUrl)!, options: [:], completionHandler: nil)
+                    } else {
+                        print("phone number is nil of contact")
+                    }
                 } label: {
                     Label("Invite", systemImage: "paperplane")
                         .font(.title2)
