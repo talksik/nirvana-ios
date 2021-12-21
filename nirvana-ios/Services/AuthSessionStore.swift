@@ -136,11 +136,9 @@ final class AuthSessionStore: ObservableObject, SessionStore {
                 
                 // when we have a user get signed in, we can activate the listener for fetching the user's data to keep our auth session store always up to date for all of the ui
                 self.firestoreService.getUserRealtime(userId: uid) {[weak self] realtimeUpdatedUser in
-                    DispatchQueue.main.async {
-                        if realtimeUpdatedUser != nil {
-                            print("up to date user: \(realtimeUpdatedUser)")
-                            self?.user = realtimeUpdatedUser
-                        }
+                    if realtimeUpdatedUser != nil {
+                        print("up to date user: \(realtimeUpdatedUser)")
+                        self?.user = realtimeUpdatedUser
                     }
                 }
                 

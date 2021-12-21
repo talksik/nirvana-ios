@@ -28,14 +28,16 @@ class FirestoreService {
                 return
             }
             
-            guard let updatedOrNewUser = try? document.data(as: User.self)
-            else {
-                completion(nil)
-                print("Document data was empty. tried fetching updated user document in firestore service")
-                return
+            DispatchQueue.main.async {
+                guard let updatedOrNewUser = try? document.data(as: User.self)
+                else {
+                    completion(nil)
+                    print("Document data was empty. tried fetching updated user document in firestore service")
+                    return
+                }
+                // up to date user
+                completion(updatedOrNewUser)
             }
-            // up to date user
-            completion(updatedOrNewUser)
         }
     }
     
