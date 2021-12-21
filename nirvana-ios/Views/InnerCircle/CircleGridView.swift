@@ -53,7 +53,8 @@ struct CircleGridView: View {
                     alignment: .center,
                     spacing: Self.spacingBetweenRows
                 ) {
-                    ForEach(0..<Self.numberOfItems) { value in
+                    ForEach(Array(self.authSessionStore.friendsArr.enumerated()), id: \.offset) { value, element in
+//                    for (value, element) in self.authSessionStore.friendMessagesDict.keys.enumerated() {
                         GeometryReader {gridProxy in
                             let scale = getScale(proxy: gridProxy, itemNumber: value)
                             
@@ -63,7 +64,7 @@ struct CircleGridView: View {
                                     .blur(radius: 8)
                                     .cornerRadius(100)
                                     
-                                Image("Artboards_Diversity_Avatars_by_Netguru-\(value + 1)")
+                                Image(element.avatar ?? Avatars.avatarSystemNames[0])
                                     .resizable()
                                     .scaledToFit()
                                     .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 20)

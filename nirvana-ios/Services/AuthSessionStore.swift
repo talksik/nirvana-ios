@@ -32,7 +32,7 @@ final class AuthSessionStore: ObservableObject, SessionStore {
     @Published var sessionState: SessionState = SessionState.isLoggedOut
     
     // TODO: figure out which ones to publish
-    var friendsArr: [User] = []
+    @Published var friendsArr: [User] = []
     var messagesArr: [Message] = []
     
     // transformed data for the views
@@ -232,6 +232,7 @@ extension AuthSessionStore {
                                 self.friendsArr.append(returnedUser!)
                                 
                                 // if this friend do not exist in the dict, add it to show up in my circle
+                                // TODO: prolly don't need this function to mess with dictionary
                                 if self.friendMessagesDict[returnedUser!.id!] == nil {
                                     self.friendMessagesDict[returnedUser!.id!] = []
                                 }
