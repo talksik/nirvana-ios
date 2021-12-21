@@ -211,7 +211,7 @@ extension AuthSessionStore {
             // parse through the new result set
             // if already exists in dict, then make sure not to delete the associated list
             
-        db.collection("userFriends").whereField("userId", isEqualTo: userId)
+        db.collection("user_friends").whereField("userId", isEqualTo: userId)
             .addSnapshotListener { querySnapshot, error in
                 guard let snapshot = querySnapshot else {
                     print("Error fetching user's friends: \(error!)")
