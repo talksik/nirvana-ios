@@ -211,7 +211,9 @@ extension AuthSessionStore {
             // parse through the new result set
             // if already exists in dict, then make sure not to delete the associated list
             
-        db.collection("user_friends").whereField("userId", isEqualTo: userId)
+        // order: when the relationship was created...also easy for user
+        // limit: for my protection of db costs lol
+        db.collection("user_friends").whereField("userId", isEqualTo: userId).order(by: "created").limit(to: 100)
             .addSnapshotListener { querySnapshot, error in
                 guard let snapshot = querySnapshot else {
                     print("Error fetching user's friends: \(error!)")
@@ -236,6 +238,33 @@ extension AuthSessionStore {
         
         
         // MARK: keeping the list of messages updated
+        // one listener for received messages
+        
+        // don't know if we need a listener for sent messages as we can alter our model from local and add to the dictionary
+        
+        // order: sent time should make it easy to add to dict
+        // limit: because each user should have most 12 friends and so would at most need 24 messages to show turns and all that...save myself from hackers here
+        db.collection("messages").whereField("receiverId", isEqualTo: userId).limit(to: 100)
+            .addSnapshotListener { querySnapshot, error in
+                guard let snapshot = querySnapshot else {
+                    print("Error fetching messages: \(error!)")
+                    return
+                }
+                snapshot.documentChanges.forEach { diff in
+                    if (diff.type == .added) {
+                        print("New message: \(diff.document.data())")
+
+                        // keep array of messages sorted, but this should automatically be sorted?
+                    }
+                    if (diff.type == .modified) {
+                        // nothing to really do here
+                        print("Modified message: \(diff.document.data())")
+                    }
+                    if (diff.type == .removed) {
+                        print("Removed message: \(diff.document.data())")
+                    }
+                }
+            }
         
     }
     

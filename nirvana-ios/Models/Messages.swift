@@ -11,11 +11,12 @@ import FirebaseFirestoreSwift
 struct Messages: Identifiable, Codable {
     @DocumentID var id: String?
     var senderId: String
-    var receiverId: String
+    var listenCount: Int
+    var hasListened: Bool? = false
+    var audioDataUrl:String?
     
     @ServerTimestamp var sentTimestamp:Date?
-    @ServerTimestamp var listenedToTimestamp:Date?
-    var audioDataUrl:String?
+    @ServerTimestamp var firstListenTimestamp:Date?
 }
 
 

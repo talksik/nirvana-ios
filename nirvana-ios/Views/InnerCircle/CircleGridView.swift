@@ -187,6 +187,6 @@ struct CircleGridView: View {
 
 struct CircleGridView_Previews: PreviewProvider {
     static var previews: some View {
-        CircleGridView()
+        CircleGridView().environmentObject(AuthSessionStore())
     }
 }
