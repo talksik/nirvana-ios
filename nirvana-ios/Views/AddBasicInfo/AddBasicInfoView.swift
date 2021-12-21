@@ -88,7 +88,6 @@ struct AddBasicInfoView: View {
                         .padding()
                         .background(.ultraThinMaterial)
                         .clipShape(Capsule())
-                        .keyboardType(.phonePad)
                         .shadow(color: Color.black.opacity(0.3), radius: 20, x: 0, y: 20)
                         .font(.subheadline)
                         .multilineTextAlignment(.center)
