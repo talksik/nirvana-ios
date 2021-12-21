@@ -62,7 +62,6 @@ struct FindFriendsView_Previews: PreviewProvider {
 }
 
 struct ListContactRow: View {
-    @Environment(\.dismiss) var dismiss
     @EnvironmentObject var navigationStack : NavigationStack
     @EnvironmentObject var authSessionStore: AuthSessionStore
     
