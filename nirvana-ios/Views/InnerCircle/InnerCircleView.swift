@@ -18,7 +18,7 @@ struct InnerCircleView: View {
     @EnvironmentObject var authSessionStore: AuthSessionStore
     @EnvironmentObject var navigationStack: NavigationStack
     
-    @State var sheetView: SheetView? = .contacts
+    @State var sheetView: SheetView? = nil
     
     let universalSize = UIScreen.main.bounds
     

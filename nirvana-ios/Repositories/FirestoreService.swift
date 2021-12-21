@@ -62,8 +62,6 @@ class FirestoreService {
                     completion(nil)
                 } else {
                     if !(querySnapshot?.isEmpty)! {
-                        print("existing user found!!!!: \(querySnapshot?.documents)")
-
                         for document in querySnapshot!.documents {
                             let returnedUser = try? document.data(as: User.self)
                             completion(returnedUser)

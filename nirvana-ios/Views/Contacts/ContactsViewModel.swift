@@ -81,6 +81,7 @@ class ContactsViewModel : ObservableObject {
                                 contactVm.sortingProp = "!" // adding for sorting purposes
                                 contactVm.user = returnedUser
                                 contactVm.isExisting = true
+                                print("existing user: \(contactVm.cnName)")
                             }
                             
                             self?.contacts[contactVm.sortingProp] = contactVm

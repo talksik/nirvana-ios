@@ -97,11 +97,12 @@ struct ListContactRow: View {
                 }
             }
             .alert(self.alertText, isPresented: self.$showAlert) {
-                Button("Add \(contact.cnName)", role: ButtonRole.cancel) {
+                Button("Add \(contact.cnName)") {
                     print("adding contact to circle")
                     // call method in vm to get it done, then navigate to the circle
                     self.contactsVM.addOrActivateFriendToCircle(userId: self.authSessionStore.user!.id!, friendId: (contact.user!.id)!)
                    
+                    self.navigationStack.push(InnerCircleView())
                 }
             } message: {
                 Text(self.alertMessage)
