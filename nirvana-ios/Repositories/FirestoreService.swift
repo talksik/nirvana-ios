@@ -133,7 +133,7 @@ class FirestoreService {
                     else { // there seems to be something existing
                         for document in querySnapshot!.documents {
                             // update this userFriend that is existing
-                            let _ = try? userFriendCollection.document(document.documentID).setData(from: userFriend)
+                            let _ = try? userFriendCollection.document(document.documentID).setData(["isActive": true, "lastUpdatedTimestamp": self.getFirestoreServerTimestamp()], merge:true)
                             print("already existing, just updated")
                             completion(ServiceState.success("updated userfriend in firestore service"))
                         }
