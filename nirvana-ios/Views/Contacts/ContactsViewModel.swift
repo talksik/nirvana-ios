@@ -21,10 +21,6 @@ class ContactsViewModel : ObservableObject {
                                    CNContactEmailAddressesKey as CNKeyDescriptor,
                                    CNContactFormatter.descriptorForRequiredKeys(for: .fullName)]
     
-    init() {
-        self.fetchContacts()
-    }
-    
     func openSettings() {
             guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
             if UIApplication.shared.canOpenURL(settingsURL) { UIApplication.shared.open(settingsURL)}
@@ -52,7 +48,7 @@ class ContactsViewModel : ObservableObject {
         fetchRequest.sortOrder = .userDefault
         
         do {
-            try store.enumerateContacts(with: fetchRequest) {(contact, stop) in
+            try store.enumerateContacts(with: fetchRequest) {[weak self](contact, stop) in
                 // only checking if american number or not for now
                 var cnPhoneNumber = contact.phoneNumbers.first?.value.stringValue
                 let contactDisplayName = contact.givenName + " " + contact.familyName
@@ -70,7 +66,7 @@ class ContactsViewModel : ObservableObject {
                     var contactVm = ContactsViewModelContact(cnName: contactDisplayName, cnPhoneNumber: contactNumber, sortingProp: contactDisplayName)
                     
                     // check if the contact is an existing user by phone number
-                    self.firestoreService.getUserByPhoneNumber(phoneNumber: contactNumber) {[weak self] returnedUser in
+                    self?.firestoreService.getUserByPhoneNumber(phoneNumber: contactNumber) {[weak self] returnedUser in
                         DispatchQueue.main.async {
                             if returnedUser == nil {
                                 // do nothing, keep contactsVm object user property nil
@@ -78,13 +74,15 @@ class ContactsViewModel : ObservableObject {
                                 contactVm.sortingProp = contactVm.cnName
                             } else {
                                 // adding user details if this contact is existing user
-                                contactVm.sortingProp = "!" // adding for sorting purposes
+                                // TODO: BUGGGG replaces each existing contact this way...need to keep the key for the dict unique
+                                contactVm.sortingProp = "!" + contactVm.cnName // adding for sorting purposes
                                 contactVm.user = returnedUser
                                 contactVm.isExisting = true
                                 print("existing user: \(contactVm.cnName)")
                             }
                             
                             self?.contacts[contactVm.sortingProp] = contactVm
+                            print(self?.contacts)
                         }
                     }
                 }

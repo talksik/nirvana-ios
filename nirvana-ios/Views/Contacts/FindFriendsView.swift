@@ -37,6 +37,9 @@ struct FindFriendsView: View {
                 Text("Cancel")
             }))
         }
+        .onAppear {
+            self.contactsVM.fetchContacts()
+        }
     }
     
     var searchItems: [String] {

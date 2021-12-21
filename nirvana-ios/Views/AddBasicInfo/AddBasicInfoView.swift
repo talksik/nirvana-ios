@@ -66,7 +66,7 @@ struct AddBasicInfoView: View {
                             Image(Avatars.avatarSystemNames[index])                                
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: 100, height: 100, alignment: .center)
+                                .frame(width: 50, height: 50, alignment: .center)
                                 .blur(radius: self.selectedAvatarIndex == index ? 0 : 1)
                                 .scaleEffect(self.selectedAvatarIndex == index ? 1.3 : 1)
                                 .padding()
