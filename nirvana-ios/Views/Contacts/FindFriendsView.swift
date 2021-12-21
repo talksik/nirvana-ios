@@ -16,15 +16,19 @@ struct FindFriendsView: View {
     @StateObject var contactsVM = ContactsViewModel()
     
     @State private var searchQuery: String = ""
-
+    
     var body: some View {
+        
         NavigationView {
             // TODO: add search bar + have secondary sort
             List {
-                ForEach(contactsVM.contacts.sorted { $0.isExisting && !$1.isExisting }) { contact in
-                    ListContactRow(contact: contact)
+                ForEach(searchItems, id: \.self) { key in
+                    if let currContact = self.contactsVM.contacts[key] {
+                        ListContactRow(contact: currContact)
+                    }
                 }
             }
+            .searchable(text: self.$searchQuery)
             .navigationTitle("Find Friends")
             .navigationBarItems(trailing: Button(action: {
                 dismiss()
@@ -32,10 +36,15 @@ struct FindFriendsView: View {
                 Text("Cancel")
             }))
         }
-        .onAppear  {
-            // organize contacts
-            // sort by has account and then show all other contacts
-            
+    }
+    
+    var searchItems: [String] {
+        let keys = (Array(self.contactsVM.contacts.keys) as [String]).sorted()
+        
+        if self.searchQuery.isEmpty  {
+            return keys
+        } else {
+            return keys.filter { $0.contains(self.searchQuery) }
         }
     }
 }

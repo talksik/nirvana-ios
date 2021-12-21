@@ -11,7 +11,7 @@ import SwiftUI
 
 class ContactsViewModel : ObservableObject {
     @Published var showPermissionAlert = false
-    @Published var contacts: [ContactsViewModelContact] = []
+    @Published var contacts: [String: ContactsViewModelContact] = [:]
     
     private var firestoreService = FirestoreService()
     
@@ -63,11 +63,11 @@ class ContactsViewModel : ObservableObject {
                 var formattedNumber = cnPhoneNumber?.digits.suffix(10)
                 
                 // only show contacts if they have a phone number
-                if formattedNumber != nil {
+                if formattedNumber != nil && formattedNumber?.count ?? 0 > 9 {
                     formattedNumber = "+1" + formattedNumber! // adding country code
                     
                     let contactNumber = String(formattedNumber!)
-                    var contactVm = ContactsViewModelContact(cnName: contactDisplayName, cnPhoneNumber: contactNumber)
+                    var contactVm = ContactsViewModelContact(cnName: contactDisplayName, cnPhoneNumber: contactNumber, sortingProp: contactDisplayName)
                     
                     // check if the contact is an existing user by phone number
                     self.firestoreService.getUserByPhoneNumber(phoneNumber: contactNumber) {[weak self] returnedUser in
@@ -75,13 +75,15 @@ class ContactsViewModel : ObservableObject {
                             if returnedUser == nil {
                                 // do nothing, keep contactsVm object user property nil
                                 contactVm.isExisting = false
+                                contactVm.sortingProp = contactVm.cnName
                             } else {
                                 // adding user details if this contact is existing user
+                                contactVm.sortingProp = "!" // adding for sorting purposes
                                 contactVm.user = returnedUser
                                 contactVm.isExisting = true
                             }
                             
-                            self?.contacts.append(contactVm)
+                            self?.contacts[contactVm.sortingProp] = contactVm
                         }
                     }
                 }
@@ -100,4 +102,5 @@ struct ContactsViewModelContact : Identifiable {
     var cnName: String
     var cnPhoneNumber: String
     var isExisting: Bool = false
+    var sortingProp: String
 }
