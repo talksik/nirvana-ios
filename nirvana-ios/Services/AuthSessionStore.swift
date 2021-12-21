@@ -30,6 +30,17 @@ final class AuthSessionStore: ObservableObject, SessionStore {
     @Published var user : User?
     @Published var sessionState: SessionState = SessionState.isLoggedOut
     
+    // TODO: figure out which ones to publish
+    var friends: [User] = []
+    var messages: [Messages] = []
+    
+    // transformed data for the views
+    var friendsDict: [String:User] = [:]
+    var friendMessagesDict: [String: [Messages]] = [:]
+    
+    // TODO: temporary...should not have this here
+    private var db = Firestore.firestore()
+        
     private var GIDconfig:GIDConfiguration
     
     private var handler: AuthStateDidChangeListenerHandle?
@@ -134,18 +145,8 @@ final class AuthSessionStore: ObservableObject, SessionStore {
                 print("auth listener: Got user: \(uid)")
                 print("auth listener: phone number: \(authUser?.phoneNumber)")
                 
-                // when we have a user get signed in, we can activate the listener for fetching the user's data to keep our auth session store always up to date for all of the ui
-                self.firestoreService.getUserRealtime(userId: uid) {[weak self] realtimeUpdatedUser in
-                    if realtimeUpdatedUser != nil {
-                        print("up to date user: \(realtimeUpdatedUser)")
-                        self?.user = realtimeUpdatedUser
-                    }
-                }
-                
-                // TODO: listener for getting user's sent and received messages
-                
-                // TODO: listener for getting user's circle members
-                
+                // MARK: data listeners for entire environment
+                self.activateMainDataListeners(userId: uid)
                 
             } else {
                 // if we don't have a user, set our session to nil
@@ -167,4 +168,78 @@ extension UIApplication {
       return root
   }
 
+}
+
+struct MasterUserFriendsMessagesModel {
+    
+}
+
+
+extension AuthSessionStore {
+    
+    
+    // get all my friends
+    // traverse all my friends, and put them into the friendsDict
+    
+    // get all messages where I am the receiver or sender in the past 5 days let's say
+    //          this way, we won't have enormous lists
+    // traverse all messages and put them in the friendMessagesDict
+    //      [sarth: [arjun's message, sarth's message, arjun's message...], liam: [liam's message, liam's message]]
+    // note: that list of messages should be sorted
+    
+    // can easily now traverse friends and find any messages to do with them
+    
+    // example:
+    // I send a new message to sarth -> goes to messages database -> notification to sarth
+    // sarth's data looks like this: [arjun: [...arjun's message, sarth's reply...]]
+    
+    
+    
+    private func activateMainDataListeners(userId: String) {
+        // MARK: keeping the @Published user object updated
+        self.firestoreService.getUserRealtime(userId: userId) {[weak self] realtimeUpdatedUser in
+            if realtimeUpdatedUser != nil {
+                print("up to date user: \(realtimeUpdatedUser)")
+                self?.user = realtimeUpdatedUser
+            }
+        }
+        
+        // MARK: keeping the friends list updated
+        // TODO: break into firestoreService
+            // different actions on additions, modifications, and removals
+            
+            // parse through the new result set
+            // if already exists in dict, then make sure not to delete the associated list
+            
+        db.collection("userFriends").whereField("userId", isEqualTo: userId)
+            .addSnapshotListener { querySnapshot, error in
+                guard let snapshot = querySnapshot else {
+                    print("Error fetching user's friends: \(error!)")
+                    return
+                }
+                snapshot.documentChanges.forEach { diff in
+                    if (diff.type == .added) {
+                        print("New friend in circle: \(diff.document.data())")
+                        
+                        // re-sort my circle alphabetically or by some other means
+                        // need to keep it looking the same everytime
+                    }
+                    if (diff.type == .modified) {
+                        // maybe it was deactivated or activated
+                        print("Modified relationship: \(diff.document.data())")
+                    }
+                    if (diff.type == .removed) {
+                        print("Removed city: \(diff.document.data())")
+                    }
+                }
+            }
+        
+        
+        // MARK: keeping the list of messages updated
+        
+    }
+    
+    private func deinitDataListeners() {
+        
+    }
 }
