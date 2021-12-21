@@ -32,6 +32,9 @@ struct PhoneVerificationView: View {
     
     @FocusState private var focusedInputField: Bool
     
+    
+    @State var navigateNext = false
+    
     // TODO: format the input so that it shows the parentheses and stuff (949)923-0445
     var body: some View {
         ZStack(alignment: .topLeading) {
@@ -40,6 +43,10 @@ struct PhoneVerificationView: View {
             OnboardingTemplateView(hdrText: "Let's get you verified", imgName: "undraw_my_password_d-6-kg", bottomActArea: AnyView(
                 VStack {
                     HStack {
+                        PushView(destination: PhoneCodeVerificationView(), isActive: self.$navigateNext) {
+                          
+                        }
+                        
                         Text("+\(ccode)")
                             .padding()
                             .background(.ultraThinMaterial)
@@ -89,14 +96,14 @@ struct PhoneVerificationView: View {
                             // TODO: do all of this in view model
                             // do auth stuff from firebase
                             PhoneAuthProvider.provider()
-                              .verifyPhoneNumber(concatPhoneNumber, uiDelegate: nil) { verificationID, error in
+                              .verifyPhoneNumber(concatPhoneNumber, uiDelegate: nil) {verificationID, error in
                                   print("firebase auth done, now running my callback")
-                                  
-                                  // got a response...done loading... either error to show or next page
-                                  self.isLoading.toggle()
                                   
                                   // problem verifying number showing alert...maybe fake number or something from user
                                   if error != nil {
+                                      // turn off loading page...have an error to show
+                                      self.isLoading.toggle()
+                                      
                                       self.toastText = "⚠️ Please try again."
                                       self.toastSubMessage = "There was an issue validating your phone number"
                                       self.showToast.toggle()
@@ -109,7 +116,8 @@ struct PhoneVerificationView: View {
                                   // use this in the next screen to verify with the code provided
                                   UserDefaults.standard.set(verificationID, forKey: "authVerificationID")
                                   
-                                  self.navigationStack.push(PhoneCodeVerificationView()) // verify code page
+//                                  self.navigationStack.push(PhoneCodeVerificationView()) // verify code page
+                                  self.navigateNext.toggle()
                               }
                         } label: {
                             VStack {
