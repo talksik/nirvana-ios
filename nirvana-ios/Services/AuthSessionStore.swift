@@ -221,6 +221,9 @@ extension AuthSessionStore {
                     return
                 }
                 
+                // resetting array to reset friends
+                self.friendsArr = []
+                
                 for document in querySnapshot!.documents {
                     let userFriend:UserFriends? = try? document.data(as: UserFriends.self)
                     
@@ -228,16 +231,18 @@ extension AuthSessionStore {
                     self.db.collection("users").document(userFriend!.friendId).getDocument { (document, error) in
                         if let document = document, document.exists {
                             let returnedUser = try? document.data(as: User.self)
-                            if returnedUser != nil {
-                                self.friendsArr.append(returnedUser!)
-                                
-                                // if this friend do not exist in the dict, add it to show up in my circle
-                                // TODO: prolly don't need this function to mess with dictionary
-                                if self.friendMessagesDict[returnedUser!.id!] == nil {
-                                    self.friendMessagesDict[returnedUser!.id!] = []
+                            DispatchQueue.main.async {
+                                if returnedUser != nil {
+                                    self.friendsArr.append(returnedUser!)
+                                    
+                                    // if this friend do not exist in the dict, add it to show up in my circle
+                                    // TODO: prolly don't need this function to mess with dictionary
+                                    if self.friendMessagesDict[returnedUser!.id!] == nil {
+                                        self.friendMessagesDict[returnedUser!.id!] = []
+                                    }
+                                    
+                                    print("added this user to the array of users for user's circle\(returnedUser)")
                                 }
-                                
-                                print("added this user to the array of users for user's circle")
                             }
                         } else {
                             print("user doesn't exist from user friend relationship")
@@ -245,6 +250,7 @@ extension AuthSessionStore {
                         }
                     }
                 }
+                
                 
                 // TODO: optimize later with the conditionals
 //                guard let snapshot = querySnapshot else {
