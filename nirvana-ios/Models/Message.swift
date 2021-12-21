@@ -8,7 +8,7 @@
 import Foundation
 import FirebaseFirestoreSwift
 
-struct Messages: Identifiable, Codable {
+struct Message: Identifiable, Codable {
     @DocumentID var id: String?
     var senderId: String
     var listenCount: Int

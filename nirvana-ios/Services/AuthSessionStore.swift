@@ -10,6 +10,7 @@ import Firebase
 import Combine
 import FirebaseAuth
 import GoogleSignIn
+import SwiftUI
 
 enum SessionState {
     case isAuthenticated
@@ -31,12 +32,11 @@ final class AuthSessionStore: ObservableObject, SessionStore {
     @Published var sessionState: SessionState = SessionState.isLoggedOut
     
     // TODO: figure out which ones to publish
-    var friends: [User] = []
-    var messages: [Messages] = []
+    var friendsArr: [User] = []
+    var messagesArr: [Message] = []
     
     // transformed data for the views
-    var friendsDict: [String:User] = [:]
-    var friendMessagesDict: [String: [Messages]] = [:]
+    var friendMessagesDict: [String: [Message]] = [:]
     
     // TODO: temporary...should not have this here
     private var db = Firestore.firestore()
@@ -213,27 +213,56 @@ extension AuthSessionStore {
             
         // order: when the relationship was created...also easy for user
         // limit: for my protection of db costs lol
-        db.collection("user_friends").whereField("userId", isEqualTo: userId).order(by: "created").limit(to: 100)
+        // TODO: use the indexes I created
+        db.collection("user_friends").whereField("userId", isEqualTo: userId).limit(to: 100)
             .addSnapshotListener { querySnapshot, error in
-                guard let snapshot = querySnapshot else {
+                guard let documents = querySnapshot?.documents else {
                     print("Error fetching user's friends: \(error!)")
                     return
                 }
-                snapshot.documentChanges.forEach { diff in
-                    if (diff.type == .added) {
-                        print("New friend in circle: \(diff.document.data())")
-                        
-                        // re-sort my circle alphabetically or by some other means
-                        // need to keep it looking the same everytime
-                    }
-                    if (diff.type == .modified) {
-                        // maybe it was deactivated or activated
-                        print("Modified relationship: \(diff.document.data())")
-                    }
-                    if (diff.type == .removed) {
-                        print("Removed city: \(diff.document.data())")
+                
+                for document in querySnapshot!.documents {
+                    let userFriend:UserFriends? = try? document.data(as: UserFriends.self)
+                    
+                    // get user and initialize this user in dict
+                    self.db.collection("users").document(userFriend!.friendId).getDocument { (document, error) in
+                        if let document = document, document.exists {
+                            let returnedUser = try? document.data(as: User.self)
+                            if returnedUser != nil {
+                                self.friendsArr.append(returnedUser!)
+                                
+                                // if this friend do not exist in the dict, add it to show up in my circle
+                                if self.friendMessagesDict[returnedUser!.id!] == nil {
+                                    self.friendMessagesDict[returnedUser!.id!] = []
+                                }
+                                
+                                print("added this user to the array of users for user's circle")
+                            }
+                        } else {
+                            print("user doesn't exist from user friend relationship")
+                            // should not happen
+                        }
                     }
                 }
+                
+                // TODO: optimize later with the conditionals
+//                guard let snapshot = querySnapshot else {
+//                    print("Error fetching user's friends: \(error!)")
+//                    return
+//                }
+//                snapshot.documentChanges.forEach { diff in
+//
+//                    if (diff.type == .added) {
+//                        print("New friend in circle: \(diff.document.data())")
+//                    }
+//                    if (diff.type == .modified) {
+//                        // maybe it was deactivated or activated
+//                        print("Modified relationship: \(diff.document.data())")
+//                    }
+//                    if (diff.type == .removed) {
+//                        print("Removed city: \(diff.document.data())")
+//                    }
+//                }
             }
         
         
@@ -244,26 +273,48 @@ extension AuthSessionStore {
         
         // order: sent time should make it easy to add to dict
         // limit: because each user should have most 12 friends and so would at most need 24 messages to show turns and all that...save myself from hackers here
+        // TODO: use the indexes I created
         db.collection("messages").whereField("receiverId", isEqualTo: userId).limit(to: 100)
             .addSnapshotListener { querySnapshot, error in
-                guard let snapshot = querySnapshot else {
+                guard let documents = querySnapshot?.documents else {
                     print("Error fetching messages: \(error!)")
                     return
                 }
-                snapshot.documentChanges.forEach { diff in
-                    if (diff.type == .added) {
-                        print("New message: \(diff.document.data())")
-
-                        // keep array of messages sorted, but this should automatically be sorted?
-                    }
-                    if (diff.type == .modified) {
-                        // nothing to really do here
-                        print("Modified message: \(diff.document.data())")
-                    }
-                    if (diff.type == .removed) {
-                        print("Removed message: \(diff.document.data())")
+                for document in querySnapshot!.documents {
+                    // decode and add to arr and dic
+                    let currMessage:Message? = try? document.data(as: Message.self)
+                    
+                    if currMessage != nil { // not really possible but just check
+                        // if the user doesn't exist for the dictionary, then add it
+                        // this means it's most likely someone new (never had user_friend relationship before) messaging for the user's inbox
+                        // TODO: prolly want to make a call to get this sender user details for the inbox
+                        if self.friendMessagesDict[currMessage!.senderId] == nil {
+                            self.friendMessagesDict[currMessage!.senderId] = [currMessage!]
+                        } else {
+                            self.friendMessagesDict[currMessage!.senderId]?.append(currMessage!)
+                        }
                     }
                 }
+                
+                // TODO: optimize later
+//                guard let snapshot = querySnapshot else {
+//                    print("Error fetching messages: \(error!)")
+//                    return
+//                }
+//                snapshot.documentChanges.forEach { diff in
+//                    if (diff.type == .added) {
+//                        print("New message: \(diff.document.data())")
+//
+//                        // keep array of messages sorted, but this should automatically be sorted?
+//                    }
+//                    if (diff.type == .modified) {
+//                        // nothing to really do here
+//                        print("Modified message: \(diff.document.data())")
+//                    }
+//                    if (diff.type == .removed) {
+//                        print("Removed message: \(diff.document.data())")
+//                    }
+//                }
             }
         
     }

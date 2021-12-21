@@ -51,7 +51,7 @@
 		89BDCDE72769616600577829 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89BDCDE62769616600577829 /* UIImage+Extension.swift */; };
 		89BDCDEA27697F9C00577829 /* UserMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89BDCDE927697F9C00577829 /* UserMenu.swift */; };
 		89BDCDEF2769B50C00577829 /* ContactsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89BDCDEE2769B50C00577829 /* ContactsView.swift */; };
-		89BDCDF12769E64200577829 /* Messages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89BDCDF02769E64200577829 /* Messages.swift */; };
+		89BDCDF12769E64200577829 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89BDCDF02769E64200577829 /* Message.swift */; };
 		89F05B9B276A87920002E9C7 /* ContactsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F05B9A276A87920002E9C7 /* ContactsViewModel.swift */; };
 		89F05BA4276ACC060002E9C7 /* ContactService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F05BA3276ACC060002E9C7 /* ContactService.swift */; };
 		89F05BA6276ACD830002E9C7 /* ContactsPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F05BA5276ACD830002E9C7 /* ContactsPickerView.swift */; };
@@ -124,7 +124,7 @@
 		89BDCDE62769616600577829 /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		89BDCDE927697F9C00577829 /* UserMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMenu.swift; sourceTree = "<group>"; };
 		89BDCDEE2769B50C00577829 /* ContactsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsView.swift; sourceTree = "<group>"; };
-		89BDCDF02769E64200577829 /* Messages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Messages.swift; sourceTree = "<group>"; };
+		89BDCDF02769E64200577829 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		89F05B9A276A87920002E9C7 /* ContactsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsViewModel.swift; sourceTree = "<group>"; };
 		89F05BA3276ACC060002E9C7 /* ContactService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactService.swift; sourceTree = "<group>"; };
 		89F05BA5276ACD830002E9C7 /* ContactsPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsPickerView.swift; sourceTree = "<group>"; };
@@ -282,7 +282,7 @@
 		891A160C27657CD600B26659 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				89BDCDF02769E64200577829 /* Messages.swift */,
+				89BDCDF02769E64200577829 /* Message.swift */,
 				891A160D27657CEA00B26659 /* User.swift */,
 				89110713277166D6005797FA /* UserFriends.swift */,
 			);
@@ -573,7 +573,7 @@
 				89BCABF0276D53C4009E9B10 /* PhoneVerificationViewModel.swift in Sources */,
 				89BDCDE72769616600577829 /* UIImage+Extension.swift in Sources */,
 				89F1386D2767EB19006680ED /* SignInView.swift in Sources */,
-				89BDCDF12769E64200577829 /* Messages.swift in Sources */,
+				89BDCDF12769E64200577829 /* Message.swift in Sources */,
 				891A160E27657CEA00B26659 /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
