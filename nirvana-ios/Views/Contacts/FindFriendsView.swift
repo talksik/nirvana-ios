@@ -62,6 +62,7 @@ struct FindFriendsView_Previews: PreviewProvider {
 }
 
 struct ListContactRow: View {
+    @Environment(\.dismiss) var dismiss
     @EnvironmentObject var navigationStack : NavigationStack
     @EnvironmentObject var authSessionStore: AuthSessionStore
     
@@ -115,8 +116,9 @@ struct ListContactRow: View {
                                 print(err)
                             case .success(let str):
                                 print(str)
-                                self.navigationStack.push(InnerCircleView())
                             }
+                            
+                            self.navigationStack.push(InnerCircleView())
                         }
                     }
                 )
