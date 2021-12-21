@@ -18,7 +18,7 @@ struct Message: Identifiable, Codable {
     var audioDataUrl:String?
     
     @ServerTimestamp var sentTimestamp:Date?
-    @ServerTimestamp var firstListenTimestamp:Date?
+    var firstListenTimestamp:Date?
     
     enum CodingKeys: String, CodingKey {
         case id

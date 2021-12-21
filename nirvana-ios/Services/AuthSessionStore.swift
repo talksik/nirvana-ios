@@ -292,26 +292,25 @@ extension AuthSessionStore {
                 print("got all messages relevant")
                 
                 self.messagesArr = documents.compactMap { (queryDocumentSnapshot) -> Message? in
-                    
-                    let currMessage = try? queryDocumentSnapshot.data(as: Message.self)
-                    print("new message received! \(queryDocumentSnapshot.data())")
-                    
-                    if currMessage != nil { // not really possible but just check
-                        // if the user doesn't exist for the dictionary, then add it
-                        // this means it's most likely someone new (never had user_friend relationship before) messaging for the user's inbox
-                        // TODO: prolly want to make a call to get this sender user details for the inbox
+                    do {
+                        let currMessage = try queryDocumentSnapshot.data(as: Message.self)
+                        print("new message received! \(queryDocumentSnapshot.data())")
                         
-                        if self.friendMessagesDict[currMessage!.senderId] == nil {
-                            self.friendMessagesDict[currMessage!.senderId] = [currMessage!]
-                        } else {
-                            self.friendMessagesDict[currMessage!.senderId]?.append(currMessage!)
+                        if currMessage != nil { // not really possible but just check
+                            // if the user doesn't exist for the dictionary, then add it
+                            // this means it's most likely someone new (never had user_friend relationship before) messaging for the user's inbox
+                            // TODO: prolly want to make a call to get this sender user details for the inbox, but they should either be in the friendsArr or their are not a friend so won't be there
+                            if self.friendMessagesDict[currMessage!.senderId] == nil {
+                                self.friendMessagesDict[currMessage!.senderId] = [currMessage!]
+                            } else {
+                                self.friendMessagesDict[currMessage!.senderId]?.append(currMessage!)
+                            }
                         }
+                        return currMessage
+                    } catch {
+                        print("error in trying to decode message \(error)")
                     }
-                    else {
-                        print("unable to unwrap message")
-                    }
-                    
-                    return currMessage
+                    return nil
                 }
                 
                 // TODO: optimize later
