@@ -57,7 +57,7 @@ struct ListContactRow: View {
     var body: some View {
         if contact.isExisting { // add to circle
             HStack(alignment: .center, spacing: 0) {
-                Image(contact.user?.avatar ?? "")
+                Image(contact.user?.avatar ?? Avatars.avatarSystemNames[1])
                     .resizable()
                     .scaledToFit()
                     .clipShape(Circle())
