@@ -17,7 +17,6 @@ struct FindFriendsView: View {
     
     @State private var searchQuery: String = ""
 
-    
     var body: some View {
         NavigationView {
             // TODO: add search bar + have secondary sort

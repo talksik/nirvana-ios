@@ -55,7 +55,7 @@ class ContactsViewModel : ObservableObject {
             try store.enumerateContacts(with: fetchRequest) {(contact, stop) in
                 // only checking if american number or not for now
                 var cnPhoneNumber = contact.phoneNumbers.first?.value.stringValue
-                let contactDisplayName = contact.givenName
+                let contactDisplayName = contact.givenName + " " + contact.familyName
                 // strip out nondigits
                 // add or keep country code
                 
