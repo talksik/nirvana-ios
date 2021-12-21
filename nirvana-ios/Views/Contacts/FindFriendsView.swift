@@ -61,6 +61,7 @@ struct FindFriendsView_Previews: PreviewProvider {
     }
 }
 
+// TODO: just encapsulate in main sheet view so that the dismiss works nicely
 struct ListContactRow: View {
     @EnvironmentObject var navigationStack : NavigationStack
     @EnvironmentObject var authSessionStore: AuthSessionStore

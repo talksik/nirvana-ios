@@ -197,10 +197,12 @@ extension AuthSessionStore {
     
     private func activateMainDataListeners(userId: String) {
         // MARK: keeping the @Published user object updated
+        // TODO: THIS WON"T UPDATE VIEW since user is a reference type...can manually publish...research and learn more
         self.firestoreService.getUserRealtime(userId: userId) {[weak self] realtimeUpdatedUser in
             if realtimeUpdatedUser != nil {
                 print("up to date user: \(realtimeUpdatedUser)")
                 self?.user = realtimeUpdatedUser
+                self?.objectWillChange.send()
             }
         }
         
