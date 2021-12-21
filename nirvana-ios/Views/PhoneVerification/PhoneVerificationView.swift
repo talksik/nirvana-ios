@@ -43,10 +43,6 @@ struct PhoneVerificationView: View {
             OnboardingTemplateView(hdrText: "Let's get you verified", imgName: "undraw_my_password_d-6-kg", bottomActArea: AnyView(
                 VStack {
                     HStack {
-                        PushView(destination: PhoneCodeVerificationView(), isActive: self.$navigateNext) {
-                          
-                        }
-                        
                         Text("+\(ccode)")
                             .padding()
                             .background(.ultraThinMaterial)
@@ -116,8 +112,7 @@ struct PhoneVerificationView: View {
                                   // use this in the next screen to verify with the code provided
                                   UserDefaults.standard.set(verificationID, forKey: "authVerificationID")
                                   
-//                                  self.navigationStack.push(PhoneCodeVerificationView()) // verify code page
-                                  self.navigateNext.toggle()
+                                  self.navigationStack.push(PhoneCodeVerificationView()) // verify code page
                               }
                         } label: {
                             VStack {

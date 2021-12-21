@@ -76,6 +76,7 @@ struct PhoneCodeVerificationView: View {
                               verificationCode: self.verificationCode
                             )
                             
+                            // TODO: bug one: not navigating after creating user...two: creating user with a random Id
                             // firebase will now verify the credential
                             Auth.auth().signIn(with: credential) { (res, err) in
                                 // done with the response here, turn off loading screen
@@ -96,10 +97,10 @@ struct PhoneCodeVerificationView: View {
                                 // firebase either created a new user or is giving back an existing user's id
                                 let userId = res?.user.uid
                                 let userPhoneNumber = res?.user.phoneNumber
-                                print("user id that was authenticated is: \(userId)")
-                                print("user id that was authenticated is: \(userPhoneNumber)")
+                                print("firebase auth: user id that was authenticated is: \(userId)")
+                                print("firebase auth: phone number that was authenticated is: \(userPhoneNumber)")
                                 
-                                // if for some reason firebase couldn't get basic user details
+                                // if for some reason firebase couldn't get auth details
                                 if userId == nil || userPhoneNumber == nil {
                                     self.toastText = "⚠️ Error with Verification"
                                     self.toastSubMessage = "Code is invalid. Please try again or re-enter your phone number in the previous page."
@@ -112,7 +113,7 @@ struct PhoneCodeVerificationView: View {
                                 self.phoneverificationViewModel.createOrUpdateUser(userId: userId!, phoneNumber: userPhoneNumber!)
                                 
                                 // then sending to next page
-                                self.navigationStack.push(OnboardingTrioView()) // verify code page
+                                self.navigationStack.push(OnboardingTrioView())
                             }
                             
                         } label: {
