@@ -110,12 +110,35 @@ class FirestoreService {
     
     func createOrUpdateUserFriends(userFriend: UserFriends, completion: @escaping((_ state: ServiceState) -> ()))  {
         do {
-            if userFriend.id != nil {
-                let _ = try db.collection(Collection.userFriends.rawValue).addDocument(from: userFriend)
-                completion(ServiceState.success("created/updated userfriend in firestore service"))
-            } else {
-                completion(ServiceState.error(ServiceError(description: "No userfriend id given to firestore service")))
+            let userFriendCollection = db.collection(Collection.userFriends.rawValue)
+            
+            // get the userFriend based on...if not exists, then update
+            let userFriendDocRef = userFriendCollection.whereField("userId", isEqualTo: userFriend.userId).whereField("friendId", isEqualTo: userFriend.friendId)
+
+            userFriendDocRef.getDocuments() { (querySnapshot, err) in
+                if let err = err {
+                    print("error in trying to check if user friend relationship exists \(err.localizedDescription)")
+                    completion(ServiceState.error(ServiceError(description: err.localizedDescription)))
+                } else {
+                    // TODO: there shoudn't be multiple, see if this would cause issues
+                    if querySnapshot!.documents.isEmpty {  //not existing already, create one
+                        let _ = try? userFriendCollection.addDocument(from: userFriend)
+                        
+                        print("created new user friend! no existing relationship")
+                        
+                        completion(ServiceState.success("created userfriend in firestore service"))
+                    }
+                    else { // there seems to be something existing
+                        for document in querySnapshot!.documents {
+                            // update this userFriend that is existing
+                            let _ = try? userFriendCollection.document(document.documentID).setData(from: userFriend)
+                            print("already existing, just updated")
+                            completion(ServiceState.success("updated userfriend in firestore service"))
+                        }
+                    }
+                }
             }
+            
         } catch {
             print("error in creating user friend \(error.localizedDescription)")
             completion(ServiceState.error(ServiceError(description: error.localizedDescription)))

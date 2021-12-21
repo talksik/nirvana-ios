@@ -82,7 +82,6 @@ class ContactsViewModel : ObservableObject {
                             }
                             
                             self?.contacts[contactVm.sortingProp] = contactVm
-                            print(self?.contacts)
                         }
                     }
                 }
@@ -93,12 +92,19 @@ class ContactsViewModel : ObservableObject {
         }
     }
     
-    func addOrActivateFriendToCircle(userId: String, friendId: String) {
+    func addOrActivateFriendToCircle(userId: String, friendId: String, completion: @escaping((_ state: ServiceState) -> ()))  {
+        // validation
+        // make sure userId is not the same as friendId...don't want people friending themselves
+        if userId == friendId {
+            completion(ServiceState.error(ServiceError(description: "You cannot friend himself! Silly!")))
+            return
+        }
+        
         // setting timestamps to nil to make sure that new server timestamp is set
         var userFriend = UserFriends(userId: userId, friendId: friendId, isActive: true, lastUpdatedTimestamp: nil, createdTimestamp: nil)
         
         self.firestoreService.createOrUpdateUserFriends(userFriend: userFriend) {[weak self] res in
-            print(res)
+            completion(res)
         }
     }
 }

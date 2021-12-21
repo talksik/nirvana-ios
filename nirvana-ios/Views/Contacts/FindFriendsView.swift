@@ -99,16 +99,27 @@ struct ListContactRow: View {
                         .foregroundColor(NirvanaColor.solidTeal)
                 }
             }
-            .alert(self.alertText, isPresented: self.$showAlert) {
-                Button("Add \(contact.cnName)") {
-                    print("adding contact to circle")
-                    // call method in vm to get it done, then navigate to the circle
-                    self.contactsVM.addOrActivateFriendToCircle(userId: self.authSessionStore.user!.id!, friendId: (contact.user!.id)!)
-                   
-                    self.navigationStack.push(InnerCircleView())
-                }
-            } message: {
-                Text(self.alertMessage)
+            .alert(isPresented: self.$showAlert) {
+                Alert(
+                    title: Text(self.alertText),
+                    message: Text(self.alertMessage),
+                    primaryButton: .default(Text("Cancel")),
+                    secondaryButton: .default(Text("Confirm")) {
+                        print("adding contact to circle")
+                        // call method in vm to get it done, then navigate to the circle
+                        self.contactsVM.addOrActivateFriendToCircle(userId: self.authSessionStore.user!.id!, friendId: (contact.user!.id)!) {res in
+                            print(res)
+                            
+                            switch res {
+                            case .error(let err):
+                                print(err)
+                            case .success(let str):
+                                print(str)
+                                self.navigationStack.push(InnerCircleView())
+                            }
+                        }
+                    }
+                )
             }
         }
         else { // invite button to text the person
