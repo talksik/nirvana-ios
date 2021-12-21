@@ -121,26 +121,34 @@ final class AuthSessionStore: ObservableObject, SessionStore {
     
     func setupAuthListen() {
         // monitor authentication changes using firebase
-        self.handler = Auth.auth().addStateDidChangeListener { [weak self] res, user in
+        self.handler = Auth.auth().addStateDidChangeListener { [weak self] res, authUser in
             print("auth listener activated")
             
             guard let self = self else { return }
          
-            self.sessionState = user == nil ? SessionState.isLoggedOut : SessionState.isAuthenticated
+            self.sessionState = authUser == nil ? SessionState.isLoggedOut : SessionState.isAuthenticated
             
             // get the user from the auth table in firebase auth
-            if let uid = user?.uid {
+            if let uid = authUser?.uid {
                 // if we have a user, create a new user model
                 print("auth listener: Got user: \(uid)")
-                print("auth listener: phone number: \(user?.phoneNumber)")
+                print("auth listener: phone number: \(authUser?.phoneNumber)")
                 
                 // when we have a user get signed in, we can activate the listener for fetching the user's data to keep our auth session store always up to date for all of the ui
                 self.firestoreService.getUserRealtime(userId: uid) {[weak self] realtimeUpdatedUser in
-                    if realtimeUpdatedUser != nil {
-                        print("up to date user: \(realtimeUpdatedUser)")
-                        self?.user = realtimeUpdatedUser
+                    DispatchQueue.main.async {
+                        if realtimeUpdatedUser != nil {
+                            print("up to date user: \(realtimeUpdatedUser)")
+                            self?.user = realtimeUpdatedUser
+                        }
                     }
                 }
+                
+                // TODO: listener for getting user's sent and received messages
+                
+                // TODO: listener for getting user's circle members
+                
+                
             } else {
                 // if we don't have a user, set our session to nil
                 self.user = nil

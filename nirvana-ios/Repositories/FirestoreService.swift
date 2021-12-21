@@ -7,13 +7,15 @@
 
 import Foundation
 import Firebase
+import FirebaseCore
 import FirebaseFirestore
+import FirebaseFirestoreSwift
 
 class FirestoreService {
     enum Collection: String {
         case users = "users"
         case messages = "messages"
-        case user_friends = "user_friends" // associating a user to
+        case userFriends = "user_friends" // associating a user to
     }
     
     private var db = Firestore.firestore()
@@ -50,6 +52,26 @@ class FirestoreService {
             }
         }
     }
+
+    func getUserByPhoneNumber(phoneNumber: String, completion: @escaping((_ user: User?) -> ())) {
+        // TODO: validation here as well to verify that phone number string is even valid
+        db.collection(Collection.users.rawValue).whereField("phoneNumber", isEqualTo: phoneNumber)
+            .getDocuments() { (querySnapshot, err) in
+                if let err = err {
+                    print("Error getting documents: \(err)")
+                    completion(nil)
+                } else {
+                    if !(querySnapshot?.isEmpty)! {
+                        for document in querySnapshot!.documents {
+                            let returnedUser = try? document.data(as: User.self)
+                            completion(returnedUser)
+                        }
+                    } else {
+                        completion(nil)
+                    }
+                }
+        }
+    }
     
     func createUser(user: User) {
         do {
@@ -79,6 +101,23 @@ class FirestoreService {
     
     func getFirestoreServerTimestamp() -> FieldValue {
         return FieldValue.serverTimestamp()
+    }
+    
+    
+    
+    func createOrUpdateUserFriends(userFriend: UserFriends, completion: @escaping((_ state: ServiceState) -> ()))  {
+        do {
+            if userFriend.id != nil {
+                let _ = try db.collection(Collection.userFriends.rawValue).addDocument(from: userFriend)
+                completion(ServiceState.success("created/updated userfriend in firestore service"))
+            } else {
+                completion(ServiceState.error(ServiceError(description: "No userfriend id given to firestore service")))
+            }
+        } catch {
+            print("error in creating user friend \(error.localizedDescription)")
+            completion(ServiceState.error(ServiceError(description: error.localizedDescription)))
+        }
+        
     }
     
 }

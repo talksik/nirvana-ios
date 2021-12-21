@@ -42,7 +42,7 @@ struct ContactsView: View {
                     .shadow(radius:10)
             })
             
-            Text(selectedContact != nil ? "Selected: \((selectedContact?.familyName)!) \((selectedContact?.givenName)!)" : "Nothing selected".localized)
+            Text(selectedContact != nil ? "Selected: \((selectedContact?.familyName)!) \((selectedContact?.givenName)!)" : "Nothing selected")
             
             Button {
                 self.navigationStack.push(InnerCircleView())
@@ -53,7 +53,7 @@ struct ContactsView: View {
             Spacer()
         }
         .sheet(isPresented: self.$showPicker) {
-                ContactPickerView(showPicker: self.$showPicker, selectedContact: self.$selectedContact)
+//                ContactPickerView(showPicker: self.$showPicker, selectedContact: self.$selectedContact)
             }
         .padding()
         .background(NirvanaColor.bgLightGrey)

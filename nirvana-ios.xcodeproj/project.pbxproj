@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		8904DEC8277055E90071E6CA /* OnboardingTrioView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8904DEC7277055E90071E6CA /* OnboardingTrioView.swift */; };
+		89110714277166D6005797FA /* UserFriends.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89110713277166D6005797FA /* UserFriends.swift */; };
 		891A15E127653A7000B26659 /* nirvana_iosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891A15E027653A7000B26659 /* nirvana_iosApp.swift */; };
 		891A15E327653A7000B26659 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891A15E227653A7000B26659 /* ContentView.swift */; };
 		891A15E527653A7100B26659 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 891A15E427653A7100B26659 /* Assets.xcassets */; };
@@ -29,6 +30,12 @@
 		894E80BE276ED7A700624B72 /* avatars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 894E80BD276ED7A700624B72 /* avatars.swift */; };
 		894E80C1276EFD0500624B72 /* AudioPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 894E80C0276EFD0400624B72 /* AudioPlayerView.swift */; };
 		894E80C327702E5900624B72 /* AddBasicInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 894E80C227702E5800624B72 /* AddBasicInfoViewModel.swift */; };
+		896CE6FE27707E6B00DB474E /* CircleNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896CE6FD27707E6B00DB474E /* CircleNavigationView.swift */; };
+		896CE7002770847400DB474E /* CircleFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896CE6FF2770847400DB474E /* CircleFooterView.swift */; };
+		896CE7022770892F00DB474E /* CircleGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896CE7012770892F00DB474E /* CircleGridView.swift */; };
+		896CE7052770AE5D00DB474E /* InboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896CE7042770AE5D00DB474E /* InboxView.swift */; };
+		896CE70727711BAB00DB474E /* FindFriendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896CE70627711BAB00DB474E /* FindFriendsView.swift */; };
+		896CE70927712CED00DB474E /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896CE70827712CED00DB474E /* StringExtension.swift */; };
 		89AD5573276DD790001658E0 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AD5572276DD790001658E0 /* SplashView.swift */; };
 		89AD5575276DE724001658E0 /* PhoneCodeVerificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AD5574276DE724001658E0 /* PhoneCodeVerificationView.swift */; };
 		89AD5578276DEAB3001658E0 /* LogoHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AD5577276DEAB3001658E0 /* LogoHeaderView.swift */; };
@@ -46,7 +53,6 @@
 		89BDCDEF2769B50C00577829 /* ContactsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89BDCDEE2769B50C00577829 /* ContactsView.swift */; };
 		89BDCDF12769E64200577829 /* Messages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89BDCDF02769E64200577829 /* Messages.swift */; };
 		89F05B9B276A87920002E9C7 /* ContactsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F05B9A276A87920002E9C7 /* ContactsViewModel.swift */; };
-		89F05B9F276A8D360002E9C7 /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F05B9E276A8D360002E9C7 /* Contact.swift */; };
 		89F05BA4276ACC060002E9C7 /* ContactService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F05BA3276ACC060002E9C7 /* ContactService.swift */; };
 		89F05BA6276ACD830002E9C7 /* ContactsPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F05BA5276ACD830002E9C7 /* ContactsPickerView.swift */; };
 		89F1386D2767EB19006680ED /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F1386C2767EB19006680ED /* SignInView.swift */; };
@@ -74,6 +80,7 @@
 
 /* Begin PBXFileReference section */
 		8904DEC7277055E90071E6CA /* OnboardingTrioView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingTrioView.swift; sourceTree = "<group>"; };
+		89110713277166D6005797FA /* UserFriends.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFriends.swift; sourceTree = "<group>"; };
 		891A15DD27653A7000B26659 /* nirvana-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "nirvana-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		891A15E027653A7000B26659 /* nirvana_iosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = nirvana_iosApp.swift; sourceTree = "<group>"; };
 		891A15E227653A7000B26659 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -97,6 +104,12 @@
 		894E80BD276ED7A700624B72 /* avatars.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = avatars.swift; sourceTree = "<group>"; };
 		894E80C0276EFD0400624B72 /* AudioPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerView.swift; sourceTree = "<group>"; };
 		894E80C227702E5800624B72 /* AddBasicInfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddBasicInfoViewModel.swift; sourceTree = "<group>"; };
+		896CE6FD27707E6B00DB474E /* CircleNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleNavigationView.swift; sourceTree = "<group>"; };
+		896CE6FF2770847400DB474E /* CircleFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleFooterView.swift; sourceTree = "<group>"; };
+		896CE7012770892F00DB474E /* CircleGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleGridView.swift; sourceTree = "<group>"; };
+		896CE7042770AE5D00DB474E /* InboxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InboxView.swift; sourceTree = "<group>"; };
+		896CE70627711BAB00DB474E /* FindFriendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindFriendsView.swift; sourceTree = "<group>"; };
+		896CE70827712CED00DB474E /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		89AD5572276DD790001658E0 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		89AD5574276DE724001658E0 /* PhoneCodeVerificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneCodeVerificationView.swift; sourceTree = "<group>"; };
 		89AD5577276DEAB3001658E0 /* LogoHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoHeaderView.swift; sourceTree = "<group>"; };
@@ -113,7 +126,6 @@
 		89BDCDEE2769B50C00577829 /* ContactsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsView.swift; sourceTree = "<group>"; };
 		89BDCDF02769E64200577829 /* Messages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Messages.swift; sourceTree = "<group>"; };
 		89F05B9A276A87920002E9C7 /* ContactsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsViewModel.swift; sourceTree = "<group>"; };
-		89F05B9E276A8D360002E9C7 /* Contact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
 		89F05BA3276ACC060002E9C7 /* ContactService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactService.swift; sourceTree = "<group>"; };
 		89F05BA5276ACD830002E9C7 /* ContactsPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsPickerView.swift; sourceTree = "<group>"; };
 		89F1386C2767EB19006680ED /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
@@ -205,6 +217,7 @@
 		891A15F62765639B00B26659 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				896CE7032770AE3400DB474E /* Inbox */,
 				894E80BF276EFCF500624B72 /* AudioPlayer */,
 				89F18AF3276ECF1800115B1E /* AddBasicInfo */,
 				89F18AF2276ECD5D00115B1E /* OnBoarding */,
@@ -261,6 +274,7 @@
 				89BDCDE62769616600577829 /* UIImage+Extension.swift */,
 				89F18AEB276E92BF00115B1E /* CustomExtensions.swift */,
 				894E80BD276ED7A700624B72 /* avatars.swift */,
+				896CE70827712CED00DB474E /* StringExtension.swift */,
 			);
 			path = Globals;
 			sourceTree = "<group>";
@@ -270,7 +284,7 @@
 			children = (
 				89BDCDF02769E64200577829 /* Messages.swift */,
 				891A160D27657CEA00B26659 /* User.swift */,
-				89F05B9E276A8D360002E9C7 /* Contact.swift */,
+				89110713277166D6005797FA /* UserFriends.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -299,6 +313,14 @@
 				894E80C0276EFD0400624B72 /* AudioPlayerView.swift */,
 			);
 			path = AudioPlayer;
+			sourceTree = "<group>";
+		};
+		896CE7032770AE3400DB474E /* Inbox */ = {
+			isa = PBXGroup;
+			children = (
+				896CE7042770AE5D00DB474E /* InboxView.swift */,
+			);
+			path = Inbox;
 			sourceTree = "<group>";
 		};
 		89AD5571276DD77D001658E0 /* SplashView */ = {
@@ -331,6 +353,9 @@
 			children = (
 				89BCABE4276B3D58009E9B10 /* InnerCircleView.swift */,
 				89BCABE6276B3D64009E9B10 /* InnerCircleViewModel.swift */,
+				896CE6FD27707E6B00DB474E /* CircleNavigationView.swift */,
+				896CE6FF2770847400DB474E /* CircleFooterView.swift */,
+				896CE7012770892F00DB474E /* CircleGridView.swift */,
 			);
 			path = InnerCircle;
 			sourceTree = "<group>";
@@ -359,6 +384,7 @@
 				89BDCDEE2769B50C00577829 /* ContactsView.swift */,
 				89F05B9A276A87920002E9C7 /* ContactsViewModel.swift */,
 				89F05BA5276ACD830002E9C7 /* ContactsPickerView.swift */,
+				896CE70627711BAB00DB474E /* FindFriendsView.swift */,
 			);
 			path = Contacts;
 			sourceTree = "<group>";
@@ -502,9 +528,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				891A15E327653A7000B26659 /* ContentView.swift in Sources */,
+				896CE7002770847400DB474E /* CircleFooterView.swift in Sources */,
 				894E80BE276ED7A700624B72 /* avatars.swift in Sources */,
-				89F05B9F276A8D360002E9C7 /* Contact.swift in Sources */,
+				896CE7052770AE5D00DB474E /* InboxView.swift in Sources */,
 				891A160327656FC700B26659 /* HomeView.swift in Sources */,
+				896CE70927712CED00DB474E /* StringExtension.swift in Sources */,
+				89110714277166D6005797FA /* UserFriends.swift in Sources */,
+				896CE70727711BAB00DB474E /* FindFriendsView.swift in Sources */,
 				891A160B2765732700B26659 /* HomeViewModel.swift in Sources */,
 				89BCABEB276D2A09009E9B10 /* PhoneVerificationView.swift in Sources */,
 				892179E62765FECD001E6C60 /* FooterControlsViewModel.swift in Sources */,
@@ -520,6 +550,7 @@
 				89BDCDE527695DB900577829 /* NirvanaImage.swift in Sources */,
 				891A16132765A44300B26659 /* ChatsCarouselViewModel.swift in Sources */,
 				89F05B9B276A87920002E9C7 /* ContactsViewModel.swift in Sources */,
+				896CE6FE27707E6B00DB474E /* CircleNavigationView.swift in Sources */,
 				89AD5573276DD790001658E0 /* SplashView.swift in Sources */,
 				89F18AEC276E92BF00115B1E /* CustomExtensions.swift in Sources */,
 				89F18AF1276ECAA300115B1E /* RouterView.swift in Sources */,
@@ -528,6 +559,7 @@
 				89BCABED276D2B05009E9B10 /* WavesGlassBackgroundView.swift in Sources */,
 				89F05BA6276ACD830002E9C7 /* ContactsPickerView.swift in Sources */,
 				8904DEC8277055E90071E6CA /* OnboardingTrioView.swift in Sources */,
+				896CE7022770892F00DB474E /* CircleGridView.swift in Sources */,
 				89BDCDEA27697F9C00577829 /* UserMenu.swift in Sources */,
 				89BCABE7276B3D64009E9B10 /* InnerCircleViewModel.swift in Sources */,
 				89AD557C276DF86A001658E0 /* FirestoreService.swift in Sources */,
