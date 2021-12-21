@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		8904DEC8277055E90071E6CA /* OnboardingTrioView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8904DEC7277055E90071E6CA /* OnboardingTrioView.swift */; };
+		89110714277166D6005797FA /* UserFriends.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89110713277166D6005797FA /* UserFriends.swift */; };
 		891A15E127653A7000B26659 /* nirvana_iosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891A15E027653A7000B26659 /* nirvana_iosApp.swift */; };
 		891A15E327653A7000B26659 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891A15E227653A7000B26659 /* ContentView.swift */; };
 		891A15E527653A7100B26659 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 891A15E427653A7100B26659 /* Assets.xcassets */; };
@@ -79,6 +80,7 @@
 
 /* Begin PBXFileReference section */
 		8904DEC7277055E90071E6CA /* OnboardingTrioView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingTrioView.swift; sourceTree = "<group>"; };
+		89110713277166D6005797FA /* UserFriends.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFriends.swift; sourceTree = "<group>"; };
 		891A15DD27653A7000B26659 /* nirvana-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "nirvana-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		891A15E027653A7000B26659 /* nirvana_iosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = nirvana_iosApp.swift; sourceTree = "<group>"; };
 		891A15E227653A7000B26659 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -282,6 +284,7 @@
 			children = (
 				89BDCDF02769E64200577829 /* Messages.swift */,
 				891A160D27657CEA00B26659 /* User.swift */,
+				89110713277166D6005797FA /* UserFriends.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -530,6 +533,7 @@
 				896CE7052770AE5D00DB474E /* InboxView.swift in Sources */,
 				891A160327656FC700B26659 /* HomeView.swift in Sources */,
 				896CE70927712CED00DB474E /* StringExtension.swift in Sources */,
+				89110714277166D6005797FA /* UserFriends.swift in Sources */,
 				896CE70727711BAB00DB474E /* FindFriendsView.swift in Sources */,
 				891A160B2765732700B26659 /* HomeViewModel.swift in Sources */,
 				89BCABEB276D2A09009E9B10 /* PhoneVerificationView.swift in Sources */,

@@ -102,7 +102,7 @@ struct AddBasicInfoView: View {
                 
                 
                 Spacer()
-                                
+
                 // button to save information
                 Button {
                     print("attempting to save information")

@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Contacts
+import NavigationStack
 
 
 
@@ -24,7 +25,7 @@ struct FindFriendsView: View {
             List {
                 ForEach(searchItems, id: \.self) { key in
                     if let currContact = self.contactsVM.contacts[key] {
-                        ListContactRow(contact: currContact)
+                        ListContactRow(contactsVM: self.contactsVM, contact: currContact)
                     }
                 }
             }
@@ -47,6 +48,8 @@ struct FindFriendsView: View {
             return keys.filter { $0.contains(self.searchQuery) }
         }
     }
+    
+    
 }
 
 struct FindFriendsView_Previews: PreviewProvider {
@@ -55,14 +58,16 @@ struct FindFriendsView_Previews: PreviewProvider {
     }
 }
 
-
-
 struct ListContactRow: View {
-    var contact: ContactsViewModelContact
+    @EnvironmentObject var navigationStack : NavigationStack
+    @EnvironmentObject var authSessionStore: AuthSessionStore
+    
+    var contactsVM: ContactsViewModel
+    var contact:ContactsViewModelContact
     
     @State var showAlert = false
-    @State var alertText = ""
-    @State var alertMessage = ""
+    @State var alertText = "🌱Confirm Arjun into Your Circle?"
+    @State var alertMessage = "Note: You can have a maximium of 12 people in your circle and you have 5 swaps left!"
     
     var body: some View {
         if contact.isExisting { // add to circle
@@ -81,15 +86,25 @@ struct ListContactRow: View {
                 Spacer()
                 
                 Button {
-                    print("adding contact to circle")
-                    
-                    //show alert if circle is full
+                    print("showing alert now")
+                    // TODO: show alert if circle is full
+                    self.showAlert.toggle()
                     
                 } label: {
                     Label("Add", systemImage: "plus.circle")
                         .font(.title2)
                         .foregroundColor(NirvanaColor.solidTeal)
                 }
+            }
+            .alert(self.alertText, isPresented: self.$showAlert) {
+                Button("Add \(contact.cnName)", role: ButtonRole.cancel) {
+                    print("adding contact to circle")
+                    // call method in vm to get it done, then navigate to the circle
+                    self.contactsVM.addOrActivateFriendToCircle(userId: self.authSessionStore.user!.id!, friendId: (contact.user!.id)!)
+                   
+                }
+            } message: {
+                Text(self.alertMessage)
             }
         }
         else { // invite button to text the person
@@ -128,3 +143,5 @@ struct ListContactRow: View {
         }
     }
 }
+
+
