@@ -69,10 +69,7 @@ class ContactsViewModel : ObservableObject {
                     let contactNumber = String(formattedNumber!)
                     var contactVm = ContactsViewModelContact(cnName: contactDisplayName, cnPhoneNumber: contactNumber)
                     
-                    print(contactVm)
                     // check if the contact is an existing user by phone number
-                    
-                    
                     self.firestoreService.getUserByPhoneNumber(phoneNumber: contactNumber) {[weak self] returnedUser in
                         DispatchQueue.main.async {
                             if returnedUser == nil {

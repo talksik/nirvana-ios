@@ -23,11 +23,9 @@ struct FindFriendsView: View {
             // list with search bar
             List {
                 ForEach(contactsVM.contacts.sorted { $0.isExisting && !$1.isExisting }) { contact in
-                    
+                    ListContactRow(contact: contact)
                 }
             }
-            .searchable(text: $searchQuery)
-            .listStyle(GroupedListStyle())
             .navigationTitle("Find Friends")
             .navigationBarItems(trailing: Button(action: {
                 dismiss()
@@ -50,30 +48,63 @@ struct FindFriendsView_Previews: PreviewProvider {
 }
 
 struct ListContactRow: View {
-    var contact: CNContact
+    var contact: ContactsViewModelContact
     
     @State var showAlert = false
     @State var alertText = ""
     @State var alertMessage = ""
     
     var body: some View {
-        Button(action: {
-            
-        }) {
-            HStack {
-                Text("\(contact.familyName)").fontWeight(.bold)
-                Text("\(contact.givenName) \(contact.middleName)")
+        if contact.isExisting { // add to circle
+            HStack(alignment: .center, spacing: 0) {
+                Image(contact.user?.avatar ?? "")
+                    .resizable()
+                    .scaledToFit()
+                    .clipShape(Circle())
+                    .frame(width: 40, height: 40)
+                    .padding(.trailing, 10)
+                        
+                Text(contact.cnName)
+                    .font(.headline)
                 
                 Spacer()
                 
-                // if the user is already an existing user
+                Button {
+                    print("adding contact to circle")
+                    
+                    //show alert if circle is full
+                    
+                } label: {
+                    Label("Add", systemImage: "plus.circle")
+                        .font(.title2)
+                        .foregroundColor(NirvanaColor.solidTeal)
+                }
             }
-            .foregroundColor(.black)
         }
-        .alert(self.alertText, isPresented: self.$showAlert) {
-            Button("OK", role: ButtonRole.cancel) { }
-        } message: {
-            Text(self.alertMessage)
+        else { // invite button to text the person
+            HStack(alignment: .center, spacing: 0) {
+                Image(Avatars.avatarSystemNames[1])
+                    .resizable()
+                    .scaledToFit()
+                    .clipShape(Circle())
+                    .frame(width: 40, height: 40)
+                    .blur(radius: 8)
+                    .padding(.trailing, 10)
+                
+                Text(contact.cnName)
+                    .font(.headline)
+                
+                Spacer()
+                
+                Button {
+                    print("inviting user now")
+                    // text message to him/her
+                } label: {
+                    Label("Invite", systemImage: "paperplane")
+                        .font(.title2)
+                        .foregroundColor(Color.orange)
+                }
+            }
         }
     }
 }
