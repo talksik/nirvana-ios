@@ -73,13 +73,13 @@ class InnerCircleViewModel: ObservableObject {
                 // create a new message in firestore with the url for receiving user to automatically get notified
                 self?.firestoreService.createMessage(message: newMessage) {[weak self] res in
                     print(res)
+                    
+                    // delete local audio file from user's phone so that it doesn't get crazy
+                    print("stopped recording: file about to get deleted from \(self?.getTemporaryDirectory()) with filename: \(self?.audioLocalUrl)")
+                    
+                    try? FileManager.default.removeItem(at: (self?.audioLocalUrl)!)
                 }
             }
-            
-            // delete local audio file from user's phone so that it doesn't get crazy
-            print("stopped recording: file about to get deleted from \(getTemporaryDirectory()) with filename: \(self.audioLocalUrl)")
-            
-            try? FileManager.default.removeItem(at: self.audioLocalUrl!)
         }
     }
     

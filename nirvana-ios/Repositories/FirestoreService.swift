@@ -150,9 +150,9 @@ class FirestoreService {
         do {
             let _ = try db.collection(Collection.messages.rawValue).addDocument(from: message)
             
-            completion(ServiceState.success("user created"))
+            completion(ServiceState.success("message created"))
         } catch {
-            print("error in updating user \(error.localizedDescription)")
+            print("error in creating message \(error.localizedDescription)")
             completion(ServiceState.error(ServiceError(description: error.localizedDescription)))
         }
     }
