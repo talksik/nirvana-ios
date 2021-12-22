@@ -18,7 +18,9 @@ class InnerCircleViewModel: ObservableObject {
     
     func startRecording() {
         let recordingSession = AVAudioSession.sharedInstance()
+        
         do {
+            try recordingSession.setAllowHapticsAndSystemSoundsDuringRecording(true)
             try recordingSession.setCategory(.playAndRecord, mode: .default)
             try recordingSession.setActive(true)
         } catch {
