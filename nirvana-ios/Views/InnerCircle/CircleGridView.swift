@@ -133,11 +133,12 @@ struct CircleGridView: View {
                             
                             // start playing if there are messages to listen to
                             if AVPlayerItems.count > 0 {
-                                print("have message urls that we will start listening to")
+                                print("have message urls that we will start listening to\(AVPlayerItems)")
                                 
-                                AVQueuePlayer(items: AVPlayerItems)
+                                let queuePlayer = AVQueuePlayer(items: AVPlayerItems)
                                 
-                                player.play()
+                                queuePlayer.play()
+                                
                                 
                                 // update the listencount and firstlistentimestamp of those messages in firestore
                             }

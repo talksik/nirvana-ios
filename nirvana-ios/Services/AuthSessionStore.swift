@@ -243,6 +243,8 @@ extension AuthSessionStore {
                                         self.friendMessagesDict[returnedUser!.id!] = []
                                     }
                                     
+                                    self.objectWillChange.send()
+                                    
                                     print("added this user to the array of users for user's circle\(returnedUser)")
                                 }
                             }
@@ -305,6 +307,8 @@ extension AuthSessionStore {
                             } else {
                                 self.friendMessagesDict[currMessage!.senderId]?.append(currMessage!)
                             }
+                            
+                            self.objectWillChange.send()
                         }
                         return currMessage
                     } catch {
