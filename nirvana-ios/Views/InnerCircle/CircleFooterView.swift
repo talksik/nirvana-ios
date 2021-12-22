@@ -26,6 +26,27 @@ struct CircleFooterView: View {
                 
                 HStack {
                     if self.selectedFriend != nil && !self.convoRelativeTime.isEmpty && self.myTurn != nil {
+                        // friend avatar
+                        Image(self.selectedFriend!.avatar ?? "")
+                            .resizable()
+                            .scaledToFit()
+                            .background(NirvanaColor.teal.opacity(0.1))
+                            .frame(width: 40, height: 40)
+                            .clipShape(Circle())
+                            .padding(5)
+                        
+                        // meta data of convo
+                        VStack (alignment: .trailing) {
+                            Text(self.selectedFriend!.nickname ?? "")
+                                .font(.footnote)
+                                .foregroundColor(NirvanaColor.light)
+                            Text(self.convoRelativeTime)
+                                .font(.caption)
+                                .foregroundColor(.gray)
+                        }
+                        
+                        Spacer()
+                        
                         // call button
                         Button {
                             print("calling user now")
@@ -44,33 +65,7 @@ struct CircleFooterView: View {
                                 .foregroundColor(NirvanaColor.teal)
                                 .padding()
                                 .font(.title2)
-                        }                        
-                        
-                        Spacer()
-                        
-                        // meta data of convo
-                        VStack (alignment: .trailing) {
-                            Text(self.selectedFriend!.nickname ?? "")
-                                .font(.footnote)
-                                .foregroundColor(NirvanaColor.light)
-                            Text(self.convoRelativeTime)
-                                .font(.caption)
-                                .foregroundColor(.gray)
                         }
-                        
-                        Image(self.selectedFriend!.avatar ?? "")
-                            .resizable()
-                            .scaledToFit()
-                            .background(NirvanaColor.teal.opacity(0.1))
-                            .frame(width: 40, height: 40)
-                            .clipShape(Circle())
-                            .padding(5)
-                        
-//                        if self.myTurn! {
-//                            Text("it's your turn")
-//                        } else {
-//                            Text("it's their turn")
-//                        }
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: 60) // 60 is the height of the footer control big circle
