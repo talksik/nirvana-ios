@@ -32,7 +32,7 @@ struct CircleGridView: View {
     private let big:CGFloat = 1
     private let medium:CGFloat = 0.75
     private let small:CGFloat = 0.5
-    private let supersmall:CGFloat = 0.3 
+    private let supersmall:CGFloat = 0.3
     
     // TODO: centered honeycomb + side: maybe have two honeycombs: one in the center of 7 people and then everyone else surrounding
     // TODO: maybe make our "center" offset to a little to the top left to make it more honeycomb from top left
@@ -41,7 +41,6 @@ struct CircleGridView: View {
     var body: some View {
         gridContent
     }
-    
     
     private var gridContent: some View {
         // main communication hub
@@ -60,7 +59,7 @@ struct CircleGridView: View {
                             let scale = getScale(proxy: gridProxy, itemNumber: value)
                             
                             let messagesRelatedToFriend = self.authSessionStore.friendMessagesDict[friend.id!]
-                            // sort the list
+                            // TODO: sort the list but may already be sorted from the query and creation of the array of messages?
                             // shouldn't be nil...hopefully
                             let userId = self.authSessionStore.user!.id
                             
@@ -68,13 +67,13 @@ struct CircleGridView: View {
                                 // check if the last message in the conversation between me and my friend was me talking or him
                                 // also check if I have listened to it once or twice
                                 if messagesRelatedToFriend?.last?.receiverId == userId && messagesRelatedToFriend?.last?.listenCount == 0 { // him talking
-                                    Image(systemName: "wave.3.right.circle")
+                                    Image(systemName: "wave.3.right.circle.fill")
                                         .foregroundColor(Color.orange)
                                         .font(.title)
                                 }
                                 
                                 Circle()
-                                    .foregroundColor(self.getBubbleTint(userIndex: value)) // different color for a selected user
+                                    .foregroundColor(self.getBubbleTint(friendIndex: value, friendDbId: friend.id!)) // different color for a selected user
                                     .blur(radius: 8)
                                     .cornerRadius(100)
                                     
@@ -129,13 +128,23 @@ struct CircleGridView: View {
         } // scrollview reader
     }
      
-    private func getBubbleTint(userIndex: Int) -> Color {
-        if (userIndex == self.selectedFriendIndex) { // user clicked on this user
+    private func haveNewMessageFromFriend(friendDbId: String) -> Bool {
+        let userId = self.authSessionStore.user!.id // O(1)
+        
+        if let messagesRelatedToFriend = self.authSessionStore.friendMessagesDict[friendDbId] { // O(1)
+            return messagesRelatedToFriend.last?.receiverId == userId && messagesRelatedToFriend.last?.listenCount == 0
+        }
+        
+        return false
+    }
+    
+    private func getBubbleTint(friendIndex: Int, friendDbId: String) -> Color {
+        if (friendIndex == self.selectedFriendIndex) { // user clicked on this user
             return NirvanaColor.dimTeal.opacity(0.4)
         }
-//        else if self.usersWithNewMessage.contains(userIndex) { // this user has a message
-//            return Color.orange.opacity(0.8)
-//        }
+        else if self.haveNewMessageFromFriend(friendDbId: friendDbId) { // this user has a message
+            return Color.orange.opacity(0.8)
+        }
       
         return Color.white.opacity(0.4)
     }
