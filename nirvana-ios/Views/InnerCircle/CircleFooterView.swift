@@ -36,7 +36,7 @@ struct CircleFooterView: View {
                             .padding(5)
                         
                         // meta data of convo
-                        VStack (alignment: .trailing) {
+                        VStack (alignment: .leading) {
                             Text(self.selectedFriend!.nickname ?? "")
                                 .font(.footnote)
                                 .foregroundColor(NirvanaColor.light)
