@@ -312,6 +312,7 @@ extension AuthSessionStore {
                     }
                     return nil
                 }
+                // TODO: maybe need to call object will change here
                 
                 // TODO: optimize later
 //                guard let snapshot = querySnapshot else {

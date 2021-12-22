@@ -15,7 +15,7 @@ struct Message: Identifiable, Codable {
     var receiverId: String
     var senderId: String
     var listenCount: Int
-    var audioDataUrl:String?
+    var audioDataUrl:String
     
     @ServerTimestamp var sentTimestamp:Date?
     var firstListenTimestamp:Date?
