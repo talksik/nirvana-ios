@@ -22,7 +22,7 @@ struct CircleGridView: View {
     private static let spacingBetweenRows: CGFloat = 0
     private static let totalColumns: Int = Int(log2(Double(Self.numberOfItems))) // scaling the circles and calculating column count
     
-    @State private var selectedUserIndex: Int? = nil
+    @State private var selectedFriendIndex: Int? = nil
     
     // TODO: change the size to adaptive or something to make outer ring items shrink their overall size and fit better
     let gridItems: [GridItem] = Array(
@@ -32,7 +32,7 @@ struct CircleGridView: View {
     private let big:CGFloat = 1
     private let medium:CGFloat = 0.75
     private let small:CGFloat = 0.5
-    private let supersmall:CGFloat = 0.3
+    private let supersmall:CGFloat = 0.3
     
     // TODO: centered honeycomb + side: maybe have two honeycombs: one in the center of 7 people and then everyone else surrounding
     // TODO: maybe make our "center" offset to a little to the top left to make it more honeycomb from top left
@@ -41,6 +41,7 @@ struct CircleGridView: View {
     var body: some View {
         gridContent
     }
+    
     
     private var gridContent: some View {
         // main communication hub
@@ -53,18 +54,31 @@ struct CircleGridView: View {
                     alignment: .center,
                     spacing: Self.spacingBetweenRows
                 ) {
-                    ForEach(Array(self.authSessionStore.friendsArr.enumerated()), id: \.offset) { value, element in
+                    ForEach(Array(self.authSessionStore.friendsArr.enumerated()), id: \.offset) { value, friend in
 //                    for (value, element) in self.authSessionStore.friendMessagesDict.keys.enumerated() {
                         GeometryReader {gridProxy in
                             let scale = getScale(proxy: gridProxy, itemNumber: value)
                             
+                            let messagesRelatedToFriend = self.authSessionStore.friendMessagesDict[friend.id!]
+                            // sort the list
+                            // shouldn't be nil...hopefully
+                            let userId = self.authSessionStore.user!.id
+                            
                             ZStack(alignment: .topTrailing) {
+                                // check if the last message in the conversation between me and my friend was me talking or him
+                                // also check if I have listened to it once or twice
+                                if messagesRelatedToFriend?.last?.receiverId == userId && messagesRelatedToFriend?.last?.listenCount == 0 { // him talking
+                                    Image(systemName: "wave.3.right.circle")
+                                        .foregroundColor(Color.orange)
+                                        .font(.title)
+                                }
+                                
                                 Circle()
                                     .foregroundColor(self.getBubbleTint(userIndex: value)) // different color for a selected user
                                     .blur(radius: 8)
                                     .cornerRadius(100)
                                     
-                                Image(element.avatar ?? Avatars.avatarSystemNames[0])
+                                Image(friend.avatar ?? Avatars.avatarSystemNames[0])
                                     .resizable()
                                     .scaledToFit()
                                     .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 20)
@@ -81,12 +95,18 @@ struct CircleGridView: View {
                         .onTapGesture {
                             withAnimation {
                                 // if user had previously selected user, put nil as a toggle
-                                if self.selectedUserIndex == value {
-                                    self.selectedUserIndex = nil
+                                if self.selectedFriendIndex == value {
+                                    self.selectedFriendIndex = nil
                                 } else {
-                                    self.selectedUserIndex = value
+                                    self.selectedFriendIndex = value
                                 }
                             }
+                            
+                            // I want to play the last x messages if I was the receiver
+                            // ["sarth": [me, me]] -> play nothing
+                            // ["sarth": [me, him, him, him]] -> play his last three messages
+                            
+                            // update the count of those messages and update them in db
                             
                             print("the selected item is: \(value)")
                         }
@@ -110,7 +130,7 @@ struct CircleGridView: View {
     }
      
     private func getBubbleTint(userIndex: Int) -> Color {
-        if (userIndex == self.selectedUserIndex) { // user clicked on this user
+        if (userIndex == self.selectedFriendIndex) { // user clicked on this user
             return NirvanaColor.dimTeal.opacity(0.4)
         }
 //        else if self.usersWithNewMessage.contains(userIndex) { // this user has a message
@@ -124,7 +144,7 @@ struct CircleGridView: View {
     // and decoding into a scale that the item should take
     private func getScale(proxy: GeometryProxy, itemNumber: Int) -> CGFloat {
         // if this user is selected
-        if itemNumber == self.selectedUserIndex {
+        if itemNumber == self.selectedFriendIndex {
             return big + 0.2
         }
         
