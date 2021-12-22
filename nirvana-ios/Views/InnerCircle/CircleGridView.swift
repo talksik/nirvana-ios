@@ -7,10 +7,13 @@
 
 import SwiftUI
 import NavigationStack
+import AVKit
 
 struct CircleGridView: View {
     @EnvironmentObject var authSessionStore: AuthSessionStore
     @EnvironmentObject var navigationStack: NavigationStack
+    
+    @State var player = AVPlayer()
     
     let universalSize = UIScreen.main.bounds
     
@@ -101,15 +104,52 @@ struct CircleGridView: View {
                             
                             // I want to play the last x messages if I was the receiver
                             // ["sarth": [me, me]] -> play nothing
-                            // ["sarth": [me, him, him, him]] -> play his last three messages
+                            // ["sarth": [me, him, him, him]] -> play his two messages
                             
-                            // update the count of those messages and update them in db
+                            // traverse through reversed list of messages and add to audio player queue
+                            // TODO: protect against force unwraps
+                            var AVPlayerItems: [AVPlayerItem] = []
+                            let messagesRelatedToFriend = self.authSessionStore.friendMessagesDict[friend.id!]!.reversed()
                             
-                            print("the selected item is: \(value)")
+                            for message in messagesRelatedToFriend {
+                                // if it's me then don't play
+                                if message.senderId == self.authSessionStore.user?.id {
+                                    break
+                                }
+                                // if I already listened to this "last" message, then break as well
+                                if message.listenCount >= 1 {
+                                    break
+                                }
+                                
+                                // only add to queue if we can convert the database url to a valid url here
+                                if let audioUrl = URL(string: message.audioDataUrl) {
+                                    let playerMessage: AVPlayerItem = AVPlayerItem(url: audioUrl)
+                                    AVPlayerItems.append(playerMessage)
+                                }
+                            }
+                            
+                            // reverse audiourls again as we want them in order of time
+                            AVPlayerItems = AVPlayerItems.reversed()
+                            
+                            // start playing if there are messages to listen to
+                            if AVPlayerItems.count > 0 {
+                                print("have message urls that we will start listening to")
+                                
+                                AVQueuePlayer(items: AVPlayerItems)
+                                
+                                player.play()
+                                
+                                // update the listencount and firstlistentimestamp of those messages in firestore
+                            }
                         }
-                        .onLongPressGesture { // haptics for recording
+                        .onLongPressGesture {
+                            // haptics for recording
                             let impactHeavy = UIImpactFeedbackGenerator(style: .heavy)
                             impactHeavy.impactOccurred()
+                            
+                            // start recording
+                            
+                            // store in db
                         }
 //                        .animation(Animation.easeInOut(duration: 2).repeatForever(autoreverses: true), value: self.usersWithNewMessage)
                         .animation(Animation.spring())
