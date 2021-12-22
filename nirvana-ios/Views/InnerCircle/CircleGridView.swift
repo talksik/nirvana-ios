@@ -177,10 +177,12 @@ struct CircleGridView: View {
     }
      
     private func haveNewMessageFromFriend(friendDbId: String) -> Bool {
-        let userId = self.authSessionStore.user!.id // O(1) // currUser who is signed in
-        
-        if let messagesRelatedToFriend = self.authSessionStore.friendMessagesDict[friendDbId] { // O(1)
-            return messagesRelatedToFriend.last?.receiverId == userId && messagesRelatedToFriend.last?.listenCount == 0
+        if self.authSessionStore.user != nil {
+            let userId = self.authSessionStore.user!.id // O(1) // currUser who is signed in
+            
+            if let messagesRelatedToFriend = self.authSessionStore.friendMessagesDict[friendDbId] { // O(1)
+                return messagesRelatedToFriend.last?.receiverId == userId && messagesRelatedToFriend.last?.listenCount == 0
+            }
         }
         
         return false
