@@ -13,6 +13,7 @@ import GoogleSignIn
 import SwiftUI
 
 enum SessionState {
+    case notCheckedYet
     case isAuthenticated
     case isLoggedOut
 }
@@ -29,7 +30,7 @@ protocol SessionStore {
 
 final class AuthSessionStore: ObservableObject, SessionStore {
     @Published var user : User?
-    @Published var sessionState: SessionState = SessionState.isLoggedOut
+    @Published var sessionState: SessionState = SessionState.notCheckedYet
     
     // TODO: figure out which ones to publish
     @Published var friendsArr: [User] = []

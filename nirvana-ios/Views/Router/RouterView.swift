@@ -22,6 +22,8 @@ struct RouterView: View {
     
     var body: some View {
         switch self.authSessionStore.sessionState {
+        case SessionState.notCheckedYet:
+            SplashView()
         case SessionState.isAuthenticated:
             InnerCircleView()
         case SessionState.isLoggedOut:
