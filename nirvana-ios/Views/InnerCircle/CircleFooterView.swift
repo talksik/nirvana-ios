@@ -75,6 +75,9 @@ struct CircleFooterView: View {
                 // get the last message's sent timestamp
                 let lastMessage = self.authSessionStore.friendMessagesDict[self.selectedFriend!.id!]?.last
                 if lastMessage != nil {
+                    // figure out whose turn it is
+                    self.myTurn = lastMessage!.receiverId == myId! ? true : false
+                                        
                     // ask for the full relative date
                     let formatter = RelativeDateTimeFormatter()
                     formatter.unitsStyle = .full
@@ -84,10 +87,7 @@ struct CircleFooterView: View {
                     print("Relative date is: \(relativeDate)")
                     
                     // setting the state for ui to update
-                    self.convoRelativeTime = relativeDate
-                    
-                    // figure out whose turn it is
-                    self.myTurn = lastMessage!.receiverId == myId! ? true : false
+                    self.convoRelativeTime = self.myTurn! ? "received " + relativeDate: "sent " + relativeDate
                 }
             }
         }
