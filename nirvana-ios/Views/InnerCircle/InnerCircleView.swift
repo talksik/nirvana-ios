@@ -15,6 +15,7 @@ enum SheetView : Identifiable {
 }
 
 struct InnerCircleView: View {
+    @StateObject var innerCircleVM: InnerCircleViewModel = InnerCircleViewModel()
     @EnvironmentObject var authSessionStore: AuthSessionStore
     @EnvironmentObject var navigationStack: NavigationStack
     
@@ -31,6 +32,7 @@ struct InnerCircleView: View {
             
             // content
             CircleGridView(selectedFriendIndex: self.$selectedFriendIndex)
+                .environmentObject(innerCircleVM)
             
             // header
             VStack(alignment: .leading) {

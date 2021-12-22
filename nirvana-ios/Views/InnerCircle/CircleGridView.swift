@@ -10,6 +10,7 @@ import NavigationStack
 import AVKit
 
 struct CircleGridView: View {
+    @EnvironmentObject var innerCircleVM: InnerCircleViewModel
     @EnvironmentObject var authSessionStore: AuthSessionStore
     @EnvironmentObject var navigationStack: NavigationStack
     
@@ -184,6 +185,7 @@ struct CircleGridView: View {
 struct CircleGridView_Previews: PreviewProvider {
     static var previews: some View {
         CircleGridView(selectedFriendIndex: Binding.constant(nil)).environmentObject(AuthSessionStore())
+            .environmentObject(InnerCircleViewModel())
     }
 }
 
@@ -360,14 +362,18 @@ extension CircleGridView {
         impactHeavy.impactOccurred()
     }
     
+    private func record() {
+        // call parent view model/environment object vm functions
+        
+        self.innerCircleVM.startRecording()
+    }
+    
     private func recordingGestureDeactived() {
         // stop recording
         print("stopped recording")
         
         self.selectedFriendIndex = nil
-    }
-    
-    private func record() {
-        // call parent view model/environment object vm functions
+        
+        self.innerCircleVM.stopRecording()
     }
 }

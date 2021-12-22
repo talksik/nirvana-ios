@@ -14,6 +14,8 @@ class InnerCircleViewModel: ObservableObject {
     
     @Published var isRecording : Bool = false
     
+    private var audioLocalUrl: URL?
+    
     func startRecording() {
         let recordingSession = AVAudioSession.sharedInstance()
         do {
@@ -23,8 +25,9 @@ class InnerCircleViewModel: ObservableObject {
             print("Can not setup the Recording")
         }
         
-        let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let fileName = path.appendingPathComponent("\(UUID().uuidString).m4a")
+        let filePath = getTemporaryDirectory().appendingPathComponent("\(UUID().uuidString).m4a")
+        
+        print("file name of recording will be : \(filePath)")
         
         let settings = [
             AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
@@ -33,12 +36,13 @@ class InnerCircleViewModel: ObservableObject {
             AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
         ]
         
-        
         do {
-            audioRecorder = try AVAudioRecorder(url: fileName, settings: settings)
+            audioRecorder = try AVAudioRecorder(url: filePath, settings: settings)
             audioRecorder.prepareToRecord()
             audioRecorder.record()
             isRecording = true
+            
+            self.audioLocalUrl = filePath // setting this for later use when recording is stopped
             
         } catch {
             print("Failed to Setup the Recording")
@@ -49,14 +53,20 @@ class InnerCircleViewModel: ObservableObject {
         audioRecorder.stop()
         isRecording = false
         
-        // upload to the cloud storage
-        
-        // store in firestore for receiving user to automatically get notified
+        if self.audioLocalUrl != nil {
+            // upload to the cloud storage
+            
+            // store in firestore for receiving user to automatically get notified
+            
+            // delete local audio file from user's phone so that it doesn't get crazy
+            print("stopped recording: file about to get deleted from \(getTemporaryDirectory()) with filename: \(self.audioLocalUrl)")
+                        
+            try? FileManager.default.removeItem(at: self.audioLocalUrl!)
+        }
     }
     
-    func getDocumentsDirectory() -> URL {
-        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        return paths[0]
+    func getTemporaryDirectory() -> URL {
+        return FileManager.default.temporaryDirectory
     }
 
 }
