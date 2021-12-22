@@ -130,7 +130,6 @@ struct CircleGridView: View {
                                 
                                 // only add to queue if we can convert the database url to a valid url here
                                 if let audioUrl = URL(string: message.audioDataUrl) {
-                                    print("going to add this message to queue player \(audioUrl)")
                                     let playerMessage: AVPlayerItem = AVPlayerItem(url: audioUrl)
                                     AVPlayerItems.append(playerMessage)
                                 }
@@ -138,14 +137,14 @@ struct CircleGridView: View {
                             
                             // start playing if there are messages to listen to
                             if AVPlayerItems.count > 0 {
-                                print("have message urls that we will start listening to\(AVPlayerItems)")
-                                
                                 queuePlayer = AVQueuePlayer(items: AVPlayerItems)
                                 
                                 // TODO: make sure these options are viable for different scenarios
                                 queuePlayer.automaticallyWaitsToMinimizeStalling = false
                                 queuePlayer.playImmediately(atRate: 1)
 //                                queuePlayer.play()
+                                
+                                print("player queued up items!!!")
                                 
                                 
                                 // update the listencount and firstlistentimestamp of those messages in firestore
