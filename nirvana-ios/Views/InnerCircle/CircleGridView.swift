@@ -58,15 +58,13 @@ struct CircleGridView: View {
                         GeometryReader {gridProxy in
                             let scale = getScale(proxy: gridProxy, itemNumber: value)
                             
-                            let messagesRelatedToFriend = self.authSessionStore.friendMessagesDict[friend.id!]
                             // TODO: sort the list but may already be sorted from the query and creation of the array of messages?
                             // shouldn't be nil...hopefully
-                            let userId = self.authSessionStore.user!.id
                             
                             ZStack(alignment: .topTrailing) {
                                 // check if the last message in the conversation between me and my friend was me talking or him
                                 // also check if I have listened to it once or twice
-                                if messagesRelatedToFriend?.last?.receiverId == userId && messagesRelatedToFriend?.last?.listenCount == 0 { // him talking
+                                if self.haveNewMessageFromFriend(friendDbId: friend.id!) { // him talking
                                     Image(systemName: "wave.3.right.circle.fill")
                                         .foregroundColor(Color.orange)
                                         .font(.title)
@@ -129,7 +127,7 @@ struct CircleGridView: View {
     }
      
     private func haveNewMessageFromFriend(friendDbId: String) -> Bool {
-        let userId = self.authSessionStore.user!.id // O(1)
+        let userId = self.authSessionStore.user!.id // O(1) // currUser who is signed in
         
         if let messagesRelatedToFriend = self.authSessionStore.friendMessagesDict[friendDbId] { // O(1)
             return messagesRelatedToFriend.last?.receiverId == userId && messagesRelatedToFriend.last?.listenCount == 0
