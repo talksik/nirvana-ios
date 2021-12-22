@@ -44,13 +44,7 @@ struct CircleFooterView: View {
                                 .foregroundColor(NirvanaColor.teal)
                                 .padding()
                                 .font(.title2)
-                        }
-                        
-                        Text("Your Turn")
-                            .padding()
-                            .background(Color.orange.opacity(0.5))
-                            .clipShape(Capsule())
-                            
+                        }                        
                         
                         Spacer()
                         
@@ -89,7 +83,7 @@ struct CircleFooterView: View {
         .animation(Animation.spring(), value: self.selectedFriendIndex)
         .offset(
             x:0,
-            y:self.selectedFriendIndex == nil ? 0 : 0
+            y:self.selectedFriendIndex == nil ? 150 : 0
         )
         .onChange(of: self.selectedFriendIndex) {newValue in
             // update meta data based on which friend was selected
