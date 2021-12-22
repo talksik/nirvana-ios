@@ -26,15 +26,36 @@ struct CircleFooterView: View {
                 
                 HStack {
                     if self.selectedFriend != nil && !self.convoRelativeTime.isEmpty && self.myTurn != nil {
-                        Image(self.selectedFriend!.avatar ?? "")
-                            .resizable()
-                            .scaledToFit()
-                            .background(NirvanaColor.teal.opacity(0.1))
-                            .frame(width: 40, height: 40)
-                            .clipShape(Circle())
-                            .padding(5)
+                        // call button
+                        Button {
+                            print("calling user now")
+                            
+                            if self.selectedFriend?.phoneNumber != nil {
+                                let tel: String = "tel://\(self.selectedFriend?.phoneNumber)"
+                                let strUrl: String = tel.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+                                
+                                UIApplication.shared.open(URL(string: strUrl)!, options: [:], completionHandler: nil)
+                            } else {
+                                print("phone number is nil of contact")
+                            }
+                        } label: {
+                            Label("Call", systemImage: "phone.and.waveform")
+                                .labelStyle(.iconOnly)
+                                .foregroundColor(NirvanaColor.teal)
+                                .padding()
+                                .font(.title2)
+                        }
                         
-                        VStack (alignment: .leading) {
+                        Text("Your Turn")
+                            .padding()
+                            .background(Color.orange.opacity(0.5))
+                            .clipShape(Capsule())
+                            
+                        
+                        Spacer()
+                        
+                        // meta data of convo
+                        VStack (alignment: .trailing) {
                             Text(self.selectedFriend!.nickname ?? "")
                                 .font(.footnote)
                                 .foregroundColor(NirvanaColor.light)
@@ -43,14 +64,20 @@ struct CircleFooterView: View {
                                 .foregroundColor(.gray)
                         }
                         
-                        if self.myTurn! {
-                            Text("it's your turn")
-                        } else {
-                            Text("it's their turn")
-                        }
+                        Image(self.selectedFriend!.avatar ?? "")
+                            .resizable()
+                            .scaledToFit()
+                            .background(NirvanaColor.teal.opacity(0.1))
+                            .frame(width: 40, height: 40)
+                            .clipShape(Circle())
+                            .padding(5)
+                        
+//                        if self.myTurn! {
+//                            Text("it's your turn")
+//                        } else {
+//                            Text("it's their turn")
+//                        }
                     }
-                    
-                    Spacer()
                 }
                 .frame(maxWidth: .infinity, maxHeight: 60) // 60 is the height of the footer control big circle
                 .background(Color.white.opacity(0.5))
@@ -62,7 +89,7 @@ struct CircleFooterView: View {
         .animation(Animation.spring(), value: self.selectedFriendIndex)
         .offset(
             x:0,
-            y:self.selectedFriendIndex == nil ? 150 : 0
+            y:self.selectedFriendIndex == nil ? 0 : 0
         )
         .onChange(of: self.selectedFriendIndex) {newValue in
             // update meta data based on which friend was selected
