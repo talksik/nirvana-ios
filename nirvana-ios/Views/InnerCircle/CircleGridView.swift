@@ -98,7 +98,7 @@ struct CircleGridView: View {
                         .frame(height: Self.size)
                         .onTapGesture {
                             self.handleTap(friendIndex: value, friend: friend)
-                        }
+                        }// TODO: maybe add simulataneous gesture or sequence? with the tap gesture?
                         .gesture(
                             LongPressGesture(minimumDuration: longPressMinDuration)
                                 .onEnded {_ in // on activation of long press
@@ -265,7 +265,6 @@ extension CircleGridView {
     }
 }
 
-
 // extension for handling the gestures and actions
 extension CircleGridView {
     // listening to messages
@@ -274,7 +273,7 @@ extension CircleGridView {
         
         // clearing the player to make room for this friend's convo or to deselect this user
         self.queuePlayer.removeAllItems()
-        
+         
         // if user had previously selected user, put nil as a toggle
         if self.selectedFriendIndex == friendIndex {
             self.selectedFriendIndex = nil
@@ -324,6 +323,7 @@ extension CircleGridView {
             print("player queued up items!!!")
             
             
+            // TODO: right now not updating all of that
             // update the listencount and firstlistentimestamp of those messages in firestore
             // this should update ui to show that there is no message to show
         }
