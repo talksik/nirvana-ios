@@ -39,6 +39,7 @@ struct FooterControlsView: View {
     var body: some View {
         ZStack {
             Button(action: {
+                
             }, label: {
                 Image(systemName: self.isHolding ? "waveform" : "mic.fill")
                     .foregroundColor(.white)

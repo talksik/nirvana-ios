@@ -52,7 +52,7 @@ struct CircleFooterView: View {
                             print("calling user now")
                             
                             if self.selectedFriend?.phoneNumber != nil {
-                                let tel: String = "tel://\(self.selectedFriend?.phoneNumber)"
+                                let tel: String = "tel://\(self.selectedFriend!.phoneNumber!)"
                                 let strUrl: String = tel.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
                                 
                                 UIApplication.shared.open(URL(string: strUrl)!, options: [:], completionHandler: nil)

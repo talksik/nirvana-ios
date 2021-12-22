@@ -14,6 +14,7 @@ struct CircleGridView: View {
     @EnvironmentObject var navigationStack: NavigationStack
     
     @State var queuePlayer = AVQueuePlayer()
+    @GestureState var dragState = DragState.inactive
     
     let universalSize = UIScreen.main.bounds
     
@@ -44,6 +45,8 @@ struct CircleGridView: View {
     var body: some View {
         gridContent
     }
+        
+    let longPressMinDuration = 0.5
     
     private var gridContent: some View {
         // main communication hub
@@ -93,74 +96,53 @@ struct CircleGridView: View {
                         .id(value) // id for scrollviewreader
                         .frame(height: Self.size)
                         .onTapGesture {
-                            // clearing the player to make room for this friend's convo or to deselect this user
-                            self.queuePlayer.removeAllItems()
-                            
-                            // if user had previously selected user, put nil as a toggle
-                            if self.selectedFriendIndex == value {
-                                self.selectedFriendIndex = nil
-                                return
-                            } else {
-                                self.selectedFriendIndex = value
-                            }
-                            
-                            // TODO: OPTIMIZATION...buffer and load all AVAssets to create AVPlayerItems before a tap happens...but this can also cause load in background if user is not playing a message right now...this isn't an optimization of the data/firestore but rather the player
-                            
-                            
-                            
-                            // I want to play the last x messages if I was the receiver
-                            // ["sarth": [me, me]] -> play nothing
-                            // ["sarth": [me, him, him, him]] -> play his two messages
-                            
-                            // traverse through reversed list of messages and add to audio player queue
-                            // TODO: protect against force unwraps
-                            var AVPlayerItems: [AVPlayerItem] = []
-                            let messagesRelatedToFriend = self.authSessionStore.friendMessagesDict[friend.id!]!.reversed()
-                            print("have \(messagesRelatedToFriend.count) messages to play")
-                            
-                            for message in messagesRelatedToFriend {
-                                // if it's me then don't play
-                                if message.senderId == self.authSessionStore.user?.id {
-                                    break
-                                }
-                                // if I already listened to this "last" message, then break as well
-                                if message.listenCount >= 1 {
-                                    break
-                                }
-                                
-                                // only add to queue if we can convert the database url to a valid url here
-                                if let audioUrl = URL(string: message.audioDataUrl) {
-                                    let playerMessage: AVPlayerItem = AVPlayerItem(url: audioUrl)
-                                    AVPlayerItems.append(playerMessage)
-                                }
-                            }
-                            
-                            // start playing if there are messages to listen to
-                            if AVPlayerItems.count > 0 {
-                                queuePlayer = AVQueuePlayer(items: AVPlayerItems)
-                                
-                                // TODO: make sure these options are viable for different scenarios
-                                queuePlayer.automaticallyWaitsToMinimizeStalling = false
-                                queuePlayer.playImmediately(atRate: 1)
-//                                queuePlayer.play()
-                                
-                                print("player queued up items!!!")
-                                
-                                
-                                // update the listencount and firstlistentimestamp of those messages in firestore
-                                // this should update ui to show that there is no message to show
-                            }
+                            self.handleTap(friendIndex: value, friend: friend)
                         }
-                        .onLongPressGesture {
-                            // haptics for recording
-                            let impactHeavy = UIImpactFeedbackGenerator(style: .heavy)
-                            impactHeavy.impactOccurred()
-                            
-                            // start recording
-                            
-                            // store in db
-                        }
-//                        .animation(Animation.easeInOut(duration: 2).repeatForever(autoreverses: true), value: self.usersWithNewMessage)
+                        .gesture(
+                            LongPressGesture(minimumDuration: longPressMinDuration)
+                                .onEnded {_ in // on activation of long press
+                                    // stop any player still playing of a message
+                                    self.queuePlayer.removeAllItems()
+                                    
+                                    print("activated long press!")
+                                    self.selectedFriendIndex = value
+                                    
+                                    self.activateHaptics()
+                                    
+                                    self.record()
+                                }
+                                .sequenced(before:
+                                            DragGesture(minimumDistance: 0, coordinateSpace: .local)
+                                  )
+                                .updating(self.$dragState) { gestureValue, state, transaction in
+//                                    print("in updating: \(gestureValue) \(state), \(transaction)")
+                                    switch gestureValue {
+                                    // Long press begins.
+                                    case .first(true):
+                                        state = .pressing
+                                    // Long press confirmed, dragging may begin.
+                                    case .second(true, let drag):
+                                        state = .dragging(translation: drag?.translation ?? .zero)
+                                    // Dragging ended or the long press cancelled.
+                                    default:
+                                        state = .inactive
+                                    }
+                                }
+                                .onEnded { gestureValue in
+                                    guard case .second(true, let drag?) = gestureValue else { return }
+                                    
+                                    self.recordingGestureDeactived()
+                                }
+                        )
+//                        .simultaneousGesture(
+//                            DragGesture(minimumDistance: 0, coordinateSpace: .local)
+//                                .onChanged {_ in
+//                                    self.recordingGestureActive(friendIndex: value, friend: friend)
+//                                }
+//                                .onEnded {_ in
+//                                    self.recordingGestureDeactived()
+//                                }
+//                        )
                         .animation(Animation.spring())
                     }
                 } // TODO: add padding based on if we are on any cornering item to allow the bubble to enlargen
@@ -174,7 +156,7 @@ struct CircleGridView: View {
             }
         } // scrollview reader
     }
-     
+    
     private func haveNewMessageFromFriend(friendDbId: String) -> Bool {
         if self.authSessionStore.user != nil {
             let userId = self.authSessionStore.user!.id // O(1) // currUser who is signed in
@@ -197,7 +179,17 @@ struct CircleGridView: View {
       
         return Color.white.opacity(0.4)
     }
-    
+}
+
+struct CircleGridView_Previews: PreviewProvider {
+    static var previews: some View {
+        CircleGridView(selectedFriendIndex: Binding.constant(nil)).environmentObject(AuthSessionStore())
+    }
+}
+
+
+// extension for the bubble math for the grid
+extension CircleGridView {
     // getting the proxy of an individual item
     // and decoding into a scale that the item should take
     private func getScale(proxy: GeometryProxy, itemNumber: Int) -> CGFloat {
@@ -264,8 +256,118 @@ struct CircleGridView: View {
     }
 }
 
-struct CircleGridView_Previews: PreviewProvider {
-    static var previews: some View {
-        CircleGridView(selectedFriendIndex: Binding.constant(nil)).environmentObject(AuthSessionStore())
+
+// extension for handling the gestures and actions
+extension CircleGridView {
+    // listening to messages
+    private func handleTap(friendIndex: Int, friend: User) {
+        print("tap gesture activated")
+        
+        // clearing the player to make room for this friend's convo or to deselect this user
+        self.queuePlayer.removeAllItems()
+        
+        // if user had previously selected user, put nil as a toggle
+        if self.selectedFriendIndex == friendIndex {
+            self.selectedFriendIndex = nil
+            return
+        } else {
+            self.selectedFriendIndex = friendIndex
+        }
+        
+        // TODO: OPTIMIZATION...buffer and load all AVAssets to create AVPlayerItems before a tap happens...but this can also cause load in background if user is not playing a message right now...this isn't an optimization of the data/firestore but rather the player
+        
+        // I want to play the last x messages if I was the receiver
+        // ["sarth": [me, me]] -> play nothing
+        // ["sarth": [me, him, him, him]] -> play his two messages
+        
+        // traverse through reversed list of messages and add to audio player queue
+        // TODO: protect against force unwraps
+        var AVPlayerItems: [AVPlayerItem] = []
+        let messagesRelatedToFriend = self.authSessionStore.friendMessagesDict[friend.id!]!.reversed()
+        print("have \(messagesRelatedToFriend.count) messages to play")
+        
+        for message in messagesRelatedToFriend {
+            // if it's me then don't play
+            if message.senderId == self.authSessionStore.user?.id {
+                break
+            }
+            // if I already listened to this "last" message, then break as well
+            if message.listenCount >= 1 {
+                break
+            }
+            
+            // only add to queue if we can convert the database url to a valid url here
+            if let audioUrl = URL(string: message.audioDataUrl) {
+                let playerMessage: AVPlayerItem = AVPlayerItem(url: audioUrl)
+                AVPlayerItems.append(playerMessage)
+            }
+        }
+        
+        // start playing if there are messages to listen to
+        if AVPlayerItems.count > 0 {
+            queuePlayer = AVQueuePlayer(items: AVPlayerItems)
+            
+            // TODO: make sure these options are viable for different scenarios
+            queuePlayer.automaticallyWaitsToMinimizeStalling = false
+            queuePlayer.playImmediately(atRate: 1)
+//                                queuePlayer.play()
+            
+            print("player queued up items!!!")
+            
+            
+            // update the listencount and firstlistentimestamp of those messages in firestore
+            // this should update ui to show that there is no message to show
+        }
+    }
+    
+    enum DragState {
+            case inactive
+            case pressing
+            case dragging(translation: CGSize)
+            
+            var translation: CGSize {
+                switch self {
+                case .inactive, .pressing:
+                    return .zero
+                case .dragging(let translation):
+                    return translation
+                }
+            }
+            
+            var isActive: Bool {
+                switch self {
+                case .inactive:
+                    return false
+                case .pressing, .dragging:
+                    return true
+                }
+            }
+            
+            var isDragging: Bool {
+                switch self {
+                case .inactive, .pressing:
+                    return false
+                case .dragging:
+                    return true
+                }
+            }
+        }
+    
+    private func activateHaptics() {
+        // haptics for recording
+        print("got haptics on")
+        let impactHeavy = UIImpactFeedbackGenerator(style: .heavy)
+        impactHeavy.impactOccurred()
+    }
+    
+    private func recordingGestureDeactived() {
+        // stop recording
+        print("stopped recording")
+        
+        self.selectedFriendIndex = nil
+    }
+    
+    private func record() {
+        // call parent view model/environment object vm functions
     }
 }
