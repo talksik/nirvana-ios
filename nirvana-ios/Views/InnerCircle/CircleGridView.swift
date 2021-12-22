@@ -93,19 +93,20 @@ struct CircleGridView: View {
                         .id(value) // id for scrollviewreader
                         .frame(height: Self.size)
                         .onTapGesture {
-                            withAnimation {
-                                // if user had previously selected user, put nil as a toggle
-                                if self.selectedFriendIndex == value {
-                                    self.selectedFriendIndex = nil
-                                } else {
-                                    self.selectedFriendIndex = value
-                                }
+                            // clearing the player to make room for this friend's convo or to deselect this user
+                            self.queuePlayer.removeAllItems()
+                            
+                            // if user had previously selected user, put nil as a toggle
+                            if self.selectedFriendIndex == value {
+                                self.selectedFriendIndex = nil
+                                return
+                            } else {
+                                self.selectedFriendIndex = value
                             }
                             
                             // TODO: OPTIMIZATION...buffer and load all AVAssets to create AVPlayerItems before a tap happens...but this can also cause load in background if user is not playing a message right now...this isn't an optimization of the data/firestore but rather the player
                             
-                            // clearing the player to make room for this friend's convo
-                            self.queuePlayer.removeAllItems()
+                            
                             
                             // I want to play the last x messages if I was the receiver
                             // ["sarth": [me, me]] -> play nothing
@@ -129,13 +130,11 @@ struct CircleGridView: View {
                                 
                                 // only add to queue if we can convert the database url to a valid url here
                                 if let audioUrl = URL(string: message.audioDataUrl) {
+                                    print("going to add this message to queue player \(audioUrl)")
                                     let playerMessage: AVPlayerItem = AVPlayerItem(url: audioUrl)
                                     AVPlayerItems.append(playerMessage)
                                 }
                             }
-                            
-                            // reverse audiourls again as we want them in order of time
-                            AVPlayerItems = AVPlayerItems.reversed()
                             
                             // start playing if there are messages to listen to
                             if AVPlayerItems.count > 0 {
@@ -143,7 +142,10 @@ struct CircleGridView: View {
                                 
                                 queuePlayer = AVQueuePlayer(items: AVPlayerItems)
                                 
-                                queuePlayer.play()
+                                // TODO: make sure these options are viable for different scenarios
+                                queuePlayer.automaticallyWaitsToMinimizeStalling = false
+                                queuePlayer.playImmediately(atRate: 1)
+//                                queuePlayer.play()
                                 
                                 
                                 // update the listencount and firstlistentimestamp of those messages in firestore
