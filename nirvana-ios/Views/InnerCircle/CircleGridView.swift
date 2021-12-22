@@ -13,7 +13,7 @@ struct CircleGridView: View {
     @EnvironmentObject var authSessionStore: AuthSessionStore
     @EnvironmentObject var navigationStack: NavigationStack
     
-    @State var player = AVPlayer()
+    @State var queuePlayer = AVQueuePlayer()
     
     let universalSize = UIScreen.main.bounds
     
@@ -102,6 +102,11 @@ struct CircleGridView: View {
                                 }
                             }
                             
+                            // TODO: OPTIMIZATION...buffer and load all AVAssets to create AVPlayerItems before a tap happens...but this can also cause load in background if user is not playing a message right now...this isn't an optimization of the data/firestore but rather the player
+                            
+                            // clearing the player to make room for this friend's convo
+                            self.queuePlayer.removeAllItems()
+                            
                             // I want to play the last x messages if I was the receiver
                             // ["sarth": [me, me]] -> play nothing
                             // ["sarth": [me, him, him, him]] -> play his two messages
@@ -110,6 +115,7 @@ struct CircleGridView: View {
                             // TODO: protect against force unwraps
                             var AVPlayerItems: [AVPlayerItem] = []
                             let messagesRelatedToFriend = self.authSessionStore.friendMessagesDict[friend.id!]!.reversed()
+                            print("have \(messagesRelatedToFriend.count) messages to play")
                             
                             for message in messagesRelatedToFriend {
                                 // if it's me then don't play
@@ -135,12 +141,13 @@ struct CircleGridView: View {
                             if AVPlayerItems.count > 0 {
                                 print("have message urls that we will start listening to\(AVPlayerItems)")
                                 
-                                let queuePlayer = AVQueuePlayer(items: AVPlayerItems)
+                                queuePlayer = AVQueuePlayer(items: AVPlayerItems)
                                 
                                 queuePlayer.play()
                                 
                                 
                                 // update the listencount and firstlistentimestamp of those messages in firestore
+                                // this should update ui to show that there is no message to show
                             }
                         }
                         .onLongPressGesture {
