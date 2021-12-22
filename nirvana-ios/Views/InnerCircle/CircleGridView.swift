@@ -132,7 +132,14 @@ struct CircleGridView: View {
                                 .onEnded { gestureValue in
                                     guard case .second(true, let drag?) = gestureValue else { return }
                                     
-                                    self.recordingGestureDeactived()
+                                    // stop recording
+                                    print("stopped recording")
+                                    
+                                    self.selectedFriendIndex = nil
+                                    
+                                    self.innerCircleVM.stopRecording(senderId: self.authSessionStore.user!.id!, receiverId: friend.id!)
+                                    
+//                                    self.recordingGestureDeactived()
                                 }
                         )
 //                        .simultaneousGesture(
@@ -368,12 +375,8 @@ extension CircleGridView {
         self.innerCircleVM.startRecording()
     }
     
+    // TODO: fill in here
     private func recordingGestureDeactived() {
-        // stop recording
-        print("stopped recording")
         
-        self.selectedFriendIndex = nil
-        
-        self.innerCircleVM.stopRecording()
     }
 }

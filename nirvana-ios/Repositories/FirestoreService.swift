@@ -146,4 +146,15 @@ class FirestoreService {
         
     }
     
+    func createMessage(message: Message, completion: @escaping((_ state: ServiceState) -> ())) {
+        do {
+            let _ = try db.collection(Collection.messages.rawValue).addDocument(from: message)
+            
+            completion(ServiceState.success("user created"))
+        } catch {
+            print("error in updating user \(error.localizedDescription)")
+            completion(ServiceState.error(ServiceError(description: error.localizedDescription)))
+        }
+    }
+    
 }

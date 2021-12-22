@@ -16,6 +16,9 @@ class InnerCircleViewModel: ObservableObject {
     
     private var audioLocalUrl: URL?
     
+    let cloudStorageService = CloudStorageService()
+    let firestoreService = FirestoreService()
+    
     func startRecording() {
         let recordingSession = AVAudioSession.sharedInstance()
         
@@ -51,18 +54,31 @@ class InnerCircleViewModel: ObservableObject {
         }
     }
     
-    func stopRecording(){
+    // sender should be current user
+    // receiver is the person we are sending to
+    func stopRecording(senderId:String, receiverId:String) {
         audioRecorder.stop()
         isRecording = false
         
         if self.audioLocalUrl != nil {
             // upload to the cloud storage
-            
-            // store in firestore for receiving user to automatically get notified
+            self.cloudStorageService.uploadLocalUrl(localFileUrl: self.audioLocalUrl!) {[weak self] audioDataUrl in
+                if audioDataUrl == nil {
+                    print("there was an error in uploading file")
+                    return
+                }
+                
+                let newMessage = Message(receiverId: receiverId, senderId: senderId, listenCount: 0, audioDataUrl: audioDataUrl!.absoluteString)
+                
+                // create a new message in firestore with the url for receiving user to automatically get notified
+                self?.firestoreService.createMessage(message: newMessage) {[weak self] res in
+                    print(res)
+                }
+            }
             
             // delete local audio file from user's phone so that it doesn't get crazy
             print("stopped recording: file about to get deleted from \(getTemporaryDirectory()) with filename: \(self.audioLocalUrl)")
-                        
+            
             try? FileManager.default.removeItem(at: self.audioLocalUrl!)
         }
     }
