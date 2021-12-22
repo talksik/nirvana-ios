@@ -20,6 +20,8 @@ struct InnerCircleView: View {
     
     @State var sheetView: SheetView? = nil
     
+    @State var selectedFriendIndex: Int? = nil
+    
     let universalSize = UIScreen.main.bounds
     
     var body: some View {
@@ -28,7 +30,7 @@ struct InnerCircleView: View {
             WavesGlassBackgroundView()
             
             // content
-            CircleGridView()
+            CircleGridView(selectedFriendIndex: self.$selectedFriendIndex)
             
             // header
             VStack(alignment: .leading) {
@@ -38,7 +40,7 @@ struct InnerCircleView: View {
                 Spacer()
             }
             
-            CircleFooterView()
+            CircleFooterView(selectedFriendIndex: self.$selectedFriendIndex)
         }
         .sheet(item: self.$sheetView) {page in
             switch page {

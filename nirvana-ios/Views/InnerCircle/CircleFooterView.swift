@@ -12,6 +12,11 @@ struct CircleFooterView: View {
     @EnvironmentObject var navigationStack: NavigationStack
     @EnvironmentObject var authSessionStore: AuthSessionStore
 
+    @Binding var selectedFriendIndex: Int?
+    
+    @State private var convoRelativeTime = ""
+    @State private var selectedFriend: User?
+    @State private var myTurn: Bool?
     
     var body: some View {
         // TODO: do cool animations with this footer background fill in while recording or playing a message
@@ -20,54 +25,77 @@ struct CircleFooterView: View {
                 Spacer()
                 
                 HStack {
-                    Image("Artboards_Diversity_Avatars_by_Netguru-1")
-                        .resizable()
-                        .scaledToFit()
-                        .background(NirvanaColor.teal.opacity(0.1))
-                        .frame(width: 40, height: 40)
-                        .clipShape(Circle())
-                        .padding(5)
-                    
-                    
-                    
-                    VStack (alignment: .leading) {
-                        Text("Sarth Shah")
-                            .font(.footnote)
-                            .foregroundColor(NirvanaColor.light)
-                        Text("sent 20 minutes ago")
-                            .font(.caption)
-                            .foregroundColor(.gray)
+                    if self.selectedFriend != nil && !self.convoRelativeTime.isEmpty && self.myTurn != nil {
+                        Image(self.selectedFriend!.avatar ?? "")
+                            .resizable()
+                            .scaledToFit()
+                            .background(NirvanaColor.teal.opacity(0.1))
+                            .frame(width: 40, height: 40)
+                            .clipShape(Circle())
+                            .padding(5)
+                        
+                        VStack (alignment: .leading) {
+                            Text(self.selectedFriend!.nickname ?? "")
+                                .font(.footnote)
+                                .foregroundColor(NirvanaColor.light)
+                            Text(self.convoRelativeTime)
+                                .font(.caption)
+                                .foregroundColor(.gray)
+                        }
+                        
+                        if self.myTurn! {
+                            Text("it's your turn")
+                        } else {
+                            Text("it's their turn")
+                        }
                     }
                     
                     Spacer()
-                    
-                    Label("Replay", systemImage: "repeat.1.circle.fill")
-                        .font(.title2)
-                        .labelStyle(.iconOnly)
-                        .foregroundColor(Color.orange)
-                    
-                    
-                    Spacer(minLength: 65)
                 }
                 .frame(maxWidth: .infinity, maxHeight: 60) // 60 is the height of the footer control big circle
                 .background(Color.white.opacity(0.5))
                 .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
                 .shadow(color: Color.black.opacity(0.25), radius: 30, x: 0, y: 20)
             }
-            
-            FooterControlsView()
         }
         .padding()
-//        .offset(
-//            x:0,
-//            y:self.selectedUserIndex == nil ? 150 : 0
-//        )
-//        .animation(Animation.spring(), value: self.selectedUserIndex)
+        .animation(Animation.spring(), value: self.selectedFriendIndex)
+        .offset(
+            x:0,
+            y:self.selectedFriendIndex == nil ? 150 : 0
+        )
+        .onChange(of: self.selectedFriendIndex) {newValue in
+            // update meta data based on which friend was selected
+            let myId = self.authSessionStore.user?.id
+            
+            // set convo moment/relative time to show
+            if newValue != nil && myId != nil {
+                self.selectedFriend = self.authSessionStore.friendsArr[newValue!]
+                
+                // get the last message's sent timestamp
+                let lastMessage = self.authSessionStore.friendMessagesDict[self.selectedFriend!.id!]?.last
+                if lastMessage != nil {
+                    // ask for the full relative date
+                    let formatter = RelativeDateTimeFormatter()
+                    formatter.unitsStyle = .full
+
+                    let relativeDate = formatter.localizedString(for: lastMessage?.sentTimestamp ?? Date(), relativeTo: Date())
+
+                    print("Relative date is: \(relativeDate)")
+                    
+                    // setting the state for ui to update
+                    self.convoRelativeTime = relativeDate
+                    
+                    // figure out whose turn it is
+                    self.myTurn = lastMessage!.receiverId == myId! ? true : false
+                }
+            }
+        }
     }
 }
 
 struct CircleFooterView_Previews: PreviewProvider {
     static var previews: some View {
-        CircleFooterView()
+        CircleFooterView(selectedFriendIndex: Binding.constant(nil)).environmentObject(AuthSessionStore())
     }
 }

@@ -52,7 +52,7 @@ struct FooterControlsView: View {
 //                    .animation(.default, value: self.isHolding)
             })
                 .zIndex(10)
-                        
+
             Circle()
                 .frame(width: 60, height: 60, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
                 .scaleEffect(self.scaleBigPulser,

@@ -25,7 +25,7 @@ struct CircleGridView: View {
     private static let spacingBetweenRows: CGFloat = 0
     private static let totalColumns: Int = Int(log2(Double(Self.numberOfItems))) // scaling the circles and calculating column count
     
-    @State private var selectedFriendIndex: Int? = nil
+    @Binding var selectedFriendIndex: Int?
     
     // TODO: change the size to adaptive or something to make outer ring items shrink their overall size and fit better
     let gridItems: [GridItem] = Array(
@@ -266,6 +266,6 @@ struct CircleGridView: View {
 
 struct CircleGridView_Previews: PreviewProvider {
     static var previews: some View {
-        CircleGridView().environmentObject(AuthSessionStore())
+        CircleGridView(selectedFriendIndex: Binding.constant(nil)).environmentObject(AuthSessionStore())
     }
 }
