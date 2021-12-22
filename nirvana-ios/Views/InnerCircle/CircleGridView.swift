@@ -32,7 +32,7 @@ struct CircleGridView: View {
     private let big:CGFloat = 1
     private let medium:CGFloat = 0.75
     private let small:CGFloat = 0.5
-    private let supersmall:CGFloat = 0.3
+    private let supersmall:CGFloat = 0.3 
     
     // TODO: centered honeycomb + side: maybe have two honeycombs: one in the center of 7 people and then everyone else surrounding
     // TODO: maybe make our "center" offset to a little to the top left to make it more honeycomb from top left
