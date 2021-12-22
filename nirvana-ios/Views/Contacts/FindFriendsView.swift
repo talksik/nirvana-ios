@@ -19,17 +19,25 @@ struct FindFriendsView: View {
     @State private var searchQuery: String = ""
     
     var body: some View {
-        
         NavigationView {
-            // TODO: add search bar + have secondary sort
-            List {
-                ForEach(searchItems, id: \.self) { key in
-                    if let currContact = self.contactsVM.contacts[key] {
-                        ListContactRow(contactsVM: self.contactsVM, contact: currContact)
+            ZStack {
+                WavesGlassBackgroundView()
+                
+                VStack {
+                    Text("You must have someone in your phone contacts to add them. 🥬")
+                        .font(.subheadline)
+                        .foregroundColor(Color.gray)
+                    
+                    List {
+                        ForEach(searchItems, id: \.self) { key in
+                            if let currContact = self.contactsVM.contacts[key] {
+                                ListContactRow(contactsVM: self.contactsVM, contact: currContact)
+                            }
+                        }
                     }
+                    .searchable(text: self.$searchQuery)
                 }
             }
-            .searchable(text: self.$searchQuery)
             .navigationTitle("Find Friends")
             .navigationBarItems(trailing: Button(action: {
                 dismiss()
@@ -57,7 +65,7 @@ struct FindFriendsView: View {
 
 struct FindFriendsView_Previews: PreviewProvider {
     static var previews: some View {
-        FindFriendsView().environmentObject(AuthSessionStore())
+        FindFriendsView().environmentObject(AuthSessionStore(isPreview: true))
     }
 }
 
@@ -71,7 +79,7 @@ struct ListContactRow: View {
     
     @State var showAlert = false
     @State var alertText = "🌱Confirm Arjun into Your Circle?"
-    @State var alertMessage = "Note: You can have a maximium of 12 people in your circle and you have 5 swaps left!"
+    @State var alertMessage = "Note: You can have a maximium of 12 people in your circle!"
     
     var body: some View {
         if contact.isExisting { // add to circle

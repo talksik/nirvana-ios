@@ -37,7 +37,7 @@ final class AuthSessionStore: ObservableObject, SessionStore {
     var messagesArr: [Message] = []
     
     // transformed data for the views
-    var friendMessagesDict: [String: [Message]] = [:]
+    @Published var friendMessagesDict: [String: [Message]] = [:]
     
     // TODO: temporary...should not have this here
     private var db = Firestore.firestore()
@@ -50,7 +50,8 @@ final class AuthSessionStore: ObservableObject, SessionStore {
     
     init(isPreview: Bool) {
         let fakeUser = User(id: UUID().uuidString, nickname: "arjunya", phoneNumber: "+19302919293")
-        self.user = User()
+        self.user = fakeUser
+        
         let clientID = FirebaseApp.app()?.options.clientID
         self.GIDconfig = GIDConfiguration(clientID: clientID!)
     }
