@@ -19,6 +19,18 @@ struct CircleGridView: View {
     
     let universalSize = UIScreen.main.bounds
     
+    var body: some View {
+        if self.authSessionStore.user?.nickname == nil || self.authSessionStore.user?.avatar == nil {
+            
+        }
+        else if self.authSessionStore.friendsArr.count < 0 {
+            
+        } else {
+            gridContent
+        }
+        
+    }
+    
     // magic variables for grid
     // TODO: make the top left person or one horizontal person be in the center of screen...makes the top honeycomb pop
     private static var numberOfItems: Int = 12
@@ -43,10 +55,6 @@ struct CircleGridView: View {
     // TODO: maybe make our "center" offset to a little to the top left to make it more honeycomb from top left
     private let center: CGPoint = CGPoint(x: UIScreen.main.bounds.width*0.5,y: UIScreen.main.bounds.height*0.5)
     
-    var body: some View {
-        gridContent
-    }
-        
     let longPressMinDuration = 0.5
     
     private var gridContent: some View {
