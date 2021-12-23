@@ -123,7 +123,7 @@ struct OnboardingTemplateView_Previews: PreviewProvider {
                 VStack(alignment: .center) {
                     NavigationLink(destination: HomeView()) {
                         Text("Start Your Detox")
-                            .bold()
+                            .fontWeight(.heavy)
                             .foregroundColor(NirvanaColor.white)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 20)

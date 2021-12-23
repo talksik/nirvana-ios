@@ -12,6 +12,7 @@ enum SheetView : Identifiable {
     var id: Self { self }
     case contacts
     case inbox
+    case profile
 }
 
 struct InnerCircleView: View {
@@ -48,8 +49,10 @@ struct InnerCircleView: View {
             switch page {
             case SheetView.contacts:
                 FindFriendsView()
-            case SheetView.inbox:
-                InboxView()// test one for now
+//            case SheetView.inbox: // removing feature for now
+//                InboxView()
+            case SheetView.profile:
+                AddBasicInfoView()
             default:
                 Text("asdf")
             }

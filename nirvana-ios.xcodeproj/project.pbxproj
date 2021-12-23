@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8904DEC8277055E90071E6CA /* OnboardingTrioView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8904DEC7277055E90071E6CA /* OnboardingTrioView.swift */; };
+		8904DEC8277055E90071E6CA /* OnboardingOneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8904DEC7277055E90071E6CA /* OnboardingOneView.swift */; };
 		891060E4277359B900F14509 /* CloudStorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891060E3277359B900F14509 /* CloudStorageService.swift */; };
 		891060E82774460500F14509 /* FirebaseInAppMessaging-Beta in Frameworks */ = {isa = PBXBuildFile; productRef = 891060E72774460500F14509 /* FirebaseInAppMessaging-Beta */; };
 		891060EA2774460500F14509 /* FirebaseInAppMessagingSwift-Beta in Frameworks */ = {isa = PBXBuildFile; productRef = 891060E92774460500F14509 /* FirebaseInAppMessagingSwift-Beta */; };
@@ -84,7 +84,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		8904DEC7277055E90071E6CA /* OnboardingTrioView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingTrioView.swift; sourceTree = "<group>"; };
+		8904DEC7277055E90071E6CA /* OnboardingOneView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingOneView.swift; sourceTree = "<group>"; };
 		891060E3277359B900F14509 /* CloudStorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudStorageService.swift; sourceTree = "<group>"; };
 		891060E527743FEB00F14509 /* nirvana-ios.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "nirvana-ios.entitlements"; sourceTree = "<group>"; };
 		89110713277166D6005797FA /* UserFriends.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFriends.swift; sourceTree = "<group>"; };
@@ -439,7 +439,7 @@
 		89F18AF2276ECD5D00115B1E /* OnBoarding */ = {
 			isa = PBXGroup;
 			children = (
-				8904DEC7277055E90071E6CA /* OnboardingTrioView.swift */,
+				8904DEC7277055E90071E6CA /* OnboardingOneView.swift */,
 			);
 			path = OnBoarding;
 			sourceTree = "<group>";
@@ -584,7 +584,7 @@
 				891A15E127653A7000B26659 /* nirvana_iosApp.swift in Sources */,
 				89BCABED276D2B05009E9B10 /* WavesGlassBackgroundView.swift in Sources */,
 				89F05BA6276ACD830002E9C7 /* ContactsPickerView.swift in Sources */,
-				8904DEC8277055E90071E6CA /* OnboardingTrioView.swift in Sources */,
+				8904DEC8277055E90071E6CA /* OnboardingOneView.swift in Sources */,
 				896CE7022770892F00DB474E /* CircleGridView.swift in Sources */,
 				89BDCDEA27697F9C00577829 /* UserMenu.swift in Sources */,
 				89BCABE7276B3D64009E9B10 /* InnerCircleViewModel.swift in Sources */,

@@ -42,7 +42,7 @@ struct CircleNavigationView: View {
                 }
                 
                 Button {
-                    self.navigationStack.push(OnboardingTrioView())
+                    self.navigationStack.push(OnboardingOneView())
                 } label: {
                     Label("why?", systemImage: "leaf")
                         .foregroundColor(NirvanaColor.teal)
