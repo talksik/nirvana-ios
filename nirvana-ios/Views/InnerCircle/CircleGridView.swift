@@ -294,9 +294,10 @@ extension CircleGridView {
         // TODO: protect against force unwraps
         var AVPlayerItems: [AVPlayerItem] = []
         let messagesRelatedToFriend = self.authSessionStore.friendMessagesDict[friend.id!]!
-        print("have \(messagesRelatedToFriend.count) messages to play")
+        
         
         for message in messagesRelatedToFriend {
+            print("message: the sender is \(message.senderId) and senttime: \(message.sentTimestamp)")
             // if it's starting to get to my messages then don't play
             if message.senderId == self.authSessionStore.user?.id {
                 break
@@ -311,6 +312,8 @@ extension CircleGridView {
                 
         // start playing if there are messages to listen to
         if AVPlayerItems.count > 0 {
+            print("have \(AVPlayerItems.count) messages to play")
+            
             // reverse the items because we want to listen to the most recent messages in order
             AVPlayerItems = AVPlayerItems.reversed()
             queuePlayer = AVQueuePlayer(items: AVPlayerItems)

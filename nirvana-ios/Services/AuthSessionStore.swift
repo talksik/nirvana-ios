@@ -239,12 +239,6 @@ extension AuthSessionStore {
                                 if returnedUser != nil {
                                     self.friendsArr.append(returnedUser!)
                                     
-                                    // if this friend do not exist in the dict, add it to show up in my circle
-                                    // TODO: prolly don't need this function to mess with dictionary
-                                    if self.friendMessagesDict[returnedUser!.id!] == nil {
-                                        self.friendMessagesDict[returnedUser!.id!] = []
-                                    }
-                                    
                                     self.objectWillChange.send()
                                     
                                     print("added this user to the array of users for user's circle\(returnedUser)")
@@ -289,38 +283,52 @@ extension AuthSessionStore {
         // SOLUTION: composite with array
         db.collection("messages").whereField("senderIdReceiverIdComposite", arrayContains: userId).order(by: "sentTimestamp", descending: true).limit(to: 100)
             .addSnapshotListener { querySnapshot, error in
-                    guard let snapshot = querySnapshot else {
-                        print("Error fetching snapshots: \(error!)")
+                    guard let documents = querySnapshot?.documents else {
+                        print("error in fetching messages: \(error!)")
                         return
                     }
-                    try? snapshot.documentChanges.forEach { diff in
-                        // only need to modify array on new additions...
-                        if (diff.type == .added) {
-                            let currMessage = try diff.document.data(as: Message.self)
-                            print("new message received! \(currMessage)")
+                    print("going through all messages now that the query found changes")
+                
+                    // clearing dict to allow clean list of messages to be put forth
+                    //optimize this? but also saving on memory and same db reads
+                    self.friendMessagesDict.removeAll()
+                
+                    self.messagesArr = documents.compactMap { (queryDocumentSnapshot) -> Message? in
+                        do {
+                            let currMessage = try queryDocumentSnapshot.data(as: Message.self)
+                            print("new message received! \(currMessage!.sentTimestamp)")
                             
-                            if currMessage != nil { // not really possible but just check
-                                // if the user doesn't exist for the dictionary, then add it
-                                // this means it's most likely someone new (never had user_friend relationship before) messaging for the user's inbox
-                                // TODO: is the firestore ordering working? maybe need clientside ordering here...just maybe...keep array of messages sorted, but this should automatically be sorted?
-                                if self.friendMessagesDict[currMessage!.senderId] == nil {
-                                    self.friendMessagesDict[currMessage!.senderId] = [currMessage!]
-                                } else { // [2, 1] => [2, 1]
-                                    self.friendMessagesDict[currMessage!.senderId]?.append(currMessage!)
+                            DispatchQueue.main.async {
+                                if currMessage != nil { // not really possible but just check
+                                    // if the user doesn't exist for the dictionary, then add it
+                                    // this means it's most likely someone new (never had user_friend relationship before) messaging for the user's inbox
+                                    // TODO: prolly want to make a call to get this sender user details for the inbox, but they should either be in the friendsArr or their are not a friend so won't be there
+                                    // also add in any messages where I am the sender
+                                    if currMessage!.senderId == userId { // if I am the sender
+                                        if self.friendMessagesDict[currMessage!.receiverId] == nil {
+                                            self.friendMessagesDict[currMessage!.receiverId] = [currMessage!]
+                                        } else {
+                                            self.friendMessagesDict[currMessage!.receiverId]?.append(currMessage!)
+                                        }
+                                    }
+                                    else  { // if I am receiving
+                                        if self.friendMessagesDict[currMessage!.senderId] == nil {
+                                            self.friendMessagesDict[currMessage!.senderId] = [currMessage!]
+                                        } else {
+                                            self.friendMessagesDict[currMessage!.senderId]?.append(currMessage!)
+                                        }
+                                    }
+                                    
                                 }
                                 
-                                //self.objectWillChange.send()// TODO: maybe don't need? value type friendsMessagesDict? so publishes changes?
+                                self.objectWillChange.send()
                             }
                             
+                            return currMessage
+                        } catch {
+                            print(error)
                         }
-                        // no need to a alter view model as of now
-                        if (diff.type == .modified) {
-                            print("Modified city: \(diff.document.data())")
-                        }
-                        // no feature for deleting messages as of now
-                        if (diff.type == .removed) {
-                            print("Removed city: \(diff.document.data())")
-                        }
+                        return nil
                     }
                 }
     }
