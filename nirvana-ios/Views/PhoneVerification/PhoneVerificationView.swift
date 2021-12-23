@@ -40,7 +40,7 @@ struct PhoneVerificationView: View {
         ZStack(alignment: .topLeading) {
             Color.clear
             
-            OnboardingTemplateView(hdrText: "Let's get you verified", imgName: "undraw_my_password_d-6-kg", bottomActArea: AnyView(
+            OnboardingTemplateView(hdrText: "Let's get you verified", imgName: "undraw_off_road_-9-oae", bottomActArea: AnyView(
                 VStack {
                     HStack {
                         Text("+\(ccode)")
@@ -121,22 +121,22 @@ struct PhoneVerificationView: View {
                                     .foregroundColor(Color.white)
                                     .frame(maxWidth: .infinity)
                                     .padding(.vertical, 20)
-                                    .background(NirvanaColor.teal) // show dull button if didn't enter full phone number
+                                    .background(NirvanaColor.teal)
                                     .clipShape(Capsule())
                                     .shadow(radius:10)
                                     .animation(.default)
                                 
                                 Text("You might receive an SMS message for verification and standard rates apply.")
-                                    .font(.footnote)
-                                    .foregroundColor(Color.black.opacity(0.5))
+                                    .font(.caption)
+                                    .foregroundColor(NirvanaColor.teal)
                             }
                         }
-                    } else {
+                    } else { // show dull button if didn't enter full phone number
                         Text("Send Verification")
                             .foregroundColor(Color.white.opacity(0.2))
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 20)
-                            .background(Color.white.opacity(0.2)) // show dull button if didn't enter full phone number
+                            .background(Color.white.opacity(0.2))
                             .clipShape(Capsule())
                             .shadow(radius:10)
                             .animation(.default)

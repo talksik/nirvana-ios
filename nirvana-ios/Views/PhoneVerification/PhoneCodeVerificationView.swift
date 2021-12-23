@@ -36,7 +36,7 @@ struct PhoneCodeVerificationView: View {
         ZStack(alignment: .topLeading) {
             Color.clear
             
-            OnboardingTemplateView(hdrText: "Let's get you verified", imgName: "undraw_my_password_d-6-kg", bottomActArea: AnyView(
+            OnboardingTemplateView(hdrText: "Let's get you verified", imgName: "undraw_off_road_-9-oae", bottomActArea: AnyView(
                 VStack {
                     TextField("Code", text: self.$verificationCode)
                         .padding()
@@ -48,6 +48,9 @@ struct PhoneCodeVerificationView: View {
                         .padding(.vertical)
                         .keyboardType(.phonePad)
                         .focused(self.$focusedInputField)
+                    Text("Please allow up to 30 seconds to receive your code. Navigate back and re-enter phone number if you do not get the message.")
+                        .font(.caption)
+                        .foregroundColor(NirvanaColor.teal)
                                         
                     
                     if self.verificationCode.count == 6 {
@@ -138,12 +141,12 @@ struct PhoneCodeVerificationView: View {
                                 .clipShape(Capsule())
                                 .shadow(radius:10)
                         }
-                    } else {
+                    } else { // show dull button if didn't enter full phone number
                         Text("Verify")
                             .foregroundColor(Color.white.opacity(0.2))
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 20)
-                            .background(Color.white.opacity(0.2)) // show dull button if didn't enter full phone number
+                            .background(Color.white.opacity(0.2))
                             .clipShape(Capsule())
                             .shadow(radius:10)
                             .animation(.default)
