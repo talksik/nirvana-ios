@@ -125,7 +125,6 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         print("failed ot register for remote notifications with error: \(error)")
     }
-    
 }
 
 // cloud messaging

@@ -13,6 +13,7 @@ import NavigationStack
 
 struct FindFriendsView: View {
     @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var authSessionStore: AuthSessionStore
     
     @StateObject var contactsVM = ContactsViewModel()
     
@@ -27,7 +28,7 @@ struct FindFriendsView: View {
                 
                 List {
                     ForEach(searchItems, id: \.self) { key in
-                        if let currContact = self.contactsVM.contacts[key] {
+                        if let currContact = self.contactsVM.contacts[key] { // getting contact's info
                             ListContactRow(contactsVM: self.contactsVM, contact: currContact)
                         }
                     }
@@ -49,10 +50,24 @@ struct FindFriendsView: View {
     var searchItems: [String] {
         let keys = (Array(self.contactsVM.contacts.keys) as [String]).sorted()
         
+        // checking if currcontact is already a friend
+        let currFriends = self.authSessionStore.friendsArr.map { $0.id }
+        let newPotentialFriends = keys.filter {
+            if let friend = self.contactsVM.contacts[$0]?.user { // seeing if this contact is an existing user
+                if currFriends.contains(friend.id) { // if this is already a friend
+                    return false
+                }
+                
+                // goes here if is an existing contact and not a friend
+            }
+            
+            return true
+        }
+        
         if self.searchQuery.isEmpty  {
-            return keys
+            return newPotentialFriends
         } else {
-            return keys.filter { $0.contains(self.searchQuery) }
+            return newPotentialFriends.filter { $0.contains(self.searchQuery) }
         }
     }
     
