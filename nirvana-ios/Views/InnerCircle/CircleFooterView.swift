@@ -96,8 +96,8 @@ struct CircleFooterView: View {
             if newValue != nil && myId != nil {
                 self.selectedFriend = self.authSessionStore.friendsArr[newValue!]
                 
-                // get the last message's sent timestamp
-                let lastMessage = self.authSessionStore.friendMessagesDict[self.selectedFriend!.id!]?.last
+                // get the latest message's timestamp...will be the first in list now
+                let lastMessage = self.authSessionStore.friendMessagesDict[self.selectedFriend!.id!]?.first
                 if lastMessage != nil {
                     // figure out whose turn it is
                     self.myTurn = lastMessage!.receiverId == myId! ? true : false

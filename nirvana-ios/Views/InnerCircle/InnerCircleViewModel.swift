@@ -14,22 +14,25 @@ class InnerCircleViewModel: ObservableObject {
     
     @Published var isRecording : Bool = false
     
+    let audioSession = AVAudioSession.sharedInstance()
+    
     private var audioLocalUrl: URL?
     
     let cloudStorageService = CloudStorageService()
     let firestoreService = FirestoreService()
     
-    func startRecording() {
-        let recordingSession = AVAudioSession.sharedInstance()
-        
+    init() {
         do {
-            try recordingSession.setAllowHapticsAndSystemSoundsDuringRecording(true)
-            try recordingSession.setCategory(.playAndRecord, mode: .default)
-            try recordingSession.setActive(true)
+            try audioSession.setAllowHapticsAndSystemSoundsDuringRecording(true)
+            try audioSession.setCategory(.playAndRecord, mode: .default)
+            try audioSession.setActive(true)
+            try audioSession.overrideOutputAudioPort(AVAudioSession.PortOverride.speaker) // allow playing in silent mode
         } catch {
             print("Can not setup the Recording")
         }
-        
+    }
+    
+    func startRecording() {
         let filePath = getTemporaryDirectory().appendingPathComponent("\(UUID().uuidString).m4a")
         
         print("file name of recording will be : \(filePath)")
