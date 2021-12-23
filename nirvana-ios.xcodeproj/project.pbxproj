@@ -40,6 +40,7 @@
 		896CE70727711BAB00DB474E /* FindFriendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896CE70627711BAB00DB474E /* FindFriendsView.swift */; };
 		896CE70927712CED00DB474E /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896CE70827712CED00DB474E /* StringExtension.swift */; };
 		89A107E3277446F600B971FD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 89A107E2277446F600B971FD /* GoogleService-Info.plist */; };
+		89A107E5277476CC00B971FD /* PushNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A107E4277476CC00B971FD /* PushNotificationService.swift */; };
 		89AD5573276DD790001658E0 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AD5572276DD790001658E0 /* SplashView.swift */; };
 		89AD5575276DE724001658E0 /* PhoneCodeVerificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AD5574276DE724001658E0 /* PhoneCodeVerificationView.swift */; };
 		89AD5578276DEAB3001658E0 /* LogoHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AD5577276DEAB3001658E0 /* LogoHeaderView.swift */; };
@@ -116,6 +117,7 @@
 		896CE70627711BAB00DB474E /* FindFriendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindFriendsView.swift; sourceTree = "<group>"; };
 		896CE70827712CED00DB474E /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		89A107E2277446F600B971FD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		89A107E4277476CC00B971FD /* PushNotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationService.swift; sourceTree = "<group>"; };
 		89AD5572276DD790001658E0 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		89AD5574276DE724001658E0 /* PhoneCodeVerificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneCodeVerificationView.swift; sourceTree = "<group>"; };
 		89AD5577276DEAB3001658E0 /* LogoHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoHeaderView.swift; sourceTree = "<group>"; };
@@ -413,6 +415,7 @@
 			children = (
 				89F05BA3276ACC060002E9C7 /* ContactService.swift */,
 				89B46E70276893E200B74255 /* AuthSessionStore.swift */,
+				89A107E4277476CC00B971FD /* PushNotificationService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -585,6 +588,7 @@
 				896CE7022770892F00DB474E /* CircleGridView.swift in Sources */,
 				89BDCDEA27697F9C00577829 /* UserMenu.swift in Sources */,
 				89BCABE7276B3D64009E9B10 /* InnerCircleViewModel.swift in Sources */,
+				89A107E5277476CC00B971FD /* PushNotificationService.swift in Sources */,
 				89AD557C276DF86A001658E0 /* FirestoreService.swift in Sources */,
 				891A15FF27656F9200B26659 /* HeaderView.swift in Sources */,
 				89AD5575276DE724001658E0 /* PhoneCodeVerificationView.swift in Sources */,

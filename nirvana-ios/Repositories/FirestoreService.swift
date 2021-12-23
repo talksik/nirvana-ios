@@ -157,4 +157,18 @@ class FirestoreService {
         }
     }
     
+    func updateUserDeviceToken(userId: String, deviceToken: String, completion: @escaping((_ state: ServiceState) -> ()))  {
+        do {
+            if userId != nil {
+                let _ = try db.collection(Collection.users.rawValue).document(userId).setData(["deviceToken": deviceToken], merge: true)
+                completion(ServiceState.success("Updated user device token"))
+            } else {
+                completion(ServiceState.error(ServiceError(description: "No user id given to firestore service")))
+            }
+        } catch {
+            print("error in updating user \(error.localizedDescription)")
+            completion(ServiceState.error(ServiceError(description: error.localizedDescription)))
+        }
+    }
+    
 }

@@ -241,7 +241,7 @@ extension AuthSessionStore {
                                     
                                     self.objectWillChange.send()
                                     
-                                    print("added this user to the array of users for user's circle\(returnedUser)")
+                                    print("added this user to the array of users for user's circle\(returnedUser?.nickname)")
                                 }
                             }
                         } else {

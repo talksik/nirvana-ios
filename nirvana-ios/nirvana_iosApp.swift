@@ -63,10 +63,10 @@ class AppDelegate: NSObject, UIApplicationDelegate {
       }
     
       func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-          
-          //MARK: add this when I have APN setup through app
           // gets the APN token so that firebase can send notifications to app
-          Auth.auth().setAPNSToken(deviceToken, type: .sandbox)
+//          Auth.auth().setAPNSToken(deviceToken, type: .sandbox)
+          
+//          Messaging.messaging().apnsToken = deviceToken
       }
       
       func application(_ application: UIApplication, didReceiveRemoteNotification notification: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
@@ -89,7 +89,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
             completionHandler(UIBackgroundFetchResult.newData)
           
-          //MARK: add this when I have APN setup through app
+            // phone auth
             if Auth.auth().canHandleNotification(notification) {
               completionHandler(.noData)
               return
@@ -123,7 +123,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     }
     
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
-        
+        print("failed ot register for remote notifications with error: \(error)")
     }
     
 }
@@ -140,8 +140,30 @@ extension AppDelegate: MessagingDelegate {
         userInfo: dataDict
       )
         
-      // TODO: If necessary send token to application server...need to use this in cloud functionb to send the message to this user
       // Note: This callback is fired at each app startup and whenever a new token is generated.
+        let firestoreService = FirestoreService()
+        let user = Auth.auth().currentUser
+        
+        // TODO: store it on loading of circle view and not on launch as this may just never get called
+        // use the notification center above
+        // https://stackoverflow.com/questions/58818046/how-to-set-addobserver-in-swiftui
+        if user != nil && fcmToken != nil {
+          // User is signed in.
+          // ...
+            print("have access to user Id when I received registration token: \(user!.uid)")
+            
+            // kind of have to store in database or update every time, because don't know if the user logged in and out or if there is a new token or not
+            // https://firebase.google.com/docs/cloud-messaging/ios/client#access_the_registration_token
+            
+            firestoreService.updateUserDeviceToken(userId: user!.uid, deviceToken: fcmToken!) { res in
+                print(res)
+            }
+        } else {
+          // No user is signed in.
+          // ...
+            print("can't save user device token to a user")
+        }
+        
     }
     
 }
@@ -165,7 +187,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     print(userInfo)
 
     // Change this to your preferred presentation option
-    completionHandler([[.alert, .sound]])
+      completionHandler([[.banner, .alert, .sound]])
   }
 
   func userNotificationCenter(_ center: UNUserNotificationCenter,

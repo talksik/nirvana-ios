@@ -20,6 +20,7 @@ class InnerCircleViewModel: ObservableObject {
     
     let cloudStorageService = CloudStorageService()
     let firestoreService = FirestoreService()
+    let pushNotificationService = pushNotificationService()
     
     init() {
         do {
@@ -76,6 +77,8 @@ class InnerCircleViewModel: ObservableObject {
                 // create a new message in firestore with the url for receiving user to automatically get notified
                 self?.firestoreService.createMessage(message: newMessage) {[weak self] res in
                     print(res)
+                    
+                    // sending push notification
                     
                     // delete local audio file from user's phone so that it doesn't get crazy
                     print("stopped recording: file about to get deleted from \(self?.getTemporaryDirectory()) with filename: \(self?.audioLocalUrl)")

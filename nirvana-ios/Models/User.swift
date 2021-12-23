@@ -16,6 +16,7 @@ struct User: Identifiable, Codable {
     var phoneNumber: String?
     var emailAddress:String?
     var avatar:String?
+    var deviceToken: String?
 
     @ServerTimestamp var lastLoggedInTimestamp: Date?
     @ServerTimestamp var createdTimestamp: Date?
