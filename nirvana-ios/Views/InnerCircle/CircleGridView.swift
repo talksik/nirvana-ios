@@ -293,7 +293,7 @@ extension CircleGridView {
         // traverse through reversed list of messages and add to audio player queue
         // TODO: protect against force unwraps
         var AVPlayerItems: [AVPlayerItem] = []
-        let messagesRelatedToFriend = self.authSessionStore.friendMessagesDict[friend.id!]!
+        let messagesRelatedToFriend = self.authSessionStore.friendMessagesDict[friend.id!] ?? []
         
         
         for message in messagesRelatedToFriend {
