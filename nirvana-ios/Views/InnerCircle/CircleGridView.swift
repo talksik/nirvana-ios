@@ -295,6 +295,10 @@ extension CircleGridView {
         var AVPlayerItems: [AVPlayerItem] = []
         let messagesRelatedToFriend = self.authSessionStore.friendMessagesDict[friend.id!] ?? []
         
+        if messagesRelatedToFriend.count == 0 {
+            return
+        }
+        
         
         for message in messagesRelatedToFriend {
             print("message: the sender is \(message.senderId) and senttime: \(message.sentTimestamp)")
