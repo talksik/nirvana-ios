@@ -13,6 +13,10 @@ struct CircleNavigationView: View {
     @EnvironmentObject var navigationStack: NavigationStack
     @EnvironmentObject var authSessionStore: AuthSessionStore
     
+    @State var alertActive = false
+    @State var alertText = ""
+    @State var alertSubtext = ""
+    
     var body: some View {
         HStack(alignment: .center) {
             Menu {
@@ -99,11 +103,16 @@ struct CircleNavigationView: View {
                                     .strokeBorder(Color.white.opacity(01), lineWidth: 1)
                             )
                     }
+                
                     
                     Button {
+                        self.alertActive.toggle()
                         
+                        self.alertText = "👯‍♂️ Coming Soon!"
+                        
+                        self.alertSubtext = "Stay posted for buttery smooth convos with groups! We will be limiting you to 3 circles!"
                     } label: {
-                        Label("groups", systemImage: "rectangle.3.group")
+                        Label("circles", systemImage: "circle.hexagongrid")
                             .font(.caption2)
                             .foregroundColor(Color.gray)
                             .padding(.vertical, 10)
@@ -115,7 +124,11 @@ struct CircleNavigationView: View {
                     }
                     
                     Button {
+                        self.alertActive.toggle()
                         
+                        self.alertText = "💼 Coming Soon!"
+                        
+                        self.alertSubtext = "Efficient and more authentic communication for teams! Contact us for more info."
                     } label: {
                         Label("work", systemImage: "suitcase")
                             .font(.caption2)
@@ -129,6 +142,13 @@ struct CircleNavigationView: View {
                     }
                 }
             }
+        }
+        .alert(self.alertText, isPresented: self.$alertActive) {
+            
+            Button("OK", role: ButtonRole.cancel) { }
+            
+        } message: {
+            Text(self.alertSubtext)
         }
         .padding(.horizontal)
     }
