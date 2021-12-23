@@ -25,7 +25,7 @@ struct CircleFooterView: View {
                 Spacer()
                 
                 HStack {
-                    if self.selectedFriend != nil && !self.convoRelativeTime.isEmpty && self.myTurn != nil {
+                    if self.selectedFriend != nil {
                         // friend avatar
                         Image(self.selectedFriend!.avatar ?? "")
                             .resizable()
@@ -34,19 +34,27 @@ struct CircleFooterView: View {
                             .frame(width: 40, height: 40)
                             .clipShape(Circle())
                             .padding(5)
-                        
-                        // meta data of convo
-                        VStack (alignment: .leading) {
+                    }
+                    
+                    
+                    
+                    // meta data of convo
+                    VStack (alignment: .leading) {
+                        if self.selectedFriend != nil {
                             Text(self.selectedFriend!.nickname ?? "")
                                 .font(.footnote)
                                 .foregroundColor(NirvanaColor.light)
+                        }
+                        if !self.convoRelativeTime.isEmpty && self.myTurn != nil {
                             Text(self.convoRelativeTime)
                                 .font(.caption)
                                 .foregroundColor(.gray)
                         }
-                        
-                        Spacer()
-                        
+                    }
+                    
+                    Spacer()
+                    
+                    if self.selectedFriend != nil {
                         // call button
                         Button {
                             print("calling user now")
