@@ -169,8 +169,9 @@ struct CircleGridView: View {
         if self.authSessionStore.user != nil {
             let userId = self.authSessionStore.user!.id // O(1) // currUser who is signed in
             
+            // get most recent message in the convo and see who has spoken
             if let messagesRelatedToFriend = self.authSessionStore.friendMessagesDict[friendDbId] { // O(1)
-                return messagesRelatedToFriend.last?.receiverId == userId && messagesRelatedToFriend.last?.listenCount == 0
+                return messagesRelatedToFriend.first?.receiverId == userId
             }
         }
         
@@ -284,23 +285,20 @@ extension CircleGridView {
         
         // TODO: OPTIMIZATION...buffer and load all AVAssets to create AVPlayerItems before a tap happens...but this can also cause load in background if user is not playing a message right now...this isn't an optimization of the data/firestore but rather the player
         
-        // I want to play the last x messages if I was the receiver
-        // ["sarth": [me, me]] -> play nothing
-        // ["sarth": [me, him, him, him]] -> play his two messages
+        // I want to play the last x messages if I was the receiver...the array is sorted from backend so that the
+        // most recent comes first
+        // ["sarth": [ME, HIM...]] -> play nothing
+        // ["sarth": [HIM, HIM, me, him...]] -> play his two messages
         
         // traverse through reversed list of messages and add to audio player queue
         // TODO: protect against force unwraps
         var AVPlayerItems: [AVPlayerItem] = []
-        let messagesRelatedToFriend = self.authSessionStore.friendMessagesDict[friend.id!]!.reversed()
+        let messagesRelatedToFriend = self.authSessionStore.friendMessagesDict[friend.id!]!
         print("have \(messagesRelatedToFriend.count) messages to play")
         
         for message in messagesRelatedToFriend {
-            // if it's me then don't play
+            // if it's starting to get to my messages then don't play
             if message.senderId == self.authSessionStore.user?.id {
-                break
-            }
-            // if I already listened to this "last" message, then break as well
-            if message.listenCount >= 1 {
                 break
             }
             
@@ -310,9 +308,11 @@ extension CircleGridView {
                 AVPlayerItems.append(playerMessage)
             }
         }
-        
+                
         // start playing if there are messages to listen to
         if AVPlayerItems.count > 0 {
+            // reverse the items because we want to listen to the most recent messages in order
+            AVPlayerItems = AVPlayerItems.reversed()
             queuePlayer = AVQueuePlayer(items: AVPlayerItems)
             
             // TODO: make sure these options are viable for different scenarios

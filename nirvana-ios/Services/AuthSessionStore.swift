@@ -209,7 +209,7 @@ extension AuthSessionStore {
         }
         
         // MARK: keeping the friends list updated
-        // TODO: break into firestoreService
+        // TODO: break into firestoreService metadata of each change...later tho since this listener will barely get changes
             // different actions on additions, modifications, and removals
             
             // parse through the new result set
@@ -279,68 +279,50 @@ extension AuthSessionStore {
             }
         
         
-        // MARK: keeping the list of messages updated
-        // one listener for received messages
+        // MARK: listener for messages
         
-        // don't know if we need a listener for sent messages as we can alter our model from local and add to the dictionary
-        
+        // TODO: don't know if we need a listener for sent messages as we can alter our model from local and add to the dictionary
+        // senderIdReceiverIdComposite: composite array of strings which contains the senderId and receiverId as elements
         // order: sent time should make it easy to add to dict
-        // limit: because each user should have most 12 friends and so would at most need 24 messages to show turns and all that...save myself from hackers here
-        // TODO: use the indexes I created
-        db.collection("messages").whereField("receiverId", isEqualTo: userId).order(by: "sentTimestamp").limit(to: 100)
+        // limit: because each user should have most 12 friends and so would at most need 24 messages to show turns and all that...save myself from hackers here...unless a user gets 100 messages from someone, and that too at least they will be ordered
+        
+        // SOLUTION: composite with array
+        db.collection("messages").whereField("senderIdReceiverIdComposite", arrayContains: userId).order(by: "sentTimestamp", descending: true).limit(to: 100)
             .addSnapshotListener { querySnapshot, error in
-                guard let documents = querySnapshot?.documents else {
-                    print("Error fetching messages: \(error!)")
-                    return
-                }
-                print("got all messages relevant")
-                
-                self.messagesArr = documents.compactMap { (queryDocumentSnapshot) -> Message? in
-                    do {
-                        let currMessage = try queryDocumentSnapshot.data(as: Message.self)
-                        print("new message received! \(queryDocumentSnapshot.data())")
-                        
-                        if currMessage != nil { // not really possible but just check
-                            // if the user doesn't exist for the dictionary, then add it
-                            // this means it's most likely someone new (never had user_friend relationship before) messaging for the user's inbox
-                            // TODO: prolly want to make a call to get this sender user details for the inbox, but they should either be in the friendsArr or their are not a friend so won't be there
-                            if self.friendMessagesDict[currMessage!.senderId] == nil {
-                                self.friendMessagesDict[currMessage!.senderId] = [currMessage!]
-                            } else {
-                                self.friendMessagesDict[currMessage!.senderId]?.append(currMessage!)
+                    guard let snapshot = querySnapshot else {
+                        print("Error fetching snapshots: \(error!)")
+                        return
+                    }
+                    try? snapshot.documentChanges.forEach { diff in
+                        // only need to modify array on new additions...
+                        if (diff.type == .added) {
+                            let currMessage = try diff.document.data(as: Message.self)
+                            print("new message received! \(currMessage)")
+                            
+                            if currMessage != nil { // not really possible but just check
+                                // if the user doesn't exist for the dictionary, then add it
+                                // this means it's most likely someone new (never had user_friend relationship before) messaging for the user's inbox
+                                // TODO: is the firestore ordering working? maybe need clientside ordering here...just maybe...keep array of messages sorted, but this should automatically be sorted?
+                                if self.friendMessagesDict[currMessage!.senderId] == nil {
+                                    self.friendMessagesDict[currMessage!.senderId] = [currMessage!]
+                                } else { // [2, 1] => [2, 1]
+                                    self.friendMessagesDict[currMessage!.senderId]?.append(currMessage!)
+                                }
+                                
+                                //self.objectWillChange.send()// TODO: maybe don't need? value type friendsMessagesDict? so publishes changes?
                             }
                             
-                            self.objectWillChange.send()
                         }
-                        return currMessage
-                    } catch {
-                        print("error in trying to decode message \(error)")
+                        // no need to a alter view model as of now
+                        if (diff.type == .modified) {
+                            print("Modified city: \(diff.document.data())")
+                        }
+                        // no feature for deleting messages as of now
+                        if (diff.type == .removed) {
+                            print("Removed city: \(diff.document.data())")
+                        }
                     }
-                    return nil
                 }
-                // TODO: maybe need to call object will change here
-                
-                // TODO: optimize later
-//                guard let snapshot = querySnapshot else {
-//                    print("Error fetching messages: \(error!)")
-//                    return
-//                }
-//                snapshot.documentChanges.forEach { diff in
-//                    if (diff.type == .added) {
-//                        print("New message: \(diff.document.data())")
-//
-//                        // keep array of messages sorted, but this should automatically be sorted?
-//                    }
-//                    if (diff.type == .modified) {
-//                        // nothing to really do here
-//                        print("Modified message: \(diff.document.data())")
-//                    }
-//                    if (diff.type == .removed) {
-//                        print("Removed message: \(diff.document.data())")
-//                    }
-//                }
-            }
-        
     }
     
     private func deinitDataListeners() {
