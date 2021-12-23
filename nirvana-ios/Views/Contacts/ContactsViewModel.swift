@@ -59,8 +59,10 @@ class ContactsViewModel : ObservableObject {
                 var formattedNumber = cnPhoneNumber?.digits.suffix(10)
                 
                 // only show contacts if they have a phone number
-                if formattedNumber != nil && formattedNumber?.count ?? 0 > 9 {
+                if formattedNumber != nil && formattedNumber!.count > 9 { // don't want the grant cardone texts to show up
                     formattedNumber = "+1" + formattedNumber! // adding country code
+                    
+                    print(formattedNumber)
                     
                     let contactNumber = String(formattedNumber!)
                     var contactVm = ContactsViewModelContact(cnName: contactDisplayName, cnPhoneNumber: contactNumber, sortingProp: contactDisplayName)

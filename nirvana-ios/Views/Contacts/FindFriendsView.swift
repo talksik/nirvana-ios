@@ -74,7 +74,7 @@ struct ListContactRow: View {
     @EnvironmentObject var navigationStack : NavigationStack
     @EnvironmentObject var authSessionStore: AuthSessionStore
     
-    var contactsVM: ContactsViewModel
+    @ObservedObject var contactsVM: ContactsViewModel
     var contact:ContactsViewModelContact
     
     @State var showAlert = false
@@ -104,7 +104,7 @@ struct ListContactRow: View {
                     
                 } label: {
                     Label("Add", systemImage: "plus.circle")
-                        .font(.title2)
+                        .font(.title3)
                         .foregroundColor(NirvanaColor.solidTeal)
                 }
             }
@@ -125,9 +125,9 @@ struct ListContactRow: View {
                             case .success(let str):
                                 print(str)
                             }
-                            
-                            self.navigationStack.push(InnerCircleView())
                         }
+                        
+                        self.navigationStack.push(InnerCircleView())
                     }
                 )
             }
@@ -161,7 +161,7 @@ struct ListContactRow: View {
                     }
                 } label: {
                     Label("Invite", systemImage: "paperplane")
-                        .font(.title2)
+                        .font(.title3)
                         .foregroundColor(Color.orange)
                 }
             }
