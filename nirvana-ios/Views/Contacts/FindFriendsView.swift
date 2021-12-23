@@ -20,23 +20,19 @@ struct FindFriendsView: View {
     
     var body: some View {
         NavigationView {
-            ZStack {
-                WavesGlassBackgroundView()
+            VStack {
+                Text("You must have someone in your phone contacts to add them. 🥬")
+                    .font(.subheadline)
+                    .foregroundColor(Color.gray)
                 
-                VStack {
-                    Text("You must have someone in your phone contacts to add them. 🥬")
-                        .font(.subheadline)
-                        .foregroundColor(Color.gray)
-                    
-                    List {
-                        ForEach(searchItems, id: \.self) { key in
-                            if let currContact = self.contactsVM.contacts[key] {
-                                ListContactRow(contactsVM: self.contactsVM, contact: currContact)
-                            }
+                List {
+                    ForEach(searchItems, id: \.self) { key in
+                        if let currContact = self.contactsVM.contacts[key] {
+                            ListContactRow(contactsVM: self.contactsVM, contact: currContact)
                         }
                     }
-                    .searchable(text: self.$searchQuery)
                 }
+                .searchable(text: self.$searchQuery)
             }
             .navigationTitle("Find Friends")
             .navigationBarItems(trailing: Button(action: {
