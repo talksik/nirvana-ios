@@ -20,15 +20,7 @@ struct CircleGridView: View {
     let universalSize = UIScreen.main.bounds
     
     var body: some View {
-        if self.authSessionStore.user?.nickname == nil || self.authSessionStore.user?.avatar == nil {
-            
-        }
-        else if self.authSessionStore.friendsArr.count < 0 {
-            
-        } else {
-            gridContent
-        }
-        
+        gridContent
     }
     
     // magic variables for grid

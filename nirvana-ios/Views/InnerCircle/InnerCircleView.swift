@@ -31,9 +31,75 @@ struct InnerCircleView: View {
             // background
             WavesGlassBackgroundView(isRecording: self.innerCircleVM.isRecording)
             
-            // content
-            CircleGridView(selectedFriendIndex: self.$selectedFriendIndex)
-                .environmentObject(innerCircleVM)
+            if self.authSessionStore.user?.nickname == nil || self.authSessionStore.user?.avatar == nil {
+                VStack(alignment: .center) {
+                    Image("undraw_fall_is_coming_yl-0-x")
+                        .renderingMode(.original)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .padding(.bottom)
+                    
+                    Button {
+                        self.sheetView = SheetView.profile
+                    } label: {
+                        Text("Create Profile")
+                            .fontWeight(.heavy)
+                            .foregroundColor(NirvanaColor.white)
+                            .padding(.vertical, 20)
+                            .frame(maxWidth: .infinity)
+                            .background(NirvanaColor.teal)
+                            .clipShape(Capsule())
+                            .shadow(radius:10)
+                    }
+                    
+                    Text("Personalize with a simple avatar and nickname! 🌿")
+                        .font(.caption)
+                        .foregroundColor(NirvanaColor.teal)
+                        .multilineTextAlignment(.center)
+                        
+                }
+                .padding()
+            }
+            else if self.authSessionStore.friendsArr.count < 0 {
+                VStack(alignment: .center) {
+                    Image("undraw_fall_is_coming_yl-0-x")
+                        .renderingMode(.original)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .padding(.bottom)
+                    
+                    Button {
+                        self.sheetView = SheetView.contacts
+                    } label: {
+                        Text("Add Friends")
+                            .fontWeight(.heavy)
+                            .foregroundColor(NirvanaColor.white)
+                            .padding(.vertical, 20)
+                            .frame(maxWidth: .infinity)
+                            .background(NirvanaColor.teal)
+                            .clipShape(Capsule())
+                            .shadow(radius:10)
+                    }
+                    
+                    Text("Start talking with your bestie right away! 🐥")
+                        .font(.caption)
+                        .foregroundColor(NirvanaColor.teal)
+                        .multilineTextAlignment(.center)
+                        
+                }
+                .padding()
+            } else {
+                Image("undraw_fall_is_coming_yl-0-x")
+                    .renderingMode(.original)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .blur(radius: 20)
+                
+                
+                // content
+                CircleGridView(selectedFriendIndex: self.$selectedFriendIndex)
+                    .environmentObject(innerCircleVM)
+            }
             
             // header
             VStack(alignment: .leading) {
