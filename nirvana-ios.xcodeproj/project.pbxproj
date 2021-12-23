@@ -39,8 +39,8 @@
 		896CE7052770AE5D00DB474E /* InboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896CE7042770AE5D00DB474E /* InboxView.swift */; };
 		896CE70727711BAB00DB474E /* FindFriendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896CE70627711BAB00DB474E /* FindFriendsView.swift */; };
 		896CE70927712CED00DB474E /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896CE70827712CED00DB474E /* StringExtension.swift */; };
-		89A107E3277446F600B971FD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 89A107E2277446F600B971FD /* GoogleService-Info.plist */; };
 		89A107E5277476CC00B971FD /* PushNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A107E4277476CC00B971FD /* PushNotificationService.swift */; };
+		89A107E927753AB600B971FD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 89A107E827753AB500B971FD /* GoogleService-Info.plist */; };
 		89AD5573276DD790001658E0 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AD5572276DD790001658E0 /* SplashView.swift */; };
 		89AD5575276DE724001658E0 /* PhoneCodeVerificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AD5574276DE724001658E0 /* PhoneCodeVerificationView.swift */; };
 		89AD5578276DEAB3001658E0 /* LogoHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AD5577276DEAB3001658E0 /* LogoHeaderView.swift */; };
@@ -116,8 +116,8 @@
 		896CE7042770AE5D00DB474E /* InboxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InboxView.swift; sourceTree = "<group>"; };
 		896CE70627711BAB00DB474E /* FindFriendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindFriendsView.swift; sourceTree = "<group>"; };
 		896CE70827712CED00DB474E /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
-		89A107E2277446F600B971FD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		89A107E4277476CC00B971FD /* PushNotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationService.swift; sourceTree = "<group>"; };
+		89A107E827753AB500B971FD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		89AD5572276DD790001658E0 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		89AD5574276DE724001658E0 /* PhoneCodeVerificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneCodeVerificationView.swift; sourceTree = "<group>"; };
 		89AD5577276DEAB3001658E0 /* LogoHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoHeaderView.swift; sourceTree = "<group>"; };
@@ -212,7 +212,7 @@
 				891A15E027653A7000B26659 /* nirvana_iosApp.swift */,
 				891A15E227653A7000B26659 /* ContentView.swift */,
 				891A15E427653A7100B26659 /* Assets.xcassets */,
-				89A107E2277446F600B971FD /* GoogleService-Info.plist */,
+				89A107E827753AB500B971FD /* GoogleService-Info.plist */,
 				891A15E627653A7100B26659 /* Preview Content */,
 			);
 			path = "nirvana-ios";
@@ -539,7 +539,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				891A15F12765528700B26659 /* Satisfy-Regular.ttf in Resources */,
-				89A107E3277446F600B971FD /* GoogleService-Info.plist in Resources */,
+				89A107E927753AB600B971FD /* GoogleService-Info.plist in Resources */,
 				891A15E827653A7100B26659 /* Preview Assets.xcassets in Resources */,
 				891A15E527653A7100B26659 /* Assets.xcassets in Resources */,
 			);
@@ -752,7 +752,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.usenirvana.nirvana;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.usenirvana.nirvana-ios";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -789,7 +789,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.usenirvana.nirvana;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.usenirvana.nirvana-ios";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
