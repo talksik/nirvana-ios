@@ -144,6 +144,7 @@ struct CircleNavigationView: View {
                 }
             }
         }
+        .padding(.horizontal)
     }
 }
 
