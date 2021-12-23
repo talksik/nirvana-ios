@@ -12,7 +12,7 @@ class PushNotificationService {
     func sendPushNotification(to token: String, title: String, body: String) {
         let urlString = "https://fcm.googleapis.com/fcm/send"
         let url = NSURL(string: urlString)!
-        let paramString: [String : Any] = ["to" : token,
+        let paramString: [String : Any] = ["to" : token, // sending to the device token of the desired receiving device
                                            "notification" : ["title" : title, "body" : body],
                                            "data" : ["user" : "test_id"]
         ]

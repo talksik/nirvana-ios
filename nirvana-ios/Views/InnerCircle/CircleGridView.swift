@@ -137,7 +137,7 @@ struct CircleGridView: View {
                                     
                                     self.selectedFriendIndex = nil
                                     
-                                    self.innerCircleVM.stopRecording(senderId: self.authSessionStore.user!.id!, receiverId: friend.id!)
+                                    self.innerCircleVM.stopRecording(senderId: self.authSessionStore.user!.id!, receiver: friend)
                                     
 //                                    self.recordingGestureDeactived()
                                 }
