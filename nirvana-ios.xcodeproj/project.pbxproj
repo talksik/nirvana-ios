@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		8904DEC8277055E90071E6CA /* OnboardingTrioView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8904DEC7277055E90071E6CA /* OnboardingTrioView.swift */; };
 		891060E4277359B900F14509 /* CloudStorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891060E3277359B900F14509 /* CloudStorageService.swift */; };
+		891060E82774460500F14509 /* FirebaseInAppMessaging-Beta in Frameworks */ = {isa = PBXBuildFile; productRef = 891060E72774460500F14509 /* FirebaseInAppMessaging-Beta */; };
+		891060EA2774460500F14509 /* FirebaseInAppMessagingSwift-Beta in Frameworks */ = {isa = PBXBuildFile; productRef = 891060E92774460500F14509 /* FirebaseInAppMessagingSwift-Beta */; };
+		891060EC2774460500F14509 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 891060EB2774460500F14509 /* FirebaseMessaging */; };
 		89110714277166D6005797FA /* UserFriends.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89110713277166D6005797FA /* UserFriends.swift */; };
 		891A15E127653A7000B26659 /* nirvana_iosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891A15E027653A7000B26659 /* nirvana_iosApp.swift */; };
 		891A15E327653A7000B26659 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891A15E227653A7000B26659 /* ContentView.swift */; };
@@ -26,7 +29,6 @@
 		891A16132765A44300B26659 /* ChatsCarouselViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891A16122765A44300B26659 /* ChatsCarouselViewModel.swift */; };
 		892179E42765FEB8001E6C60 /* FooterControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892179E32765FEB8001E6C60 /* FooterControlsView.swift */; };
 		892179E62765FECD001E6C60 /* FooterControlsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892179E52765FECD001E6C60 /* FooterControlsViewModel.swift */; };
-		89288EC0276755DF00E962C4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 89288EBF276755DF00E962C4 /* GoogleService-Info.plist */; };
 		89288ECB27675B9F00E962C4 /* OnboardingTemplateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89288ECA27675B9F00E962C4 /* OnboardingTemplateView.swift */; };
 		894E80BE276ED7A700624B72 /* avatars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 894E80BD276ED7A700624B72 /* avatars.swift */; };
 		894E80C1276EFD0500624B72 /* AudioPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 894E80C0276EFD0400624B72 /* AudioPlayerView.swift */; };
@@ -37,6 +39,7 @@
 		896CE7052770AE5D00DB474E /* InboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896CE7042770AE5D00DB474E /* InboxView.swift */; };
 		896CE70727711BAB00DB474E /* FindFriendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896CE70627711BAB00DB474E /* FindFriendsView.swift */; };
 		896CE70927712CED00DB474E /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896CE70827712CED00DB474E /* StringExtension.swift */; };
+		89A107E3277446F600B971FD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 89A107E2277446F600B971FD /* GoogleService-Info.plist */; };
 		89AD5573276DD790001658E0 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AD5572276DD790001658E0 /* SplashView.swift */; };
 		89AD5575276DE724001658E0 /* PhoneCodeVerificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AD5574276DE724001658E0 /* PhoneCodeVerificationView.swift */; };
 		89AD5578276DEAB3001658E0 /* LogoHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AD5577276DEAB3001658E0 /* LogoHeaderView.swift */; };
@@ -82,6 +85,7 @@
 /* Begin PBXFileReference section */
 		8904DEC7277055E90071E6CA /* OnboardingTrioView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingTrioView.swift; sourceTree = "<group>"; };
 		891060E3277359B900F14509 /* CloudStorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudStorageService.swift; sourceTree = "<group>"; };
+		891060E527743FEB00F14509 /* nirvana-ios.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "nirvana-ios.entitlements"; sourceTree = "<group>"; };
 		89110713277166D6005797FA /* UserFriends.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFriends.swift; sourceTree = "<group>"; };
 		891A15DD27653A7000B26659 /* nirvana-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "nirvana-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		891A15E027653A7000B26659 /* nirvana_iosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = nirvana_iosApp.swift; sourceTree = "<group>"; };
@@ -101,7 +105,6 @@
 		891A16122765A44300B26659 /* ChatsCarouselViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsCarouselViewModel.swift; sourceTree = "<group>"; };
 		892179E32765FEB8001E6C60 /* FooterControlsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FooterControlsView.swift; sourceTree = "<group>"; };
 		892179E52765FECD001E6C60 /* FooterControlsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FooterControlsViewModel.swift; sourceTree = "<group>"; };
-		89288EBF276755DF00E962C4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		89288ECA27675B9F00E962C4 /* OnboardingTemplateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingTemplateView.swift; sourceTree = "<group>"; };
 		894E80BD276ED7A700624B72 /* avatars.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = avatars.swift; sourceTree = "<group>"; };
 		894E80C0276EFD0400624B72 /* AudioPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerView.swift; sourceTree = "<group>"; };
@@ -112,6 +115,7 @@
 		896CE7042770AE5D00DB474E /* InboxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InboxView.swift; sourceTree = "<group>"; };
 		896CE70627711BAB00DB474E /* FindFriendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindFriendsView.swift; sourceTree = "<group>"; };
 		896CE70827712CED00DB474E /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
+		89A107E2277446F600B971FD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		89AD5572276DD790001658E0 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		89AD5574276DE724001658E0 /* PhoneCodeVerificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneCodeVerificationView.swift; sourceTree = "<group>"; };
 		89AD5577276DEAB3001658E0 /* LogoHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoHeaderView.swift; sourceTree = "<group>"; };
@@ -153,10 +157,13 @@
 				89F18AD0276E881800115B1E /* FirebaseAnalyticsSwift-Beta in Frameworks */,
 				89F18AE6276E881900115B1E /* FirebaseStorage in Frameworks */,
 				89F18AE2276E881900115B1E /* FirebaseFunctionsCombine-Community in Frameworks */,
+				891060E82774460500F14509 /* FirebaseInAppMessaging-Beta in Frameworks */,
+				891060EC2774460500F14509 /* FirebaseMessaging in Frameworks */,
 				89F18AE8276E881900115B1E /* FirebaseStorageCombine-Community in Frameworks */,
 				89F18ADA276E881900115B1E /* FirebaseFirestore in Frameworks */,
 				89F18AD6276E881900115B1E /* FirebaseDatabase in Frameworks */,
 				89F18AD8276E881900115B1E /* FirebaseDatabaseSwift-Beta in Frameworks */,
+				891060EA2774460500F14509 /* FirebaseInAppMessagingSwift-Beta in Frameworks */,
 				89F18ACE276E881800115B1E /* FirebaseAnalytics in Frameworks */,
 				89F18AE4276E881900115B1E /* FirebaseFunctionsSwift-Beta in Frameworks */,
 			);
@@ -165,11 +172,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		891060E62774460500F14509 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		891A15D427653A7000B26659 = {
 			isa = PBXGroup;
 			children = (
 				891A15DF27653A7000B26659 /* nirvana-ios */,
 				891A15DE27653A7000B26659 /* Products */,
+				891060E62774460500F14509 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -184,6 +199,7 @@
 		891A15DF27653A7000B26659 /* nirvana-ios */ = {
 			isa = PBXGroup;
 			children = (
+				891060E527743FEB00F14509 /* nirvana-ios.entitlements */,
 				89AD557D276E01E2001658E0 /* Repositories */,
 				89F05BA2276ACBFA0002E9C7 /* Services */,
 				891A160C27657CD600B26659 /* Models */,
@@ -194,7 +210,7 @@
 				891A15E027653A7000B26659 /* nirvana_iosApp.swift */,
 				891A15E227653A7000B26659 /* ContentView.swift */,
 				891A15E427653A7100B26659 /* Assets.xcassets */,
-				89288EBF276755DF00E962C4 /* GoogleService-Info.plist */,
+				89A107E2277446F600B971FD /* GoogleService-Info.plist */,
 				891A15E627653A7100B26659 /* Preview Content */,
 			);
 			path = "nirvana-ios";
@@ -468,6 +484,9 @@
 				89F18AE5276E881900115B1E /* FirebaseStorage */,
 				89F18AE7276E881900115B1E /* FirebaseStorageCombine-Community */,
 				89F18AE9276E881900115B1E /* FirebaseStorageSwift-Beta */,
+				891060E72774460500F14509 /* FirebaseInAppMessaging-Beta */,
+				891060E92774460500F14509 /* FirebaseInAppMessagingSwift-Beta */,
+				891060EB2774460500F14509 /* FirebaseMessaging */,
 			);
 			productName = "nirvana-ios";
 			productReference = 891A15DD27653A7000B26659 /* nirvana-ios.app */;
@@ -517,7 +536,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				891A15F12765528700B26659 /* Satisfy-Regular.ttf in Resources */,
-				89288EC0276755DF00E962C4 /* GoogleService-Info.plist in Resources */,
+				89A107E3277446F600B971FD /* GoogleService-Info.plist in Resources */,
 				891A15E827653A7100B26659 /* Preview Assets.xcassets in Resources */,
 				891A15E527653A7100B26659 /* Assets.xcassets in Resources */,
 			);
@@ -706,6 +725,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "nirvana-ios/nirvana-ios.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -741,6 +761,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "nirvana-ios/nirvana-ios.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -822,6 +843,21 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		891060E72774460500F14509 /* FirebaseInAppMessaging-Beta */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 89F18ACC276E881800115B1E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = "FirebaseInAppMessaging-Beta";
+		};
+		891060E92774460500F14509 /* FirebaseInAppMessagingSwift-Beta */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 89F18ACC276E881800115B1E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = "FirebaseInAppMessagingSwift-Beta";
+		};
+		891060EB2774460500F14509 /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 89F18ACC276E881800115B1E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
+		};
 		89BCABE1276B3CB0009E9B10 /* NavigationStack */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 89BCABE0276B3CB0009E9B10 /* XCRemoteSwiftPackageReference "swiftui-navigation-stack" */;

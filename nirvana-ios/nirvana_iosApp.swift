@@ -8,6 +8,7 @@
 import SwiftUI
 import Firebase
 import GoogleSignIn
+import FirebaseMessaging
 
 @main
 struct nirvana_iosApp: App {
@@ -27,29 +28,74 @@ struct nirvana_iosApp: App {
 }
 
 class AppDelegate: NSObject, UIApplicationDelegate {
+    
+    let gcmMessageIDKey = "gcm.message_id"
+    
       func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-          print("Colors application is starting up. ApplicationDelegate didFinishLaunchingWithOptions.")
+          print("application is starting up. ApplicationDelegate didFinishLaunchingWithOptions.")
             
           print("initialized Firebase")
           FirebaseApp.configure()
+          
+          // setting up cloud messaging
+          Messaging.messaging().delegate = self
+          
+          // setting up notifications ... requesting authorization from user
+          if #available(iOS 10.0, *) {
+            // For iOS 10 display notification (sent via APNS)
+            UNUserNotificationCenter.current().delegate = self
+
+            let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
+            UNUserNotificationCenter.current().requestAuthorization(
+              options: authOptions,
+              completionHandler: { _, _ in }
+            )
+          } else {
+            let settings: UIUserNotificationSettings =
+              UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
+            application.registerUserNotificationSettings(settings)
+          }
+
+          application.registerForRemoteNotifications()
+
+          
           return true
       }
     
       func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-          print("\(#function)")
+          
           //MARK: add this when I have APN setup through app
           // gets the APN token so that firebase can send notifications to app
-//          Auth.auth().setAPNSToken(deviceToken, type: .sandbox)
+          Auth.auth().setAPNSToken(deviceToken, type: .sandbox)
       }
       
       func application(_ application: UIApplication, didReceiveRemoteNotification notification: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
             print("did receive remote notification")
-            print("\(#function)")
+          
+          // If you are receiving a notification message while your app is in the background,
+            // this callback will not be fired till the user taps on the notification launching the application.
+            // TODO: Handle data of notification
+
+            // With swizzling disabled you must let Messaging know about the message, for Analytics
+            // Messaging.messaging().appDidReceiveMessage(userInfo)
+
+            // Print message ID.
+            if let messageID = notification[gcmMessageIDKey] {
+              print("Message ID: \(messageID)")
+            }
+
+            // Print full message.
+            print(notification)
+
+            completionHandler(UIBackgroundFetchResult.newData)
+          
           //MARK: add this when I have APN setup through app
-//            if Auth.auth().canHandleNotification(notification) {
-//              completionHandler(.noData)
-//              return
-//            }
+            if Auth.auth().canHandleNotification(notification) {
+              completionHandler(.noData)
+              return
+            }
+          
+          
           
       }
     
@@ -78,4 +124,67 @@ class AppDelegate: NSObject, UIApplicationDelegate {
       // URL not auth related, developer should handle it.
         return true
     }
+    
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        
+    }
+    
+}
+
+// cloud messaging
+extension AppDelegate: MessagingDelegate {
+    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
+      print("Firebase registration token: \(String(describing: fcmToken))")
+
+      let dataDict: [String: String] = ["token": fcmToken ?? ""]
+        print(fcmToken)
+      NotificationCenter.default.post(
+        name: Notification.Name("FCMToken"),
+        object: nil,
+        userInfo: dataDict
+      )
+        
+      // TODO: If necessary send token to application server.
+      // Note: This callback is fired at each app startup and whenever a new token is generated.
+    }
+    
+}
+
+// user notifications...in app notifications
+@available(iOS 10, *)
+extension AppDelegate: UNUserNotificationCenterDelegate {
+  // Receive displayed notifications for iOS 10 devices.
+  func userNotificationCenter(_ center: UNUserNotificationCenter,
+                              willPresent notification: UNNotification,
+                              withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions)
+                                -> Void) {
+    let userInfo = notification.request.content.userInfo
+
+    // With swizzling disabled you must let Messaging know about the message, for Analytics
+    // Messaging.messaging().appDidReceiveMessage(userInfo)
+
+    // ...
+
+    // Print full message.
+    print(userInfo)
+
+    // Change this to your preferred presentation option
+    completionHandler([[.alert, .sound]])
+  }
+
+  func userNotificationCenter(_ center: UNUserNotificationCenter,
+                              didReceive response: UNNotificationResponse,
+                              withCompletionHandler completionHandler: @escaping () -> Void) {
+    let userInfo = response.notification.request.content.userInfo
+
+    // ...
+
+    // With swizzling disabled you must let Messaging know about the message, for Analytics
+    // Messaging.messaging().appDidReceiveMessage(userInfo)
+
+    // Print full message.
+    print(userInfo)
+
+    completionHandler()
+  }
 }
