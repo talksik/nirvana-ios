@@ -9,6 +9,7 @@ import SwiftUI
 import NavigationStack
 
 struct CircleNavigationView: View {
+    @EnvironmentObject var innerCircleVM: InnerCircleViewModel
     @EnvironmentObject var navigationStack: NavigationStack
     @EnvironmentObject var authSessionStore: AuthSessionStore
     
@@ -83,7 +84,7 @@ struct CircleNavigationView: View {
                     Image((self.authSessionStore.user?.avatar)!)
                         .resizable()
                         .scaledToFit()
-                        .background(NirvanaColor.teal.opacity(0.5))
+                        .background(self.innerCircleVM.isRecording ? Color.orange : NirvanaColor.teal.opacity(0.5))
                         .frame(width: 40, height: 40)
                         .clipShape(Circle())
                         .padding(5)

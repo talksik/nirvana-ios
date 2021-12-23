@@ -69,7 +69,7 @@ class InnerCircleViewModel: ObservableObject {
                 }
                 
                 let newMessage = Message(sendId: senderId, receivId: receiverId, audioDUrl: audioDataUrl!.absoluteString)
-                print(newMessage)
+                
                 // create a new message in firestore with the url for receiving user to automatically get notified
                 self?.firestoreService.createMessage(message: newMessage) {[weak self] res in
                     print(res)

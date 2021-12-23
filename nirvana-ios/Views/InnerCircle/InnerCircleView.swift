@@ -28,7 +28,7 @@ struct InnerCircleView: View {
     var body: some View {
         ZStack {
             // background
-            WavesGlassBackgroundView()
+            WavesGlassBackgroundView(isRecording: self.innerCircleVM.isRecording)
             
             // content
             CircleGridView(selectedFriendIndex: self.$selectedFriendIndex)
@@ -37,7 +37,7 @@ struct InnerCircleView: View {
             // header
             VStack(alignment: .leading) {
                 
-                CircleNavigationView(sheetView: self.$sheetView)
+                CircleNavigationView(sheetView: self.$sheetView).environmentObject(innerCircleVM)
                 
                 Spacer()
             }

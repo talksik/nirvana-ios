@@ -11,14 +11,18 @@ struct WavesGlassBackgroundView: View {
     let universalSize = UIScreen.main.bounds
     // y position of where waves should start
     let baseLineY = UIScreen.main.bounds.height * 0.95
+
+    var isRecording: Bool = false
     
     @State var animateWaves = false
     
     var body: some View {
+        let recordingColors = [NirvanaColor.solidBlue, NirvanaColor.dimTeal, Color.orange.opacity(0.8), NirvanaColor.teal.opacity(0.7), NirvanaColor.teal.opacity(0.7), NirvanaColor.solidTeal.opacity(0.7), NirvanaColor.solidBlue]
+        let normalColors = [NirvanaColor.solidBlue, NirvanaColor.dimTeal, Color.orange.opacity(0.4), NirvanaColor.teal.opacity(0.5), NirvanaColor.teal.opacity(0.3), NirvanaColor.solidTeal.opacity(0.3), NirvanaColor.solidBlue]
         ZStack {
             AngularGradient(
                 gradient: Gradient(
-                    colors: [NirvanaColor.solidBlue, NirvanaColor.dimTeal, Color.orange.opacity(0.4), NirvanaColor.teal.opacity(0.5), NirvanaColor.teal.opacity(0.3), NirvanaColor.solidTeal.opacity(0.3), NirvanaColor.solidBlue]),
+                    colors: self.isRecording ? recordingColors : normalColors),
                 center: .bottom,
                 angle: .degrees(120))
              
