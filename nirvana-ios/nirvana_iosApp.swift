@@ -77,7 +77,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
             // TODO: Handle data of notification
 
             // With swizzling disabled you must let Messaging know about the message, for Analytics
-            // Messaging.messaging().appDidReceiveMessage(userInfo)
+             Messaging.messaging().appDidReceiveMessage(notification)
 
             // Print message ID.
             if let messageID = notification[gcmMessageIDKey] {
@@ -94,9 +94,6 @@ class AppDelegate: NSObject, UIApplicationDelegate {
               completionHandler(.noData)
               return
             }
-          
-          
-          
       }
     
     // For iOS 9+
@@ -137,14 +134,13 @@ extension AppDelegate: MessagingDelegate {
       print("Firebase registration token: \(String(describing: fcmToken))")
 
       let dataDict: [String: String] = ["token": fcmToken ?? ""]
-        print(fcmToken)
       NotificationCenter.default.post(
         name: Notification.Name("FCMToken"),
         object: nil,
         userInfo: dataDict
       )
         
-      // TODO: If necessary send token to application server.
+      // TODO: If necessary send token to application server...need to use this in cloud functionb to send the message to this user
       // Note: This callback is fired at each app startup and whenever a new token is generated.
     }
     
