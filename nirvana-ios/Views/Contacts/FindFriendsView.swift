@@ -9,10 +9,8 @@ import SwiftUI
 import Contacts
 import NavigationStack
 
-
-
 struct FindFriendsView: View {
-    @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var navigationStack : NavigationStack
     @EnvironmentObject var authSessionStore: AuthSessionStore
     
     @StateObject var contactsVM = ContactsViewModel()
@@ -20,11 +18,41 @@ struct FindFriendsView: View {
     @State private var searchQuery: String = ""
     
     var body: some View {
-        NavigationView {
+        ZStack {
+            WavesGlassBackgroundView()
+            
+            // programmatic back button
+            ZStack(alignment: .topLeading) {
+                Color.clear
+                
+                Button {
+                    self.navigationStack.pop()
+                } label: {
+                    Label("back", systemImage:"chevron.left")
+                        .labelStyle(.iconOnly)
+                        .font(.title2)
+                        .foregroundColor(NirvanaColor.teal)
+                }
+                .padding()
+            }
+            
+            // main content
             VStack {
-                Text("You must have someone in your phone contacts to add them. 🥬")
-                    .font(.subheadline)
-                    .foregroundColor(Color.gray)
+                // header logo area
+                LogoHeaderView()
+                
+                // action text
+                VStack(alignment: .leading) {
+                    Text("Let's add some friends.")
+                        .font(.title)
+                        .fontWeight(.medium)
+                        .foregroundColor(NirvanaColor.teal)
+                        .multilineTextAlignment(.center)
+                    
+                    Text("You must have someone in your phone contacts to add them. You can only add 10 people to your circle! 🥬")
+                        .font(.subheadline)
+                        .foregroundColor(NirvanaColor.teal)
+                }
                 
                 List {
                     ForEach(searchItems, id: \.self) { key in
@@ -35,12 +63,6 @@ struct FindFriendsView: View {
                 }
                 .searchable(text: self.$searchQuery)
             }
-            .navigationTitle("Find Friends")
-            .navigationBarItems(trailing: Button(action: {
-                dismiss()
-            }, label: {
-                Text("Cancel")
-            }))
         }
         .onAppear {
             self.contactsVM.fetchContacts()

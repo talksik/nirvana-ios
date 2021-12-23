@@ -8,19 +8,10 @@
 import SwiftUI
 import NavigationStack
 
-enum SheetView : Identifiable {
-    var id: Self { self }
-    case contacts
-    case inbox
-    case profile
-}
-
 struct InnerCircleView: View {
     @StateObject var innerCircleVM: InnerCircleViewModel = InnerCircleViewModel()
     @EnvironmentObject var authSessionStore: AuthSessionStore
     @EnvironmentObject var navigationStack: NavigationStack
-    
-    @State var sheetView: SheetView? = nil
     
     @State var selectedFriendIndex: Int? = nil
     
@@ -40,7 +31,7 @@ struct InnerCircleView: View {
                         .padding(.bottom)
                     
                     Button {
-                        self.sheetView = SheetView.profile
+                        self.navigationStack.push(AddBasicInfoView())
                     } label: {
                         Text("Create Profile")
                             .fontWeight(.heavy)
@@ -69,7 +60,7 @@ struct InnerCircleView: View {
                         .padding(.bottom)
                     
                     Button {
-                        self.sheetView = SheetView.contacts
+                        self.navigationStack.push(FindFriendsView())
                     } label: {
                         Text("Add Friends")
                             .fontWeight(.heavy)
@@ -104,25 +95,12 @@ struct InnerCircleView: View {
             // header
             VStack(alignment: .leading) {
                 
-                CircleNavigationView(sheetView: self.$sheetView).environmentObject(innerCircleVM)
+                CircleNavigationView().environmentObject(innerCircleVM)
                 
                 Spacer()
             }
             
             CircleFooterView(selectedFriendIndex: self.$selectedFriendIndex)
-        }
-        .sheet(item: self.$sheetView) {page in
-            switch page {
-            case SheetView.contacts:
-                FindFriendsView()
-//            case SheetView.inbox: // removing feature for now
-//                InboxView()
-            case SheetView.profile:
-                AddBasicInfoView()
-            default:
-                Text("asdf")
-            }
-            
         }
         .onAppear() {
         }

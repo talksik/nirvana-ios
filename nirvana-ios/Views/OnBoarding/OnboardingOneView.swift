@@ -26,7 +26,7 @@ struct OnboardingOneView: View {
                         .frame(width: 5, height: 5)
                         .foregroundColor(NirvanaColor.teal)
                     
-                    Circle()
+                    Capsule()
                         .frame(width: 5, height: 5)
                         .foregroundColor(NirvanaColor.teal)
                     
@@ -82,7 +82,7 @@ struct OnboardingTwo: View {
                         .frame(width: 20, height: 5)
                         .foregroundColor(NirvanaColor.teal)
                     
-                    Circle()
+                    Capsule()
                         .frame(width: 5, height: 5)
                         .foregroundColor(NirvanaColor.teal)
                     
@@ -104,7 +104,7 @@ struct OnboardingTwo: View {
                     }
                     
                     Button {
-                        self.navigationStack.push(OnboardingTwo())
+                        self.navigationStack.push(OnboardingThree())
                     } label: {
                         Text("Next")
                             .fontWeight(.heavy)
@@ -146,7 +146,7 @@ struct OnboardingThree: View {
                         .frame(width: 5, height: 5)
                         .foregroundColor(NirvanaColor.teal)
                     
-                    Circle()
+                    Capsule()
                         .frame(width: 20, height: 5)
                         .foregroundColor(NirvanaColor.teal)
                     
@@ -168,7 +168,7 @@ struct OnboardingThree: View {
                     }
                     
                     Button {
-                        self.navigationStack.push(OnboardingTwo())
+                        self.navigationStack.push(InnerCircleView())
                     } label: {
                         Text("Get Started")
                             .fontWeight(.heavy)

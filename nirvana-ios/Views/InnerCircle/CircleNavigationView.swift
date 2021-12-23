@@ -13,22 +13,12 @@ struct CircleNavigationView: View {
     @EnvironmentObject var navigationStack: NavigationStack
     @EnvironmentObject var authSessionStore: AuthSessionStore
     
-    @Binding var sheetView: SheetView?
-    
     var body: some View {
         HStack(alignment: .center) {
             Menu {
-                Button(role: .destructive) {
-                    print("manage inbox")
-                    self.sheetView = .inbox
-                } label: {
-                    Label("inbox", systemImage: "envelope.badge")
-                        .foregroundColor(NirvanaColor.teal)
-                }
-                
                 Button {
                     print("going to show contacts now")
-                    self.sheetView = .contacts
+                    self.navigationStack.push(FindFriendsView())
                 } label: {
                     Label("add peeps", systemImage: "person.2.wave.2")
                         .foregroundColor(NirvanaColor.teal)
@@ -146,6 +136,6 @@ struct CircleNavigationView: View {
 
 struct CircleNavigationView_Previews: PreviewProvider {
     static var previews: some View {
-        CircleNavigationView(sheetView: .constant(SheetView.contacts)).environmentObject(AuthSessionStore(isPreview: true))
+        CircleNavigationView().environmentObject(AuthSessionStore(isPreview: true))
     }
 }
