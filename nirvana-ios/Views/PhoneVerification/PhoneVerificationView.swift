@@ -47,7 +47,7 @@ struct PhoneVerificationView: View {
                             .padding()
                             .background(.ultraThinMaterial)
                             .clipShape(Circle())
-                            .shadow(color: Color.black.opacity(0.3), radius: 20, x: 0, y: 20)
+                            .shadow(radius:10)
                             .font(.subheadline)
                             .onTapGesture {
                                 // tell people that we only support the United States
@@ -60,7 +60,7 @@ struct PhoneVerificationView: View {
                             .background(.ultraThinMaterial)
                             .clipShape(Capsule())
                             .keyboardType(.phonePad)
-                            .shadow(color: Color.black.opacity(0.3), radius: 20, x: 0, y: 20)
+                            .shadow(radius:10)
                             .font(.subheadline)
                             .onReceive(Just(self.phoneNumber)) {newValue in
                                 let filtered = newValue.filter {
@@ -125,10 +125,6 @@ struct PhoneVerificationView: View {
                                     .clipShape(Capsule())
                                     .shadow(radius:10)
                                     .animation(.default)
-                                
-                                Text("You might receive an SMS message for verification and standard rates apply.")
-                                    .font(.caption)
-                                    .foregroundColor(NirvanaColor.teal)
                             }
                         }
                     } else { // show dull button if didn't enter full phone number
@@ -141,6 +137,10 @@ struct PhoneVerificationView: View {
                             .shadow(radius:10)
                             .animation(.default)
                     }
+                    
+                    Text("You might receive an SMS message for verification and standard rates apply.")
+                        .font(.caption)
+                        .foregroundColor(NirvanaColor.teal)
                 }
             ))
             
