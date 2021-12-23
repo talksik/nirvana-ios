@@ -16,12 +16,17 @@ struct InnerCircleView: View {
     @State var selectedFriendIndex: Int? = nil
     
     let universalSize = UIScreen.main.bounds
+        
+    @State var alertActive = false
+    @State var alertText = ""
+    @State var alertSubtext = ""
     
     var body: some View {
         ZStack {
             // background
             WavesGlassBackgroundView(isRecording: self.innerCircleVM.isRecording)
             
+            // stale states
             if self.authSessionStore.user?.nickname == nil || self.authSessionStore.user?.avatar == nil {
                 VStack(alignment: .center) {
                     Image("undraw_fall_is_coming_yl-0-x")
@@ -95,14 +100,41 @@ struct InnerCircleView: View {
             // header
             VStack(alignment: .leading) {
                 
-                CircleNavigationView().environmentObject(innerCircleVM)
+                CircleNavigationView(alertActive: self.$alertActive, alertText: self.$alertText, alertSubtext: self.$alertSubtext).environmentObject(innerCircleVM)
                 
                 Spacer()
             }
             
             CircleFooterView(selectedFriendIndex: self.$selectedFriendIndex)
+            
+            // helper for new users
+            if self.authSessionStore.friendsArr.count <= 1 {
+                ZStack(alignment: .bottomTrailing) {
+                    Color.clear
+
+                    Button {
+                        self.alertActive.toggle()
+                        self.alertText = "👆🏼It's simple!"
+                        self.alertSubtext = "Press and hold to send a message. \n Tap to listen!"
+                    } label: {
+                        Label("help!", systemImage: "questionmark.circle")
+                            .font(.title2)
+                            .foregroundColor(NirvanaColor.teal)
+                            .padding()
+                            .background(.ultraThinMaterial)
+                            .shadow(radius: 10)
+                            .clipShape(Circle())
+                            .labelStyle(.iconOnly)
+                    }
+                }
+            }
         }
-        .onAppear() {
+        .alert(self.alertText, isPresented: self.$alertActive) {
+
+            Button("OK", role: ButtonRole.cancel) { }
+
+        } message: {
+            Text(self.alertSubtext)
         }
     }
 }

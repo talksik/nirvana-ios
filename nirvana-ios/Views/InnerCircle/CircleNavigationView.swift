@@ -13,9 +13,9 @@ struct CircleNavigationView: View {
     @EnvironmentObject var navigationStack: NavigationStack
     @EnvironmentObject var authSessionStore: AuthSessionStore
     
-    @State var alertActive = false
-    @State var alertText = ""
-    @State var alertSubtext = ""
+    @Binding var alertActive: Bool
+    @Binding var alertText: String
+    @Binding var alertSubtext: String
     
     var body: some View {
         HStack(alignment: .center) {
@@ -129,6 +129,7 @@ struct CircleNavigationView: View {
                         self.alertText = "💼 Coming Soon!"
                         
                         self.alertSubtext = "Efficient and more authentic communication for teams! Contact us for more info."
+                        
                     } label: {
                         Label("work", systemImage: "suitcase")
                             .font(.caption2)
@@ -143,19 +144,11 @@ struct CircleNavigationView: View {
                 }
             }
         }
-        .alert(self.alertText, isPresented: self.$alertActive) {
-            
-            Button("OK", role: ButtonRole.cancel) { }
-            
-        } message: {
-            Text(self.alertSubtext)
-        }
-        .padding(.horizontal)
     }
 }
 
-struct CircleNavigationView_Previews: PreviewProvider {
-    static var previews: some View {
-        CircleNavigationView().environmentObject(AuthSessionStore(isPreview: true))
-    }
-}
+//struct CircleNavigationView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        CircleNavigationView().environmentObject(AuthSessionStore(isPreview: true))
+//    }
+//}
