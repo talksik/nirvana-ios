@@ -39,6 +39,9 @@ final class AuthSessionStore: ObservableObject, SessionStore {
     // transformed data for the views
     @Published var friendMessagesDict: [String: [Message]] = [:]
     
+    private var dataListeners: [ListenerRegistration] = []
+    private var listenersActive = false // false on app/processes killed
+    
     // TODO: temporary...should not have this here
     private var db = Firestore.firestore()
         
@@ -117,10 +120,10 @@ final class AuthSessionStore: ObservableObject, SessionStore {
     }
     
     func logOut() {
-         let firebaseAuth = Auth.auth()
-        
          do {
-           try firebaseAuth.signOut()
+           try Auth.auth().signOut()
+             
+           self.deinitDataListeners()
          } catch let signOutError as NSError {
            print("Error signing out: %@", signOutError)
          }
@@ -132,6 +135,10 @@ final class AuthSessionStore: ObservableObject, SessionStore {
         }
     }
     
+    func getCurrentUserId() -> String?  {
+        return Auth.auth().currentUser?.uid
+    }
+    
     func setupAuthListen() {
         // monitor authentication changes using firebase
         self.handler = Auth.auth().addStateDidChangeListener { [weak self] res, authUser in
@@ -140,15 +147,13 @@ final class AuthSessionStore: ObservableObject, SessionStore {
             guard let self = self else { return }
          
             self.sessionState = authUser == nil ? SessionState.isLoggedOut : SessionState.isAuthenticated
+            print("set the session state to \(self.sessionState)")
             
             // get the user from the auth table in firebase auth
             if let uid = authUser?.uid {
                 // if we have a user, create a new user model
                 print("auth listener: Got user: \(uid)")
                 print("auth listener: phone number: \(authUser?.phoneNumber)")
-                
-                // MARK: data listeners for entire environment
-                self.activateMainDataListeners(userId: uid)
                 
             } else {
                 // if we don't have a user, set our session to nil
@@ -172,14 +177,9 @@ extension UIApplication {
 
 }
 
-struct MasterUserFriendsMessagesModel {
-    
-}
 
-
+// activate data listeners for the main data throughout the app
 extension AuthSessionStore {
-    
-    
     // get all my friends
     // traverse all my friends, and put them into the friendsDict
     
@@ -195,12 +195,29 @@ extension AuthSessionStore {
     // I send a new message to sarth -> goes to messages database -> notification to sarth
     // sarth's data looks like this: [arjun: [...arjun's message, sarth's reply...]]
     
-    
-    
-    private func activateMainDataListeners(userId: String) {
+    func activateMainDataListeners() {
+        // do nothing if the snapshots are already alive
+        if self.listenersActive {
+            print("listeners already alive...no point reinitiating")
+            return
+        }
+        
+        // extra validation to make sure that we are authenticated although should be if this is called
+        if self.sessionState != SessionState.isAuthenticated {
+            print("can't initiate data listeners...user not authenticated")
+            return
+        }
+        
+        // can't get proper listeners working if don't have current user's id
+        let currUserId = self.getCurrentUserId()
+        if currUserId == nil {
+            print("no user id available to initiate data listeners")
+            return
+        }
+        
         // MARK: keeping the @Published user object updated
         // TODO: THIS WON"T UPDATE VIEW since user is a reference type...can manually publish...research and learn more
-        self.firestoreService.getUserRealtime(userId: userId) {[weak self] realtimeUpdatedUser in
+        self.firestoreService.getUserRealtime(userId: currUserId!) {[weak self] realtimeUpdatedUser in
             if realtimeUpdatedUser != nil {
                 print("up to date user: \(realtimeUpdatedUser)")
                 self?.user = realtimeUpdatedUser
@@ -218,7 +235,7 @@ extension AuthSessionStore {
         // order: when the relationship was created...also easy for user
         // limit: for my protection of db costs lol
         // TODO: use the indexes I created
-        db.collection("user_friends").whereField("userId", isEqualTo: userId).limit(to: 100)
+        let friendsListener = db.collection("user_friends").whereField("userId", isEqualTo: currUserId).limit(to: 100)
             .addSnapshotListener { querySnapshot, error in
                 guard let documents = querySnapshot?.documents else {
                     print("Error fetching user's friends: \(error!)")
@@ -281,7 +298,7 @@ extension AuthSessionStore {
         // limit: because each user should have most 12 friends and so would at most need 24 messages to show turns and all that...save myself from hackers here...unless a user gets 100 messages from someone, and that too at least they will be ordered
         
         // SOLUTION: composite with array
-        db.collection("messages").whereField("senderIdReceiverIdComposite", arrayContains: userId).order(by: "sentTimestamp", descending: true).limit(to: 100)
+        let messagesListener = db.collection("messages").whereField("senderIdReceiverIdComposite", arrayContains: currUserId).order(by: "sentTimestamp", descending: true).limit(to: 100)
             .addSnapshotListener { querySnapshot, error in
                     guard let documents = querySnapshot?.documents else {
                         print("error in fetching messages: \(error!)")
@@ -304,7 +321,7 @@ extension AuthSessionStore {
                                     // this means it's most likely someone new (never had user_friend relationship before) messaging for the user's inbox
                                     // TODO: prolly want to make a call to get this sender user details for the inbox, but they should either be in the friendsArr or their are not a friend so won't be there
                                     // also add in any messages where I am the sender
-                                    if currMessage!.senderId == userId { // if I am the sender
+                                    if currMessage!.senderId == currUserId { // if I am the sender
                                         if self.friendMessagesDict[currMessage!.receiverId] == nil {
                                             self.friendMessagesDict[currMessage!.receiverId] = [currMessage!]
                                         } else {
@@ -318,7 +335,6 @@ extension AuthSessionStore {
                                             self.friendMessagesDict[currMessage!.senderId]?.append(currMessage!)
                                         }
                                     }
-                                    
                                 }
                                 
                                 self.objectWillChange.send()
@@ -331,9 +347,24 @@ extension AuthSessionStore {
                         return nil
                     }
                 }
+        
+        self.listenersActive = true
+        
+        // adding listeners to be able to deinit later
+        // TODO: make sure to have this listener avaible available to deinit as well
+        // self.dataListeners.append(currUserListener)
+        self.dataListeners.append(messagesListener)
+        self.dataListeners.append(friendsListener)
+        
     }
     
-    private func deinitDataListeners() {
+    func deinitDataListeners() {
+        for listener in self.dataListeners {
+            listener.remove()
+        }
         
+        print("deactivated listeners!")
+        
+        self.listenersActive = false
     }
 }

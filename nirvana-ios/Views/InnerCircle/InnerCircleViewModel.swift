@@ -33,6 +33,10 @@ class InnerCircleViewModel: ObservableObject {
         }
     }
     
+}
+
+// audio stuff
+extension InnerCircleViewModel {
     func startRecording() {
         let filePath = getTemporaryDirectory().appendingPathComponent("\(UUID().uuidString).m4a")
         
@@ -98,3 +102,7 @@ class InnerCircleViewModel: ObservableObject {
 
 }
 
+// handling saving device token for notifications
+extension InnerCircleViewModel {
+    
+}

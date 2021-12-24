@@ -58,6 +58,8 @@ struct CircleNavigationView: View {
                     
                     self.authSessionStore.logOut()
                     
+                    // TODO: brute force navigating out as it's not working
+                    self.navigationStack.push(RouterView())
                     // once logged out, then the listener will listen and router view will take care of us thereafter
                 } label: {
                     Label("log out", systemImage: "rectangle.portrait.and.arrow.right")

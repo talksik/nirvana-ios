@@ -116,7 +116,7 @@ struct InnerCircleView: View {
                     Button {
                         self.alertActive.toggle()
                         self.alertText = "👆🏼It's simple!"
-                        self.alertSubtext = "Press and hold to send a message. \n Tap to listen!"
+                        self.alertSubtext = "Press and hold on a friend to send a message. \n Tap on them to listen!"
                     } label: {
                         Label("help!🙉", systemImage: "questionmark.circle")
                             .font(.caption)
@@ -139,6 +139,18 @@ struct InnerCircleView: View {
         } message: {
             Text(self.alertSubtext)
         }
+        .onAppear {
+            // activate 3 data listeners once for authsessionstore/usermanager if not already called, but authsessionstore will handle that
+            self.authSessionStore.activateMainDataListeners()
+                        
+            // save device token
+        }
+//        .onDisappear {
+//            print("deiniting data listeners, but current data should still be cached!")
+//
+//            // deactivate all data listeners
+//            self.authSessionStore.deinitDataListeners()
+//        }
     }
 }
 
