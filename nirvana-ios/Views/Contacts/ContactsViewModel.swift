@@ -96,7 +96,7 @@ class ContactsViewModel : ObservableObject {
         // validation
         // make sure userId is not the same as friendId...don't want people friending themselves
         if userId == friendId {
-            completion(ServiceState.error(ServiceError(description: "You cannot friend himself! Silly!")))
+            completion(ServiceState.error(ServiceError(description: "You cannot friend yourself, silly!")))
             return
         }
         
