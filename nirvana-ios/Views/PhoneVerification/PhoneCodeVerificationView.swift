@@ -48,6 +48,7 @@ struct PhoneCodeVerificationView: View {
                         .padding(.vertical)
                         .keyboardType(.phonePad)
                         .focused(self.$focusedInputField)
+                    
                     Text("Please allow up to 30 seconds to receive your code. Navigate back and re-enter phone number if you do not get the message.")
                         .font(.caption)
                         .foregroundColor(NirvanaColor.teal)

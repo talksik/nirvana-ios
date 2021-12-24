@@ -56,7 +56,7 @@ struct InnerCircleView: View {
                 }
                 .padding()
             }
-            else if self.authSessionStore.friendsArr.count < 0 {
+            else if self.authSessionStore.friendsArr.count == 0 {
                 VStack(alignment: .center) {
                     Image("undraw_fall_is_coming_yl-0-x")
                         .renderingMode(.original)
