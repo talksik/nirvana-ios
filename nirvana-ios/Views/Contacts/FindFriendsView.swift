@@ -18,41 +18,13 @@ struct FindFriendsView: View {
     @State private var searchQuery: String = ""
     
     var body: some View {
-        ZStack {
-            WavesGlassBackgroundView()
-            
-            // programmatic back button
-            ZStack(alignment: .topLeading) {
-                Color.clear
-                
-                Button {
-                    self.navigationStack.pop()
-                } label: {
-                    Label("back", systemImage:"chevron.left")
-                        .labelStyle(.iconOnly)
-                        .font(.title2)
-                        .foregroundColor(NirvanaColor.teal)
-                }
-                .padding()
-            }
-            
-            // main content
+        // main content
+        NavigationView {
             VStack {
-                // header logo area
-                LogoHeaderView()
-                
-                // action text
-                VStack(alignment: .leading) {
-                    Text("Let's add some friends.")
-                        .font(.title)
-                        .fontWeight(.medium)
-                        .foregroundColor(NirvanaColor.teal)
-                        .multilineTextAlignment(.center)
-                    
-                    Text("You must have someone in your phone contacts to add them. You can only add 10 people to your circle! 🥬")
-                        .font(.subheadline)
-                        .foregroundColor(NirvanaColor.teal)
-                }
+                Text("You must have someone in your phone contacts to add them. You can only add 10 people to your circle! 🥬")
+                    .font(.subheadline)
+                    .foregroundColor(NirvanaColor.teal)
+                    .padding(.horizontal)
                 
                 List {
                     ForEach(searchItems, id: \.self) { key in
@@ -63,6 +35,18 @@ struct FindFriendsView: View {
                 }
                 .searchable(text: self.$searchQuery)
             }
+            .navigationBarItems(
+                leading:
+                    Button {
+                        self.navigationStack.pop()
+                    } label: {
+                        Label("back", systemImage:"chevron.left")
+                            .labelStyle(.iconOnly)
+                            .font(.title2)
+                            .foregroundColor(NirvanaColor.teal)
+                    }
+                )
+            .navigationBarTitle("Find Friends")
         }
         .onAppear {
             self.contactsVM.fetchContacts()
