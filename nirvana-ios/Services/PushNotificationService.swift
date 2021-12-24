@@ -6,8 +6,14 @@
 //
 
 import Foundation
+import Firebase
+import FirebaseFirestore
+import FirebaseMessaging
+import UserNotifications
+import UIKit
 
-class PushNotificationService {
+class PushNotificationService: NSObject, MessagingDelegate, UNUserNotificationCenterDelegate {
+    let firestoreService = FirestoreService()
     
     func sendPushNotification(to token: String, title: String, body: String) {
         let urlString = "https://fcm.googleapis.com/fcm/send"
@@ -33,6 +39,44 @@ class PushNotificationService {
             }
         }
         task.resume()
+    }
+    
+    func registerForPushNotifications() {
+        if #available(iOS 10.0, *) {
+            // For iOS 10 display notification (sent via APNS)
+            UNUserNotificationCenter.current().delegate = self
+            let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
+            UNUserNotificationCenter.current().requestAuthorization(
+                options: authOptions,
+                completionHandler: {_, _ in })
+            // For iOS 10 data message (sent via FCM)
+            Messaging.messaging().delegate = self
+        } else {
+            let settings: UIUserNotificationSettings =
+                UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
+            UIApplication.shared.registerUserNotificationSettings(settings)
+        }
+        UIApplication.shared.registerForRemoteNotifications()
+    }
+    
+    func updateFirestorePushTokenIfNeeded() {
+        if let deviceToken = Messaging.messaging().fcmToken {
+            if let user = Auth.auth().currentUser {
+              // User is signed in.
+                print("have access to user Id when I received registration token: \(user.uid)")
+                
+                // kind of have to store in database or update every time, because don't know if the user logged in and out or if there is a new token or not
+                // https://firebase.google.com/docs/cloud-messaging/ios/client#access_the_registration_token
+                
+                firestoreService.updateUserDeviceToken(userId: user.uid, deviceToken: deviceToken) { res in
+                    print(res)
+                }
+            } else {
+              // No user is signed in.
+              // ...
+                print("can't save user device token to a user")
+            }
+        }
     }
 }
 

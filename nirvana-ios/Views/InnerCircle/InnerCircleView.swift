@@ -143,7 +143,9 @@ struct InnerCircleView: View {
             // activate 3 data listeners once for authsessionstore/usermanager if not already called, but authsessionstore will handle that
             self.authSessionStore.activateMainDataListeners()
                         
-            // save device token
+            // set up push notifications and such + save up to date device token
+            // TODO: this is firing too often?
+            self.innerCircleVM.setUpPushNotifications()
         }
 //        .onDisappear {
 //            print("deiniting data listeners, but current data should still be cached!")

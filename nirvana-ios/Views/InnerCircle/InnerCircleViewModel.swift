@@ -18,9 +18,9 @@ class InnerCircleViewModel: ObservableObject {
     
     private var audioLocalUrl: URL?
     
-    let cloudStorageService = CloudStorageService()
-    let firestoreService = FirestoreService()
-    let pushNotificationService = PushNotificationService()
+    private let cloudStorageService = CloudStorageService()
+    private let firestoreService = FirestoreService()
+    private let pushNotificationService = PushNotificationService()
     
     init() {
         do {
@@ -32,7 +32,6 @@ class InnerCircleViewModel: ObservableObject {
             print("Can not setup the Recording")
         }
     }
-    
 }
 
 // audio stuff
@@ -104,5 +103,9 @@ extension InnerCircleViewModel {
 
 // handling saving device token for notifications
 extension InnerCircleViewModel {
-    
+    func setUpPushNotifications() {
+        self.pushNotificationService.registerForPushNotifications()
+        
+        self.pushNotificationService.updateFirestorePushTokenIfNeeded()
+    }
 }
