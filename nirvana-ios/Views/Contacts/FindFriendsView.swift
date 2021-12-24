@@ -35,6 +35,7 @@ struct FindFriendsView: View {
                 }
                 .searchable(text: self.$searchQuery)
             }
+            .navigationBarTitle("Find Friends")
             .navigationBarItems(
                 leading:
                     Button {
@@ -46,8 +47,8 @@ struct FindFriendsView: View {
                             .foregroundColor(NirvanaColor.teal)
                     }
                 )
-            .navigationBarTitle("Find Friends")
         }
+        .navigationViewStyle(StackNavigationViewStyle())
         .onAppear {
             self.contactsVM.fetchContacts()
         }

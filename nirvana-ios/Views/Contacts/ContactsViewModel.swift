@@ -62,8 +62,6 @@ class ContactsViewModel : ObservableObject {
                 if formattedNumber != nil && formattedNumber!.count > 9 { // don't want the grant cardone texts to show up
                     formattedNumber = "+1" + formattedNumber! // adding country code
                     
-                    print(formattedNumber)
-                    
                     let contactNumber = String(formattedNumber!)
                     var contactVm = ContactsViewModelContact(cnName: contactDisplayName, cnPhoneNumber: contactNumber, sortingProp: contactDisplayName)
                     
@@ -120,3 +118,4 @@ struct ContactsViewModelContact : Identifiable {
     var isExisting: Bool = false
     var sortingProp: String
 }
+
