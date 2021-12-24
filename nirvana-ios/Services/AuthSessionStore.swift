@@ -34,7 +34,7 @@ final class AuthSessionStore: ObservableObject, SessionStore {
     
     // TODO: figure out which ones to publish
     @Published var friendsArr: [User] = []
-    var messagesArr: [Message] = []
+    @Published var messagesArr: [Message] = []
     
     // transformed data for the views
     @Published var friendMessagesDict: [String: [Message]] = [:]

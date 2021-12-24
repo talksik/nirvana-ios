@@ -108,7 +108,8 @@ struct InnerCircleView: View {
             CircleFooterView(selectedFriendIndex: self.$selectedFriendIndex)
             
             // helper for new users
-            if self.authSessionStore.friendsArr.count <= 1 {
+            // TODO: make it back to 1 instead of 10...testing
+            if self.authSessionStore.friendsArr.count == 1 && self.selectedFriendIndex == nil { // don't show if bottom metadata showing
                 ZStack(alignment: .bottomTrailing) {
                     Color.clear
 
@@ -117,16 +118,18 @@ struct InnerCircleView: View {
                         self.alertText = "👆🏼It's simple!"
                         self.alertSubtext = "Press and hold to send a message. \n Tap to listen!"
                     } label: {
-                        Label("help!", systemImage: "questionmark.circle")
-                            .font(.title2)
+                        Label("help!🙉", systemImage: "questionmark.circle")
+                            .font(.caption)
                             .foregroundColor(NirvanaColor.teal)
-                            .padding()
+                            .padding(10)
                             .background(.ultraThinMaterial)
                             .shadow(radius: 10)
-                            .clipShape(Circle())
-                            .labelStyle(.iconOnly)
+                            .labelStyle(.titleOnly)
+                            .clipShape(Capsule())
                     }
+                    .padding()
                 }
+                .transition(.slide)
             }
         }
         .alert(self.alertText, isPresented: self.$alertActive) {

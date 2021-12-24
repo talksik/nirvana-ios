@@ -82,6 +82,7 @@ struct CircleNavigationView: View {
                         .frame(width: 40, height: 40)
                         .clipShape(Circle())
                         .padding(5)
+                        .shadow(radius: 10)
                 }
             }
             
