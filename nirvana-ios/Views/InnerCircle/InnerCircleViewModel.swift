@@ -121,7 +121,7 @@ extension InnerCircleViewModel {
         }
         
         // setting timestamps to nil to make sure that new server timestamp is set
-        var userFriend = UserFriends(userId: userId, friendId: friendId, isActive: true, lastUpdatedTimestamp: nil)
+        var userFriend = UserFriends(userId: userId, friendId: friendId, isActive: activate, lastUpdatedTimestamp: nil)
         
         self.firestoreService.createOrUpdateUserFriends(userFriend: userFriend, activateOrDeactivate: activate) {[weak self] res in
             completion(res)
