@@ -35,9 +35,9 @@ struct CircleGridView: View {
     @Binding var selectedFriendIndex: String?
     
     private let big:CGFloat = 1
-    private let medium:CGFloat = 0.75
-    private let small:CGFloat = 0.5
-    private let supersmall:CGFloat = 0.3
+    private let medium:CGFloat = 0.9
+    private let small:CGFloat = 0.8
+    private let supersmall:CGFloat = 0.7
     
     // TODO: centered honeycomb + side: maybe have two honeycombs: one in the center of 7 people and then everyone else surrounding
     // TODO: maybe make our "center" offset to a little to the top left to make it more honeycomb from top left
@@ -49,8 +49,11 @@ struct CircleGridView: View {
         // main communication hub
         // TODO: client side, sort the honeycomb from top left to bottom right
         // based on most close friends to least
+        
+        // MARK: data entry point
         let activeFriends = self.authSessionStore.getActiveFriendIds()
         let inboxUsers = self.authSessionStore.getInboxUsersIds()
+        
         ScrollViewReader {scrollReaderValue in
             ScrollView([.horizontal, .vertical], showsIndicators: false) {
                 LazyVGrid(
@@ -141,34 +144,28 @@ struct CircleGridView: View {
                         .animation(Animation.spring())
                     }
                     
-//                    ForEach(Array(self.authSessionStore.getInboxUsersIds.enumerated()), id: \.offset) { inboxValue, inboxUser in
-//                    for (inboxValue, inboxUserId) in inboxUsers.enumerated() {
+                    // inbox users
                     ForEach(0..<inboxUsers.count, id: \.self) {inboxValue in
                         let inboxUserId = inboxUsers[inboxValue]
-                        let adjustedValue = inboxValue + activeFriends.count
+                        let adjustedValue = inboxValue + activeFriends.count // IMPORTANT: accounting for the active friends iterations
                         GeometryReader {gridProxy in
-                            // IMPORTANT: accounting for the active friends iterations
+                            let scale = getScale(proxy: gridProxy, itemNumber: adjustedValue, userId: inboxUserId) * 0.75 // don't want inbox to match size of active
                             
-                            let scale = getScale(proxy: gridProxy, itemNumber: adjustedValue, userId: inboxUserId)
-                            
-                            ZStack(alignment: .topLeading) {
-                                // check if the last message in the conversation between me and my friend was me talking or him
-                                // also check if I have listened to it once or twice
-                                if self.haveNewMessageFromFriend(friendDbId: inboxUserId) { // him talking
-                                    Image(systemName: "wave.3.right.circle.fill")
-                                        .foregroundColor(Color.orange)
-                                        .font(.title)
-                                }
+                            ZStack(alignment: .topTrailing) {
+                                Image(systemName: "arrow.down.left.circle.fill")
+                                    .foregroundColor(NirvanaColor.dimTeal)
+                                    .font(.title)
                                 
                                 Circle()
-                                    .foregroundColor(self.getBubbleTint(friendIndex: adjustedValue, friendDbId: inboxUserId)) // different color for a selected user
-                                    .blur(radius: 8)
+                                    .foregroundColor(NirvanaColor.dimTeal.opacity(0.3)) // different color for a selected user
+                                    .blur(radius: 5)
                                     .cornerRadius(100)
                                     
                                 Image(self.authSessionStore.relevantUsersDict[inboxUserId]?.avatar ?? Avatars.avatarSystemNames[0])
                                     .resizable()
                                     .scaledToFit()
                                     .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 20)
+                                    .blur(radius: 5)
                             }
                             .scaleEffect(scale)
                             .padding(scale * 5)
@@ -186,7 +183,40 @@ struct CircleGridView: View {
                         }
                         .animation(Animation.spring())
                     }
-                } // TODO: add padding based on if we are on any cornering item to allow the bubble to enlargen
+                    
+                    // stale state for adding a contact
+                    let staleAdjustedValue = activeFriends.count + inboxUsers.count
+                    GeometryReader {gridProxy in
+                        let scale = getScale(proxy: gridProxy, itemNumber: staleAdjustedValue, userId: nil) * 0.5 // adjusting size as stale states should be the smallest
+                        
+                        ZStack {
+                            Image(systemName: "person.badge.plus")
+                                .foregroundColor(NirvanaColor.teal)
+                                .font(.largeTitle)
+                            
+                            Circle()
+                                .foregroundColor(Color.white.opacity(0.2))
+                                .blur(radius: 8)
+                                .cornerRadius(100)
+                        }
+                        .scaleEffect(scale)
+                        .padding(scale * 5)
+                    } // geometry reader
+                    .offset(
+                        x: honeycombOffSetX(staleAdjustedValue),
+                        y: 0
+                    )
+                    .id(UUID().uuidString) // id for scrollviewreader
+                    .frame(height: Self.size)
+                    .onTapGesture {
+                        // action to open alert to add this person to circle or reject
+                        
+                        // create user_friend with isActive = false
+                    }
+                    .animation(Animation.spring())
+                    
+                    
+                } //lazygrid // TODO: add padding based on if we are on any cornering item to allow the bubble to enlargen
                 .padding(.trailing, Self.size / 2 + Self.spacingBetweenColumns / 2) // because of the offset of last column
                 .padding(.top, Self.size / 2 + Self.spacingBetweenRows / 2) // because we are going under the nav bar
             }// scrollview
@@ -238,9 +268,9 @@ struct CircleGridView_Previews: PreviewProvider {
 extension CircleGridView {
     // getting the proxy of an individual item
     // and decoding into a scale that the item should take
-    private func getScale(proxy: GeometryProxy, itemNumber: Int, userId: String) -> CGFloat {
+    private func getScale(proxy: GeometryProxy, itemNumber: Int, userId: String?) -> CGFloat {
         // if this user is selected
-        if userId == self.selectedFriendIndex {
+        if userId != nil && userId == self.selectedFriendIndex {
             return big + 0.2
         }
         
