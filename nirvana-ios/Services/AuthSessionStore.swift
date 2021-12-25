@@ -373,6 +373,10 @@ extension AuthSessionStore {
                     }                
                 }
         
+        // listener for people who have me as an active friend might make inbox easier
+        // where friendId = me, isActive = true...this way it's a published property that can update the ui
+        // as inbox users is only being called on load
+        
         self.listenersActive = true
         
         // adding listeners to be able to deinit later
@@ -398,6 +402,8 @@ extension AuthSessionStore {
 // transforming data to make it more valuable
 extension AuthSessionStore {
     func getActiveFriendIds() -> [String] {
+        // TODO: order friends by user friend creation date as dictionaries don't have any inherent order
+        // they order randomly through hash value creation
         var activeFriendIds: [String] = []
         
         for (friendId, userFriend) in self.userFriendsDict {

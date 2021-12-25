@@ -84,14 +84,7 @@ struct InnerCircleView: View {
                         
                 }
                 .padding()
-            } else {
-                Image("undraw_fall_is_coming_yl-0-x")
-                    .renderingMode(.original)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .blur(radius: 20)
-                
-                
+            } else {                 
                 // content
                 CircleGridView(selectedFriendIndex: self.$selectedFriendIndex)
                     .environmentObject(innerCircleVM)

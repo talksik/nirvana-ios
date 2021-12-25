@@ -68,6 +68,7 @@ struct CircleGridView: View {
                     // active friends
                     ForEach(0..<activeFriends.count, id: \.self) {value in
                         let friendId = activeFriends[value]
+                        
                         GeometryReader {gridProxy in
                             let scale = getScale(proxy: gridProxy, itemNumber: value, userId: friendId)
                             
@@ -151,7 +152,7 @@ struct CircleGridView: View {
                     // inbox users
                     ForEach(0..<inboxUsers.count, id: \.self) {inboxValue in
                         let inboxUserId = inboxUsers[inboxValue]
-                        let adjustedValue = inboxValue + activeFriends.count // IMPORTANT: accounting for the active friends iterations
+                        let adjustedValue = inboxValue + self.authSessionStore.getActiveFriendIds().count // IMPORTANT: accounting for the active friends iterations
                         GeometryReader {gridProxy in
                             let scale = getScale(proxy: gridProxy, itemNumber: adjustedValue, userId: inboxUserId) * 0.75 // don't want inbox to match size of active
                             
@@ -211,7 +212,7 @@ struct CircleGridView: View {
                     }
                     
                     // stale state for adding a contact
-                    let staleAdjustedValue = activeFriends.count + inboxUsers.count
+                    let staleAdjustedValue = self.authSessionStore.getActiveFriendIds().count + self.authSessionStore.getInboxUsersIds().count
                     GeometryReader {gridProxy in
                         let scale = getScale(proxy: gridProxy, itemNumber: staleAdjustedValue, userId: nil) * 0.75 // adjusting size as stale states should be the smallest
                         Button {
