@@ -187,20 +187,24 @@ struct CircleGridView: View {
                     // stale state for adding a contact
                     let staleAdjustedValue = activeFriends.count + inboxUsers.count
                     GeometryReader {gridProxy in
-                        let scale = getScale(proxy: gridProxy, itemNumber: staleAdjustedValue, userId: nil) * 0.5 // adjusting size as stale states should be the smallest
-                        
-                        ZStack {
-                            Image(systemName: "person.badge.plus")
-                                .foregroundColor(NirvanaColor.teal)
-                                .font(.largeTitle)
-                            
-                            Circle()
-                                .foregroundColor(Color.white.opacity(0.2))
-                                .blur(radius: 8)
-                                .cornerRadius(100)
+                        let scale = getScale(proxy: gridProxy, itemNumber: staleAdjustedValue, userId: nil) * 0.75 // adjusting size as stale states should be the smallest
+                        Button {
+                            self.navigationStack.push(FindFriendsView())
+                        } label: {
+                            ZStack {
+                                Image(systemName: "person.badge.plus")
+                                    .foregroundColor(NirvanaColor.dimTeal)
+                                    .font(.largeTitle)
+                                
+                                Circle()
+                                    .foregroundColor(Color.white.opacity(0.2))
+                                    .blur(radius: 8)
+                                    .cornerRadius(100)
+                            }
+                            .scaleEffect(scale)
+                            .padding(scale * 5)
                         }
-                        .scaleEffect(scale)
-                        .padding(scale * 5)
+                        
                     } // geometry reader
                     .offset(
                         x: honeycombOffSetX(staleAdjustedValue),
@@ -208,11 +212,6 @@ struct CircleGridView: View {
                     )
                     .id(UUID().uuidString) // id for scrollviewreader
                     .frame(height: Self.size)
-                    .onTapGesture {
-                        // action to open alert to add this person to circle or reject
-                        
-                        // create user_friend with isActive = false
-                    }
                     .animation(Animation.spring())
                     
                     
