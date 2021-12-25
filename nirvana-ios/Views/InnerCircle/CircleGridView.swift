@@ -19,24 +19,20 @@ struct CircleGridView: View {
     
     let universalSize = UIScreen.main.bounds
     
-    var body: some View {
-        gridContent
-    }
-    
     // magic variables for grid
     // TODO: make the top left person or one horizontal person be in the center of screen...makes the top honeycomb pop
-    private static var numberOfItems: Int = 12
+    @State var numberOfItems: Int = 12
     private static let size: CGFloat = UIScreen.main.bounds.height*0.15 // scaling with screen size
     private static let spacingBetweenColumns: CGFloat = 0
     private static let spacingBetweenRows: CGFloat = 0
-    private static let totalColumns: Int = Int(log2(Double(Self.numberOfItems))) // scaling the circles and calculating column count
-    
-    @Binding var selectedFriendIndex: Int?
+    private static let totalColumns: Int = 3 // scaling the circles and calculating column count
     
     // TODO: change the size to adaptive or something to make outer ring items shrink their overall size and fit better
     let gridItems: [GridItem] = Array(
         repeating: GridItem(.fixed(Self.size), spacing: spacingBetweenColumns, alignment: .center),
         count: totalColumns)
+    
+    @Binding var selectedFriendIndex: String?
     
     private let big:CGFloat = 1
     private let medium:CGFloat = 0.75
@@ -49,10 +45,12 @@ struct CircleGridView: View {
     
     let longPressMinDuration = 0.5
     
-    private var gridContent: some View {
+    var body: some View {
         // main communication hub
         // TODO: client side, sort the honeycomb from top left to bottom right
         // based on most close friends to least
+        let activeFriends = self.authSessionStore.getActiveFriendIds()
+        let inboxUsers = self.authSessionStore.getInboxUsersIds()
         ScrollViewReader {scrollReaderValue in
             ScrollView([.horizontal, .vertical], showsIndicators: false) {
                 LazyVGrid(
@@ -60,29 +58,27 @@ struct CircleGridView: View {
                     alignment: .center,
                     spacing: Self.spacingBetweenRows
                 ) {
-                    ForEach(Array(self.authSessionStore.friendsArr.enumerated()), id: \.offset) { value, friend in
-//                    for (value, element) in self.authSessionStore.friendMessagesDict.keys.enumerated() {
+                    // active friends
+                    ForEach(0..<activeFriends.count, id: \.self) {value in
+                        let friendId = activeFriends[value]
                         GeometryReader {gridProxy in
-                            let scale = getScale(proxy: gridProxy, itemNumber: value)
-                            
-                            // TODO: sort the list but may already be sorted from the query and creation of the array of messages?
-                            // shouldn't be nil...hopefully
+                            let scale = getScale(proxy: gridProxy, itemNumber: value, userId: friendId)
                             
                             ZStack(alignment: .topTrailing) {
                                 // check if the last message in the conversation between me and my friend was me talking or him
                                 // also check if I have listened to it once or twice
-                                if self.haveNewMessageFromFriend(friendDbId: friend.id!) { // him talking
+                                if self.haveNewMessageFromFriend(friendDbId: friendId) { // him talking
                                     Image(systemName: "wave.3.right.circle.fill")
                                         .foregroundColor(Color.orange)
                                         .font(.title)
                                 }
                                 
                                 Circle()
-                                    .foregroundColor(self.getBubbleTint(friendIndex: value, friendDbId: friend.id!)) // different color for a selected user
+                                    .foregroundColor(self.getBubbleTint(friendIndex: value, friendDbId: friendId)) // different color for a selected user
                                     .blur(radius: 8)
                                     .cornerRadius(100)
                                     
-                                Image(friend.avatar ?? Avatars.avatarSystemNames[0])
+                                Image(self.authSessionStore.relevantUsersDict[friendId]?.avatar ?? Avatars.avatarSystemNames[0])
                                     .resizable()
                                     .scaledToFit()
                                     .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 20)
@@ -94,10 +90,10 @@ struct CircleGridView: View {
                             x: honeycombOffSetX(value),
                             y: 0
                         )
-                        .id(value) // id for scrollviewreader
+                        .id(friendId) // id for scrollviewreader
                         .frame(height: Self.size)
                         .onTapGesture {
-                            self.handleTap(friendIndex: value, friend: friend)
+                            self.handleTap(gridItemIndex: value, friendId: friendId)
                         }// TODO: maybe add simulataneous gesture or sequence? with the tap gesture?
                         .gesture(
                             LongPressGesture(minimumDuration: longPressMinDuration)
@@ -106,7 +102,7 @@ struct CircleGridView: View {
                                     self.queuePlayer.removeAllItems()
                                     
                                     print("activated long press!")
-                                    self.selectedFriendIndex = value
+                                    self.selectedFriendIndex = friendId
                                     
                                     self.activateHaptics()
                                     
@@ -137,20 +133,57 @@ struct CircleGridView: View {
                                     
                                     self.selectedFriendIndex = nil
                                     
-                                    self.innerCircleVM.stopRecording(senderId: self.authSessionStore.user!.id!, receiver: friend)
+                                    self.innerCircleVM.stopRecording(senderId: self.authSessionStore.user!.id!, receiver: self.authSessionStore.relevantUsersDict[friendId]!)
                                     
 //                                    self.recordingGestureDeactived()
                                 }
                         )
-//                        .simultaneousGesture(
-//                            DragGesture(minimumDistance: 0, coordinateSpace: .local)
-//                                .onChanged {_ in
-//                                    self.recordingGestureActive(friendIndex: value, friend: friend)
-//                                }
-//                                .onEnded {_ in
-//                                    self.recordingGestureDeactived()
-//                                }
-//                        )
+                        .animation(Animation.spring())
+                    }
+                    
+//                    ForEach(Array(self.authSessionStore.getInboxUsersIds.enumerated()), id: \.offset) { inboxValue, inboxUser in
+//                    for (inboxValue, inboxUserId) in inboxUsers.enumerated() {
+                    ForEach(0..<inboxUsers.count, id: \.self) {inboxValue in
+                        let inboxUserId = inboxUsers[inboxValue]
+                        let adjustedValue = inboxValue + activeFriends.count
+                        GeometryReader {gridProxy in
+                            // IMPORTANT: accounting for the active friends iterations
+                            
+                            let scale = getScale(proxy: gridProxy, itemNumber: adjustedValue, userId: inboxUserId)
+                            
+                            ZStack(alignment: .topLeading) {
+                                // check if the last message in the conversation between me and my friend was me talking or him
+                                // also check if I have listened to it once or twice
+                                if self.haveNewMessageFromFriend(friendDbId: inboxUserId) { // him talking
+                                    Image(systemName: "wave.3.right.circle.fill")
+                                        .foregroundColor(Color.orange)
+                                        .font(.title)
+                                }
+                                
+                                Circle()
+                                    .foregroundColor(self.getBubbleTint(friendIndex: adjustedValue, friendDbId: inboxUserId)) // different color for a selected user
+                                    .blur(radius: 8)
+                                    .cornerRadius(100)
+                                    
+                                Image(self.authSessionStore.relevantUsersDict[inboxUserId]?.avatar ?? Avatars.avatarSystemNames[0])
+                                    .resizable()
+                                    .scaledToFit()
+                                    .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 20)
+                            }
+                            .scaleEffect(scale)
+                            .padding(scale * 5)
+                        } // geometry reader
+                        .offset(
+                            x: honeycombOffSetX(adjustedValue),
+                            y: 0
+                        )
+                        .id(inboxUserId) // id for scrollviewreader
+                        .frame(height: Self.size)
+                        .onTapGesture {
+                            // action to open alert to add this person to circle or reject
+                            
+                            // create user_friend with isActive = false
+                        }
                         .animation(Animation.spring())
                     }
                 } // TODO: add padding based on if we are on any cornering item to allow the bubble to enlargen
@@ -161,16 +194,19 @@ struct CircleGridView: View {
                 //TODO: was causing problems so commenting out
                 //may not need anymore with bottom nav activation
 //                scrollReaderValue.scrollTo(Self.numberOfItems / 2)
+                
             }
         } // scrollview reader
     }
+    
+    
     
     private func haveNewMessageFromFriend(friendDbId: String) -> Bool {
         if self.authSessionStore.user != nil {
             let userId = self.authSessionStore.user!.id // O(1) // currUser who is signed in
             
             // get most recent message in the convo and see who has spoken
-            if let messagesRelatedToFriend = self.authSessionStore.friendMessagesDict[friendDbId] { // O(1)
+            if let messagesRelatedToFriend = self.authSessionStore.relevantMessagesByUserDict[friendDbId] { // O(1)
                 return messagesRelatedToFriend.first?.receiverId == userId
             }
         }
@@ -179,7 +215,7 @@ struct CircleGridView: View {
     }
     
     private func getBubbleTint(friendIndex: Int, friendDbId: String) -> Color {
-        if (friendIndex == self.selectedFriendIndex) { // user clicked on this user
+        if (friendDbId == self.selectedFriendIndex) { // user clicked on this user
             return NirvanaColor.dimTeal.opacity(0.4)
         }
         else if self.haveNewMessageFromFriend(friendDbId: friendDbId) { // this user has a message
@@ -202,9 +238,9 @@ struct CircleGridView_Previews: PreviewProvider {
 extension CircleGridView {
     // getting the proxy of an individual item
     // and decoding into a scale that the item should take
-    private func getScale(proxy: GeometryProxy, itemNumber: Int) -> CGFloat {
+    private func getScale(proxy: GeometryProxy, itemNumber: Int, userId: String) -> CGFloat {
         // if this user is selected
-        if itemNumber == self.selectedFriendIndex {
+        if userId == self.selectedFriendIndex {
             return big + 0.2
         }
         
@@ -269,18 +305,18 @@ extension CircleGridView {
 // extension for handling the gestures and actions
 extension CircleGridView {
     // listening to messages
-    private func handleTap(friendIndex: Int, friend: User) {
+    private func handleTap(gridItemIndex: Int, friendId: String) {
         print("tap gesture activated")
         
         // clearing the player to make room for this friend's convo or to deselect this user
         self.queuePlayer.removeAllItems()
          
         // if user had previously selected user, put nil as a toggle
-        if self.selectedFriendIndex == friendIndex {
+        if self.selectedFriendIndex == friendId {
             self.selectedFriendIndex = nil
             return
         } else {
-            self.selectedFriendIndex = friendIndex
+            self.selectedFriendIndex = friendId
         }
         
         // TODO: OPTIMIZATION...buffer and load all AVAssets to create AVPlayerItems before a tap happens...but this can also cause load in background if user is not playing a message right now...this isn't an optimization of the data/firestore but rather the player
@@ -293,7 +329,7 @@ extension CircleGridView {
         // traverse through reversed list of messages and add to audio player queue
         // TODO: protect against force unwraps
         var AVPlayerItems: [AVPlayerItem] = []
-        let messagesRelatedToFriend = self.authSessionStore.friendMessagesDict[friend.id!] ?? []
+        let messagesRelatedToFriend = self.authSessionStore.relevantMessagesByUserDict[friendId] ?? []
         
         if messagesRelatedToFriend.count == 0 {
             return

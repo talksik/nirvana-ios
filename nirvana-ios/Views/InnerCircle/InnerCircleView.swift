@@ -13,7 +13,7 @@ struct InnerCircleView: View {
     @EnvironmentObject var authSessionStore: AuthSessionStore
     @EnvironmentObject var navigationStack: NavigationStack
     
-    @State var selectedFriendIndex: Int? = nil
+    @State var selectedFriendIndex: String? = nil
     
     let universalSize = UIScreen.main.bounds
         
@@ -56,7 +56,7 @@ struct InnerCircleView: View {
                 }
                 .padding()
             }
-            else if self.authSessionStore.friendsArr.count == 0 {
+            else if self.authSessionStore.getActiveFriendIds().count == 0 && self.authSessionStore.getInboxUsersIds().count == 0 {
                 VStack(alignment: .center) {
                     Image("undraw_fall_is_coming_yl-0-x")
                         .renderingMode(.original)
@@ -109,7 +109,7 @@ struct InnerCircleView: View {
             
             // helper for new users
             // TODO: make it back to 1 instead of 10...testing
-            if self.authSessionStore.friendsArr.count == 1 && self.selectedFriendIndex == nil { // don't show if bottom metadata showing
+            if self.authSessionStore.getActiveFriendIds().count == 1 && self.selectedFriendIndex == nil { // don't show if bottom metadata showing
                 ZStack(alignment: .bottomTrailing) {
                     Color.clear
 

@@ -12,7 +12,7 @@ struct CircleFooterView: View {
     @EnvironmentObject var navigationStack: NavigationStack
     @EnvironmentObject var authSessionStore: AuthSessionStore
 
-    @Binding var selectedFriendIndex: Int?
+    @Binding var selectedFriendIndex: String?
     
     @State private var convoRelativeTime = ""
     @State private var selectedFriend: User?
@@ -94,7 +94,7 @@ struct CircleFooterView: View {
             
             // set convo moment/relative time to show
             if newValue != nil && myId != nil {
-                self.selectedFriend = self.authSessionStore.friendsArr[newValue!]
+                self.selectedFriend = self.authSessionStore.relevantUsersDict[newValue!]
                 
                 // get the latest message's timestamp...will be the first in list now
                 let lastMessage = self.authSessionStore.relevantMessagesByUserDict[self.selectedFriend!.id!]?.first

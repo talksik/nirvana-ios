@@ -33,13 +33,12 @@ final class AuthSessionStore: ObservableObject, SessionStore {
     @Published var sessionState: SessionState = SessionState.notCheckedYet
     
     // TODO: figure out which ones to publish
-    @Published var friendsArr: [User] = [] // all active and inactive friends
     var messagesArr: [Message] = []
-    @Published var userFriends: [UserFriends] = [] // all active and inactive relationships
+    var userFriendsDict: [String: UserFriends] = [:] // all active and inactive relationships
     
     // transformed data for the views
+    @Published var relevantUsersDict: [String: User] = [:] // all cached/snapshotted users from db for app use
     @Published var relevantMessagesByUserDict: [String: [Message]] = [:] // note, this is all messages related to me
-    @Published var inboxUsers: [User] = []
     
     private var dataListeners: [ListenerRegistration] = []
     private var listenersActive = false // false on app/processes killed
@@ -245,8 +244,8 @@ extension AuthSessionStore {
                 }
                 
                 // resetting array to reset friends
-                self.friendsArr.removeAll()
-                self.userFriends.removeAll()
+                self.relevantUsersDict.removeAll()
+                self.userFriendsDict.removeAll()
                 
                 for document in querySnapshot!.documents {
                     let userFriend:UserFriends? = try? document.data(as: UserFriends.self)
@@ -255,15 +254,16 @@ extension AuthSessionStore {
                         continue
                     }
                     
-                    self.userFriends.append(userFriend!)
+                    self.userFriendsDict[userFriend!.friendId] = userFriend!
                     
                     // get user and initialize this user in dict
                     self.db.collection("users").document(userFriend!.friendId).getDocument { (document, error) in
                         if let document = document, document.exists {
                             let returnedUser = try? document.data(as: User.self)
+                            
                             DispatchQueue.main.async {
                                 if returnedUser != nil {
-                                    self.friendsArr.append(returnedUser!)
+                                    self.relevantUsersDict[userFriend!.friendId] = returnedUser!
                                     
                                     self.objectWillChange.send()
                                     
@@ -318,7 +318,6 @@ extension AuthSessionStore {
                     // clearing dict to allow clean list of messages to be put forth
                     //optimize this? but also saving on memory and same db reads
                     self.relevantMessagesByUserDict.removeAll()
-                    self.inboxUsers.removeAll()
                 
                     self.messagesArr = documents.compactMap { (queryDocumentSnapshot) -> Message? in
                         do {
@@ -329,7 +328,7 @@ extension AuthSessionStore {
                                 if currMessage != nil { // not really possible but just check
                                     // if the user doesn't exist for the dictionary, then add it
                                     // this means it's most likely someone new (never had user_friend relationship before) messaging for the user's inbox
-                                    // TODO: prolly want to make a call to get this sender user details for the inbox, but they should either be in the friendsArr or their are not a friend so won't be there
+                                    // TODO: prolly want to make a call to get this sender user details for the inbox, but they should either be in the friendsDict or their are not a friend so won't be there
                                     // also add in any messages where I am the sender
                                     if currMessage!.senderId == currUserId { // if I am the sender
                                         if self.relevantMessagesByUserDict[currMessage!.receiverId] == nil {
@@ -345,6 +344,21 @@ extension AuthSessionStore {
                                             self.relevantMessagesByUserDict[currMessage!.senderId]?.append(currMessage!)
                                         }
                                         
+                                        // need to get and add this user to inbox if they are not a friend, active or inactive
+//                                        self.updateInboxUsers(currMessage!.senderId)
+                                        // might be an inbox message from someone completely new, but also can be a concurrency thing, where we haven't completely fetched all friends, active or inactive with the previous listener
+                                        // no worries though as we keep everything update to date in the view
+                                        if !self.relevantUsersDict.keys.contains(currMessage!.senderId) {
+                                            self.firestoreService.getUser(userId: currMessage!.senderId) {[weak self] returnedUser in
+                                                if returnedUser == nil {
+                                                    print("couldn't get new user info")
+                                                    return
+                                                }
+                                                
+                                                print("new user for inbox fetched")
+                                                self?.relevantUsersDict[currMessage!.senderId] = returnedUser!
+                                            }
+                                        }
                                     }
                                 }
                                 
@@ -356,11 +370,7 @@ extension AuthSessionStore {
                             print(error)
                         }
                         return nil
-                    }
-                
-                    // TODO: concurrency problem if the friends array is not filled? prolly not
-                    // get all inbox users' data
-                    self.getIncomingNewMessageUserIds()
+                    }                
                 }
         
         self.listenersActive = true
@@ -387,55 +397,21 @@ extension AuthSessionStore {
 
 // transforming data to make it more valuable
 extension AuthSessionStore {
-    func getActiveFriends() -> [User] {
-        let activeFriendRelationships = self.userFriends.filter {userFriend in
-            return userFriend.isActive
-        }
-        let activeFriendsIds = activeFriendRelationships.map {activeUserFriend in
-            return activeUserFriend.id
-        }
+    func getActiveFriendIds() -> [String] {
+        var activeFriendIds: [String] = []
         
-        // they should already be in the friends arr
-        return self.friendsArr.filter {friend in
-            return activeFriendsIds.contains(friend.id)
-        }
-    }
-    
-    func getInactiveFriends() -> [User] {
-        let inactiveFriendRelationships = self.userFriends.filter {userFriend in
-            return !userFriend.isActive
-        }
-        let inactiveFriendsIds = inactiveFriendRelationships.map {inactiveUserFriend in
-            return inactiveUserFriend.id
-        }
-        
-        // they should already be in the friends arr
-        return self.friendsArr.filter {friend in
-            return inactiveFriendsIds.contains(friend.id)
-        }
-    }
-    
-    // people info of people who are new to me and sent me a message...not active nor inactive
-    func getIncomingNewMessageUserIds() {
-        let allFriends = self.friendsArr.map {friend in
-            return friend.id
-        }
-        
-        let allIncomingPeopleIds = self.relevantMessagesByUserDict.keys.filter {friendId in
-            return !allFriends.contains(friendId)
-        }
-        
-        // make call to firestore to get data of each of these people
-        for newPersonId in allIncomingPeopleIds {
-            self.firestoreService.getUser(userId: newPersonId) {[weak self] returnedUser in
-                if returnedUser == nil {
-                    print("couldn't get new user info")
-                    return
-                }
-                
-                print("new user for inbox fetched")
-                self?.inboxUsers.append(returnedUser!)
+        for (friendId, userFriend) in self.userFriendsDict {
+            if userFriend.isActive {
+                activeFriendIds.append(friendId)
             }
+        }
+        
+        return activeFriendIds
+    }
+    
+    func getInboxUsersIds() -> [String] {
+        return self.relevantUsersDict.keys.filter {userId in
+            return !self.userFriendsDict.keys.contains(userId)
         }
     }
 }

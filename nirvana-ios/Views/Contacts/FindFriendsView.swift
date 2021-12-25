@@ -58,10 +58,13 @@ struct FindFriendsView: View {
         let keys = (Array(self.contactsVM.contacts.keys) as [String]).sorted()
         
         // checking if currcontact is already a friend
-        let currFriends = self.authSessionStore.friendsArr.map { $0.id }
-        let newPotentialFriends = keys.filter {
-            if let friend = self.contactsVM.contacts[$0]?.user { // seeing if this contact is an existing user
-                if currFriends.contains(friend.id) { // if this is already a friend
+        let activeFriendIds = self.authSessionStore.getActiveFriendIds()
+        
+        let newPotentialFriends = keys.filter {contactSortProp in
+            if let friend = self.contactsVM.contacts[contactSortProp]?.user { // seeing if this contact is an existing user
+                // if this is already an ACTIVE friend -> don't show
+                // we want to show inactive friends
+                if activeFriendIds.contains(friend.id!) {
                     return false
                 }
                 
