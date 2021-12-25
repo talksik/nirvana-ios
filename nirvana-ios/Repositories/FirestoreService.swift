@@ -108,7 +108,7 @@ class FirestoreService {
         return FieldValue.serverTimestamp()
     }
         
-    func createOrUpdateUserFriends(userFriend: UserFriends, completion: @escaping((_ state: ServiceState) -> ()))  {
+    func createOrUpdateUserFriends(userFriend: UserFriends, activateOrDeactivate: Bool, completion: @escaping((_ state: ServiceState) -> ()))  {
         do {
             let userFriendCollection = db.collection(Collection.userFriends.rawValue)
             
@@ -131,14 +131,13 @@ class FirestoreService {
                     else { // there seems to be something existing
                         for document in querySnapshot!.documents {
                             // update this userFriend that is existing
-                            let _ = try? userFriendCollection.document(document.documentID).setData(["isActive": true, "lastUpdatedTimestamp": self.getFirestoreServerTimestamp()], merge:true)
+                            let _ = try? userFriendCollection.document(document.documentID).setData(["isActive": activateOrDeactivate, "lastUpdatedTimestamp": self.getFirestoreServerTimestamp()], merge:true)
                             print("already existing, just updated")
                             completion(ServiceState.success("updated userfriend in firestore service"))
                         }
                     }
                 }
             }
-            
         } catch {
             print("error in creating user friend \(error.localizedDescription)")
             completion(ServiceState.error(ServiceError(description: error.localizedDescription)))

@@ -21,9 +21,9 @@ struct FindFriendsView: View {
         // main content
         NavigationView {
             VStack {
-                Text("You must have someone in your phone contacts to add them. You can only add 10 people to your circle! 🥬")
+                Text("You must have someone in your phone contacts to add them. Remember: \(self.authSessionStore.getActiveFriendIds().count)/10 spots filled in your circle. 🥬")
                     .font(.subheadline)
-                    .foregroundColor(NirvanaColor.teal)
+                    .foregroundColor(Color.gray)
                     .padding(.horizontal)
                 
                 List {

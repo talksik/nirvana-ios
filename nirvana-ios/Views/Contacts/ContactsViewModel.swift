@@ -103,7 +103,7 @@ class ContactsViewModel : ObservableObject {
         // setting timestamps to nil to make sure that new server timestamp is set
         var userFriend = UserFriends(userId: userId, friendId: friendId, isActive: true, lastUpdatedTimestamp: nil)
         
-        self.firestoreService.createOrUpdateUserFriends(userFriend: userFriend) {[weak self] res in
+        self.firestoreService.createOrUpdateUserFriends(userFriend: userFriend, activateOrDeactivate: true) {[weak self] res in
             completion(res)
         }
     }

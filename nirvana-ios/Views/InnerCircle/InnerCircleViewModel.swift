@@ -109,3 +109,22 @@ extension InnerCircleViewModel {
         self.pushNotificationService.updateFirestorePushTokenIfNeeded()
     }
 }
+
+// handle activating or deactivating friends
+extension InnerCircleViewModel {
+    func activateOrDeactiveInboxUser(activate: Bool, userId: String, friendId: String, completion: @escaping((_ state: ServiceState) -> ()))  {
+        // validation
+        // make sure userId is not the same as friendId...don't want people friending themselves
+        if userId == friendId {
+            completion(ServiceState.error(ServiceError(description: "You cannot friend yourself, silly!")))
+            return
+        }
+        
+        // setting timestamps to nil to make sure that new server timestamp is set
+        var userFriend = UserFriends(userId: userId, friendId: friendId, isActive: true, lastUpdatedTimestamp: nil)
+        
+        self.firestoreService.createOrUpdateUserFriends(userFriend: userFriend, activateOrDeactivate: activate) {[weak self] res in
+            completion(res)
+        }
+    }
+}

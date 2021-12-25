@@ -45,6 +45,10 @@ struct CircleGridView: View {
     
     let longPressMinDuration = 0.5
     
+    @State var alertActive = false
+    @State var alertText = ""
+    @State var alertSubtext = ""
+    
     var body: some View {
         // main communication hub
         // TODO: client side, sort the honeycomb from top left to bottom right
@@ -178,10 +182,32 @@ struct CircleGridView: View {
                         .frame(height: Self.size)
                         .onTapGesture {
                             // action to open alert to add this person to circle or reject
+                            let inboxFriendName = self.authSessionStore.relevantUsersDict[inboxUserId]?.nickname ?? ""
+                            let inboxFriendNumber = self.authSessionStore.relevantUsersDict[inboxUserId]?.phoneNumber
                             
-                            // create user_friend with isActive = false
+                            self.alertText = "🌴Add to your circle?"
+                            self.alertSubtext = "\(inboxFriendName ?? "") started a convo with you... \n \(inboxFriendNumber!) \n Remember: you have \(10 - activeFriends.count) spots left!"
+                            self.alertActive.toggle()
                         }
                         .animation(Animation.spring())
+                        .alert(isPresented: self.$alertActive) {
+                            Alert(
+                                title: Text(self.alertText),
+                                message: Text(self.alertSubtext),
+                                primaryButton: .destructive(Text("Reject"), action: {
+                                    // create user friend but a rejected one
+                                    self.innerCircleVM.activateOrDeactiveInboxUser(activate: false, userId: self.authSessionStore.user!.id!, friendId: inboxUserId) { res in
+                                        print(res)
+                                    }
+                                }),
+                                secondaryButton: .default(Text("Add"), action: {
+                                    // create user friend
+                                    self.innerCircleVM.activateOrDeactiveInboxUser(activate: true, userId: self.authSessionStore.user!.id!, friendId: inboxUserId) { res in
+                                        print(res)
+                                    }
+                                })
+                            )
+                        }
                     }
                     
                     // stale state for adding a contact
@@ -219,13 +245,13 @@ struct CircleGridView: View {
                 .padding(.trailing, Self.size / 2 + Self.spacingBetweenColumns / 2) // because of the offset of last column
                 .padding(.top, Self.size / 2 + Self.spacingBetweenRows / 2) // because we are going under the nav bar
             }// scrollview
-            .onAppear {
-                //TODO: was causing problems so commenting out
-                //may not need anymore with bottom nav activation
-//                scrollReaderValue.scrollTo(Self.numberOfItems / 2)
-                
-            }
         } // scrollview reader
+        .onAppear {
+            //TODO: was causing problems so commenting out
+            //may not need anymore with bottom nav activation
+//                scrollReaderValue.scrollTo(Self.numberOfItems / 2)
+        }
+        
     }
     
     
