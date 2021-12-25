@@ -80,12 +80,8 @@ struct CircleGridView: View {
                                 
                                 // check if the last message in the conversation between me and my friend was me talking or him
                                 if self.haveNewMessageFromFriend(friendDbId: friendId) { // him talking
-                                    Image(systemName: "wave.3.right.circle.fill")
+                                    Image(systemName: "arrow.down.left.circle.fill")
                                         .foregroundColor(Color.orange)
-                                        .font(.title2)
-                                } else {
-                                    Image(systemName: "wave.3.right.circle.fill")
-                                        .foregroundColor(NirvanaColor.dimTeal)
                                         .font(.title2)
                                 }
 //
@@ -163,8 +159,6 @@ struct CircleGridView: View {
                                 Image(systemName: "arrow.down.left.circle.fill")
                                     .foregroundColor(Color.orange)
                                     .font(.title)
-                                
-                                Text("\(activeFriends.count)")
                                 
                                 Circle()
                                     .foregroundColor(Color.orange.opacity(0.4))

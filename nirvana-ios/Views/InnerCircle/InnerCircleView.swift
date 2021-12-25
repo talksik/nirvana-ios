@@ -98,7 +98,7 @@ struct InnerCircleView: View {
                 Spacer()
             }
             
-            CircleFooterView(selectedFriendIndex: self.$selectedFriendIndex)
+            CircleFooterView(selectedFriendIndex: self.$selectedFriendIndex).environmentObject(innerCircleVM)
             
             // helper for new users
             // TODO: make it back to 1 instead of 10...testing

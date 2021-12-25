@@ -11,6 +11,7 @@ import NavigationStack
 struct CircleFooterView: View {
     @EnvironmentObject var navigationStack: NavigationStack
     @EnvironmentObject var authSessionStore: AuthSessionStore
+    @EnvironmentObject var innerCircleVM: InnerCircleViewModel
 
     @Binding var selectedFriendIndex: String?
     
@@ -34,6 +35,20 @@ struct CircleFooterView: View {
                             .frame(width: 40, height: 40)
                             .clipShape(Circle())
                             .padding(5)
+                            .contextMenu {
+                                Button(role: .destructive) {
+                                    print("deactivating friend...removing from circle")
+                                    if self.authSessionStore.user?.id != nil && self.selectedFriendIndex != nil {
+                                        self.innerCircleVM.activateOrDeactiveInboxUser(activate: false, userId: self.authSessionStore.user!.id!, friendId: self.selectedFriendIndex!) {res in
+                                            
+                                            print(res)
+                                            self.selectedFriendIndex = nil // making this footer disappear although a view change should do this
+                                        }
+                                    }
+                                } label: {
+                                    Label("Remove from Circle", systemImage: "person.crop.circle.fill.badge.minus")
+                                }
+                            }
                     }
                     
                     

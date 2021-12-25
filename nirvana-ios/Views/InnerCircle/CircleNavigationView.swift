@@ -111,7 +111,7 @@ struct CircleNavigationView: View {
                     Button {
                         self.alertActive.toggle()
                         
-                        self.alertText = "👯‍♂️ Coming Soon!"
+                        self.alertText = "❄️ Coming Soon!"
                         
                         self.alertSubtext = "Stay posted for buttery smooth convos with groups! We will be limiting you to 3 circles!"
                     } label: {
