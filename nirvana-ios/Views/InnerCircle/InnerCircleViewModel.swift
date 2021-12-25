@@ -24,10 +24,11 @@ class InnerCircleViewModel: ObservableObject {
     
     init() {
         do {
-            try audioSession.setAllowHapticsAndSystemSoundsDuringRecording(true)
+            
             try audioSession.setCategory(.playAndRecord, mode: .default)
             try audioSession.setActive(true)
             try audioSession.overrideOutputAudioPort(AVAudioSession.PortOverride.speaker) // allow playing in silent mode
+            try audioSession.setAllowHapticsAndSystemSoundsDuringRecording(true)
         } catch {
             print("Can not setup the Recording")
         }
