@@ -71,7 +71,7 @@ struct CircleFooterView: View {
                             }
                             
                             Text(self.convoRelativeTime)
-                                .font(.caption)
+                                .font(.caption2)
                                 .foregroundColor(.gray)
                         }
                     }
