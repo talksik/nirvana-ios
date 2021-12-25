@@ -37,7 +37,6 @@ struct CircleFooterView: View {
                     }
                     
                     
-                    
                     // meta data of convo
                     VStack (alignment: .leading) {
                         if self.selectedFriend != nil {
@@ -46,6 +45,16 @@ struct CircleFooterView: View {
                                 .foregroundColor(NirvanaColor.light)
                         }
                         if !self.convoRelativeTime.isEmpty && self.myTurn != nil {
+                            if self.myTurn! {
+                                Label("your turn", systemImage: "wave.3.right.circle.fill")
+                                    .foregroundColor(Color.orange)
+                                    .font(.caption)
+                            } else {
+                                Label("their turn", systemImage: "wave.3.right.circle.fill")
+                                    .foregroundColor(NirvanaColor.dimTeal)
+                                    .font(.caption)
+                            }
+                            
                             Text(self.convoRelativeTime)
                                 .font(.caption)
                                 .foregroundColor(.gray)

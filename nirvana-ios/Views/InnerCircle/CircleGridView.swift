@@ -73,19 +73,22 @@ struct CircleGridView: View {
                             let scale = getScale(proxy: gridProxy, itemNumber: value, userId: friendId)
                             
                             ZStack(alignment: .topTrailing) {
-                                // check if the last message in the conversation between me and my friend was me talking or him
-                                // also check if I have listened to it once or twice
-                                if self.haveNewMessageFromFriend(friendDbId: friendId) { // him talking
-                                    Image(systemName: "wave.3.right.circle.fill")
-                                        .foregroundColor(Color.orange)
-                                        .font(.title)
-                                }
-                                
                                 Circle()
                                     .foregroundColor(self.getBubbleTint(friendIndex: value, friendDbId: friendId)) // different color for a selected user
                                     .blur(radius: 8)
                                     .cornerRadius(100)
-                                    
+                                
+                                // check if the last message in the conversation between me and my friend was me talking or him
+                                if self.haveNewMessageFromFriend(friendDbId: friendId) { // him talking
+                                    Image(systemName: "wave.3.right.circle.fill")
+                                        .foregroundColor(Color.orange)
+                                        .font(.title2)
+                                } else {
+                                    Image(systemName: "wave.3.right.circle.fill")
+                                        .foregroundColor(NirvanaColor.dimTeal)
+                                        .font(.title2)
+                                }
+//
                                 Image(self.authSessionStore.relevantUsersDict[friendId]?.avatar ?? Avatars.avatarSystemNames[0])
                                     .resizable()
                                     .scaledToFit()
@@ -158,13 +161,13 @@ struct CircleGridView: View {
                                                         
                             ZStack(alignment: .topTrailing) {
                                 Image(systemName: "arrow.down.left.circle.fill")
-                                    .foregroundColor(NirvanaColor.dimTeal)
+                                    .foregroundColor(Color.orange)
                                     .font(.title)
                                 
                                 Text("\(activeFriends.count)")
                                 
                                 Circle()
-                                    .foregroundColor(NirvanaColor.dimTeal.opacity(0.3)) // different color for a selected user
+                                    .foregroundColor(Color.orange.opacity(0.4))
                                     .blur(radius: 5)
                                     .cornerRadius(100)
                                     
@@ -248,13 +251,13 @@ struct CircleGridView: View {
                 .padding(.trailing, Self.size / 2 + Self.spacingBetweenColumns / 2) // because of the offset of last column
                 .padding(.top, Self.size / 2 + Self.spacingBetweenRows / 2) // because we are going under the nav bar
             }// scrollview
+            .onAppear {
+                // scrolling to first person in grid
+                if self.authSessionStore.friendsArr.count > 0 {
+                    scrollReaderValue.scrollTo(self.selectedFriendIndex)
+                }
+            }
         } // scrollview reader
-        .onAppear {
-            //TODO: was causing problems so commenting out
-            //may not need anymore with bottom nav activation
-//                scrollReaderValue.scrollTo(Self.numberOfItems / 2)
-        }
-        
     }
     
     
@@ -273,14 +276,16 @@ struct CircleGridView: View {
     }
     
     private func getBubbleTint(friendIndex: Int, friendDbId: String) -> Color {
+        // TODO: check if I listened to the message before or not
+        if self.haveNewMessageFromFriend(friendDbId: friendDbId) { // this friend has a message for me
+            return Color.orange.opacity(0.8)
+        }
+        
         if (friendDbId == self.selectedFriendIndex) { // user clicked on this user
             return NirvanaColor.dimTeal.opacity(0.4)
         }
-        else if self.haveNewMessageFromFriend(friendDbId: friendDbId) { // this user has a message
-            return Color.orange.opacity(0.8)
-        }
       
-        return Color.white.opacity(0.4)
+        return NirvanaColor.dimTeal.opacity(0.2)
     }
 }
 

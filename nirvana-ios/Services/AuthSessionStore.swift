@@ -309,7 +309,7 @@ extension AuthSessionStore {
                                         
                     // if this user is not already a friend, active or inactive/rejected, then get their user data and add to inbox
                     if self.userFriendsDict.keys.contains(userFriend!.userId) {
-                        print("already have this user in my circle or I rejected them \(userFriend?.friendId)")
+                        print("already have this user in my circle or I rejected them \(userFriend?.userId)")
                         continue
                     }
                     else {
