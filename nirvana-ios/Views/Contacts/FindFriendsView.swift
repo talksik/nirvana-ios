@@ -21,7 +21,7 @@ struct FindFriendsView: View {
         // main content
         NavigationView {
             VStack {
-                Text("You must have someone in your phone contacts to add them. Remember: \(self.authSessionStore.getActiveFriendIds().count)/10 spots filled in your circle. 🥬")
+                Text("You must have someone in your phone contacts to add them. Remember: \(self.authSessionStore.friendsArr.count)/10 spots filled in your circle. 🥬")
                     .font(.subheadline)
                     .foregroundColor(Color.gray)
                     .padding(.horizontal)
@@ -58,13 +58,11 @@ struct FindFriendsView: View {
         let keys = (Array(self.contactsVM.contacts.keys) as [String]).sorted()
         
         // checking if currcontact is already a friend
-        let activeFriendIds = self.authSessionStore.getActiveFriendIds()
-        
         let newPotentialFriends = keys.filter {contactSortProp in
             if let friend = self.contactsVM.contacts[contactSortProp]?.user { // seeing if this contact is an existing user
                 // if this is already an ACTIVE friend -> don't show
                 // we want to show inactive friends
-                if activeFriendIds.contains(friend.id!) {
+                if self.authSessionStore.friendsArr.contains(friend.id!) {
                     return false
                 }
                 

@@ -37,6 +37,8 @@ final class AuthSessionStore: ObservableObject, SessionStore {
     var userFriendsDict: [String: UserFriends] = [:] // all active and inactive relationships
     
     // transformed data for the views
+    @Published var friendsArr: [String] = []
+    @Published var inboxUsersArr: [String] = []
     @Published var relevantUsersDict: [String: User] = [:] // all cached/snapshotted users from db for app use
     @Published var relevantMessagesByUserDict: [String: [Message]] = [:] // note, this is all messages related to me
     
@@ -217,7 +219,7 @@ extension AuthSessionStore {
         }
         
         // MARK: keeping the @Published user object updated
-        // TODO: THIS WON"T UPDATE VIEW since user is a reference type...can manually publish...research and learn more
+        // TODO: THIS WON'T UPDATE VIEW since user is a reference type...can manually publish...research and learn more
         self.firestoreService.getUserRealtime(userId: currUserId!) {[weak self] realtimeUpdatedUser in
             if realtimeUpdatedUser != nil {
                 print("up to date user: \(realtimeUpdatedUser)")
@@ -228,24 +230,18 @@ extension AuthSessionStore {
         
         // MARK: keeping the friends list updated
         // TODO: break into firestoreService metadata of each change...later tho since this listener will barely get changes
-            // different actions on additions, modifications, and removals
-            
-            // parse through the new result set
-            // if already exists in dict, then make sure not to delete the associated list
-            
-        // order: when the relationship was created...also easy for user
-        // limit: for my protection of db costs lol
-        // TODO: use the indexes I created
         let friendsListener = db.collection("user_friends").whereField("userId", isEqualTo: currUserId).limit(to: 100)
             .addSnapshotListener { querySnapshot, error in
+                print("friends listener activated")
+                
                 guard let documents = querySnapshot?.documents else {
                     print("Error fetching user's friends: \(error!)")
                     return
                 }
                 
                 // resetting array to reset friends
-                self.relevantUsersDict.removeAll()
                 self.userFriendsDict.removeAll()
+                self.friendsArr.removeAll() // updating to keep the friends in order
                 
                 for document in querySnapshot!.documents {
                     let userFriend:UserFriends? = try? document.data(as: UserFriends.self)
@@ -265,6 +261,18 @@ extension AuthSessionStore {
                                 if returnedUser != nil {
                                     self.relevantUsersDict[userFriend!.friendId] = returnedUser!
                                     
+                                    // making sure that I clear the inbox if this user came from the inbox...regardless of
+                                    // whether I accepted or rejected them
+                                    if self.inboxUsersArr.contains(userFriend!.friendId) {
+                                        self.inboxUsersArr = self.inboxUsersArr.filter {inboxUserId in
+                                            return inboxUserId != userFriend!.friendId
+                                        }
+                                    }
+                                    
+                                    if userFriend!.isActive {
+                                        self.friendsArr.append(userFriend!.friendId)
+                                    }
+                                    
                                     self.objectWillChange.send()
                                     
                                     print("added this user to the array of users for user's circle\(returnedUser?.nickname)")
@@ -276,28 +284,51 @@ extension AuthSessionStore {
                         }
                     }
                 }
-                
-                
-                // TODO: optimize later with the conditionals
-//                guard let snapshot = querySnapshot else {
-//                    print("Error fetching user's friends: \(error!)")
-//                    return
-//                }
-//                snapshot.documentChanges.forEach { diff in
-//
-//                    if (diff.type == .added) {
-//                        print("New friend in circle: \(diff.document.data())")
-//                    }
-//                    if (diff.type == .modified) {
-//                        // maybe it was deactivated or activated
-//                        print("Modified relationship: \(diff.document.data())")
-//                    }
-//                    if (diff.type == .removed) {
-//                        print("Removed city: \(diff.document.data())")
-//                    }
-//                }
             }
         
+        // listener for people who have me as an active friend might make inbox easier
+        // where friendId = me, isActive = true...this way it's a published property that can update the ui
+        // as inbox users is only being called on load
+        
+        let inboxUsersListener = db.collection("user_friends").whereField("friendId", isEqualTo: currUserId).whereField("isActive", isEqualTo: true)
+            .addSnapshotListener { querySnapshot, error in
+                print("inbox users listener")
+                guard let documents = querySnapshot?.documents else {
+                    print("Error fetching friends who have me as a friend: \(error!)")
+                    return
+                }
+                
+                self.inboxUsersArr.removeAll()
+                
+                for document in querySnapshot!.documents {
+                    let userFriend:UserFriends? = try? document.data(as: UserFriends.self)
+                    
+                    if userFriend == nil {
+                        continue
+                    }
+                                        
+                    // if this user is not already a friend, active or inactive/rejected, then get their user data and add to inbox
+                    if self.userFriendsDict.keys.contains(userFriend!.userId) {
+                        print("already have this user in my circle or I rejected them \(userFriend?.friendId)")
+                        continue
+                    }
+                    else {
+                        self.firestoreService.getUser(userId: userFriend!.userId) {[weak self] returnedUser in
+                            if returnedUser == nil {
+                                print("couldn't get new user info")
+                                return
+                            }
+                            print("new user for inbox fetched \(returnedUser!.nickname)")
+                            
+                            DispatchQueue.main.async {
+                                // add data to our app cache of users for their info down the road
+                                self?.relevantUsersDict[userFriend!.userId] = returnedUser!
+                                self?.inboxUsersArr.append(userFriend!.userId)
+                            }
+                        }
+                    }
+                }
+            }
         
         // MARK: listener for messages
         
@@ -309,6 +340,8 @@ extension AuthSessionStore {
         // SOLUTION: composite with array
         let messagesListener = db.collection("messages").whereField("senderIdReceiverIdComposite", arrayContains: currUserId).order(by: "sentTimestamp", descending: true).limit(to: 100)
             .addSnapshotListener { querySnapshot, error in
+                    print("messages listener activated")
+                
                     guard let documents = querySnapshot?.documents else {
                         print("error in fetching messages: \(error!)")
                         return
@@ -343,22 +376,6 @@ extension AuthSessionStore {
                                         } else {
                                             self.relevantMessagesByUserDict[currMessage!.senderId]?.append(currMessage!)
                                         }
-                                        
-                                        // need to get and add this user to inbox if they are not a friend, active or inactive
-//                                        self.updateInboxUsers(currMessage!.senderId)
-                                        // might be an inbox message from someone completely new, but also can be a concurrency thing, where we haven't completely fetched all friends, active or inactive with the previous listener
-                                        // no worries though as we keep everything update to date in the view
-                                        if !self.relevantUsersDict.keys.contains(currMessage!.senderId) {
-                                            self.firestoreService.getUser(userId: currMessage!.senderId) {[weak self] returnedUser in
-                                                if returnedUser == nil {
-                                                    print("couldn't get new user info")
-                                                    return
-                                                }
-                                                
-                                                print("new user for inbox fetched")
-                                                self?.relevantUsersDict[currMessage!.senderId] = returnedUser!
-                                            }
-                                        }
                                     }
                                 }
                                 
@@ -373,10 +390,6 @@ extension AuthSessionStore {
                     }                
                 }
         
-        // listener for people who have me as an active friend might make inbox easier
-        // where friendId = me, isActive = true...this way it's a published property that can update the ui
-        // as inbox users is only being called on load
-        
         self.listenersActive = true
         
         // adding listeners to be able to deinit later
@@ -384,6 +397,7 @@ extension AuthSessionStore {
         // self.dataListeners.append(currUserListener)
         self.dataListeners.append(messagesListener)
         self.dataListeners.append(friendsListener)
+        self.dataListeners.append(inboxUsersListener)
         
     }
     
@@ -395,29 +409,5 @@ extension AuthSessionStore {
         print("deactivated listeners!")
         
         self.listenersActive = false
-    }
-}
-
-
-// transforming data to make it more valuable
-extension AuthSessionStore {
-    func getActiveFriendIds() -> [String] {
-        // TODO: order friends by user friend creation date as dictionaries don't have any inherent order
-        // they order randomly through hash value creation
-        var activeFriendIds: [String] = []
-        
-        for (friendId, userFriend) in self.userFriendsDict {
-            if userFriend.isActive {
-                activeFriendIds.append(friendId)
-            }
-        }
-        
-        return activeFriendIds
-    }
-    
-    func getInboxUsersIds() -> [String] {
-        return self.relevantUsersDict.keys.filter {userId in
-            return !self.userFriendsDict.keys.contains(userId)
-        }
     }
 }

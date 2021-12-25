@@ -55,8 +55,8 @@ struct CircleGridView: View {
         // based on most close friends to least
         
         // MARK: data entry point
-        let activeFriends = self.authSessionStore.getActiveFriendIds()
-        let inboxUsers = self.authSessionStore.getInboxUsersIds()
+        let activeFriends = self.authSessionStore.friendsArr
+        let inboxUsers = self.authSessionStore.inboxUsersArr
         
         ScrollViewReader {scrollReaderValue in
             ScrollView([.horizontal, .vertical], showsIndicators: false) {
@@ -152,14 +152,16 @@ struct CircleGridView: View {
                     // inbox users
                     ForEach(0..<inboxUsers.count, id: \.self) {inboxValue in
                         let inboxUserId = inboxUsers[inboxValue]
-                        let adjustedValue = inboxValue + self.authSessionStore.getActiveFriendIds().count // IMPORTANT: accounting for the active friends iterations
+                        let adjustedValue = inboxValue + activeFriends.count // IMPORTANT: accounting for the active friends iterations
                         GeometryReader {gridProxy in
                             let scale = getScale(proxy: gridProxy, itemNumber: adjustedValue, userId: inboxUserId) * 0.75 // don't want inbox to match size of active
-                            
+                                                        
                             ZStack(alignment: .topTrailing) {
                                 Image(systemName: "arrow.down.left.circle.fill")
                                     .foregroundColor(NirvanaColor.dimTeal)
                                     .font(.title)
+                                
+                                Text("\(activeFriends.count)")
                                 
                                 Circle()
                                     .foregroundColor(NirvanaColor.dimTeal.opacity(0.3)) // different color for a selected user
@@ -187,7 +189,7 @@ struct CircleGridView: View {
                             let inboxFriendNumber = self.authSessionStore.relevantUsersDict[inboxUserId]?.phoneNumber
                             
                             self.alertText = "🌴Add to your circle?"
-                            self.alertSubtext = "\(inboxFriendName ?? "") started a convo with you... \n \(inboxFriendNumber!) \n Remember: you have \(10 - activeFriends.count) spots left!"
+                            self.alertSubtext = "\(inboxFriendName ?? "") started a convo with you... \n \(inboxFriendNumber ?? "") \n Remember: you have \(10 - activeFriends.count) spots left!"
                             self.alertActive.toggle()
                         }
                         .animation(Animation.spring())
@@ -212,7 +214,7 @@ struct CircleGridView: View {
                     }
                     
                     // stale state for adding a contact
-                    let staleAdjustedValue = self.authSessionStore.getActiveFriendIds().count + self.authSessionStore.getInboxUsersIds().count
+                    let staleAdjustedValue = activeFriends.count + inboxUsers.count
                     GeometryReader {gridProxy in
                         let scale = getScale(proxy: gridProxy, itemNumber: staleAdjustedValue, userId: nil) * 0.75 // adjusting size as stale states should be the smallest
                         Button {
