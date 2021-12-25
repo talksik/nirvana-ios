@@ -111,6 +111,7 @@ struct CircleGridView: View {
                                     print("activated long press!")
                                     self.selectedFriendIndex = friendId
                                     
+                                    // TODO: haptics stopped working again
                                     self.activateHaptics()
                                     
                                     self.record()
@@ -466,12 +467,11 @@ extension CircleGridView {
         // haptics for recording
         print("got haptics on")
         let impactHeavy = UIImpactFeedbackGenerator(style: .heavy)
+        impactHeavy.prepare()
         impactHeavy.impactOccurred()
     }
     
     private func record() {
-        // call parent view model/environment object vm functions
-        
         self.innerCircleVM.startRecording()
     }
     
