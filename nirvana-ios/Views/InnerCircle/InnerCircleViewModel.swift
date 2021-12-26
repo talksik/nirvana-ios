@@ -25,10 +25,11 @@ class InnerCircleViewModel: ObservableObject {
     init() {
         // separate set up for listening vs recording
         do {
-            try audioSession.setCategory(.playAndRecord, mode: .voiceChat, options: [.duckOthers, .allowBluetooth, .allowBluetoothA2DP])
+            try audioSession.setCategory(.playAndRecord, mode: .default, options: [.duckOthers, .allowBluetooth, .allowBluetoothA2DP])
             try audioSession.setActive(true)
-            try audioSession.overrideOutputAudioPort(AVAudioSession.PortOverride.speaker) // allow playing in silent mode
             try audioSession.setAllowHapticsAndSystemSoundsDuringRecording(true)
+            try audioSession.overrideOutputAudioPort(AVAudioSession.PortOverride.speaker) // allow playing in silent mode
+            
         } catch {
             print("Can not setup the Recording")
         }
