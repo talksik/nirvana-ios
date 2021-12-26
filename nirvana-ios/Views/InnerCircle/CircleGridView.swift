@@ -432,22 +432,22 @@ extension CircleGridView {
             print("player queued up items!!!")
             
             // notify every half second
-            let timeScale = CMTimeScale(NSEC_PER_SEC)
-            let time = CMTime(seconds: 0.5, preferredTimescale: timeScale)
+//            let timeScale = CMTimeScale(NSEC_PER_SEC)
+//            let time = CMTime(seconds: 0.5, preferredTimescale: timeScale)
             
-            timeObserverToken = queuePlayer.addPeriodicTimeObserver(forInterval: time, queue: .main) {time in
-                // update player transport UI
-                print("periodic time observer: \(time)")
-                // if the current playeritem is the latest one:
-                // 1. deselect this user
-                // 2. update databse that I listened to this
-                if queuePlayer.currentItem == AVPlayerItems.last {
-                    // hide the footer now...ehhh don't need to
-//                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-//                        self.selectedFriendIndex = nil
-//                    }
-                }
-            }
+//            timeObserverToken = queuePlayer.addPeriodicTimeObserver(forInterval: time, queue: .main) {time in
+//                // update player transport UI
+//                print("periodic time observer: \(time)")
+//                // if the current playeritem is the latest one:
+//                // 1. deselect this user
+//                // 2. update databse that I listened to this
+//                if queuePlayer.currentItem == AVPlayerItems.last {
+//                    // hide the footer now...ehhh don't need to
+////                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+////                        self.selectedFriendIndex = nil
+////                    }
+//                }
+//            }
             
             // TODO: right now not updating all of that
             // update the listencount and firstlistentimestamp of those messages in firestore
