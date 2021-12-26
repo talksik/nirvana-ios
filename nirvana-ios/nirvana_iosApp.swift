@@ -72,6 +72,12 @@ class AppDelegate: NSObject, UIApplicationDelegate {
       func application(_ application: UIApplication, didReceiveRemoteNotification notification: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
             print("did receive remote notification")
           
+          // phone auth
+          if Auth.auth().canHandleNotification(notification) {
+            completionHandler(.noData)
+            return
+          }
+          
           // If you are receiving a notification message while your app is in the background,
             // this callback will not be fired till the user taps on the notification launching the application.
             // TODO: Handle data of notification
@@ -88,12 +94,6 @@ class AppDelegate: NSObject, UIApplicationDelegate {
             print(notification)
 
             completionHandler(UIBackgroundFetchResult.newData)
-          
-            // phone auth
-            if Auth.auth().canHandleNotification(notification) {
-              completionHandler(.noData)
-              return
-            }
       }
     
     // For iOS 9+
