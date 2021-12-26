@@ -202,8 +202,10 @@ struct CircleGridView: View {
                                 message: Text(self.alertSubtext),
                                 primaryButton: .destructive(Text("Reject"), action: {
                                     // create user friend but a rejected one
-                                    self.innerCircleVM.activateOrDeactiveInboxUser(activate: false, userId: self.authSessionStore.user!.id!, friendId: inboxUserId) { res in
-                                        print(res)
+                                    if self.authSessionStore.friendsArr.count < 10 {
+                                        self.innerCircleVM.activateOrDeactiveInboxUser(activate: false, userId: self.authSessionStore.user!.id!, friendId: inboxUserId) { res in
+                                            print(res)
+                                        }
                                     }
                                 }),
                                 secondaryButton: .default(Text("Add"), action: {

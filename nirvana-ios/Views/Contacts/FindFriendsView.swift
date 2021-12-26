@@ -135,18 +135,20 @@ struct ListContactRow: View {
                     secondaryButton: .default(Text("Confirm")) {
                         print("adding contact to circle")
                         // call method in vm to get it done, then navigate to the circle
-                        self.contactsVM.addOrActivateFriendToCircle(userId: self.authSessionStore.user!.id!, friendId: (contact.user!.id)!) {res in
-                            print(res)
-                            
-                            switch res {
-                            case .error(let err):
-                                print(err)
-                            case .success(let str):
-                                print(str)
+                        if self.authSessionStore.friendsArr.count < 10 {                            
+                            self.contactsVM.addOrActivateFriendToCircle(userId: self.authSessionStore.user!.id!, friendId: (contact.user!.id)!) {res in
+                                print(res)
+                                
+                                switch res {
+                                case .error(let err):
+                                    print(err)
+                                case .success(let str):
+                                    print(str)
+                                }
                             }
+                            
+                            self.navigationStack.push(InnerCircleView())
                         }
-                        
-                        self.navigationStack.push(InnerCircleView())
                     }
                 )
             }
