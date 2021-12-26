@@ -15,6 +15,8 @@ struct CircleGridView: View {
     @EnvironmentObject var navigationStack: NavigationStack
     
     @State var queuePlayer = AVQueuePlayer()
+    @State var timeObserverToken: Any?
+    
     @GestureState var dragState = DragState.inactive
     
     let universalSize = UIScreen.main.bounds
@@ -240,8 +242,7 @@ struct CircleGridView: View {
                     .id(UUID().uuidString) // id for scrollviewreader
                     .frame(height: Self.size)
                     .animation(Animation.spring())
-                    
-                    
+                                        
                 } //lazygrid // TODO: add padding based on if we are on any cornering item to allow the bubble to enlargen
                 .padding(.trailing, Self.size / 2 + Self.spacingBetweenColumns / 2) // because of the offset of last column
                 .padding(.top, Self.size / 2 + Self.spacingBetweenRows / 2) // because we are going under the nav bar
@@ -387,12 +388,12 @@ extension CircleGridView {
         // traverse through reversed list of messages and add to audio player queue
         // TODO: protect against force unwraps
         var AVPlayerItems: [AVPlayerItem] = []
+        var AVAssets: [AVAsset] = []
         let messagesRelatedToFriend = self.authSessionStore.relevantMessagesByUserDict[friendId] ?? []
         
         if messagesRelatedToFriend.count == 0 {
             return
         }
-        
         
         for message in messagesRelatedToFriend {
             print("message: the sender is \(message.senderId) and senttime: \(message.sentTimestamp)")
@@ -404,10 +405,12 @@ extension CircleGridView {
             // only add to queue if we can convert the database url to a valid url here
             if let audioUrl = URL(string: message.audioDataUrl) {
                 let playerMessage: AVPlayerItem = AVPlayerItem(url: audioUrl)
+                let playerAsset: AVAsset = AVAsset(url: audioUrl)
+                AVAssets.append(playerAsset)
                 AVPlayerItems.append(playerMessage)
             }
         }
-                
+        
         // start playing if there are messages to listen to
         if AVPlayerItems.count > 0 {
             print("have \(AVPlayerItems.count) messages to play")
@@ -423,10 +426,65 @@ extension CircleGridView {
             
             print("player queued up items!!!")
             
+            // notify every half second
+            let timeScale = CMTimeScale(NSEC_PER_SEC)
+            let time = CMTime(seconds: 0.5, preferredTimescale: timeScale)
+            
+            timeObserverToken = queuePlayer.addPeriodicTimeObserver(forInterval: time, queue: .main) {time in
+                // update player transport UI
+                print("periodic time observer: \(time)")
+                // if the current playeritem is the latest one:
+                // 1. deselect this user
+                // 2. update databse that I listened to this
+                if queuePlayer.currentItem == AVPlayerItems.last {
+                    // hide the footer now...ehhh don't need to
+//                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+//                        self.selectedFriendIndex = nil
+//                    }
+                }
+            }
             
             // TODO: right now not updating all of that
             // update the listencount and firstlistentimestamp of those messages in firestore
             // this should update ui to show that there is no message to show
+        }
+    }
+    
+    
+    
+    func addBoundaryTimeObserver(playerAssets: [AVAsset]) {
+        var totalDuration = CMTime.zero
+        for item in playerAssets {
+            print(item.duration)
+            totalDuration = CMTimeAdd(item.duration, totalDuration)
+        }
+        print(totalDuration)
+        
+        // Divide the total duration into quarters.
+        let interval = CMTimeMultiplyByFloat64(totalDuration, multiplier: 0.95)
+        var currentTime = CMTime.zero
+        var times = [NSValue]()
+
+        // Calculate boundary times
+        while currentTime < totalDuration {
+            currentTime = currentTime + interval
+            times.append(NSValue(time:currentTime))
+        }
+
+        print(times)
+        
+        timeObserverToken = queuePlayer.addBoundaryTimeObserver(forTimes: times,
+                                                           queue: DispatchQueue.main) {
+            // Update UI
+            print("activated time boundary")
+        }
+        
+    }
+    
+    func removeBoundaryTimeObserver() {
+        if let timeObserverToken = timeObserverToken {
+            self.queuePlayer.removeTimeObserver(timeObserverToken)
+            self.timeObserverToken = nil
         }
     }
     

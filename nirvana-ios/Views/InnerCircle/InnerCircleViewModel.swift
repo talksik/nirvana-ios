@@ -23,9 +23,9 @@ class InnerCircleViewModel: ObservableObject {
     private let pushNotificationService = PushNotificationService()
     
     init() {
+        // separate set up for listening vs recording
         do {
-            
-            try audioSession.setCategory(.playAndRecord, mode: .default)
+            try audioSession.setCategory(.playAndRecord, mode: .voiceChat, options: [.duckOthers, .allowBluetooth, .allowBluetoothA2DP])
             try audioSession.setActive(true)
             try audioSession.overrideOutputAudioPort(AVAudioSession.PortOverride.speaker) // allow playing in silent mode
             try audioSession.setAllowHapticsAndSystemSoundsDuringRecording(true)
@@ -99,6 +99,8 @@ extension InnerCircleViewModel {
     func getTemporaryDirectory() -> URL {
         return FileManager.default.temporaryDirectory
     }
+    
+    
 
 }
 
@@ -127,5 +129,12 @@ extension InnerCircleViewModel {
         self.firestoreService.createOrUpdateUserFriends(userFriend: userFriend, activateOrDeactivate: activate) {[weak self] res in
             completion(res)
         }
+    }
+}
+
+extension InnerCircleViewModel {
+    // update listen count to update ui to remove orange telling them that they listened to it already
+    func updateMessageListenCount() {
+        
     }
 }
