@@ -65,7 +65,7 @@ extension InnerCircleViewModel {
     
     // sender should be current user
     // receiver is the person we are sending to
-    func stopRecording(senderId:String, receiver: User) {
+    func stopRecording(sender:User, receiver: User) {
         audioRecorder.stop()
         isRecording = false
         
@@ -77,7 +77,7 @@ extension InnerCircleViewModel {
                     return
                 }
                 
-                let newMessage = Message(sendId: senderId, receivId: receiver.id!, audioDUrl: audioDataUrl!.absoluteString)
+                let newMessage = Message(sendId: sender.id!, receivId: receiver.id!, audioDUrl: audioDataUrl!.absoluteString)
                 
                 // create a new message in firestore with the url for receiving user to automatically get notified
                 self?.firestoreService.createMessage(message: newMessage) {[weak self] res in
@@ -85,7 +85,7 @@ extension InnerCircleViewModel {
                     
                     // sending push notification if there was a device token
                     if receiver.deviceToken != nil && receiver.nickname != nil {
-                        self?.pushNotificationService.sendPushNotification(to: receiver.deviceToken!, title: "🌱Nirvana", body: "continue your conversation with \(receiver.nickname ?? "your friend")")
+                        self?.pushNotificationService.sendPushNotification(to: receiver.deviceToken!, title: "🌱Nirvana", body: "continue your conversation with \(sender.nickname ?? "your friend")")
                     }
                     
                     // delete local audio file from user's phone so that it doesn't get crazy
