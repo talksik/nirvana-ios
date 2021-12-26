@@ -101,9 +101,12 @@ struct CircleGridView: View {
                         )
                         .id(friendId) // id for scrollviewreader
                         .frame(height: Self.size)
-                        .onTapGesture {
-                            self.handleTap(gridItemIndex: value, friendId: friendId)
-                        }// TODO: maybe add simulataneous gesture or sequence? with the tap gesture?
+                        .simultaneousGesture(
+                            TapGesture()
+                                .onEnded{_ in
+                                    self.handleTap(gridItemIndex: value, friendId: friendId)
+                                }
+                        )
                         .gesture(
                             LongPressGesture(minimumDuration: longPressMinDuration)
                                 .onEnded {_ in // on activation of long press
