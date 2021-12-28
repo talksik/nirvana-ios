@@ -65,7 +65,6 @@ struct CircleNavigationView: View {
                     Label("log out", systemImage: "rectangle.portrait.and.arrow.right")
                         .foregroundColor(NirvanaColor.teal)
                 }
-                
             } label: {
                 if self.authSessionStore.user?.avatar == nil {
                     Image("Artboards_Diversity_Avatars_by_Netguru-1")
@@ -75,7 +74,19 @@ struct CircleNavigationView: View {
                         .blur(radius: 5)
                         .frame(width: 40, height: 40)
                         .clipShape(Circle())
-                        .padding(5)
+                        .overlay(alignment: .bottomTrailing) {
+                            // user status
+                            switch self.authSessionStore.user?.userStatus {
+                            case .online:
+                                Circle()
+                                    .frame(width: 10, height: 10)
+                                    .foregroundColor(Color.green)
+                            case .offline:
+                                Circle()
+                            default:
+                                Circle()
+                            }
+                        }
                 } else {
                     Image((self.authSessionStore.user?.avatar)!)
                         .resizable()
@@ -83,8 +94,20 @@ struct CircleNavigationView: View {
                         .background(self.innerCircleVM.isRecording ? Color.orange : NirvanaColor.teal.opacity(0.5))
                         .frame(width: 40, height: 40)
                         .clipShape(Circle())
-                        .padding(5)
                         .shadow(radius: 10)
+                        .overlay(alignment: .bottomTrailing) {
+                            // user status
+                            switch self.authSessionStore.user?.userStatus {
+                            case .online:
+                                Circle()
+                                    .frame(width: 10, height: 10)
+                                    .foregroundColor(Color.green)
+                            case .offline:
+                                Circle()
+                            default:
+                                Circle()
+                            }
+                        }
                 }
             }
             

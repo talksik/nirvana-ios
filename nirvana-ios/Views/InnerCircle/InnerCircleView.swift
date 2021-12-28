@@ -92,11 +92,10 @@ struct InnerCircleView: View {
             }
             
             // header
-            VStack(alignment: .leading) {
+            ZStack(alignment: .topLeading) {
+                Color.clear
                 
                 CircleNavigationView(alertActive: self.$alertActive, alertText: self.$alertText, alertSubtext: self.$alertSubtext).environmentObject(innerCircleVM)
-                
-                Spacer()
             }
             
             CircleFooterView(selectedFriendIndex: self.$selectedFriendIndex).environmentObject(innerCircleVM)

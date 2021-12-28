@@ -42,6 +42,8 @@ struct RouterView: View {
                 // set firestore user document isOnline to true
                 self.authSessionStore.updateUserStatus(userStatus: .online)
             } else if newPhase == .background {
+                // TODO: find a way to do this in the background so that people can call me and start talking even if it's in the background
+                // but this may just not be possible, only with an actual call so to speak
                 print("app is in backgroun")
                 self.authSessionStore.updateUserStatus(userStatus: .background)
             }
