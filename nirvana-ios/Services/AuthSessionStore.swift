@@ -411,3 +411,28 @@ extension AuthSessionStore {
         self.listenersActive = false
     }
 }
+
+
+// manage whether user is online or not
+extension AuthSessionStore {
+    func updateUserStatus(userStatus: UserStatus) {
+        // if user is authenticated
+        if self.sessionState == .isAuthenticated {
+            // if user already has the status that we want to update to, no need to update
+            // remember that the user is updated realtime so we have the newest user data
+            if self.user?.userStatus == userStatus {
+                // do nothing...already have this status
+                print("user already has status: \(userStatus)")
+            }
+            else {
+                if let uid = self.getCurrentUserId() {
+                    self.firestoreService.updateUserStatus(userId: uid, userStatus: userStatus) {res in
+                       print(res)
+                    }
+                }
+            }
+        }
+        
+        print("not authenticated can't change user status")
+    }
+}

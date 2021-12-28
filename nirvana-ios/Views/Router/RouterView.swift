@@ -36,11 +36,14 @@ struct RouterView: View {
             if newPhase == .inactive {
                 print("user is offline")
                 // set firestore user document isOnline to false
+                self.authSessionStore.updateUserStatus(userStatus: .offline)
             } else if newPhase == .active {
                 print("user is online again")
                 // set firestore user document isOnline to true
+                self.authSessionStore.updateUserStatus(userStatus: .online)
             } else if newPhase == .background {
                 print("app is in backgroun")
+                self.authSessionStore.updateUserStatus(userStatus: .background)
             }
         }
         
