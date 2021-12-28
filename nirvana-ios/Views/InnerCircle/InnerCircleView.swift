@@ -13,6 +13,7 @@ struct InnerCircleView: View {
     @EnvironmentObject var authSessionStore: AuthSessionStore
     @EnvironmentObject var navigationStack: NavigationStack
     
+    
     @State var selectedFriendIndex: String? = nil
     
     let universalSize = UIScreen.main.bounds
