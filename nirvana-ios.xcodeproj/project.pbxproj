@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		8904DEC8277055E90071E6CA /* OnboardingOneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8904DEC7277055E90071E6CA /* OnboardingOneView.swift */; };
 		890C245D277BF628009B4A30 /* AgoraRtcKit in Frameworks */ = {isa = PBXBuildFile; productRef = 890C245C277BF628009B4A30 /* AgoraRtcKit */; };
+		890C2460277BF896009B4A30 /* AgoraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890C245F277BF896009B4A30 /* AgoraViewController.swift */; };
+		890C2462277BF935009B4A30 /* CallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890C2461277BF935009B4A30 /* CallView.swift */; };
+		890C2464277BFA97009B4A30 /* AgroRep.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890C2463277BFA97009B4A30 /* AgroRep.swift */; };
 		891060E4277359B900F14509 /* CloudStorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891060E3277359B900F14509 /* CloudStorageService.swift */; };
 		891060E82774460500F14509 /* FirebaseInAppMessaging-Beta in Frameworks */ = {isa = PBXBuildFile; productRef = 891060E72774460500F14509 /* FirebaseInAppMessaging-Beta */; };
 		891060EA2774460500F14509 /* FirebaseInAppMessagingSwift-Beta in Frameworks */ = {isa = PBXBuildFile; productRef = 891060E92774460500F14509 /* FirebaseInAppMessagingSwift-Beta */; };
@@ -86,6 +89,9 @@
 
 /* Begin PBXFileReference section */
 		8904DEC7277055E90071E6CA /* OnboardingOneView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingOneView.swift; sourceTree = "<group>"; };
+		890C245F277BF896009B4A30 /* AgoraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgoraViewController.swift; sourceTree = "<group>"; };
+		890C2461277BF935009B4A30 /* CallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallView.swift; sourceTree = "<group>"; };
+		890C2463277BFA97009B4A30 /* AgroRep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgroRep.swift; sourceTree = "<group>"; };
 		891060E3277359B900F14509 /* CloudStorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudStorageService.swift; sourceTree = "<group>"; };
 		891060E527743FEB00F14509 /* nirvana-ios.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "nirvana-ios.entitlements"; sourceTree = "<group>"; };
 		89110713277166D6005797FA /* UserFriends.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFriends.swift; sourceTree = "<group>"; };
@@ -176,6 +182,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		890C245E277BF888009B4A30 /* VoiceCall */ = {
+			isa = PBXGroup;
+			children = (
+				890C245F277BF896009B4A30 /* AgoraViewController.swift */,
+				890C2461277BF935009B4A30 /* CallView.swift */,
+				890C2463277BFA97009B4A30 /* AgroRep.swift */,
+			);
+			path = VoiceCall;
+			sourceTree = "<group>";
+		};
 		891060E62774460500F14509 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -374,6 +390,7 @@
 		89BCABDF276B3588009E9B10 /* InnerCircle */ = {
 			isa = PBXGroup;
 			children = (
+				890C245E277BF888009B4A30 /* VoiceCall */,
 				89BCABE4276B3D58009E9B10 /* InnerCircleView.swift */,
 				89BCABE6276B3D64009E9B10 /* InnerCircleViewModel.swift */,
 				896CE6FD27707E6B00DB474E /* CircleNavigationView.swift */,
@@ -560,6 +577,7 @@
 				891060E4277359B900F14509 /* CloudStorageService.swift in Sources */,
 				896CE7002770847400DB474E /* CircleFooterView.swift in Sources */,
 				894E80BE276ED7A700624B72 /* avatars.swift in Sources */,
+				890C2462277BF935009B4A30 /* CallView.swift in Sources */,
 				896CE7052770AE5D00DB474E /* InboxView.swift in Sources */,
 				891A160327656FC700B26659 /* HomeView.swift in Sources */,
 				896CE70927712CED00DB474E /* StringExtension.swift in Sources */,
@@ -578,6 +596,7 @@
 				89BDCDEF2769B50C00577829 /* ContactsView.swift in Sources */,
 				891A1611276590B000B26659 /* ChatsCarouselView.swift in Sources */,
 				89BDCDE527695DB900577829 /* NirvanaImage.swift in Sources */,
+				890C2460277BF896009B4A30 /* AgoraViewController.swift in Sources */,
 				891A16132765A44300B26659 /* ChatsCarouselViewModel.swift in Sources */,
 				89F05B9B276A87920002E9C7 /* ContactsViewModel.swift in Sources */,
 				896CE6FE27707E6B00DB474E /* CircleNavigationView.swift in Sources */,
@@ -603,6 +622,7 @@
 				89F18AF5276ECF2A00115B1E /* AddBasicInfoView.swift in Sources */,
 				89BCABF0276D53C4009E9B10 /* PhoneVerificationViewModel.swift in Sources */,
 				89BDCDE72769616600577829 /* UIImage+Extension.swift in Sources */,
+				890C2464277BFA97009B4A30 /* AgroRep.swift in Sources */,
 				89F1386D2767EB19006680ED /* SignInView.swift in Sources */,
 				89BDCDF12769E64200577829 /* Message.swift in Sources */,
 				891A160E27657CEA00B26659 /* User.swift in Sources */,

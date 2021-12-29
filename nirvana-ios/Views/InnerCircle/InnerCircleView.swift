@@ -11,8 +11,7 @@ import NavigationStack
 struct InnerCircleView: View {
     @StateObject var innerCircleVM: InnerCircleViewModel = InnerCircleViewModel()
     @EnvironmentObject var authSessionStore: AuthSessionStore
-    @EnvironmentObject var navigationStack: NavigationStack
-    
+    @EnvironmentObject var navigationStack: NavigationStack    
     
     @State var selectedFriendIndex: String? = nil
     

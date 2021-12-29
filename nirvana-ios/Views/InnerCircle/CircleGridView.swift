@@ -17,6 +17,8 @@ struct CircleGridView: View {
     @State var queuePlayer = AVQueuePlayer()
     @State var timeObserverToken: Any?
     
+    @State private var showCall: Bool = false
+    
     @GestureState var dragState = DragState.inactive
     
     let universalSize = UIScreen.main.bounds
@@ -209,7 +211,7 @@ struct CircleGridView: View {
                                 message: Text(self.alertSubtext),
                                 primaryButton: .destructive(Text("Reject"), action: {
                                     // create user friend but a rejected one
-                                    if self.authSessionStore.friendsArr.count < 10 {
+                                    if self.authSessionStore.friendsArr.count < 10 || self.authSessionStore.user?.phoneNumber == "+19499230445" {
                                         self.innerCircleVM.activateOrDeactiveInboxUser(activate: false, userId: self.authSessionStore.user!.id!, friendId: inboxUserId) { res in
                                             print(res)
                                         }
@@ -266,6 +268,9 @@ struct CircleGridView: View {
                 }
             }
         } // scrollview reader
+        .fullScreenCover(isPresented: $showCall, content: {
+          CallView()
+        })
     }
     
     
@@ -379,6 +384,13 @@ extension CircleGridView {
     private func handleTap(gridItemIndex: Int, friendId: String) {
         // TODO: if there is a message, then listen to it
         // then after that, check if friend is online, and if so, then connect with him/her if they are free/not in another call
+        // TESTING CALL
+        let testingCall = false
+        if testingCall {
+            self.showCall.toggle()
+            return
+        }
+        
         print("tap gesture activated")
         
         // clearing the player to make room for this friend's convo or to deselect this user

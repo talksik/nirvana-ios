@@ -13,6 +13,7 @@ import FirebaseMessaging
 @main
 struct nirvana_iosApp: App {
     @StateObject var authSessionStore: AuthSessionStore = AuthSessionStore()
+    @Environment(\.scenePhase) var scenePhase
     
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     var body: some Scene {
@@ -23,6 +24,25 @@ struct nirvana_iosApp: App {
                     print("Received URL: \(url)")
                     Auth.auth().canHandle(url) // <- just for information purposes
                   }
+        }
+        .onChange(of: scenePhase) { newPhase in
+            switch newPhase {
+            case .inactive:
+                print("user is offline")
+                // set firestore user document isOnline to false
+                self.authSessionStore.updateUserStatus(userStatus: .offline)
+            case .active:
+                print("user is online again")
+                // set firestore user document isOnline to true
+                self.authSessionStore.updateUserStatus(userStatus: .online)
+            case .background:
+                // TODO: find a way to do this in the background so that people can call me and start talking even if it's in the background
+                // but this may just not be possible, only with an actual call so to speak
+                print("app is in backgroun")
+                self.authSessionStore.updateUserStatus(userStatus: .background)
+            default:
+                print("default state of app")
+            }
         }
     }
 }
