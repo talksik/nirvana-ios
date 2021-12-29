@@ -12,6 +12,7 @@
 		890C2460277BF896009B4A30 /* AgoraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890C245F277BF896009B4A30 /* AgoraViewController.swift */; };
 		890C2462277BF935009B4A30 /* CallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890C2461277BF935009B4A30 /* CallView.swift */; };
 		890C2464277BFA97009B4A30 /* AgroRep.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890C2463277BFA97009B4A30 /* AgroRep.swift */; };
+		890C2466277C5711009B4A30 /* AgoraService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890C2465277C5711009B4A30 /* AgoraService.swift */; };
 		891060E4277359B900F14509 /* CloudStorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891060E3277359B900F14509 /* CloudStorageService.swift */; };
 		891060E82774460500F14509 /* FirebaseInAppMessaging-Beta in Frameworks */ = {isa = PBXBuildFile; productRef = 891060E72774460500F14509 /* FirebaseInAppMessaging-Beta */; };
 		891060EA2774460500F14509 /* FirebaseInAppMessagingSwift-Beta in Frameworks */ = {isa = PBXBuildFile; productRef = 891060E92774460500F14509 /* FirebaseInAppMessagingSwift-Beta */; };
@@ -92,6 +93,7 @@
 		890C245F277BF896009B4A30 /* AgoraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgoraViewController.swift; sourceTree = "<group>"; };
 		890C2461277BF935009B4A30 /* CallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallView.swift; sourceTree = "<group>"; };
 		890C2463277BFA97009B4A30 /* AgroRep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgroRep.swift; sourceTree = "<group>"; };
+		890C2465277C5711009B4A30 /* AgoraService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgoraService.swift; sourceTree = "<group>"; };
 		891060E3277359B900F14509 /* CloudStorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudStorageService.swift; sourceTree = "<group>"; };
 		891060E527743FEB00F14509 /* nirvana-ios.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "nirvana-ios.entitlements"; sourceTree = "<group>"; };
 		89110713277166D6005797FA /* UserFriends.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFriends.swift; sourceTree = "<group>"; };
@@ -435,6 +437,7 @@
 				89F05BA3276ACC060002E9C7 /* ContactService.swift */,
 				89B46E70276893E200B74255 /* AuthSessionStore.swift */,
 				89A107E4277476CC00B971FD /* PushNotificationService.swift */,
+				890C2465277C5711009B4A30 /* AgoraService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -601,6 +604,7 @@
 				89F05B9B276A87920002E9C7 /* ContactsViewModel.swift in Sources */,
 				896CE6FE27707E6B00DB474E /* CircleNavigationView.swift in Sources */,
 				89AD5573276DD790001658E0 /* SplashView.swift in Sources */,
+				890C2466277C5711009B4A30 /* AgoraService.swift in Sources */,
 				89F18AEC276E92BF00115B1E /* CustomExtensions.swift in Sources */,
 				89F18AF1276ECAA300115B1E /* RouterView.swift in Sources */,
 				89F18AEE276EB55C00115B1E /* ServiceState.swift in Sources */,

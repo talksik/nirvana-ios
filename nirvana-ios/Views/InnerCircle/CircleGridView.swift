@@ -266,6 +266,9 @@ struct CircleGridView: View {
                 if self.authSessionStore.friendsArr.count > 0 {
                     scrollReaderValue.scrollTo(self.selectedFriendIndex)
                 }
+                
+                // get this user's agora token
+                self.innerCircleVM.getAgoraToken()
             }
         } // scrollview reader
         .fullScreenCover(isPresented: $showCall, content: {

@@ -53,7 +53,7 @@
       <EnvironmentVariables>
          <EnvironmentVariable
             key = "nirvana-server-url"
-            value = "http://localhost:3000/"
+            value = "http://192.168.50.26:3000/"
             isEnabled = "YES">
          </EnvironmentVariable>
       </EnvironmentVariables>
