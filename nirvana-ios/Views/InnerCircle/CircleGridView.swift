@@ -80,8 +80,15 @@ struct CircleGridView: View {
                                     .blur(radius: 8)
                                     .cornerRadius(100)
                                 
-                                // check if the last message in the conversation between me and my friend was me talking or him
-                                if self.haveNewMessageFromFriend(friendDbId: friendId) { // him talking
+                                // this friend is online
+                                if self.authSessionStore.relevantUsersDict[friendId]?.userStatus == .online {
+                                    Circle()
+                                        .frame(width: 20, height: 20)
+                                        .foregroundColor(Color.green)
+                                        .font(.title2)
+                                        .padding(5)
+                                }
+                                else if self.haveNewMessageFromFriend(friendDbId: friendId) { // check if the last message in the conversation between me and my friend was me talking or him
                                     Image(systemName: "arrow.down.left.circle.fill")
                                         .foregroundColor(Color.orange)
                                         .font(.title2)
@@ -370,6 +377,8 @@ extension CircleGridView {
 extension CircleGridView {
     // listening to messages
     private func handleTap(gridItemIndex: Int, friendId: String) {
+        // TODO: if there is a message, then listen to it
+        // then after that, check if friend is online, and if so, then connect with him/her if they are free/not in another call
         print("tap gesture activated")
         
         // clearing the player to make room for this friend's convo or to deselect this user

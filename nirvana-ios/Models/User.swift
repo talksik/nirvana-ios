@@ -10,6 +10,12 @@ import Firebase
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
+enum UserStatus: String, Codable {
+    case online
+    case offline
+    case background
+}
+
 struct User: Identifiable, Codable {
     @DocumentID var id: String?
     var nickname: String?
@@ -17,6 +23,8 @@ struct User: Identifiable, Codable {
     var emailAddress:String?
     var avatar:String?
     var deviceToken: String?
+    
+    var userStatus: UserStatus?
 
     @ServerTimestamp var lastLoggedInTimestamp: Date?
     @ServerTimestamp var createdTimestamp: Date?

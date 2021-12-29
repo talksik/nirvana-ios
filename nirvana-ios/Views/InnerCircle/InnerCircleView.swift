@@ -13,6 +13,7 @@ struct InnerCircleView: View {
     @EnvironmentObject var authSessionStore: AuthSessionStore
     @EnvironmentObject var navigationStack: NavigationStack
     
+    
     @State var selectedFriendIndex: String? = nil
     
     let universalSize = UIScreen.main.bounds
@@ -91,11 +92,10 @@ struct InnerCircleView: View {
             }
             
             // header
-            VStack(alignment: .leading) {
+            ZStack(alignment: .topLeading) {
+                Color.clear
                 
                 CircleNavigationView(alertActive: self.$alertActive, alertText: self.$alertText, alertSubtext: self.$alertSubtext).environmentObject(innerCircleVM)
-                
-                Spacer()
             }
             
             CircleFooterView(selectedFriendIndex: self.$selectedFriendIndex).environmentObject(innerCircleVM)
@@ -134,17 +134,22 @@ struct InnerCircleView: View {
         }
         .onAppear {
             // activate 3 data listeners once for authsessionstore/usermanager if not already called, but authsessionstore will handle that
+            // TODO: can/should do this on init of view model
             self.authSessionStore.activateMainDataListeners()
                         
             // set up push notifications and such + save up to date device token
             // TODO: this is firing too often?
             self.innerCircleVM.setUpPushNotifications()
+            
+            // set status of user to online
+            self.authSessionStore.updateUserStatus(userStatus: .online)
+            
         }
 //        .onDisappear {
 //            print("deiniting data listeners, but current data should still be cached!")
 //
 //            // deactivate all data listeners
-//            self.authSessionStore.deinitDataListeners()
+//            self.authSessionStore.deinitAllDataListeners()
 //        }
     }
 }

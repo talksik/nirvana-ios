@@ -42,6 +42,8 @@ final class AuthSessionStore: ObservableObject, SessionStore {
     @Published var relevantUsersDict: [String: User] = [:] // all cached/snapshotted users from db for app use
     @Published var relevantMessagesByUserDict: [String: [Message]] = [:] // note, this is all messages related to me
     
+    private var friendsListeners: [ListenerRegistration] = []
+    
     private var dataListeners: [ListenerRegistration] = []
     private var listenersActive = false // false on app/processes killed
     
@@ -126,7 +128,7 @@ final class AuthSessionStore: ObservableObject, SessionStore {
          do {
            try Auth.auth().signOut()
              
-           self.deinitDataListeners()
+           self.deinitAllDataListeners()
          } catch let signOutError as NSError {
            print("Error signing out: %@", signOutError)
          }
@@ -243,6 +245,9 @@ extension AuthSessionStore {
                 self.userFriendsDict.removeAll()
                 self.friendsArr.removeAll() // updating to keep the friends in order
                 
+                // clear the listeners for the the previous set of users
+                self.deinitFriendListeners()
+                
                 for document in querySnapshot!.documents {
                     let userFriend:UserFriends? = try? document.data(as: UserFriends.self)
                     
@@ -252,37 +257,54 @@ extension AuthSessionStore {
                     
                     self.userFriendsDict[userFriend!.friendId] = userFriend!
                     
-                    // get user and initialize this user in dict
-                    self.db.collection("users").document(userFriend!.friendId).getDocument { (document, error) in
-                        if let document = document, document.exists {
-                            let returnedUser = try? document.data(as: User.self)
+                    // making sure that I clear the inbox if this user came from the inbox...
+                    // could be an accepted or rejected user
+                    if self.inboxUsersArr.contains(userFriend!.friendId) {
+                        self.inboxUsersArr = self.inboxUsersArr.filter {inboxUserId in
+                            return inboxUserId != userFriend!.friendId
+                        }
+                    }
+                    
+                    // only get friend's info if is an active friend
+                    if !userFriend!.isActive {
+                        continue
+                    }
+                    
+                    // create a listener for this specific user
+                    let currFriendListener = self.db.collection("users").document(userFriend!.friendId)
+                        .addSnapshotListener {documentSnapshot, error in
+                            guard let document = documentSnapshot else {
+                                print("Error fetching friend's data: \(error!)")
+                                return
+                            }
                             
-                            DispatchQueue.main.async {
-                                if returnedUser != nil {
-                                    self.relevantUsersDict[userFriend!.friendId] = returnedUser!
+                            guard let data = document.data() else {
+                                print("friend realtime data was empty.")
+                                return
+                            }
+                            
+                            let updatedReturnedUser = try? document.data(as: User.self)
+                            
+                            if updatedReturnedUser != nil {
+                                DispatchQueue.main.async {
+                                    self.relevantUsersDict[userFriend!.friendId] = updatedReturnedUser!
                                     
-                                    // making sure that I clear the inbox if this user came from the inbox...regardless of
-                                    // whether I accepted or rejected them
-                                    if self.inboxUsersArr.contains(userFriend!.friendId) {
-                                        self.inboxUsersArr = self.inboxUsersArr.filter {inboxUserId in
-                                            return inboxUserId != userFriend!.friendId
-                                        }
-                                    }
-                                    
-                                    if userFriend!.isActive {
+                                    // update current friendsArr if the friend is already there
+                                    if let indexFriend = self.friendsArr.firstIndex(of: userFriend!.friendId) {
+                                        print("friend already in the friends arr, just needed to update the relevantusersdict")
+                                    } else { // new friend not in array
                                         self.friendsArr.append(userFriend!.friendId)
                                     }
                                     
                                     self.objectWillChange.send()
                                     
-                                    print("added this user to the array of users for user's circle\(returnedUser?.nickname)")
+                                    print("added this user to the array of users for user's circle\(updatedReturnedUser?.nickname)")
                                 }
                             }
-                        } else {
-                            print("user doesn't exist from user friend relationship")
-                            // should not happen
                         }
-                    }
+                    
+                    // adding to list of current friend listeners
+                    self.friendsListeners.append(currFriendListener)
                 }
             }
         
@@ -401,13 +423,48 @@ extension AuthSessionStore {
         
     }
     
-    func deinitDataListeners() {
+    func deinitFriendListeners() {
+        for listener in self.friendsListeners {
+            listener.remove()
+        }
+    }
+    
+    func deinitAllDataListeners() {
+        // get rid of the main listeners
         for listener in self.dataListeners {
             listener.remove()
         }
         
+        // get rid of the inner listeners
+        self.deinitFriendListeners()
+        
         print("deactivated listeners!")
         
         self.listenersActive = false
+    }
+}
+
+
+// manage whether user is online or not
+extension AuthSessionStore {
+    func updateUserStatus(userStatus: UserStatus) {
+        // if user is authenticated
+        if self.sessionState == .isAuthenticated {
+            // if user already has the status that we want to update to, no need to update
+            // remember that the user is updated realtime so we have the newest user data
+            if self.user?.userStatus == userStatus {
+                // do nothing...already have this status
+                print("user already has status: \(userStatus)")
+            }
+            else {
+                if let uid = self.getCurrentUserId() {
+                    self.firestoreService.updateUserStatus(userId: uid, userStatus: userStatus) {res in
+                       print(res)
+                    }
+                }
+            }
+        }
+        
+        print("not authenticated can't change user status")
     }
 }

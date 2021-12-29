@@ -155,7 +155,10 @@ class FirestoreService {
             completion(ServiceState.error(ServiceError(description: error.localizedDescription)))
         }
     }
-    
+}
+
+// updates to user
+extension FirestoreService {
     func updateUserDeviceToken(userId: String, deviceToken: String, completion: @escaping((_ state: ServiceState) -> ()))  {
         do {
             if userId != nil {
@@ -170,4 +173,13 @@ class FirestoreService {
         }
     }
     
+    func updateUserStatus(userId: String, userStatus: UserStatus, completion: @escaping((_ state: ServiceState) -> ()))  {
+        do {
+            let _ = try db.collection(Collection.users.rawValue).document(userId).setData(["userStatus": userStatus.rawValue], merge: true)
+            completion(ServiceState.success("Updated user status"))
+        } catch {
+            print("error in updating user \(error.localizedDescription)")
+            completion(ServiceState.error(ServiceError(description: error.localizedDescription)))
+        }
+    }
 }
