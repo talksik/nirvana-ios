@@ -288,8 +288,13 @@ extension AuthSessionStore {
                             if updatedReturnedUser != nil {
                                 DispatchQueue.main.async {
                                     self.relevantUsersDict[userFriend!.friendId] = updatedReturnedUser!
-                                                                        
-                                    self.friendsArr.append(userFriend!.friendId)
+                                    
+                                    // update current friendsArr if the friend is already there
+                                    if let indexFriend = self.friendsArr.firstIndex(of: userFriend!.friendId) {
+                                        print("friend already in the friends arr, just needed to update the relevantusersdict")
+                                    } else { // new friend not in array
+                                        self.friendsArr.append(userFriend!.friendId)
+                                    }
                                     
                                     self.objectWillChange.send()
                                     
