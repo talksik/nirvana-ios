@@ -149,7 +149,7 @@ struct InnerCircleView: View {
 //            print("deiniting data listeners, but current data should still be cached!")
 //
 //            // deactivate all data listeners
-//            self.authSessionStore.deinitDataListeners()
+//            self.authSessionStore.deinitAllDataListeners()
 //        }
     }
 }

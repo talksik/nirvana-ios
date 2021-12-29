@@ -95,7 +95,7 @@ struct CircleNavigationView: View {
                         .frame(width: 40, height: 40)
                         .clipShape(Circle())
                         .shadow(radius: 10)
-                        .overlay(alignment: .bottomTrailing) {
+                        .overlay(alignment: .topTrailing) {
                             // user status
                             switch self.authSessionStore.user?.userStatus {
                             case .online:
