@@ -45,6 +45,7 @@
 		896CE70727711BAB00DB474E /* FindFriendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896CE70627711BAB00DB474E /* FindFriendsView.swift */; };
 		896CE70927712CED00DB474E /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896CE70827712CED00DB474E /* StringExtension.swift */; };
 		89814683277D83F300DA46CD /* ConvosView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89814682277D83F300DA46CD /* ConvosView.swift */; };
+		89814685277D857300DA46CD /* Convo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89814684277D857300DA46CD /* Convo.swift */; };
 		89A107E5277476CC00B971FD /* PushNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A107E4277476CC00B971FD /* PushNotificationService.swift */; };
 		89A107E927753AB600B971FD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 89A107E827753AB500B971FD /* GoogleService-Info.plist */; };
 		89AD5573276DD790001658E0 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AD5572276DD790001658E0 /* SplashView.swift */; };
@@ -127,6 +128,7 @@
 		896CE70627711BAB00DB474E /* FindFriendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindFriendsView.swift; sourceTree = "<group>"; };
 		896CE70827712CED00DB474E /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		89814682277D83F300DA46CD /* ConvosView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConvosView.swift; sourceTree = "<group>"; };
+		89814684277D857300DA46CD /* Convo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Convo.swift; sourceTree = "<group>"; };
 		89A107E4277476CC00B971FD /* PushNotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationService.swift; sourceTree = "<group>"; };
 		89A107E827753AB500B971FD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		89AD5572276DD790001658E0 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
@@ -328,6 +330,7 @@
 				89BDCDF02769E64200577829 /* Message.swift */,
 				891A160D27657CEA00B26659 /* User.swift */,
 				89110713277166D6005797FA /* UserFriends.swift */,
+				89814684277D857300DA46CD /* Convo.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -598,6 +601,7 @@
 				89110714277166D6005797FA /* UserFriends.swift in Sources */,
 				896CE70727711BAB00DB474E /* FindFriendsView.swift in Sources */,
 				891A160B2765732700B26659 /* HomeViewModel.swift in Sources */,
+				89814685277D857300DA46CD /* Convo.swift in Sources */,
 				89814683277D83F300DA46CD /* ConvosView.swift in Sources */,
 				89BCABEB276D2A09009E9B10 /* PhoneVerificationView.swift in Sources */,
 				892179E62765FECD001E6C60 /* FooterControlsViewModel.swift in Sources */,
