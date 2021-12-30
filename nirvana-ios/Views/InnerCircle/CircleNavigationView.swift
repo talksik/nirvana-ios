@@ -91,7 +91,7 @@ struct CircleNavigationView: View {
                     Image((self.authSessionStore.user?.avatar)!)
                         .resizable()
                         .scaledToFit()
-                        .background(self.innerCircleVM.isRecording ? Color.orange : NirvanaColor.teal.opacity(0.5))
+                        .background(self.innerCircleVM.isRecording ? Color.orange : Color.teal.opacity(0.5))
                         .frame(width: 40, height: 40)
                         .clipShape(Circle())
                         .shadow(radius: 10)
