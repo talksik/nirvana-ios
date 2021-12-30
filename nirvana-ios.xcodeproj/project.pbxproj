@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		8904DEC8277055E90071E6CA /* OnboardingOneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8904DEC7277055E90071E6CA /* OnboardingOneView.swift */; };
 		89091993277D958D0025F4BB /* ConvoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89091992277D958D0025F4BB /* ConvoViewModel.swift */; };
+		89091995277DD9F80025F4BB /* ConvoFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89091994277DD9F80025F4BB /* ConvoFooterView.swift */; };
 		890C245D277BF628009B4A30 /* AgoraRtcKit in Frameworks */ = {isa = PBXBuildFile; productRef = 890C245C277BF628009B4A30 /* AgoraRtcKit */; };
 		890C2460277BF896009B4A30 /* AgoraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890C245F277BF896009B4A30 /* AgoraViewController.swift */; };
 		890C2462277BF935009B4A30 /* CallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890C2461277BF935009B4A30 /* CallView.swift */; };
@@ -94,6 +95,7 @@
 /* Begin PBXFileReference section */
 		8904DEC7277055E90071E6CA /* OnboardingOneView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingOneView.swift; sourceTree = "<group>"; };
 		89091992277D958D0025F4BB /* ConvoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConvoViewModel.swift; sourceTree = "<group>"; };
+		89091994277DD9F80025F4BB /* ConvoFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConvoFooterView.swift; sourceTree = "<group>"; };
 		890C245F277BF896009B4A30 /* AgoraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgoraViewController.swift; sourceTree = "<group>"; };
 		890C2461277BF935009B4A30 /* CallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallView.swift; sourceTree = "<group>"; };
 		890C2463277BFA97009B4A30 /* AgroRep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgroRep.swift; sourceTree = "<group>"; };
@@ -376,6 +378,7 @@
 			children = (
 				89814682277D83F300DA46CD /* ConvosView.swift */,
 				89091992277D958D0025F4BB /* ConvoViewModel.swift */,
+				89091994277DD9F80025F4BB /* ConvoFooterView.swift */,
 			);
 			path = Convos;
 			sourceTree = "<group>";
@@ -632,6 +635,7 @@
 				89F05BA6276ACD830002E9C7 /* ContactsPickerView.swift in Sources */,
 				8904DEC8277055E90071E6CA /* OnboardingOneView.swift in Sources */,
 				896CE7022770892F00DB474E /* CircleGridView.swift in Sources */,
+				89091995277DD9F80025F4BB /* ConvoFooterView.swift in Sources */,
 				89BDCDEA27697F9C00577829 /* UserMenu.swift in Sources */,
 				89BCABE7276B3D64009E9B10 /* InnerCircleViewModel.swift in Sources */,
 				89A107E5277476CC00B971FD /* PushNotificationService.swift in Sources */,

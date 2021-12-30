@@ -12,7 +12,6 @@ struct CircleFooterView: View {
     @EnvironmentObject var navigationStack: NavigationStack
     @EnvironmentObject var authSessionStore: AuthSessionStore
     @EnvironmentObject var innerCircleVM: InnerCircleViewModel
-    @EnvironmentObject var convoVM: ConvoViewModel
 
     @Binding var selectedFriendIndex: String?
     
@@ -131,6 +130,11 @@ struct CircleFooterView: View {
             // update meta data based on which friend was selected
             let myId = self.authSessionStore.user?.id
             
+            // reset the selected options to start fresh
+            self.selectedFriend = nil
+            self.myTurn = false
+            self.convoRelativeTime = ""
+                        
             // set convo moment/relative time to show
             if newValue != nil && myId != nil {
                 self.selectedFriend = self.authSessionStore.relevantUsersDict[newValue!]

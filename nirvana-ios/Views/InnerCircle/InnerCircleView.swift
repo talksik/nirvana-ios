@@ -86,19 +86,11 @@ struct InnerCircleView: View {
                 }
                 .padding()
             } else {
-                VStack(alignment: .leading) {
-                    // convos
-//                    ConvosView()
-//                        .environmentObject(self.convoViewModel)
-//                        .padding(.top, 50)
-                    
-                    // inner circle grid
-                    CircleGridView(selectedFriendIndex: self.$selectedFriendIndex)
-                        .environmentObject(self.innerCircleVM)
-                        .environmentObject(self.convoViewModel)
-                    
-                    Spacer()
-                }
+                // inner circle grid
+                CircleGridView(selectedFriendIndex: self.$selectedFriendIndex)
+                    .environmentObject(self.innerCircleVM)
+                    .environmentObject(self.convoViewModel)
+                
             }
             
             // header
