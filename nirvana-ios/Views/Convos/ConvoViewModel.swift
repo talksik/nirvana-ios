@@ -15,7 +15,6 @@ class ConvoViewModel: NSObject, ObservableObject {
     let firestoreService = FirestoreService()
     
     var agoraKit: AgoraRtcEngineKit?
-    var agoraDelegate: AgoraRtcEngineDelegate?
     
     override init() {
         super.init()
@@ -60,14 +59,14 @@ class ConvoViewModel: NSObject, ObservableObject {
         // ensure the convo is active and includes 2 people in it currently...shouldn't be shown if not anyway
         
         // ensure that this user leaves all other channels
-        self.leaveConvo()
+        if self.inCall {
+            self.leaveConvo()
+        }
         
         self.agoraKit?.setDefaultAudioRouteToSpeakerphone(true)
         
         // finally join channel
-        self.agoraKit?.joinChannel(byToken: convoAgoraToken, channelId: "testChannel", info: nil, uid: 0, joinSuccess: {(channel, uid, elapsed) in
-            self.inCall = true
-        })
+        self.agoraKit?.joinChannel(byToken: convoAgoraToken, channelId: "testChannel", info: nil, uid: 0, joinSuccess: nil)
     }
     
     // anyone can leave at any time
@@ -90,23 +89,29 @@ class ConvoViewModel: NSObject, ObservableObject {
 extension ConvoViewModel {
     func initializeAgoraEngine() {
         // TODO: put app id in environment variables
-        agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: "c8dfd65deb5c4741bd564085627139d0", delegate: agoraDelegate)
+        agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: "c8dfd65deb5c4741bd564085627139d0", delegate: self)
     }
 }
 
 extension ConvoViewModel: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
         print("I did join channel")
+        
+        // leave channel if it's just me
+        
+        self.inCall = true
     }
     
     func rtcEngine(_ engine: AgoraRtcEngineKit, didLeaveChannelWith stats: AgoraChannelStats) {
+        // leave channel if I am the only one in it
+        
         print("I did leave channel")
+        
+        
+        self.inCall = false
     }
     
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
-        // Only one remote video view is available for this
-        // tutorial. Here we check if there exists a surface
-        // view tagged as this uid.
         print("new user joined \(uid)")
     }
     
