@@ -9,6 +9,7 @@ import SwiftUI
 import NavigationStack
 
 struct InnerCircleView: View {
+    @StateObject var convoViewModel: ConvoViewModel = ConvoViewModel()
     @StateObject var innerCircleVM: InnerCircleViewModel = InnerCircleViewModel()
     @EnvironmentObject var authSessionStore: AuthSessionStore
     @EnvironmentObject var navigationStack: NavigationStack    
@@ -88,11 +89,12 @@ struct InnerCircleView: View {
                 VStack(alignment: .leading) {
                     // convos
                     ConvosView()
+                        .environmentObject(self.convoViewModel)
                         .padding(.top, 50)
                     
                     // inner circle grid
                     CircleGridView(selectedFriendIndex: self.$selectedFriendIndex)
-                        .environmentObject(innerCircleVM)
+                        .environmentObject(self.innerCircleVM)
                     
                     Spacer()
                 }
@@ -105,7 +107,9 @@ struct InnerCircleView: View {
                 CircleNavigationView(alertActive: self.$alertActive, alertText: self.$alertText, alertSubtext: self.$alertSubtext).environmentObject(innerCircleVM)
             }
             
-            CircleFooterView(selectedFriendIndex: self.$selectedFriendIndex).environmentObject(innerCircleVM)
+            CircleFooterView(selectedFriendIndex: self.$selectedFriendIndex)
+                .environmentObject(self.innerCircleVM)
+                .environmentObject(self.convoViewModel)
             
             // helper for new users
             // TODO: make it back to 1 instead of 10...testing

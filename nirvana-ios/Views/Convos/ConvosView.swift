@@ -7,22 +7,18 @@
 
 import SwiftUI
 
-// test convos
-let testConvos: [Convo] = [
-    Convo(id: "testChannel", leaderUserId: "VWVPKCrNmMeZlkEeZxuJ0Wsgq0C3", receiverUserId: "zd6PpD3TmnQUDoy6noS9aZpuPWr1", agoraToken: "006c8dfd65deb5c4741bd564085627139d0IAAqbHMFow9oQ8BN0WCkFrkGBTqFTjlbr6tJmFH5judwbnZXrgMAAAAAEADQ943gC8nOYQEAAQALyc5h", state: .connected)
-]
-
 struct ConvosView: View {
-    @ObservedObject var vm = ConvoViewModel()
+    @EnvironmentObject var vm: ConvoViewModel
     @State var animate = false
     
     var body: some View {
         ScrollView([.horizontal]) {
             HStack {
-                ForEach(0..<testConvos.count, id: \.self) {index in
+                ForEach(0..<self.vm.testConvos.count, id: \.self) {index in
+                    let currConvo = self.vm.testConvos[index]
                     ZStack(alignment: .topTrailing) {
                         Circle()
-                            .foregroundColor(NirvanaColor.dimTeal.opacity(0.4))
+                            .foregroundColor(self.vm.selectedConvoId == currConvo.id ? Color.green : NirvanaColor.dimTeal.opacity(0.2))
                                                         
                         ZStack {
                             Color.clear
@@ -47,11 +43,16 @@ struct ConvosView: View {
                     }
                     .frame(width: 100, height: 100)
                     .scaleEffect(self.animate ? 1 : 0.85)
-                    .animation(animate ? Animation.easeInOut(duration: 4).repeatForever(autoreverses: true) : .default)
+                    .animation(
+                        Animation.easeInOut(duration: self.vm.selectedConvoId == currConvo.id ? 2 : 4
+                                           ).repeatForever(autoreverses: true),
+                       value: self.animate
+                    )
                     .onTapGesture {
                         // if not in a call already
-                        if !self.vm.inCall {
-                            self.vm.joinConvo(convoId: testConvos[index].id!, convoAgoraToken: testConvos[index].agoraToken)
+                        if !self.vm.isInCall() {
+                            self.vm.selectedConvoId = self.vm.testConvos[index].id!
+                            self.vm.joinConvo()
                             
                             return
                         }
@@ -68,11 +69,11 @@ struct ConvosView: View {
     }
 }
 
-struct ConvosView_Previews: PreviewProvider {
-    static var previews: some View {
-        ConvosView()
-    }
-}
+//struct ConvosView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ConvosView()
+//    }
+//}
 
 struct ProfilePictureOverlap: View {
     let numberAttendees:Int = 5

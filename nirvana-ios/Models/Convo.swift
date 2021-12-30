@@ -15,7 +15,7 @@ enum ConvoState: String, Codable {
 }
 
 struct Convo: Identifiable, Codable {
-    @DocumentID var id: String?
+    @DocumentID var id: String? = UUID().uuidString
     var leaderUserId: String
     var receiverUserId: String
     

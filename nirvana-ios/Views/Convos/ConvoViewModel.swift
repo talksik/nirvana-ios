@@ -10,11 +10,19 @@ import AgoraRtcKit
 
 
 class ConvoViewModel: NSObject, ObservableObject {
-    @Published var inCall = false
+    @Published var selectedConvoId:String? = nil
     
     let firestoreService = FirestoreService()
     
+    let testConvos: [Convo] = [
+        Convo(id: "testChannel", leaderUserId: "VWVPKCrNmMeZlkEeZxuJ0Wsgq0C3", receiverUserId: "zd6PpD3TmnQUDoy6noS9aZpuPWr1", agoraToken: "006c8dfd65deb5c4741bd564085627139d0IAAqbHMFow9oQ8BN0WCkFrkGBTqFTjlbr6tJmFH5judwbnZXrgMAAAAAEADQ943gC8nOYQEAAQALyc5h", state: .connected)
+    ]
+    
     var agoraKit: AgoraRtcEngineKit?
+    
+    func isInCall() -> Bool {
+        return self.selectedConvoId != nil
+    }
     
     override init() {
         super.init()
@@ -55,18 +63,31 @@ class ConvoViewModel: NSObject, ObservableObject {
     /**
     Allow user to join an active convo
      */
-    func joinConvo(convoId: String, convoAgoraToken: String) {
+    func joinConvo() {
         // ensure the convo is active and includes 2 people in it currently...shouldn't be shown if not anyway
         
         // ensure that this user leaves all other channels
-        if self.inCall {
+        if self.isInCall() {
             self.leaveConvo()
         }
         
         self.agoraKit?.setDefaultAudioRouteToSpeakerphone(true)
         
+        let convo = self.testConvos.first {convo in
+            convo.id == self.selectedConvoId
+        }
+        
+        if convo == nil {
+            // handles the offchance that the convo was deactivated or was mistakenly seen by this user
+            print("convo not available")
+            return
+        }
+        
+        let convoAgoraToken:String = convo!.agoraToken
+        let channelName:String = convo!.id!
+        
         // finally join channel
-        self.agoraKit?.joinChannel(byToken: convoAgoraToken, channelId: "testChannel", info: nil, uid: 0, joinSuccess: nil)
+        self.agoraKit?.joinChannel(byToken: convoAgoraToken, channelId: channelName, info: nil, uid: 0, joinSuccess: nil)
     }
     
     // anyone can leave at any time
@@ -75,7 +96,7 @@ class ConvoViewModel: NSObject, ObservableObject {
         
         // if I am the second person in the room, then end the convo
         
-        self.inCall = false
+        self.selectedConvoId = nil
     }
     
     // if you are the second to last person in the convo and you leave, you end the convo
@@ -98,8 +119,6 @@ extension ConvoViewModel: AgoraRtcEngineDelegate {
         print("I did join channel")
         
         // leave channel if it's just me
-        
-        self.inCall = true
     }
     
     func rtcEngine(_ engine: AgoraRtcEngineKit, didLeaveChannelWith stats: AgoraChannelStats) {
@@ -108,7 +127,7 @@ extension ConvoViewModel: AgoraRtcEngineDelegate {
         print("I did leave channel")
         
         
-        self.inCall = false
+        self.selectedConvoId = nil
     }
     
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
@@ -125,5 +144,9 @@ extension ConvoViewModel: AgoraRtcEngineDelegate {
     
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
         print("did occur error: \(errorCode.rawValue)")
+        
+        // publish an error in view...toast or something
+        
+        self.selectedConvoId = nil
     }
 }
