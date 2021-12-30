@@ -175,7 +175,7 @@ extension FirestoreService {
     
     func updateUserStatus(userId: String, userStatus: UserStatus, completion: @escaping((_ state: ServiceState) -> ()))  {
         do {
-            let _ = try db.collection(Collection.users.rawValue).document(userId).setData(["userStatus": userStatus.rawValue], merge: true)
+            let _ = try db.collection(Collection.users.rawValue).document(userId).setData(["userStatus": userStatus.rawValue, "lastUpdatedStatusTimestamp": getFirestoreServerTimestamp()], merge: true)
             completion(ServiceState.success("Updated user status"))
         } catch {
             print("error in updating user \(error.localizedDescription)")

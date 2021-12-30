@@ -26,6 +26,7 @@ class AgoraService {
 
             var urlRequest = URLRequest(url: url)
             urlRequest.addValue(idToken!, forHTTPHeaderField: "authorization")
+            urlRequest.httpMethod = "GET"
             
             let dataTask = URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
                 if let error = error {
