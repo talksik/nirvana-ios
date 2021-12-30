@@ -8,11 +8,11 @@
 import Foundation
 import AgoraRtcKit
 
-
 class ConvoViewModel: NSObject, ObservableObject {
     private var testingUIMode = true
     
     @Published var selectedConvoId:String? = nil
+    @Published var connectionState: AgoraConnectionStateType? = nil
     
     let firestoreService = FirestoreService()
     
@@ -137,9 +137,13 @@ extension ConvoViewModel {
 }
 
 extension ConvoViewModel: AgoraRtcEngineDelegate {
+    func rtcEngine(_ engine: AgoraRtcEngineKit, connectionChangedTo state: AgoraConnectionStateType, reason: AgoraConnectionChangedReason) {
+        self.connectionState = state
+    }
+    
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
         print("I did join channel")
-        
+                
         // set my user status to in convo
         
         // leave channel if it's just me

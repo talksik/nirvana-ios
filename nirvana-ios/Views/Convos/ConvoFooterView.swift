@@ -29,6 +29,33 @@ struct ConvoFooterView: View {
                             .font(.footnote)
                             .foregroundColor(NirvanaColor.light)
                         
+                        switch self.convoVM.connectionState {
+                        case .connecting:
+                            Label("connecting", systemImage: "chart.bar")
+                                .foregroundColor(Color.orange)
+                                .font(.caption)
+                        case .connected:
+                            Label("connected", systemImage: "chart.bar.fill")
+                                .foregroundColor(Color.green)
+                                .font(.caption)
+                        case .reconnecting:
+                            Label("reconnecting", systemImage: "chart.bar")
+                                .foregroundColor(Color.orange)
+                                .font(.caption)
+                        case .failed:
+                            Label("failed", systemImage: "chart.bar")
+                                .foregroundColor(Color.red)
+                                .font(.caption)
+                        case .disconnected:
+                            Label("disconnected", systemImage: "chart.bar")
+                                .foregroundColor(Color.red)
+                                .font(.caption)
+                        default:
+                            Label("disconnected", systemImage: "chart.bar")
+                                .foregroundColor(Color.red)
+                                .font(.caption)
+                        }
+                        
                         Text(self.convoRelativeTime)
                             .font(.caption2)
                             .foregroundColor(.gray)
