@@ -103,9 +103,9 @@ struct CircleNavigationView: View {
                                     .frame(width: 10, height: 10)
                                     .foregroundColor(Color.green)
                             case .offline:
-                                Circle()
+                                EmptyView()
                             default:
-                                Circle()
+                                EmptyView()
                             }
                         }
                 }

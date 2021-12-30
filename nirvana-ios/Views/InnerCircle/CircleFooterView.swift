@@ -42,9 +42,9 @@ struct CircleFooterView: View {
                                         .frame(width: 10, height: 10)
                                         .foregroundColor(Color.green)
                                 case .offline:
-                                    Circle()
+                                    EmptyView()
                                 default:
-                                    Circle()
+                                    EmptyView()
                                 }
                             }
                             .padding(5)
