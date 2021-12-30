@@ -26,7 +26,7 @@ struct InnerCircleView: View {
             // background
             WavesGlassBackgroundView(isRecording: self.innerCircleVM.isRecording)
             
-            // stale states
+            // stale state: create profile
             if self.authSessionStore.user?.nickname == nil || self.authSessionStore.user?.avatar == nil {
                 VStack(alignment: .center) {
                     Image("undraw_fall_is_coming_yl-0-x")
@@ -55,7 +55,7 @@ struct InnerCircleView: View {
                         
                 }
                 .padding()
-            }
+            } // add friend: stale state
             else if self.authSessionStore.friendsArr.count == 0 && self.authSessionStore.inboxUsersArr.count == 0 {
                 VStack(alignment: .center) {
                     Image("undraw_fall_is_coming_yl-0-x")
@@ -84,10 +84,18 @@ struct InnerCircleView: View {
                         
                 }
                 .padding()
-            } else {                 
-                // content
-                CircleGridView(selectedFriendIndex: self.$selectedFriendIndex)
-                    .environmentObject(innerCircleVM)
+            } else {
+                VStack(alignment: .leading) {
+                    // convos
+                    ConvosView()
+                        .padding(.top, 50)
+                    
+                    // inner circle grid
+                    CircleGridView(selectedFriendIndex: self.$selectedFriendIndex)
+                        .environmentObject(innerCircleVM)
+                    
+                    Spacer()
+                }
             }
             
             // header

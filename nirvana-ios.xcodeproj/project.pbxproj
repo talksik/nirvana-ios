@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		8904DEC8277055E90071E6CA /* OnboardingOneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8904DEC7277055E90071E6CA /* OnboardingOneView.swift */; };
+		89091993277D958D0025F4BB /* ConvoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89091992277D958D0025F4BB /* ConvoViewModel.swift */; };
 		890C245D277BF628009B4A30 /* AgoraRtcKit in Frameworks */ = {isa = PBXBuildFile; productRef = 890C245C277BF628009B4A30 /* AgoraRtcKit */; };
 		890C2460277BF896009B4A30 /* AgoraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890C245F277BF896009B4A30 /* AgoraViewController.swift */; };
 		890C2462277BF935009B4A30 /* CallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890C2461277BF935009B4A30 /* CallView.swift */; };
@@ -92,6 +93,7 @@
 
 /* Begin PBXFileReference section */
 		8904DEC7277055E90071E6CA /* OnboardingOneView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingOneView.swift; sourceTree = "<group>"; };
+		89091992277D958D0025F4BB /* ConvoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConvoViewModel.swift; sourceTree = "<group>"; };
 		890C245F277BF896009B4A30 /* AgoraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgoraViewController.swift; sourceTree = "<group>"; };
 		890C2461277BF935009B4A30 /* CallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallView.swift; sourceTree = "<group>"; };
 		890C2463277BFA97009B4A30 /* AgroRep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgroRep.swift; sourceTree = "<group>"; };
@@ -373,6 +375,7 @@
 			isa = PBXGroup;
 			children = (
 				89814682277D83F300DA46CD /* ConvosView.swift */,
+				89091992277D958D0025F4BB /* ConvoViewModel.swift */,
 			);
 			path = Convos;
 			sourceTree = "<group>";
@@ -640,6 +643,7 @@
 				89BCABE5276B3D58009E9B10 /* InnerCircleView.swift in Sources */,
 				894E80C1276EFD0500624B72 /* AudioPlayerView.swift in Sources */,
 				89F18AF5276ECF2A00115B1E /* AddBasicInfoView.swift in Sources */,
+				89091993277D958D0025F4BB /* ConvoViewModel.swift in Sources */,
 				89BCABF0276D53C4009E9B10 /* PhoneVerificationViewModel.swift in Sources */,
 				89BDCDE72769616600577829 /* UIImage+Extension.swift in Sources */,
 				890C2464277BFA97009B4A30 /* AgroRep.swift in Sources */,

@@ -141,6 +141,7 @@ extension InnerCircleViewModel {
     }
 }
 
+// everything related to calls and such
 extension InnerCircleViewModel {
     func getAgoraToken() {
         if let uid = AuthSessionStore.getCurrentUserId() {
@@ -149,5 +150,5 @@ extension InnerCircleViewModel {
         else {
             print("no user authenticated to get an agora token")
         }
-    }
+    }    
 }

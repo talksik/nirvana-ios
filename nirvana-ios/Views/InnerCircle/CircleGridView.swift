@@ -17,8 +17,6 @@ struct CircleGridView: View {
     @State var queuePlayer = AVQueuePlayer()
     @State var timeObserverToken: Any?
     
-    @State private var showCall: Bool = false
-    
     @GestureState var dragState = DragState.inactive
     
     let universalSize = UIScreen.main.bounds
@@ -268,9 +266,6 @@ struct CircleGridView: View {
                 }                
             }
         } // scrollview reader
-        .fullScreenCover(isPresented: $showCall, content: {
-          CallView()
-        })
     }
     
     
@@ -382,16 +377,11 @@ extension CircleGridView {
 extension CircleGridView {
     // listening to messages
     private func handleTap(gridItemIndex: Int, friendId: String) {
-        // TODO: if there is a message, then listen to it
-        // then after that, check if friend is online, and if so, then connect with him/her if they are free/not in another call
-        // TESTING CALL
-        let testingCall = false
-        if testingCall {
-            self.showCall.toggle()
-            return
-        }
-        
         print("tap gesture activated")
+        
+        // if friend is online, start call immediately
+        
+        
         
         // clearing the player to make room for this friend's convo or to deselect this user
         self.queuePlayer.removeAllItems()
