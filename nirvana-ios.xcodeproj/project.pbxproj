@@ -44,6 +44,7 @@
 		896CE7052770AE5D00DB474E /* InboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896CE7042770AE5D00DB474E /* InboxView.swift */; };
 		896CE70727711BAB00DB474E /* FindFriendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896CE70627711BAB00DB474E /* FindFriendsView.swift */; };
 		896CE70927712CED00DB474E /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896CE70827712CED00DB474E /* StringExtension.swift */; };
+		89814683277D83F300DA46CD /* ConvosView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89814682277D83F300DA46CD /* ConvosView.swift */; };
 		89A107E5277476CC00B971FD /* PushNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A107E4277476CC00B971FD /* PushNotificationService.swift */; };
 		89A107E927753AB600B971FD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 89A107E827753AB500B971FD /* GoogleService-Info.plist */; };
 		89AD5573276DD790001658E0 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AD5572276DD790001658E0 /* SplashView.swift */; };
@@ -125,6 +126,7 @@
 		896CE7042770AE5D00DB474E /* InboxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InboxView.swift; sourceTree = "<group>"; };
 		896CE70627711BAB00DB474E /* FindFriendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindFriendsView.swift; sourceTree = "<group>"; };
 		896CE70827712CED00DB474E /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
+		89814682277D83F300DA46CD /* ConvosView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConvosView.swift; sourceTree = "<group>"; };
 		89A107E4277476CC00B971FD /* PushNotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationService.swift; sourceTree = "<group>"; };
 		89A107E827753AB500B971FD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		89AD5572276DD790001658E0 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
@@ -184,14 +186,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		890C245E277BF888009B4A30 /* VoiceCall */ = {
+		890C245E277BF888009B4A30 /* VoiceCallTest */ = {
 			isa = PBXGroup;
 			children = (
 				890C245F277BF896009B4A30 /* AgoraViewController.swift */,
 				890C2461277BF935009B4A30 /* CallView.swift */,
 				890C2463277BFA97009B4A30 /* AgroRep.swift */,
 			);
-			path = VoiceCall;
+			path = VoiceCallTest;
 			sourceTree = "<group>";
 		};
 		891060E62774460500F14509 /* Frameworks */ = {
@@ -257,6 +259,7 @@
 		891A15F62765639B00B26659 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				89814681277D83CF00DA46CD /* Convos */,
 				896CE7032770AE3400DB474E /* Inbox */,
 				894E80BF276EFCF500624B72 /* AudioPlayer */,
 				89F18AF3276ECF1800115B1E /* AddBasicInfo */,
@@ -363,6 +366,14 @@
 			path = Inbox;
 			sourceTree = "<group>";
 		};
+		89814681277D83CF00DA46CD /* Convos */ = {
+			isa = PBXGroup;
+			children = (
+				89814682277D83F300DA46CD /* ConvosView.swift */,
+			);
+			path = Convos;
+			sourceTree = "<group>";
+		};
 		89AD5571276DD77D001658E0 /* SplashView */ = {
 			isa = PBXGroup;
 			children = (
@@ -392,7 +403,7 @@
 		89BCABDF276B3588009E9B10 /* InnerCircle */ = {
 			isa = PBXGroup;
 			children = (
-				890C245E277BF888009B4A30 /* VoiceCall */,
+				890C245E277BF888009B4A30 /* VoiceCallTest */,
 				89BCABE4276B3D58009E9B10 /* InnerCircleView.swift */,
 				89BCABE6276B3D64009E9B10 /* InnerCircleViewModel.swift */,
 				896CE6FD27707E6B00DB474E /* CircleNavigationView.swift */,
@@ -587,6 +598,7 @@
 				89110714277166D6005797FA /* UserFriends.swift in Sources */,
 				896CE70727711BAB00DB474E /* FindFriendsView.swift in Sources */,
 				891A160B2765732700B26659 /* HomeViewModel.swift in Sources */,
+				89814683277D83F300DA46CD /* ConvosView.swift in Sources */,
 				89BCABEB276D2A09009E9B10 /* PhoneVerificationView.swift in Sources */,
 				892179E62765FECD001E6C60 /* FooterControlsViewModel.swift in Sources */,
 				891A15F5276557AB00B26659 /* colors.swift in Sources */,
