@@ -49,7 +49,14 @@ struct ConvosView: View {
                     .scaleEffect(self.animate ? 1 : 0.85)
                     .animation(animate ? Animation.easeInOut(duration: 4).repeatForever(autoreverses: true) : .default)
                     .onTapGesture {
-                        self.vm.joinConvo(convoId: testConvos[index].id!, convoAgoraToken: testConvos[index].agoraToken)
+                        // if not in a call already
+                        if !self.vm.inCall {
+                            self.vm.joinConvo(convoId: testConvos[index].id!, convoAgoraToken: testConvos[index].agoraToken)
+                            
+                            return
+                        }
+                        
+                        self.vm.leaveConvo()
                     }
                 }
             }
