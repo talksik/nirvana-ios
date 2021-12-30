@@ -10,6 +10,8 @@ import AgoraRtcKit
 
 
 class ConvoViewModel: NSObject, ObservableObject {
+    private var testingUIMode = true
+    
     @Published var selectedConvoId:String? = nil
     
     let firestoreService = FirestoreService()
@@ -41,12 +43,23 @@ class ConvoViewModel: NSObject, ObservableObject {
     deinit {
         // deinit the firestore listener
         // deinit the agora engine
+        print("deiniting and cleaning up convo view model/agora services")
+        
+        AgoraRtcEngineKit.destroy()
+        
+        self.leaveConvo()
     }
     
     /**
      @param: friendId: the second person in the convo...the receiver
      **/
     func startConvo(friendId: String) {
+        if testingUIMode {
+            print("testing mode...not doing anything")
+            return
+        }
+
+        
         if let userId = AuthSessionStore.getCurrentUserId() {
             
         }
@@ -64,6 +77,12 @@ class ConvoViewModel: NSObject, ObservableObject {
     Allow user to join an active convo
      */
     func joinConvo() {
+        if testingUIMode {
+            print("testing mode...not doing anything")
+            
+            return
+        }
+        
         // ensure the convo is active and includes 2 people in it currently...shouldn't be shown if not anyway
         
         // ensure that this user leaves all other channels
@@ -83,6 +102,10 @@ class ConvoViewModel: NSObject, ObservableObject {
             return
         }
         
+        
+        // TODO: if the convo has more than 10 people, stop user from joining...that's too expensive...
+        
+        
         let convoAgoraToken:String = convo!.agoraToken
         let channelName:String = convo!.id!
         
@@ -92,18 +115,17 @@ class ConvoViewModel: NSObject, ObservableObject {
     
     // anyone can leave at any time
     func leaveConvo() {
+        if testingUIMode {
+            print("testing mode...not doing anything")
+            
+            return
+        }
+        
         agoraKit?.leaveChannel(nil)
         
         // if I am the second person in the room, then end the convo
         
         self.selectedConvoId = nil
-    }
-    
-    // if you are the second to last person in the convo and you leave, you end the convo
-    private func endConvo() {
-        self.leaveConvo()
-        
-        AgoraRtcEngineKit.destroy()
     }
 }
 
@@ -117,6 +139,8 @@ extension ConvoViewModel {
 extension ConvoViewModel: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
         print("I did join channel")
+        
+        // set my user status to in convo
         
         // leave channel if it's just me
     }

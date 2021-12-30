@@ -12,6 +12,7 @@ struct CircleFooterView: View {
     @EnvironmentObject var navigationStack: NavigationStack
     @EnvironmentObject var authSessionStore: AuthSessionStore
     @EnvironmentObject var innerCircleVM: InnerCircleViewModel
+    @EnvironmentObject var convoVM: ConvoViewModel
 
     @Binding var selectedFriendIndex: String?
     

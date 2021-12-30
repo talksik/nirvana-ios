@@ -13,6 +13,7 @@ struct CircleGridView: View {
     @EnvironmentObject var innerCircleVM: InnerCircleViewModel
     @EnvironmentObject var authSessionStore: AuthSessionStore
     @EnvironmentObject var navigationStack: NavigationStack
+    @EnvironmentObject var convoVM: ConvoViewModel
     
     @State var queuePlayer = AVQueuePlayer()
     @State var timeObserverToken: Any?
@@ -51,6 +52,8 @@ struct CircleGridView: View {
     @State var alertText = ""
     @State var alertSubtext = ""
     
+    @State var animateLiveConvos = false
+    
     var body: some View {
         // main communication hub
         // TODO: client side, sort the honeycomb from top left to bottom right
@@ -59,6 +62,7 @@ struct CircleGridView: View {
         // MARK: data entry point
         let activeFriends = self.authSessionStore.friendsArr
         let inboxUsers = self.authSessionStore.inboxUsersArr
+        let convos = self.convoVM.testConvos
         
         ScrollViewReader {scrollReaderValue in
             ScrollView([.horizontal, .vertical], showsIndicators: false) {
@@ -67,16 +71,81 @@ struct CircleGridView: View {
                     alignment: .center,
                     spacing: Self.spacingBetweenRows
                 ) {
+                    // live convos
+                    ForEach(0..<convos.count, id: \.self) {value in
+                        let currConvo = self.convoVM.testConvos[value]
+                        
+                        GeometryReader {gridProxy in
+                            let scale = getScale(proxy: gridProxy, itemNumber: value, userId: nil, convoId: currConvo.id)
+                                                        
+                            ZStack(alignment: .topTrailing) {
+                                Circle()
+                                    .foregroundColor(self.getBubbleTint(convoId: currConvo.id))
+                                                                
+                                ZStack {
+                                    Color.clear
+                                    ProfilePictureOverlap()
+                                        .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 20)
+                                }
+                                
+                                Text("+2")
+                                    .padding(5)
+                                    .font(.caption)
+                                    .foregroundColor(Color.white)
+                                    .background(NirvanaColor.dimTeal)
+                                    .cornerRadius(100)
+                                
+        //                        ZStack(alignment: .bottom) {
+        //                            Color.clear
+        //
+        //                            Text("kev, sarth...")
+        //                                .foregroundColor(NirvanaColor.teal)
+        //                                .font(.caption)
+        //                        }
+                            }
+                            .scaleEffect(self.animateLiveConvos ? scale + 0.2 : scale)
+                            .padding(scale * 5)
+                        } // geometry reader
+                        .offset(
+                            x: honeycombOffSetX(value),
+                            y: 0
+                        )
+                        .id(currConvo.id) // id for scrollviewreader
+                        .frame(height: Self.size)
+                        .onTapGesture {
+                            // if not in a call already
+                            if !self.convoVM.isInCall() {
+                                self.convoVM.selectedConvoId = self.convoVM.testConvos[value].id!
+                                self.convoVM.joinConvo()
+                                
+                                // if had selected an individual, don't want them in here anymore
+                                self.selectedFriendIndex = nil
+                                
+                                return
+                            }
+                            
+                            self.convoVM.selectedConvoId = nil
+                            self.convoVM.leaveConvo()
+                        }
+                        .animation(
+                            Animation.easeInOut(duration: self.convoVM.selectedConvoId == currConvo.id ? 2 : 4
+                                               ).repeatForever(autoreverses: true),
+                           value: self.animateLiveConvos
+                        )
+                        
+                    }
+                    
                     // active friends
                     ForEach(0..<activeFriends.count, id: \.self) {value in
+                        let adjustedValue = value + convos.count
                         let friendId = activeFriends[value]
                         
                         GeometryReader {gridProxy in
-                            let scale = getScale(proxy: gridProxy, itemNumber: value, userId: friendId)
+                            let scale = getScale(proxy: gridProxy, itemNumber: adjustedValue, userId: friendId)
                             
                             ZStack(alignment: .topTrailing) {
                                 Circle()
-                                    .foregroundColor(self.getBubbleTint(friendIndex: value, friendDbId: friendId)) // different color for a selected user
+                                    .foregroundColor(self.getBubbleTint(friendDbId: friendId)) // different color for a selected user
                                     .blur(radius: 8)
                                     .cornerRadius(100)
                                 
@@ -103,7 +172,7 @@ struct CircleGridView: View {
                             .padding(scale * 5)
                         } // geometry reader
                         .offset(
-                            x: honeycombOffSetX(value),
+                            x: honeycombOffSetX(adjustedValue),
                             y: 0
                         )
                         .id(friendId) // id for scrollviewreader
@@ -164,7 +233,7 @@ struct CircleGridView: View {
                     // inbox users
                     ForEach(0..<inboxUsers.count, id: \.self) {inboxValue in
                         let inboxUserId = inboxUsers[inboxValue]
-                        let adjustedValue = inboxValue + activeFriends.count // IMPORTANT: accounting for the active friends iterations
+                        let adjustedValue = inboxValue + activeFriends.count + convos.count // IMPORTANT: accounting for the active friends iterations
                         GeometryReader {gridProxy in
                             let scale = getScale(proxy: gridProxy, itemNumber: adjustedValue, userId: inboxUserId) * 0.75 // don't want inbox to match size of active
                                                         
@@ -226,7 +295,7 @@ struct CircleGridView: View {
                     }
                     
                     // stale state for adding a contact
-                    let staleAdjustedValue = activeFriends.count + inboxUsers.count
+                    let staleAdjustedValue = activeFriends.count + inboxUsers.count + convos.count
                     GeometryReader {gridProxy in
                         let scale = getScale(proxy: gridProxy, itemNumber: staleAdjustedValue, userId: nil) * 0.75 // adjusting size as stale states should be the smallest
                         Button {
@@ -263,7 +332,9 @@ struct CircleGridView: View {
                 // scrolling to first person in grid
                 if self.authSessionStore.friendsArr.count > 0 {
                     scrollReaderValue.scrollTo(self.selectedFriendIndex)
-                }                
+                }
+                
+                self.animateLiveConvos = true
             }
         } // scrollview reader
     }
@@ -283,7 +354,7 @@ struct CircleGridView: View {
         return false
     }
     
-    private func getBubbleTint(friendIndex: Int, friendDbId: String) -> Color {
+    private func getBubbleTint(friendDbId: String) -> Color {
         // TODO: check if I listened to the message before or not
         if self.haveNewMessageFromFriend(friendDbId: friendDbId) { // this friend has a message for me
             return Color.orange.opacity(0.8)
@@ -293,6 +364,14 @@ struct CircleGridView: View {
             return NirvanaColor.dimTeal.opacity(0.4)
         }
       
+        return NirvanaColor.dimTeal.opacity(0.2)
+    }
+    
+    private func getBubbleTint(convoId: String?) -> Color {
+        if convoId != nil && convoId == self.convoVM.selectedConvoId {
+            return NirvanaColor.teal.opacity(0.7)
+        }
+        
         return NirvanaColor.dimTeal.opacity(0.2)
     }
 }
@@ -309,9 +388,13 @@ struct CircleGridView_Previews: PreviewProvider {
 extension CircleGridView {
     // getting the proxy of an individual item
     // and decoding into a scale that the item should take
-    private func getScale(proxy: GeometryProxy, itemNumber: Int, userId: String?) -> CGFloat {
+    private func getScale(proxy: GeometryProxy, itemNumber: Int, userId: String? = nil, convoId: String? = nil) -> CGFloat {
         // if this user is selected
         if userId != nil && userId == self.selectedFriendIndex {
+            return big + 0.2
+        }
+        
+        if convoId != nil && convoId == self.convoVM.selectedConvoId {
             return big + 0.2
         }
         
