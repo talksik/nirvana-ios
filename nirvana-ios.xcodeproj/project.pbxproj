@@ -10,6 +10,7 @@
 		8904DEC8277055E90071E6CA /* OnboardingOneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8904DEC7277055E90071E6CA /* OnboardingOneView.swift */; };
 		89091993277D958D0025F4BB /* ConvoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89091992277D958D0025F4BB /* ConvoViewModel.swift */; };
 		89091995277DD9F80025F4BB /* ConvoFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89091994277DD9F80025F4BB /* ConvoFooterView.swift */; };
+		89091997277DDE030025F4BB /* ProfilePicturesOverlappedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89091996277DDE030025F4BB /* ProfilePicturesOverlappedView.swift */; };
 		890C245D277BF628009B4A30 /* AgoraRtcKit in Frameworks */ = {isa = PBXBuildFile; productRef = 890C245C277BF628009B4A30 /* AgoraRtcKit */; };
 		890C2460277BF896009B4A30 /* AgoraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890C245F277BF896009B4A30 /* AgoraViewController.swift */; };
 		890C2462277BF935009B4A30 /* CallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890C2461277BF935009B4A30 /* CallView.swift */; };
@@ -96,6 +97,7 @@
 		8904DEC7277055E90071E6CA /* OnboardingOneView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingOneView.swift; sourceTree = "<group>"; };
 		89091992277D958D0025F4BB /* ConvoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConvoViewModel.swift; sourceTree = "<group>"; };
 		89091994277DD9F80025F4BB /* ConvoFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConvoFooterView.swift; sourceTree = "<group>"; };
+		89091996277DDE030025F4BB /* ProfilePicturesOverlappedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePicturesOverlappedView.swift; sourceTree = "<group>"; };
 		890C245F277BF896009B4A30 /* AgoraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgoraViewController.swift; sourceTree = "<group>"; };
 		890C2461277BF935009B4A30 /* CallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallView.swift; sourceTree = "<group>"; };
 		890C2463277BFA97009B4A30 /* AgroRep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgroRep.swift; sourceTree = "<group>"; };
@@ -379,6 +381,7 @@
 				89814682277D83F300DA46CD /* ConvosView.swift */,
 				89091992277D958D0025F4BB /* ConvoViewModel.swift */,
 				89091994277DD9F80025F4BB /* ConvoFooterView.swift */,
+				89091996277DDE030025F4BB /* ProfilePicturesOverlappedView.swift */,
 			);
 			path = Convos;
 			sourceTree = "<group>";
@@ -600,6 +603,7 @@
 				891060E4277359B900F14509 /* CloudStorageService.swift in Sources */,
 				896CE7002770847400DB474E /* CircleFooterView.swift in Sources */,
 				894E80BE276ED7A700624B72 /* avatars.swift in Sources */,
+				89091997277DDE030025F4BB /* ProfilePicturesOverlappedView.swift in Sources */,
 				890C2462277BF935009B4A30 /* CallView.swift in Sources */,
 				896CE7052770AE5D00DB474E /* InboxView.swift in Sources */,
 				891A160327656FC700B26659 /* HomeView.swift in Sources */,

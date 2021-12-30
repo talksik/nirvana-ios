@@ -53,7 +53,6 @@ struct InnerCircleView: View {
                         .font(.caption)
                         .foregroundColor(NirvanaColor.teal)
                         .multilineTextAlignment(.center)
-                        
                 }
                 .padding()
             } // add friend: stale state
@@ -90,7 +89,6 @@ struct InnerCircleView: View {
                 CircleGridView(selectedFriendIndex: self.$selectedFriendIndex)
                     .environmentObject(self.innerCircleVM)
                     .environmentObject(self.convoViewModel)
-                
             }
             
             // header
@@ -102,6 +100,9 @@ struct InnerCircleView: View {
             
             CircleFooterView(selectedFriendIndex: self.$selectedFriendIndex)
                 .environmentObject(self.innerCircleVM)
+                .environmentObject(self.convoViewModel)
+            
+            ConvoFooterView()
                 .environmentObject(self.convoViewModel)
             
             // helper for new users

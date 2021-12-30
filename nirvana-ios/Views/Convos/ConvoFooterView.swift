@@ -18,7 +18,10 @@ struct ConvoFooterView: View {
                 Spacer()
                 
                 HStack {
-                    ProfilePictureOverlap()
+                    ProfilePicturesOverlappedView(indvAvatarWidth: CGFloat(35))
+                        .padding(.leading, 20)
+                        .padding(.trailing, 10)
+                    
                                         
                     // meta data of convo
                     VStack (alignment: .leading) {
@@ -43,8 +46,8 @@ struct ConvoFooterView: View {
                         Label("attendees", systemImage: "person.2.circle.fill")
                             .labelStyle(.iconOnly)
                             .foregroundColor(NirvanaColor.teal)
-                            .padding()
                             .font(.title2)
+                            .padding(.trailing, 5)
                     }
                     
                     // disconnect button
@@ -58,8 +61,8 @@ struct ConvoFooterView: View {
                         Label("Call", systemImage: "powerplug.fill")
                             .labelStyle(.iconOnly)
                             .foregroundColor(Color.orange)
-                            .padding()
                             .font(.title2)
+                            .padding(.trailing, 5)
                     }
                     
                 }

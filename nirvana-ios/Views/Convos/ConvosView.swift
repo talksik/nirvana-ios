@@ -22,7 +22,7 @@ struct ConvosView: View {
                                                         
                         ZStack {
                             Color.clear
-                            ProfilePictureOverlap()
+                            ProfilePicturesOverlappedView()
                                 .shadow(radius: 10)
                         }
                         
@@ -74,25 +74,3 @@ struct ConvosView: View {
 //        ConvosView()
 //    }
 //}
-
-struct ProfilePictureOverlap: View {
-    let numberAttendees:Int = 5
-    let offset:Int = 15
-    
-    var body: some View {
-        ZStack {
-            ForEach(0..<numberAttendees, id: \.self) {attendeeIndex in
-                if attendeeIndex < 3 {
-                    Image(Avatars.avatarSystemNames[attendeeIndex+1])
-                        .resizable()
-                        .scaledToFit()
-                        .background(NirvanaColor.dimTeal)
-                        .clipShape(Circle())
-                        .offset(x: CGFloat((-15 * attendeeIndex)) + 15)
-                        .frame(width: 50)
-                }
-            }
-            
-        }
-    }
-}

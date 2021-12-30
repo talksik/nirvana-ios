@@ -84,7 +84,7 @@ struct CircleGridView: View {
                                                                 
                                 ZStack {
                                     Color.clear
-                                    ProfilePictureOverlap()
+                                    ProfilePicturesOverlappedView()
                                         .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 20)
                                 }
                                 
