@@ -86,7 +86,7 @@ class ConvoViewModel: NSObject, ObservableObject {
                                     continue
                                 }
                                 
-                                // TODO: if convo receiver is me, then join in
+                                // TODO: if convo receiver is me and I'm not in a call, then join in
                                 if convo!.receiverUserId == userId && !(self?.isInCall())! {
                                     self?.joinConvo(convo: convo!)
                                 }
@@ -250,17 +250,18 @@ class ConvoViewModel: NSObject, ObservableObject {
                 case .success:
                     //update convo in database to show that I left...if I am the last person, also close out the channel
                     
+                    // if I am the last one in the convo, then end the convo
+                    if updatedConvo!.users.count == 1 && updatedConvo!.users[0] == userId {
+                        updatedConvo!.state = .complete
+                        updatedConvo!.endedTimestamp = Date()
+                    }
+                    
                     let updatedUsers: [String] = updatedConvo!.users.filter{ arrUserId in
                         return arrUserId != userId
                     }
                     
                     updatedConvo!.users = updatedUsers
                     
-                    // if I am the last one in the convo, then end the convo
-                    if updatedConvo!.users.count == 1 && updatedConvo!.users[0] == userId {
-                        updatedConvo!.state = .complete
-                        updatedConvo!.endedTimestamp = Date()
-                    }
                     
                     self?.firestoreService.updateConvo(convo: updatedConvo!) {[weak self] res in
                         self?.selectedConvoId = nil
