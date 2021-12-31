@@ -16,6 +16,7 @@ class FirestoreService {
         case users = "users"
         case messages = "messages"
         case userFriends = "user_friends" // associating a user to
+        case convos = "convos"
     }
     
     private var db = Firestore.firestore()
@@ -175,10 +176,53 @@ extension FirestoreService {
     
     func updateUserStatus(userId: String, userStatus: UserStatus, completion: @escaping((_ state: ServiceState) -> ()))  {
         do {
-            let _ = try db.collection(Collection.users.rawValue).document(userId).setData(["userStatus": userStatus.rawValue], merge: true)
+            let _ = try db.collection(Collection.users.rawValue).document(userId).setData(["userStatus": userStatus.rawValue, "lastUpdatedStatusTimestamp": getFirestoreServerTimestamp()], merge: true)
             completion(ServiceState.success("Updated user status"))
         } catch {
             print("error in updating user \(error.localizedDescription)")
+            completion(ServiceState.error(ServiceError(description: error.localizedDescription)))
+        }
+    }
+}
+
+
+// convos
+extension FirestoreService {
+    func getConvo(channelName: String, completion: @escaping((_ user: Convo?) -> ())) {
+        let docRef = db.collection(Collection.convos.rawValue).document(channelName)
+
+        docRef.getDocument { (document, error) in
+            if let document = document, document.exists {
+                let returnedConvo = try? document.data(as: Convo.self)
+                completion(returnedConvo)
+            } else {
+                print("convo doesn't exist")
+                completion(nil)
+            }
+        }
+    }
+    
+    func createConvo(convo: Convo, completion: @escaping((_ state: ServiceState) -> ())) {
+        do {
+            let _ = try db.collection(Collection.convos.rawValue).document(convo.id!).setData(from: convo)
+            
+            completion(ServiceState.success("convo created"))
+        } catch {
+            print("error in creating convo \(error.localizedDescription)")
+            completion(ServiceState.error(ServiceError(description: error.localizedDescription)))
+        }
+    }
+    
+    func updateConvo(convo: Convo, completion: @escaping((_ state: ServiceState) -> ()))  {
+        do {
+            if convo.id != nil {
+                let _ = try db.collection(Collection.convos.rawValue).document(convo.id!).setData(from: convo)
+                completion(ServiceState.success("Updated convo in firestore service"))
+            } else {
+                completion(ServiceState.error(ServiceError(description: "No convo id given to firestore service")))
+            }
+        } catch {
+            print("error in updating convo \(error.localizedDescription)")
             completion(ServiceState.error(ServiceError(description: error.localizedDescription)))
         }
     }

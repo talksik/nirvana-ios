@@ -9,10 +9,10 @@ import SwiftUI
 import NavigationStack
 
 struct InnerCircleView: View {
+    @StateObject var convoViewModel: ConvoViewModel = ConvoViewModel()
     @StateObject var innerCircleVM: InnerCircleViewModel = InnerCircleViewModel()
     @EnvironmentObject var authSessionStore: AuthSessionStore
-    @EnvironmentObject var navigationStack: NavigationStack
-    
+    @EnvironmentObject var navigationStack: NavigationStack    
     
     @State var selectedFriendIndex: String? = nil
     
@@ -27,7 +27,7 @@ struct InnerCircleView: View {
             // background
             WavesGlassBackgroundView(isRecording: self.innerCircleVM.isRecording)
             
-            // stale states
+            // stale state: create profile
             if self.authSessionStore.user?.nickname == nil || self.authSessionStore.user?.avatar == nil {
                 VStack(alignment: .center) {
                     Image("undraw_fall_is_coming_yl-0-x")
@@ -53,10 +53,9 @@ struct InnerCircleView: View {
                         .font(.caption)
                         .foregroundColor(NirvanaColor.teal)
                         .multilineTextAlignment(.center)
-                        
                 }
                 .padding()
-            }
+            } // add friend: stale state
             else if self.authSessionStore.friendsArr.count == 0 && self.authSessionStore.inboxUsersArr.count == 0 {
                 VStack(alignment: .center) {
                     Image("undraw_fall_is_coming_yl-0-x")
@@ -85,10 +84,11 @@ struct InnerCircleView: View {
                         
                 }
                 .padding()
-            } else {                 
-                // content
+            } else {
+                // inner circle grid
                 CircleGridView(selectedFriendIndex: self.$selectedFriendIndex)
-                    .environmentObject(innerCircleVM)
+                    .environmentObject(self.innerCircleVM)
+                    .environmentObject(self.convoViewModel)
             }
             
             // header
@@ -98,7 +98,12 @@ struct InnerCircleView: View {
                 CircleNavigationView(alertActive: self.$alertActive, alertText: self.$alertText, alertSubtext: self.$alertSubtext).environmentObject(innerCircleVM)
             }
             
-            CircleFooterView(selectedFriendIndex: self.$selectedFriendIndex).environmentObject(innerCircleVM)
+            CircleFooterView(selectedFriendIndex: self.$selectedFriendIndex)
+                .environmentObject(self.innerCircleVM)
+                .environmentObject(self.convoViewModel)
+            
+            ConvoFooterView()
+                .environmentObject(self.convoViewModel)
             
             // helper for new users
             // TODO: make it back to 1 instead of 10...testing

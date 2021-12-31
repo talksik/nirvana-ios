@@ -11,6 +11,15 @@
         }
       },
       {
+        "package": "AgoraRtcKit",
+        "repositoryURL": "https://github.com/AgoraIO/AgoraAudio_iOS",
+        "state": {
+          "branch": null,
+          "revision": "74856715c8d8b381b0dbd02ddc86fbbfd0f0f6c4",
+          "version": "3.6.0"
+        }
+      },
+      {
         "package": "AppAuth",
         "repositoryURL": "https://github.com/openid/AppAuth-iOS.git",
         "state": {

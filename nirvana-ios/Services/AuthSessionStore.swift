@@ -140,7 +140,7 @@ final class AuthSessionStore: ObservableObject, SessionStore {
         }
     }
     
-    func getCurrentUserId() -> String?  {
+    static func getCurrentUserId() -> String?  {
         return Auth.auth().currentUser?.uid
     }
     
@@ -214,7 +214,7 @@ extension AuthSessionStore {
         }
         
         // can't get proper listeners working if don't have current user's id
-        let currUserId = self.getCurrentUserId()
+        let currUserId = AuthSessionStore.getCurrentUserId()
         if currUserId == nil {
             print("no user id available to initiate data listeners")
             return
@@ -457,7 +457,7 @@ extension AuthSessionStore {
                 print("user already has status: \(userStatus)")
             }
             else {
-                if let uid = self.getCurrentUserId() {
+                if let uid = AuthSessionStore.getCurrentUserId() {
                     self.firestoreService.updateUserStatus(userId: uid, userStatus: userStatus) {res in
                        print(res)
                     }

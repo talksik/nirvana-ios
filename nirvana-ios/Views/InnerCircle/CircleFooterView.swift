@@ -34,6 +34,19 @@ struct CircleFooterView: View {
                             .background(NirvanaColor.teal.opacity(0.1))
                             .frame(width: 40, height: 40)
                             .clipShape(Circle())
+                            .overlay(alignment: .topTrailing) {
+                                // user status
+                                switch self.selectedFriend!.userStatus {
+                                case .online:
+                                    Circle()
+                                        .frame(width: 10, height: 10)
+                                        .foregroundColor(Color.green)
+                                case .offline:
+                                    EmptyView()
+                                default:
+                                    EmptyView()
+                                }
+                            }
                             .padding(5)
                             .contextMenu {
                                 Button(role: .destructive) {
@@ -49,6 +62,7 @@ struct CircleFooterView: View {
                                     Label("Remove from Circle", systemImage: "person.crop.circle.fill.badge.minus")
                                 }
                             }
+                            
                     }
                     
                     
@@ -116,6 +130,11 @@ struct CircleFooterView: View {
             // update meta data based on which friend was selected
             let myId = self.authSessionStore.user?.id
             
+            // reset the selected options to start fresh
+            self.selectedFriend = nil
+            self.myTurn = false
+            self.convoRelativeTime = ""
+                        
             // set convo moment/relative time to show
             if newValue != nil && myId != nil {
                 self.selectedFriend = self.authSessionStore.relevantUsersDict[newValue!]

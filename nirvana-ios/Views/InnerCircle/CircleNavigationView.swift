@@ -83,15 +83,21 @@ struct CircleNavigationView: View {
                                     .foregroundColor(Color.green)
                             case .offline:
                                 Circle()
-                            default:
+                                    .frame(width: 10, height: 10)
+                                    .foregroundColor(Color.red)
+                            case .inConvo:
                                 Circle()
+                                    .frame(width: 10, height: 10)
+                                    .foregroundColor(Color.orange)
+                            default:
+                                EmptyView()
                             }
                         }
                 } else {
                     Image((self.authSessionStore.user?.avatar)!)
                         .resizable()
                         .scaledToFit()
-                        .background(self.innerCircleVM.isRecording ? Color.orange : NirvanaColor.teal.opacity(0.5))
+                        .background(self.innerCircleVM.isRecording ? Color.orange : Color.teal.opacity(0.5))
                         .frame(width: 40, height: 40)
                         .clipShape(Circle())
                         .shadow(radius: 10)
@@ -104,8 +110,14 @@ struct CircleNavigationView: View {
                                     .foregroundColor(Color.green)
                             case .offline:
                                 Circle()
-                            default:
+                                    .frame(width: 10, height: 10)
+                                    .foregroundColor(Color.red)
+                            case .inConvo:
                                 Circle()
+                                    .frame(width: 10, height: 10)
+                                    .foregroundColor(Color.orange)
+                            default:
+                                EmptyView()
                             }
                         }
                 }

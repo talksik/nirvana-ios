@@ -21,6 +21,7 @@ class InnerCircleViewModel: ObservableObject {
     private let cloudStorageService = CloudStorageService()
     private let firestoreService = FirestoreService()
     private let pushNotificationService = PushNotificationService()
+    private let agoraService = AgoraService()
     
     init() {
         // separate set up for listening vs recording
@@ -138,4 +139,16 @@ extension InnerCircleViewModel {
     func updateMessageListenCount() {
         
     }
+}
+
+// everything related to calls and such
+extension InnerCircleViewModel {
+    func getAgoraToken() {
+        if let uid = AuthSessionStore.getCurrentUserId() {
+            self.agoraService.getAgoraUserTokenServer(channelName: uid)
+        }
+        else {
+            print("no user authenticated to get an agora token")
+        }
+    }    
 }

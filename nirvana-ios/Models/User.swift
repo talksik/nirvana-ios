@@ -14,6 +14,7 @@ enum UserStatus: String, Codable {
     case online
     case offline
     case background
+    case inConvo
 }
 
 struct User: Identifiable, Codable {
@@ -26,6 +27,7 @@ struct User: Identifiable, Codable {
     
     var userStatus: UserStatus?
 
+    var lastUpdatedStatusTimestamp: Date?
     @ServerTimestamp var lastLoggedInTimestamp: Date?
     @ServerTimestamp var createdTimestamp: Date?
     
