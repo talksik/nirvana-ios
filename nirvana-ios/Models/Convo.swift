@@ -30,6 +30,7 @@ struct Convo: Identifiable, Codable {
     
     @ServerTimestamp var startedTimestamp: Date?
     var endedTimestamp: Date?
+    var receiverEndedTimestamp: Date?
 }
 
 //struct DetailConvo: Convo {

@@ -87,7 +87,8 @@ class ConvoViewModel: NSObject, ObservableObject {
                                 }
                                 
                                 // TODO: if convo receiver is me and I'm not in a call or this call already, then join in
-                                if convo!.receiverUserId == userId && !(self?.isInCall())! {
+                                if convo!.receiverUserId == userId && !(self?.isInCall())!
+                                    && convo!.receiverEndedTimestamp == nil {
                                     self?.joinConvo(convo: convo!)
                                 }
                                 
@@ -261,6 +262,9 @@ class ConvoViewModel: NSObject, ObservableObject {
             if updatedConvo!.users.count == 1 && updatedConvo!.users[0] == userId {
                 updatedConvo!.state = .complete
                 updatedConvo!.endedTimestamp = Date()
+            } // if I am second to last, the last guy is a loner
+            else if updatedConvo!.users.count == 2 && updatedConvo!.users.contains(userId!) {
+                updatedConvo!.receiverEndedTimestamp = Date()
             }
             
             let updatedUsers: [String] = updatedConvo!.users.filter{ arrUserId in
