@@ -14,21 +14,19 @@ class ConvoViewModel: NSObject, ObservableObject {
     @Published var connectionState: AgoraConnectionStateType? = nil
     
     let firestoreService = FirestoreService()
+    private var db = Firestore.firestore()
+    var convosListener: ListenerRegistration? = nil
+    
     let agoraService = AgoraService()
-    
-    @Published var relevantConvos: [Convo] = []
-    
     var agoraKit: AgoraRtcEngineKit?
+    
+    private var allConvos: [Convo] = []
+    @Published var relevantConvos: [Convo] = []
+    private var currConvo: Convo? = nil // local cache for updating
     
     func isInCall() -> Bool {
         return self.selectedConvoId != nil
     }
-    
-    var convosListener: ListenerRegistration? = nil
-    
-    private var db = Firestore.firestore()
-    
-    private var allConvos: [Convo] = []
     
     private var relevancyAcceptance = 0.6
     
@@ -65,6 +63,8 @@ class ConvoViewModel: NSObject, ObservableObject {
                         continue
                     }
                     
+                    // TODO: if convo receiver is me, then join in
+                    
                     self.allConvos.append(convo!)
                 }
                 
@@ -86,9 +86,6 @@ class ConvoViewModel: NSObject, ObservableObject {
                     return false
                 }
             }
-        
-        // initiate agora engine
-        self.initializeAgoraEngine()
     }
     
     deinit {
@@ -117,19 +114,22 @@ class ConvoViewModel: NSObject, ObservableObject {
             self.agoraService.getAgoraTokenCF(channelName: channelName) {[weak self] token in
                 if token == nil {
                     print("error in getting token")
+                    return
                 }
                 
-                let users = [userId] // just one user now, and that's me...but no one has joined yet
+                let _ = [userId] // just one user now, and that's me...but no one has joined yet
                 // only considered joined when I have officially joined the agora channel
                 
-                var convo = Convo(id: channelName, leaderUserId: userId, receiverUserId: friendId, agoraToken: token!, state: .initialized, users: [], startedTimestamp: nil, endedTimestamp: nil)
+                let convo = Convo(id: channelName, leaderUserId: userId, receiverUserId: friendId, agoraToken: token!, state: .initialized, users: [], startedTimestamp: nil, endedTimestamp: nil)
+                
+                
                 
                 // create a convo/channel in db to notify the other user with proper attributes
                 self?.firestoreService.createConvo(convo: convo) {[weak self] res in
                     switch res {
                     case .success:
                         // join the convo myself
-                        self?.joinConvo(channelName: channelName, agoraToken: token!)
+                        self?.joinConvo(convo: convo)
                     case .error(let error):
                         print(error)
                     default:
@@ -140,15 +140,23 @@ class ConvoViewModel: NSObject, ObservableObject {
         }
     }
     
-    func joinConvo(channelName: String, agoraToken: String) {
+    func joinConvo(convo: Convo) {
         // ensure that this user leaves all other channels
         if self.isInCall() {
             self.leaveConvo()
         }
         
+        // add this convo for the delegate use
+        self.currConvo = convo
+        
+        // update ui to select this one
+        self.selectedConvoId = convo.id
+        
+        self.initializeAgoraEngine() // give delegate up to date object
+        
         self.agoraKit?.setDefaultAudioRouteToSpeakerphone(true)
         // finally join channel
-        self.agoraKit?.joinChannel(byToken: agoraToken, channelId: channelName, info: nil, uid: 0, joinSuccess: nil)
+        self.agoraKit?.joinChannel(byToken: convo.agoraToken, channelId: convo.id!, info: nil, uid: 0, joinSuccess: nil)
     }
     
     
@@ -173,11 +181,15 @@ class ConvoViewModel: NSObject, ObservableObject {
             return
         }
         
+        self.currConvo = convo
+        
         // TODO: if the convo has more than 10 people, stop user from joining...that's too expensive...
         
         let convoAgoraToken:String = convo!.agoraToken
         let channelName:String = convo!.id!
         
+        
+        self.initializeAgoraEngine()
         
         self.agoraKit?.setDefaultAudioRouteToSpeakerphone(true)
         // finally join channel
@@ -191,6 +203,9 @@ class ConvoViewModel: NSObject, ObservableObject {
         // if I am the second person in the room, then end the convo
         
         self.selectedConvoId = nil
+        self.currConvo = nil
+        
+        AgoraRtcEngineKit.destroy()
     }
 }
 
@@ -213,28 +228,25 @@ extension ConvoViewModel: AgoraRtcEngineDelegate {
             
         // TODO: leave channel if it's just me
         
-        
-        var convo = self.relevantConvos.first {convo in
-            convo.id == self.selectedConvoId
-        }
-        if convo == nil {
-            print("no such convo found")
-            return
-        }
-        
         if let userId = AuthSessionStore.getCurrentUserId() {
-            // set my user status to in convo/red
+            
+            if self.currConvo == nil {
+                print("no such convo found")
+                return
+            }
+            
+            // set my user status to in convo
             self.firestoreService.updateUserStatus(userId: userId, userStatus: .inConvo) {[weak self] res in
                 print(res)
                 
                 switch res {
                 case .success:
-                    // update convo in database users array to let them know I am there
+                    // update convo in database users array to let them know I am in now
                    
-                    convo?.users.append(userId)
-                    convo?.state = .active
+                    self?.currConvo!.users.append(userId)
+                    self?.currConvo!.state = .active
                     
-                    self?.firestoreService.updateConvo(convo: convo!) {[weak self] res in
+                    self?.firestoreService.updateConvo(convo: (self?.currConvo)!) {[weak self] res in
                         print(res)
                     }
                 case .error(let error):
@@ -249,10 +261,7 @@ extension ConvoViewModel: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didLeaveChannelWith stats: AgoraChannelStats) {
         print("I did leave channel")
         
-        var convo = self.relevantConvos.first {convo in
-            convo.id == self.selectedConvoId
-        }
-        if convo == nil {
+        if self.currConvo == nil {
             print("no such convo found")
             return
         }
@@ -266,20 +275,21 @@ extension ConvoViewModel: AgoraRtcEngineDelegate {
                 case .success:
                     //update convo in database to show that I left...if I am the last person, also close out the channel
                     
-                    let updatedUsers: [String] = convo!.users.filter{ arrUserId in
+                    let updatedUsers: [String] = (self?.currConvo!.users.filter{ arrUserId in
                         return arrUserId != userId
-                    }
+                    })!
                     
-                    convo!.users = updatedUsers
+                    self?.currConvo!.users = updatedUsers
                     
                     // if I am the last one in the convo, then end the convo
-                    if convo!.users.count == 1 && convo!.users[0] == userId {
-                        convo!.state = .complete
-                        convo!.endedTimestamp = Date()
+                    if self?.currConvo!.users.count == 1 && self?.currConvo!.users[0] == userId {
+                        self?.currConvo!.state = .complete
+                        self?.currConvo!.endedTimestamp = Date()
                     }
                     
-                    self?.firestoreService.updateConvo(convo: convo!) {[weak self] res in
+                    self?.firestoreService.updateConvo(convo: (self?.currConvo)!) {[weak self] res in
                         self?.selectedConvoId = nil
+                        self?.currConvo = nil
                         print("left convo officially in our db as well")
                     }
                 case .error(let error):

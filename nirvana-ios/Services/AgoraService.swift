@@ -58,12 +58,12 @@ class AgoraService {
               let code = FunctionsErrorCode(rawValue: error.code)
               let message = error.localizedDescription
               let details = error.userInfo[FunctionsErrorDetailsKey]
-                
-                print(message)
             }
+              print(error)
               completion(nil)
           }
             
+            print(result)
           if let data = result?.data as? [String: Any], let token = data["token"] as? String {
               print("got agora token from cloud function")
             completion(token)
