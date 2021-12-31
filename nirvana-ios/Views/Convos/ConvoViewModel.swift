@@ -86,7 +86,7 @@ class ConvoViewModel: NSObject, ObservableObject {
                                     continue
                                 }
                                 
-                                // TODO: if convo receiver is me and I'm not in a call, then join in
+                                // TODO: if convo receiver is me and I'm not in a call or this call already, then join in
                                 if convo!.receiverUserId == userId && !(self?.isInCall())! {
                                     self?.joinConvo(convo: convo!)
                                 }
@@ -235,44 +235,44 @@ class ConvoViewModel: NSObject, ObservableObject {
             return
         }
         
-        self.firestoreService.getConvo(channelName: self.selectedConvoId!) {convo in
+        self.firestoreService.updateUserStatus(userId: userId!, userStatus: .online) {[weak self] res in
+            print(res)
+            
+            switch res {
+            case .success:
+                print("updated user status")
+            case .error(let error):
+                print(error)
+            default:
+                return
+            }
+        }
+        
+        self.firestoreService.getConvo(channelName: self.selectedConvoId!) {[weak self] convo in
             if convo == nil {
                 print("no such convo found")
                 return
             }
             
             var updatedConvo = convo
+            //update convo in database to show that I left...if I am the last person, also close out the channel
             
-            self.firestoreService.updateUserStatus(userId: userId!, userStatus: .online) {[weak self] res in
-                print(res)
+            // if I am the last one in the convo, then end the convo in the db
+            if updatedConvo!.users.count == 1 && updatedConvo!.users[0] == userId {
+                updatedConvo!.state = .complete
+                updatedConvo!.endedTimestamp = Date()
+            }
+            
+            let updatedUsers: [String] = updatedConvo!.users.filter{ arrUserId in
+                return arrUserId != userId
+            }
+            
+            updatedConvo!.users = updatedUsers
+            
+            self?.firestoreService.updateConvo(convo: updatedConvo!) {[weak self] res in
+                self?.selectedConvoId = nil
                 
-                switch res {
-                case .success:
-                    //update convo in database to show that I left...if I am the last person, also close out the channel
-                    
-                    // if I am the last one in the convo, then end the convo
-                    if updatedConvo!.users.count == 1 && updatedConvo!.users[0] == userId {
-                        updatedConvo!.state = .complete
-                        updatedConvo!.endedTimestamp = Date()
-                    }
-                    
-                    let updatedUsers: [String] = updatedConvo!.users.filter{ arrUserId in
-                        return arrUserId != userId
-                    }
-                    
-                    updatedConvo!.users = updatedUsers
-                    
-                    
-                    self?.firestoreService.updateConvo(convo: updatedConvo!) {[weak self] res in
-                        self?.selectedConvoId = nil
-                        
-                        print("left convo officially in our db as well")
-                    }
-                case .error(let error):
-                    print(error)
-                default:
-                    return
-                }
+                print("left convo officially in our db as well")
             }
         }
     }
@@ -389,8 +389,6 @@ extension ConvoViewModel: AgoraRtcEngineDelegate {
         
         // sound effect upon leaving
         self.playLeaveAudioEffect(engine: engine)
-        
-        print("properties in leave channel: \(self)")
     }
     
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
