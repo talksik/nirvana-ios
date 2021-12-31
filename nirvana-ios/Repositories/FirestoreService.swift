@@ -188,6 +188,20 @@ extension FirestoreService {
 
 // convos
 extension FirestoreService {
+    func getConvo(channelName: String, completion: @escaping((_ user: Convo?) -> ())) {
+        let docRef = db.collection(Collection.convos.rawValue).document(channelName)
+
+        docRef.getDocument { (document, error) in
+            if let document = document, document.exists {
+                let returnedConvo = try? document.data(as: Convo.self)
+                completion(returnedConvo)
+            } else {
+                print("convo doesn't exist")
+                completion(nil)
+            }
+        }
+    }
+    
     func createConvo(convo: Convo, completion: @escaping((_ state: ServiceState) -> ())) {
         do {
             let _ = try db.collection(Collection.convos.rawValue).document(convo.id!).setData(from: convo)

@@ -18,11 +18,11 @@ class ConvoViewModel: NSObject, ObservableObject {
     var convosListener: ListenerRegistration? = nil
     
     let agoraService = AgoraService()
-    var agoraKit: AgoraRtcEngineKit?
+    // TODO: put the value in environment variables
+    lazy var agoraKit: AgoraRtcEngineKit? = AgoraRtcEngineKit.sharedEngine(withAppId: "c8dfd65deb5c4741bd564085627139d0", delegate: self)
     
     private var allConvos: [Convo] = []
     @Published var relevantConvos: [Convo] = []
-    private var currConvo: Convo? = nil // local cache for updating
     
     func isInCall() -> Bool {
         return self.selectedConvoId != nil
@@ -175,16 +175,12 @@ class ConvoViewModel: NSObject, ObservableObject {
             self.leaveConvo()
         }
         
-        // add this convo for the delegate use
-        self.currConvo = convo
-        
         // update ui to select this one
         self.selectedConvoId = convo.id
         
-        self.initializeAgoraEngine() // give delegate up to date object
-        
         self.agoraKit?.setDefaultAudioRouteToSpeakerphone(true)
         // finally join channel
+        self.agoraKit?.delegate = self
         self.agoraKit?.joinChannel(byToken: convo.agoraToken, channelId: convo.id!, info: nil, uid: 0, joinSuccess: nil)
     }
     
@@ -211,38 +207,81 @@ class ConvoViewModel: NSObject, ObservableObject {
             return
         }
         
-        self.currConvo = convo
-        
         // TODO: if the convo has more than 10 people, stop user from joining...that's too expensive...
         
         let convoAgoraToken:String = convo!.agoraToken
         let channelName:String = convo!.id!
         
-        self.initializeAgoraEngine()
-        
         self.agoraKit?.setDefaultAudioRouteToSpeakerphone(true)
         // finally join channel
+        self.agoraKit?.delegate = self
         self.agoraKit?.joinChannel(byToken: convoAgoraToken, channelId: channelName, info: nil, uid: 0, joinSuccess: nil)
     }
     
     // anyone can leave at any time
     func leaveConvo() {
+        self.agoraKit?.delegate = self
         agoraKit?.leaveChannel(nil)
         
-        // if I am the second person in the room, then end the convo
+        let userId = AuthSessionStore.getCurrentUserId()
         
-        self.selectedConvoId = nil
-        self.currConvo = nil
+        if userId == nil {
+            print("not authenticated...can't join channel")
+            return
+        }
         
+        if self.selectedConvoId == nil {
+            print("not in a convo currently!")
+            return
+        }
+        
+        self.firestoreService.getConvo(channelName: self.selectedConvoId!) {convo in
+            if convo == nil {
+                print("no such convo found")
+                return
+            }
+            
+            var updatedConvo = convo
+            
+            self.firestoreService.updateUserStatus(userId: userId!, userStatus: .online) {[weak self] res in
+                print(res)
+                
+                switch res {
+                case .success:
+                    //update convo in database to show that I left...if I am the last person, also close out the channel
+                    
+                    let updatedUsers: [String] = updatedConvo!.users.filter{ arrUserId in
+                        return arrUserId != userId
+                    }
+                    
+                    updatedConvo!.users = updatedUsers
+                    
+                    // if I am the last one in the convo, then end the convo
+                    if updatedConvo!.users.count == 1 && updatedConvo!.users[0] == userId {
+                        updatedConvo!.state = .complete
+                        updatedConvo!.endedTimestamp = Date()
+                    }
+                    
+                    self?.firestoreService.updateConvo(convo: updatedConvo!) {[weak self] res in
+                        self?.selectedConvoId = nil
+                        
+                        print("left convo officially in our db as well")
+                    }
+                case .error(let error):
+                    print(error)
+                default:
+                    return
+                }
+            }
+        }
+    }
+    
+    func destroyInstance() {
         AgoraRtcEngineKit.destroy()
     }
 }
 
 extension ConvoViewModel {
-    func initializeAgoraEngine() {
-        // TODO: put app id in environment variables
-        agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: "c8dfd65deb5c4741bd564085627139d0", delegate: self)
-    }
     
     func playJoinAudioEffect(engine: AgoraRtcEngineKit) {
         print("playing JOINED audio sound")
@@ -305,27 +344,35 @@ extension ConvoViewModel: AgoraRtcEngineDelegate {
         
         // TODO: leave channel if it's just me
         
-        if let userId = AuthSessionStore.getCurrentUserId() {
-            if self.currConvo == nil {
+        let userId = AuthSessionStore.getCurrentUserId()
+        
+        if userId == nil {
+            print("not authenticated...can't join channel")
+            return
+        }
+        
+        self.firestoreService.getConvo(channelName: channel) {convo in
+            if convo == nil {
                 print("no such convo found")
                 return
             }
             
-            // set my user status to in convo
-            self.firestoreService.updateUserStatus(userId: userId, userStatus: .inConvo) {[weak self] res in
+            var updatedConvo = convo
+            
+            // set my user status to inConvo
+            self.firestoreService.updateUserStatus(userId: userId!, userStatus: .inConvo) {[weak self] res in
                 print(res)
                 
                 switch res {
                 case .success:
                     // update convo in database users array to let them know I am in now
                    
-                    self?.currConvo!.users.append(userId)
-                    self?.currConvo!.state = .active
+                    updatedConvo!.users.append(userId!)
+                    updatedConvo!.state = .active
                     
-                    self?.firestoreService.updateConvo(convo: (self?.currConvo)!) {[weak self] res in
+                    self?.firestoreService.updateConvo(convo: updatedConvo!) {[weak self] res in
                         print(res)
-                        
-                        
+                                                
                     }
                 case .error(let error):
                     print(error)
@@ -342,44 +389,7 @@ extension ConvoViewModel: AgoraRtcEngineDelegate {
         // sound effect upon leaving
         self.playLeaveAudioEffect(engine: engine)
         
-        if self.currConvo == nil {
-            print("no such convo found")
-            return
-        }
-        
-        if let userId = AuthSessionStore.getCurrentUserId() {
-            // set my user status to online
-            self.firestoreService.updateUserStatus(userId: userId, userStatus: .online) {[weak self] res in
-                print(res)
-                
-                switch res {
-                case .success:
-                    //update convo in database to show that I left...if I am the last person, also close out the channel
-                    
-                    let updatedUsers: [String] = (self?.currConvo!.users.filter{ arrUserId in
-                        return arrUserId != userId
-                    })!
-                    
-                    self?.currConvo!.users = updatedUsers
-                    
-                    // if I am the last one in the convo, then end the convo
-                    if self?.currConvo!.users.count == 1 && self?.currConvo!.users[0] == userId {
-                        self?.currConvo!.state = .complete
-                        self?.currConvo!.endedTimestamp = Date()
-                    }
-                    
-                    self?.firestoreService.updateConvo(convo: (self?.currConvo)!) {[weak self] res in
-                        self?.selectedConvoId = nil
-                        self?.currConvo = nil
-                        print("left convo officially in our db as well")
-                    }
-                case .error(let error):
-                    print(error)
-                default:
-                    return
-                }
-            }
-        }
+        print("properties in leave channel: \(self)")
     }
     
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
