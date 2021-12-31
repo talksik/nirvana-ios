@@ -190,7 +190,7 @@ extension FirestoreService {
 extension FirestoreService {
     func createConvo(convo: Convo, completion: @escaping((_ state: ServiceState) -> ())) {
         do {
-            let _ = try db.collection(Collection.convos.rawValue).addDocument(from: convo)
+            let _ = try db.collection(Collection.convos.rawValue).document(convo.id!).setData(from: convo)
             
             completion(ServiceState.success("convo created"))
         } catch {

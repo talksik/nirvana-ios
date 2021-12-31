@@ -28,64 +28,95 @@ class ConvoViewModel: NSObject, ObservableObject {
         return self.selectedConvoId != nil
     }
     
-    private var relevancyAcceptance = 0.6
+    static var relevancyAcceptance = 0.6
     
-    func activateDataListener(activeFriendsIds: [String]) {
-        // initiate convo listener to get all relevant convos
-        //  any convo that is active
-        //  and any of my active friends or I am in that convo
-        //  if am being "called" catch that and join the convo/channel
-        var scopeUserIds: [String] = []
-        scopeUserIds += activeFriendsIds
+    override init() {
+        super.init()
         
-        // I want to get back convos that involve me
-        if let userId = AuthSessionStore.getCurrentUserId() {
-            scopeUserIds.append(userId)
+        // start process of data collection
+        let userId = AuthSessionStore.getCurrentUserId()
+        if userId == nil {
+            print("no authenticated user")
         }
         
-        print("the scope of users to search for convos is \(scopeUserIds)")
+        // get all active userfriends
+        var scopeUserIds: [String] = []
+        scopeUserIds.append(userId!)
         
-        self.convosListener = db.collection("convos").whereField("state", isEqualTo: ConvoState.active.rawValue).whereField("users", arrayContainsAny: scopeUserIds)
-            .addSnapshotListener { querySnapshot, error in
-                print("convos listener")
-                guard let documents = querySnapshot?.documents else {
-                    print("Error fetching convos \(error!)")
-                    return
-                }
-                
-                self.allConvos.removeAll()
-                self.relevantConvos.removeAll()
-                
-                for document in querySnapshot!.documents {
-                    let convo:Convo? = try? document.data(as: Convo.self)
-                    
-                    if convo == nil {
-                        continue
-                    }
-                    
-                    // TODO: if convo receiver is me, then join in
-                    
-                    self.allConvos.append(convo!)
-                }
-                
-                // only show convos in which I know a majority of the people inside
-                // use relevancyAcceptance value
-                self.relevantConvos = self.allConvos.filter{convo in
-                    var relevancyCount = 0
-                    // go through all users in this convo
-                    for user in convo.users {
-                        if scopeUserIds.contains(user) {
-                            relevancyCount += 1
+        db.collection("user_friends").whereField("userId", isEqualTo: userId).whereField("isActive", isEqualTo: true)
+            .getDocuments() {[weak self] (querySnapshot, err) in
+                if let err = err {
+                    print("Error getting user's active friends: \(err)")
+                } else {
+                    for document in querySnapshot!.documents {
+                        let userFriend:UserFriends? = try? document.data(as: UserFriends.self)
+                        
+                        if userFriend == nil {
+                            continue
                         }
+                        
+                        scopeUserIds.append(userFriend!.friendId)
                     }
                     
-                    if Double(relevancyCount / convo.users.count) > self.relevancyAcceptance {
-                        print("this convo counts as relevant!!!")
-                        return true
-                    }
-                    return false
+                    
+                    //TODO: can only use 10 in array for firestore comparison...enact two listeners if need more than that
+                    let splicedArray = Array(scopeUserIds.prefix(10))
+                    
+                    print("the scope of users to search for convos is \(splicedArray)")
+                    
+                    // initiate convo listener to get all relevant convos
+                    //  any convo that is active
+                    //  and any of my active friends or I am in that convo
+                    //  if am being "called" catch that and join the convo/channel
+                    self?.convosListener = self?.db.collection("convos").whereField("state", isEqualTo: ConvoState.active.rawValue).whereField("users", arrayContainsAny: splicedArray)
+                        .addSnapshotListener { querySnapshot, error in
+                            print("convos listener")
+                            guard let documents = querySnapshot?.documents else {
+                                print("Error fetching convos \(error!)")
+                                return
+                            }
+                            
+                            self?.allConvos.removeAll()
+                            self?.relevantConvos.removeAll()
+                            
+                            for document in querySnapshot!.documents {
+                                let convo:Convo? = try? document.data(as: Convo.self)
+                                
+                                if convo == nil {
+                                    continue
+                                }
+                                
+                                // TODO: if convo receiver is me, then join in
+                                if convo!.receiverUserId == userId {
+                                    self?.joinConvo(convo: convo!)
+                                }
+                                
+                                self?.allConvos.append(convo!)
+                            }
+                            
+                            // only show convos in which I know a majority of the people inside
+                            // use relevancyAcceptance value
+                            self?.relevantConvos = (self?.allConvos.filter{convo in
+                                var relevancyCount = 0
+                                // go through all users in this convo
+                                for user in convo.users {
+                                    if scopeUserIds.contains(user) {
+                                        relevancyCount += 1
+                                    }
+                                }
+                                
+                                let relevancyScore = Double(relevancyCount / convo.users.count)
+                                print("relevancy score: \(relevancyScore)")
+                                
+                                if relevancyScore > Self.relevancyAcceptance {
+                                    print("this convo counts as relevant!!!")
+                                    return true
+                                }
+                                return false
+                            })!
+                        }
                 }
-            }
+        }
     }
     
     deinit {
@@ -121,8 +152,6 @@ class ConvoViewModel: NSObject, ObservableObject {
                 // only considered joined when I have officially joined the agora channel
                 
                 let convo = Convo(id: channelName, leaderUserId: userId, receiverUserId: friendId, agoraToken: token!, state: .initialized, users: [], startedTimestamp: nil, endedTimestamp: nil)
-                
-                
                 
                 // create a convo/channel in db to notify the other user with proper attributes
                 self?.firestoreService.createConvo(convo: convo) {[weak self] res in
@@ -168,7 +197,8 @@ class ConvoViewModel: NSObject, ObservableObject {
         
         // ensure that this user leaves all other channels
         if self.isInCall() {
-            self.leaveConvo()
+            print("can't join another call, already in one")
+            return
         }
         
         let convo = self.relevantConvos.first {convo in
@@ -187,7 +217,6 @@ class ConvoViewModel: NSObject, ObservableObject {
         
         let convoAgoraToken:String = convo!.agoraToken
         let channelName:String = convo!.id!
-        
         
         self.initializeAgoraEngine()
         
@@ -214,6 +243,50 @@ extension ConvoViewModel {
         // TODO: put app id in environment variables
         agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: "c8dfd65deb5c4741bd564085627139d0", delegate: self)
     }
+    
+    func playJoinAudioEffect(engine: AgoraRtcEngineKit) {
+        // Sets the audio effect ID.
+        let EFFECT_ID:Int32 = 1
+        // Sets the path of the audio effect file.
+        let filePath = Bundle.main.path(forResource: "[8]__Notify__Sound", ofType: "mp3")
+        // Sets the number of times the audio effect loops. -1 represents an infinite loop.
+        let loopCount = 1
+        // Sets the pitch of the audio effect. The value range is 0.5 to 2.0, where 1.0 is the original pitch.
+        let pitch: Double = 1.0
+        // Sets the spatial position of the audio effect. The value range is -1.0 to 1.0.
+        // -1.0 represents the audio effect occurs on the left; 0 represents the audio effect occurs in the front; 1.0 represents the audio effect occurs on the right.
+        let pan: Double = 1.0
+        // Sets the volume of the audio effect. The value range is 0 to 100. 100 represents the original volume.
+        let gain = 100.0
+        // Sets whether to publish the audio effect to the remote users. true represents that both the local user and remote users can hear the audio effect; false represents that only the local user can hear the audio effect.
+        let publish = true
+        // Sets the playback position (ms) of the audio effect file. 500 represents that the playback starts at the 500 ms mark of the audio effect file.
+        let startPos: Int32 = 500;
+        // Plays the specified audio effect file.
+        engine.playEffect(EFFECT_ID, filePath: filePath, loopCount: Int32(loopCount), pitch: pitch, pan: pan, gain: gain, publish: publish, startPos: startPos)
+    }
+    
+    func playLeaveAudioEffect(engine: AgoraRtcEngineKit) {
+        // Sets the audio effect ID.
+        let EFFECT_ID:Int32 = 2
+        // Sets the path of the audio effect file.
+        let filePath = Bundle.main.path(forResource: "[5]__Notify__Sound", ofType: "mp3")
+        // Sets the number of times the audio effect loops. -1 represents an infinite loop.
+        let loopCount = 1
+        // Sets the pitch of the audio effect. The value range is 0.5 to 2.0, where 1.0 is the original pitch.
+        let pitch: Double = 1.0
+        // Sets the spatial position of the audio effect. The value range is -1.0 to 1.0.
+        // -1.0 represents the audio effect occurs on the left; 0 represents the audio effect occurs in the front; 1.0 represents the audio effect occurs on the right.
+        let pan: Double = 1.0
+        // Sets the volume of the audio effect. The value range is 0 to 100. 100 represents the original volume.
+        let gain = 100.0
+        // Sets whether to publish the audio effect to the remote users. true represents that both the local user and remote users can hear the audio effect; false represents that only the local user can hear the audio effect.
+        let publish = true
+        // Sets the playback position (ms) of the audio effect file. 500 represents that the playback starts at the 500 ms mark of the audio effect file.
+        let startPos: Int32 = 500;
+        // Plays the specified audio effect file.
+        engine.playEffect(EFFECT_ID, filePath: filePath, loopCount: Int32(loopCount), pitch: pitch, pan: pan, gain: gain, publish: publish, startPos: startPos)
+    }
 }
 
 extension ConvoViewModel: AgoraRtcEngineDelegate {
@@ -224,12 +297,11 @@ extension ConvoViewModel: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
         print("I did join channel")
         
-        // TODO: play a sound when I join the channel
-            
+        self.playJoinAudioEffect(engine: engine)
+        
         // TODO: leave channel if it's just me
         
         if let userId = AuthSessionStore.getCurrentUserId() {
-            
             if self.currConvo == nil {
                 print("no such convo found")
                 return
@@ -260,6 +332,9 @@ extension ConvoViewModel: AgoraRtcEngineDelegate {
     
     func rtcEngine(_ engine: AgoraRtcEngineKit, didLeaveChannelWith stats: AgoraChannelStats) {
         print("I did leave channel")
+        
+        // sound effect upon leaving
+        self.playLeaveAudioEffect(engine: engine)
         
         if self.currConvo == nil {
             print("no such convo found")

@@ -332,9 +332,6 @@ struct CircleGridView: View {
                 }
                 
                 self.animateLiveConvos = true
-                
-                // TODO: called once, have to refresh page to make it update on new friends added and such
-                self.convoVM.activateDataListener(activeFriendsIds: self.authSessionStore.friendsArr)
             }
         } // scrollview reader
     }

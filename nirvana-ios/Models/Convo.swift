@@ -17,7 +17,7 @@ enum ConvoState: String, Codable {
 
 struct Convo: Identifiable, Codable {
     // channel name for agora's purposes
-    @DocumentID var id: String? = UUID().uuidString
+    @DocumentID var id: String?
     
     var leaderUserId: String
     var receiverUserId: String
