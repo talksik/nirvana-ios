@@ -10,7 +10,9 @@ import FirebaseAuth
 import Firebase
 
 class AgoraService {
-    func getAgoraUserToken(channelName: String) {
+    lazy var functions = Functions.functions()
+
+    func getAgoraUserTokenServer(channelName: String) {
         let currentUser = Auth.auth().currentUser
         currentUser?.getIDTokenForcingRefresh(true) { idToken, error in
           if let error = error {
@@ -43,6 +45,31 @@ class AgoraService {
             }
 
             dataTask.resume()
+        }
+    }
+    
+    func getAgoraTokenCF(channelName: String, completion: @escaping((_ token: String?) -> ()))  {
+        // validate channelName
+        
+        
+        functions.httpsCallable("agoraToken").call(["channelName": channelName]) {[weak self] result, error in
+          if let error = error as NSError? {
+            if error.domain == FunctionsErrorDomain {
+              let code = FunctionsErrorCode(rawValue: error.code)
+              let message = error.localizedDescription
+              let details = error.userInfo[FunctionsErrorDetailsKey]
+                
+                print(message)
+            }
+              completion(nil)
+          }
+            
+          if let data = result?.data as? [String: Any], let token = data["token"] as? String {
+              print("got agora token from cloud function")
+            completion(token)
+          } else {
+              completion(nil)
+          }
         }
     }
 }

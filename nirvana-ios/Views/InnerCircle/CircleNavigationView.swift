@@ -83,8 +83,14 @@ struct CircleNavigationView: View {
                                     .foregroundColor(Color.green)
                             case .offline:
                                 Circle()
-                            default:
+                                    .frame(width: 10, height: 10)
+                                    .foregroundColor(Color.red)
+                            case .inConvo:
                                 Circle()
+                                    .frame(width: 10, height: 10)
+                                    .foregroundColor(Color.orange)
+                            default:
+                                EmptyView()
                             }
                         }
                 } else {
@@ -103,7 +109,13 @@ struct CircleNavigationView: View {
                                     .frame(width: 10, height: 10)
                                     .foregroundColor(Color.green)
                             case .offline:
-                                EmptyView()
+                                Circle()
+                                    .frame(width: 10, height: 10)
+                                    .foregroundColor(Color.red)
+                            case .inConvo:
+                                Circle()
+                                    .frame(width: 10, height: 10)
+                                    .foregroundColor(Color.orange)
                             default:
                                 EmptyView()
                             }

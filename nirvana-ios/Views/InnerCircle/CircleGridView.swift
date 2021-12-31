@@ -62,7 +62,7 @@ struct CircleGridView: View {
         // MARK: data entry point
         let activeFriends = self.authSessionStore.friendsArr
         let inboxUsers = self.authSessionStore.inboxUsersArr
-        let convos = self.convoVM.testConvos
+        let convos = self.convoVM.relevantConvos
         
         ScrollViewReader {scrollReaderValue in
             ScrollView([.horizontal, .vertical], showsIndicators: false) {
@@ -73,7 +73,7 @@ struct CircleGridView: View {
                 ) {
                     // live convos
                     ForEach(0..<convos.count, id: \.self) {value in
-                        let currConvo = self.convoVM.testConvos[value]
+                        let currConvo = self.convoVM.relevantConvos[value]
                         
                         GeometryReader {gridProxy in
                             let scale = getScale(proxy: gridProxy, itemNumber: value, userId: nil, convoId: currConvo.id)
@@ -115,7 +115,7 @@ struct CircleGridView: View {
                         .onTapGesture {
                             // if not in a call already
                             if !self.convoVM.isInCall() {
-                                self.convoVM.selectedConvoId = self.convoVM.testConvos[value].id!
+                                self.convoVM.selectedConvoId = self.convoVM.relevantConvos[value].id!
                                 self.convoVM.joinConvo()
                                 
                                 // if had selected an individual, don't want them in here anymore
@@ -123,9 +123,6 @@ struct CircleGridView: View {
                                 
                                 return
                             }
-                            
-                            self.convoVM.selectedConvoId = nil
-                            self.convoVM.leaveConvo()
                         }
                         .animation(
                             Animation.easeInOut(duration: self.convoVM.selectedConvoId == currConvo.id ? 2 : 4
@@ -335,6 +332,9 @@ struct CircleGridView: View {
                 }
                 
                 self.animateLiveConvos = true
+                
+                // TODO: called once, have to refresh page to make it update on new friends added and such
+                self.convoVM.activateDataListener(activeFriendsIds: self.authSessionStore.friendsArr)
             }
         } // scrollview reader
     }
@@ -462,9 +462,13 @@ extension CircleGridView {
     private func handleTap(gridItemIndex: Int, friendId: String) {
         print("tap gesture activated")
         
-        // if friend is online, start call immediately
-        
-        
+        // if friend and I are online, start call immediately
+        if self.authSessionStore.relevantUsersDict[friendId]?.userStatus == .online
+            && self.authSessionStore.user?.userStatus == .online {
+            self.convoVM.startConvo(friendId: friendId)
+            
+            return
+        }
         
         // clearing the player to make room for this friend's convo or to deselect this user
         self.queuePlayer.removeAllItems()

@@ -14,8 +14,8 @@ struct ConvosView: View {
     var body: some View {
         ScrollView([.horizontal]) {
             HStack {
-                ForEach(0..<self.vm.testConvos.count, id: \.self) {index in
-                    let currConvo = self.vm.testConvos[index]
+                ForEach(0..<self.vm.relevantConvos.count, id: \.self) {index in
+                    let currConvo = self.vm.relevantConvos[index]
                     ZStack(alignment: .topTrailing) {
                         Circle()
                             .foregroundColor(self.vm.selectedConvoId == currConvo.id ? Color.green : NirvanaColor.dimTeal.opacity(0.2))
@@ -51,7 +51,7 @@ struct ConvosView: View {
                     .onTapGesture {
                         // if not in a call already
                         if !self.vm.isInCall() {
-                            self.vm.selectedConvoId = self.vm.testConvos[index].id!
+                            self.vm.selectedConvoId = self.vm.relevantConvos[index].id!
                             self.vm.joinConvo()
                             
                             return

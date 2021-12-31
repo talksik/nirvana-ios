@@ -16,6 +16,7 @@ class FirestoreService {
         case users = "users"
         case messages = "messages"
         case userFriends = "user_friends" // associating a user to
+        case convos = "convos"
     }
     
     private var db = Firestore.firestore()
@@ -179,6 +180,35 @@ extension FirestoreService {
             completion(ServiceState.success("Updated user status"))
         } catch {
             print("error in updating user \(error.localizedDescription)")
+            completion(ServiceState.error(ServiceError(description: error.localizedDescription)))
+        }
+    }
+}
+
+
+// convos
+extension FirestoreService {
+    func createConvo(convo: Convo, completion: @escaping((_ state: ServiceState) -> ())) {
+        do {
+            let _ = try db.collection(Collection.convos.rawValue).addDocument(from: convo)
+            
+            completion(ServiceState.success("convo created"))
+        } catch {
+            print("error in creating convo \(error.localizedDescription)")
+            completion(ServiceState.error(ServiceError(description: error.localizedDescription)))
+        }
+    }
+    
+    func updateConvo(convo: Convo, completion: @escaping((_ state: ServiceState) -> ()))  {
+        do {
+            if convo.id != nil {
+                let _ = try db.collection(Collection.convos.rawValue).document(convo.id!).setData(from: convo)
+                completion(ServiceState.success("Updated convo in firestore service"))
+            } else {
+                completion(ServiceState.error(ServiceError(description: "No convo id given to firestore service")))
+            }
+        } catch {
+            print("error in updating convo \(error.localizedDescription)")
             completion(ServiceState.error(ServiceError(description: error.localizedDescription)))
         }
     }

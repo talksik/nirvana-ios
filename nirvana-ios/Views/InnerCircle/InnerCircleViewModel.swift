@@ -145,7 +145,7 @@ extension InnerCircleViewModel {
 extension InnerCircleViewModel {
     func getAgoraToken() {
         if let uid = AuthSessionStore.getCurrentUserId() {
-            self.agoraService.getAgoraUserToken(channelName: uid)
+            self.agoraService.getAgoraUserTokenServer(channelName: uid)
         }
         else {
             print("no user authenticated to get an agora token")

@@ -10,12 +10,15 @@ import FirebaseFirestoreSwift
 import FirebaseFirestore
 
 enum ConvoState: String, Codable {
-    case connected
-    case disconnected
+    case initialized
+    case active
+    case complete
 }
 
 struct Convo: Identifiable, Codable {
+    // channel name for agora's purposes
     @DocumentID var id: String? = UUID().uuidString
+    
     var leaderUserId: String
     var receiverUserId: String
     
@@ -23,10 +26,10 @@ struct Convo: Identifiable, Codable {
     
     var state: ConvoState
     
-    var Users: [String]?
+    var users: [String] = []
     
     @ServerTimestamp var startedTimestamp: Date?
-    @ServerTimestamp var endedTimestamp: Date?
+    var endedTimestamp: Date?
 }
 
 //struct DetailConvo: Convo {

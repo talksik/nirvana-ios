@@ -26,7 +26,6 @@ struct ProfilePicturesOverlappedView: View {
                         .frame(width: indvAvatarWidth)
                 }
             }
-            
         }
     }
 }
