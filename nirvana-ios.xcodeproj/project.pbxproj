@@ -11,6 +11,8 @@
 		89091993277D958D0025F4BB /* ConvoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89091992277D958D0025F4BB /* ConvoViewModel.swift */; };
 		89091995277DD9F80025F4BB /* ConvoFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89091994277DD9F80025F4BB /* ConvoFooterView.swift */; };
 		89091997277DDE030025F4BB /* ProfilePicturesOverlappedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89091996277DDE030025F4BB /* ProfilePicturesOverlappedView.swift */; };
+		89091999277EFDCC0025F4BB /* leaveSound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 89091998277EFDCC0025F4BB /* leaveSound.mp3 */; };
+		8909199C277EFDF30025F4BB /* joinSound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 8909199B277EFDF30025F4BB /* joinSound.mp3 */; };
 		890C245D277BF628009B4A30 /* AgoraRtcKit in Frameworks */ = {isa = PBXBuildFile; productRef = 890C245C277BF628009B4A30 /* AgoraRtcKit */; };
 		890C2460277BF896009B4A30 /* AgoraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890C245F277BF896009B4A30 /* AgoraViewController.swift */; };
 		890C2462277BF935009B4A30 /* CallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890C2461277BF935009B4A30 /* CallView.swift */; };
@@ -98,6 +100,8 @@
 		89091992277D958D0025F4BB /* ConvoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConvoViewModel.swift; sourceTree = "<group>"; };
 		89091994277DD9F80025F4BB /* ConvoFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConvoFooterView.swift; sourceTree = "<group>"; };
 		89091996277DDE030025F4BB /* ProfilePicturesOverlappedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePicturesOverlappedView.swift; sourceTree = "<group>"; };
+		89091998277EFDCC0025F4BB /* leaveSound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = leaveSound.mp3; sourceTree = "<group>"; };
+		8909199B277EFDF30025F4BB /* joinSound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = joinSound.mp3; sourceTree = "<group>"; };
 		890C245F277BF896009B4A30 /* AgoraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgoraViewController.swift; sourceTree = "<group>"; };
 		890C2461277BF935009B4A30 /* CallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallView.swift; sourceTree = "<group>"; };
 		890C2463277BFA97009B4A30 /* AgroRep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgroRep.swift; sourceTree = "<group>"; };
@@ -194,6 +198,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8909199A277EFDE50025F4BB /* sounds */ = {
+			isa = PBXGroup;
+			children = (
+				8909199B277EFDF30025F4BB /* joinSound.mp3 */,
+				89091998277EFDCC0025F4BB /* leaveSound.mp3 */,
+			);
+			path = sounds;
+			sourceTree = "<group>";
+		};
 		890C245E277BF888009B4A30 /* VoiceCallTest */ = {
 			isa = PBXGroup;
 			children = (
@@ -231,6 +244,7 @@
 		891A15DF27653A7000B26659 /* nirvana-ios */ = {
 			isa = PBXGroup;
 			children = (
+				8909199A277EFDE50025F4BB /* sounds */,
 				891060E527743FEB00F14509 /* nirvana-ios.entitlements */,
 				89AD557D276E01E2001658E0 /* Repositories */,
 				89F05BA2276ACBFA0002E9C7 /* Services */,
@@ -587,7 +601,9 @@
 			files = (
 				891A15F12765528700B26659 /* Satisfy-Regular.ttf in Resources */,
 				89A107E927753AB600B971FD /* GoogleService-Info.plist in Resources */,
+				89091999277EFDCC0025F4BB /* leaveSound.mp3 in Resources */,
 				891A15E827653A7100B26659 /* Preview Assets.xcassets in Resources */,
+				8909199C277EFDF30025F4BB /* joinSound.mp3 in Resources */,
 				891A15E527653A7100B26659 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

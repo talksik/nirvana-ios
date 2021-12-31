@@ -81,7 +81,6 @@ struct ConvoFooterView: View {
                     Button {
                         print("disconnecting user now ")
                         
-                        self.convoVM.selectedConvoId = nil
                         self.convoVM.leaveConvo()
                                                 
                         // show success or failure toast

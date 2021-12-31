@@ -331,7 +331,7 @@ struct CircleGridView: View {
                     scrollReaderValue.scrollTo(self.selectedFriendIndex)
                 }
                 
-                self.animateLiveConvos = true
+                self.animateLiveConvos = true                
             }
         } // scrollview reader
     }

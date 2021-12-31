@@ -87,7 +87,7 @@ class ConvoViewModel: NSObject, ObservableObject {
                                 }
                                 
                                 // TODO: if convo receiver is me, then join in
-                                if convo!.receiverUserId == userId {
+                                if convo!.receiverUserId == userId && !(self?.isInCall())! {
                                     self?.joinConvo(convo: convo!)
                                 }
                                 
@@ -245,10 +245,12 @@ extension ConvoViewModel {
     }
     
     func playJoinAudioEffect(engine: AgoraRtcEngineKit) {
+        print("playing JOINED audio sound")
+        
         // Sets the audio effect ID.
         let EFFECT_ID:Int32 = 1
         // Sets the path of the audio effect file.
-        let filePath = Bundle.main.path(forResource: "[8]__Notify__Sound", ofType: "mp3")
+        let filePath = Bundle.main.path(forResource: "joinSound", ofType: "mp3")
         // Sets the number of times the audio effect loops. -1 represents an infinite loop.
         let loopCount = 1
         // Sets the pitch of the audio effect. The value range is 0.5 to 2.0, where 1.0 is the original pitch.
@@ -259,7 +261,7 @@ extension ConvoViewModel {
         // Sets the volume of the audio effect. The value range is 0 to 100. 100 represents the original volume.
         let gain = 100.0
         // Sets whether to publish the audio effect to the remote users. true represents that both the local user and remote users can hear the audio effect; false represents that only the local user can hear the audio effect.
-        let publish = true
+        let publish = false
         // Sets the playback position (ms) of the audio effect file. 500 represents that the playback starts at the 500 ms mark of the audio effect file.
         let startPos: Int32 = 500;
         // Plays the specified audio effect file.
@@ -267,10 +269,12 @@ extension ConvoViewModel {
     }
     
     func playLeaveAudioEffect(engine: AgoraRtcEngineKit) {
+        print("playing LEFT audio sound")
+        
         // Sets the audio effect ID.
         let EFFECT_ID:Int32 = 2
         // Sets the path of the audio effect file.
-        let filePath = Bundle.main.path(forResource: "[5]__Notify__Sound", ofType: "mp3")
+        let filePath = Bundle.main.path(forResource: "leaveSound", ofType: "mp3")
         // Sets the number of times the audio effect loops. -1 represents an infinite loop.
         let loopCount = 1
         // Sets the pitch of the audio effect. The value range is 0.5 to 2.0, where 1.0 is the original pitch.
@@ -281,7 +285,7 @@ extension ConvoViewModel {
         // Sets the volume of the audio effect. The value range is 0 to 100. 100 represents the original volume.
         let gain = 100.0
         // Sets whether to publish the audio effect to the remote users. true represents that both the local user and remote users can hear the audio effect; false represents that only the local user can hear the audio effect.
-        let publish = true
+        let publish = false
         // Sets the playback position (ms) of the audio effect file. 500 represents that the playback starts at the 500 ms mark of the audio effect file.
         let startPos: Int32 = 500;
         // Plays the specified audio effect file.
@@ -320,6 +324,8 @@ extension ConvoViewModel: AgoraRtcEngineDelegate {
                     
                     self?.firestoreService.updateConvo(convo: (self?.currConvo)!) {[weak self] res in
                         print(res)
+                        
+                        
                     }
                 case .error(let error):
                     print(error)
@@ -378,10 +384,14 @@ extension ConvoViewModel: AgoraRtcEngineDelegate {
     
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
         print("new user joined \(uid)")
+        
+        self.playJoinAudioEffect(engine: engine)
     }
     
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
-        print("user joined left")
+        print("a user left")
+        
+        self.playLeaveAudioEffect(engine: engine)
     }
     
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurWarning warningCode: AgoraWarningCode) {
