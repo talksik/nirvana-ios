@@ -86,10 +86,15 @@ class ConvoViewModel: NSObject, ObservableObject {
                                     continue
                                 }
                                 
-                                // TODO: if convo receiver is me and I'm not in a call or this call already, then join in
+                                // if convo receiver is me and I'm not in a call or this call already, then join in
                                 if convo!.receiverUserId == userId && !(self?.isInCall())!
                                     && convo!.receiverEndedTimestamp == nil {
                                     self?.joinConvo(convo: convo!)
+                                }
+                                
+                                // if I am in a convo in which the last/loner has left, I need to leave the convo
+                                if convo!.receiverEndedTimestamp != nil && (self?.isInCall())! && convo!.users.contains(userId!) {
+                                    self?.leaveConvo()
                                 }
                                 
                                 self?.allConvos.append(convo!)
