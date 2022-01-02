@@ -14,6 +14,7 @@
 		89091999277EFDCC0025F4BB /* leaveSound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 89091998277EFDCC0025F4BB /* leaveSound.mp3 */; };
 		8909199C277EFDF30025F4BB /* joinSound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 8909199B277EFDF30025F4BB /* joinSound.mp3 */; };
 		8909199E278155920025F4BB /* UserStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8909199D278155920025F4BB /* UserStatusView.swift */; };
+		890919A42781845D0025F4BB /* AlertToast in Frameworks */ = {isa = PBXBuildFile; productRef = 890919A32781845D0025F4BB /* AlertToast */; };
 		890C245D277BF628009B4A30 /* AgoraRtcKit in Frameworks */ = {isa = PBXBuildFile; productRef = 890C245C277BF628009B4A30 /* AgoraRtcKit */; };
 		890C2460277BF896009B4A30 /* AgoraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890C245F277BF896009B4A30 /* AgoraViewController.swift */; };
 		890C2462277BF935009B4A30 /* CallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890C2461277BF935009B4A30 /* CallView.swift */; };
@@ -174,6 +175,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				890C245D277BF628009B4A30 /* AgoraRtcKit in Frameworks */,
+				890919A42781845D0025F4BB /* AlertToast in Frameworks */,
 				89BCABE2276B3CB0009E9B10 /* NavigationStack in Frameworks */,
 				89F18AD4276E881800115B1E /* FirebaseAuthCombine-Community in Frameworks */,
 				89F18AEA276E881900115B1E /* FirebaseStorageSwift-Beta in Frameworks */,
@@ -553,6 +555,7 @@
 				891060E92774460500F14509 /* FirebaseInAppMessagingSwift-Beta */,
 				891060EB2774460500F14509 /* FirebaseMessaging */,
 				890C245C277BF628009B4A30 /* AgoraRtcKit */,
+				890919A32781845D0025F4BB /* AlertToast */,
 			);
 			productName = "nirvana-ios";
 			productReference = 891A15DD27653A7000B26659 /* nirvana-ios.app */;
@@ -587,6 +590,7 @@
 				89BCABE0276B3CB0009E9B10 /* XCRemoteSwiftPackageReference "swiftui-navigation-stack" */,
 				89F18ACC276E881800115B1E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				890C245B277BF628009B4A30 /* XCRemoteSwiftPackageReference "AgoraAudio_iOS" */,
+				890919A22781845C0025F4BB /* XCRemoteSwiftPackageReference "AlertToast" */,
 			);
 			productRefGroup = 891A15DE27653A7000B26659 /* Products */;
 			projectDirPath = "";
@@ -898,6 +902,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		890919A22781845C0025F4BB /* XCRemoteSwiftPackageReference "AlertToast" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/elai950/AlertToast.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 		890C245B277BF628009B4A30 /* XCRemoteSwiftPackageReference "AgoraAudio_iOS" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/AgoraIO/AgoraAudio_iOS";
@@ -933,6 +945,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		890919A32781845D0025F4BB /* AlertToast */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 890919A22781845C0025F4BB /* XCRemoteSwiftPackageReference "AlertToast" */;
+			productName = AlertToast;
+		};
 		890C245C277BF628009B4A30 /* AgoraRtcKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 890C245B277BF628009B4A30 /* XCRemoteSwiftPackageReference "AgoraAudio_iOS" */;

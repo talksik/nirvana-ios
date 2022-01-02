@@ -7,6 +7,7 @@
 
 import SwiftUI
 import NavigationStack
+import AlertToast
 
 struct InnerCircleView: View {
     @StateObject var convoViewModel: ConvoViewModel = ConvoViewModel()
@@ -148,7 +149,9 @@ struct InnerCircleView: View {
             
             // set status of user to online
             self.authSessionStore.updateUserStatus(userStatus: .online)
-            
+        }
+        .toast(isPresenting: self.$convoViewModel.showToast) {
+            self.convoViewModel.toast?.view ?? AlertToast(displayMode: .hud, type: .error(Color.red), title: "Something went wrong")
         }
 //        .onDisappear {
 //            print("deiniting data listeners, but current data should still be cached!")

@@ -8,6 +8,7 @@
 import SwiftUI
 import NavigationStack
 import AVKit
+import AlertToast
 
 struct CircleGridView: View {
     @EnvironmentObject var innerCircleVM: InnerCircleViewModel
@@ -338,9 +339,9 @@ struct CircleGridView: View {
                 
                 self.animateLiveConvos = true
             }// univseral alert TODO: move to inner circle view and use this pattern for all view models
-            .alert(item: self.$convoVM.error) {error in
-                error.alert
-            }
+//            .alert(item: self.$convoVM.error) {error in
+//                error.alert
+//            }            
         } // scrollview reader
     }
     

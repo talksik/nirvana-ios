@@ -9,28 +9,61 @@ import Foundation
 import AgoraRtcKit
 import Firebase
 import SwiftUI
+import AlertToast
 
 class ConvoViewModel: NSObject, ObservableObject {
-    enum Error: Identifiable {
+    enum Toast: Identifiable {
         var id: Self { self }
+        
+        case newRelevantConvoFound
+        case successfullyJoined
+        case successfullyAddedThirdParty
+        case disconnected
         
         case notAuthenticated
         case maxLimitUsers
         case convoNotFound
+        case probSettingUpConvo
+        case cantAddThirdParty
         
-        var alert: Alert {
+        case generalError
+        
+        var view: AlertToast {
             switch self {
+            case .disconnected:
+                return AlertToast(displayMode: .hud, type: .systemImage("hand.wave.fill", NirvanaColor.teal), title: "disconnected")
+            case .successfullyAddedThirdParty:
+                return AlertToast(displayMode: .hud, type: .complete(Color.green), title: "added friend")
+            case .cantAddThirdParty:
+                return AlertToast(displayMode: .hud, type: .error(Color.orange), title: "You are not in a call, cannot add this friend")
+            case .convoNotFound:
+                return AlertToast(displayMode: .hud, type: .error(Color.orange), title: "Not a valid convo to join 😞")
+            case .newRelevantConvoFound:
+                return AlertToast(displayMode: .hud, type: .systemImage("person.2.wave.2.fill", NirvanaColor.teal), title: "joined convo")
+            case .successfullyJoined:
+                return AlertToast(displayMode: .hud, type: .complete(Color.green), title: "joined convo")
+            case .probSettingUpConvo:
+                return AlertToast(displayMode: .hud, type: .error(Color.red), title: "Problem setting up convo ‼️")
+            case .maxLimitUsers:
+                return AlertToast(displayMode: .hud, type: .error(Color.red), title: "The convo is full! Sorry! 😞")
             case .notAuthenticated:
-                return Alert(title: Text("Not Authenticated!"))
+                return AlertToast(displayMode: .hud, type: .error(Color.red), title: "Not authenticated ‼️")
+            case .generalError:
+                return AlertToast(displayMode: .hud, type: .error(Color.red), title: "Something went wrong ‼️")
             default:
-                return Alert(title: Text("There was a problem"))
+                return AlertToast(displayMode: .hud, type: .error(Color.red), title: "Something went wrong ‼️")
             }
         }
     }
     
     @Published var selectedConvoId:String? = nil
     @Published var connectionState: AgoraConnectionStateType?
-    @Published var error: Error?
+    @Published var toast: Toast? {
+        didSet {
+            self.showToast = true
+        }
+    }
+    @Published var showToast: Bool = false
     
     let firestoreService = FirestoreService()
     private var db = Firestore.firestore()
@@ -62,6 +95,7 @@ class ConvoViewModel: NSObject, ObservableObject {
         let userId = AuthSessionStore.getCurrentUserId()
         if userId == nil {
             print("no authenticated user")
+            self.toast = .notAuthenticated
             return
         }
         
@@ -73,6 +107,7 @@ class ConvoViewModel: NSObject, ObservableObject {
             .getDocuments() {[weak self] (querySnapshot, err) in
                 if let err = err {
                     print("Error getting user's active friends: \(err)")
+                    self?.toast = .generalError
                 } else {
                     for document in querySnapshot!.documents {
                         let userFriend:UserFriends? = try? document.data(as: UserFriends.self)
@@ -99,6 +134,7 @@ class ConvoViewModel: NSObject, ObservableObject {
                             print("convos listener")
                             guard let documents = querySnapshot?.documents else {
                                 print("Error fetching convos \(error!)")
+                                self?.toast = .generalError
                                 return
                             }
                             
@@ -148,6 +184,8 @@ class ConvoViewModel: NSObject, ObservableObject {
                                 
                                 if relevancyScore > Self.relevancyAcceptance && convo.users.count > 1 { //offchance that it's just the one person in the convo right now, don't want to see it until there are at least 2 people
                                     print("this convo counts as relevant!!!")
+                                    self?.toast = .newRelevantConvoFound
+                                    
                                     return true
                                 }
                                 return false
@@ -180,6 +218,7 @@ class ConvoViewModel: NSObject, ObservableObject {
             self.agoraService.getAgoraTokenCF(channelName: channelName) {[weak self] token in
                 if token == nil {
                     print("error in getting token")
+                    self?.toast = .probSettingUpConvo
                     return
                 }
                 
@@ -196,7 +235,9 @@ class ConvoViewModel: NSObject, ObservableObject {
                         self?.joinConvo(convo: convo)
                     case .error(let error):
                         print(error)
+                        self?.toast = .probSettingUpConvo
                     default:
+                        self?.toast = .generalError
                         return
                     }
                 }
@@ -234,6 +275,7 @@ class ConvoViewModel: NSObject, ObservableObject {
         if convo == nil {
             // handles the offchance that the convo was deactivated or was mistakenly seen by this user
             print("convo not available")
+            self.toast = .convoNotFound
             return
         }
         
@@ -255,6 +297,7 @@ class ConvoViewModel: NSObject, ObservableObject {
         
         if !self.isInCall() {
             print("not in a call, can't invite/force someone else...must have a selected convo")
+            self.toast = .cantAddThirdParty
             return
         }
         
@@ -263,6 +306,7 @@ class ConvoViewModel: NSObject, ObservableObject {
             convo.id == self.selectedConvoId
         }
         if convo == nil {
+            self.toast = .convoNotFound
             print("convo not available")
             return
         }
@@ -271,6 +315,7 @@ class ConvoViewModel: NSObject, ObservableObject {
         convo!.users.append(friendId)
         
         self.firestoreService.updateConvo(convo: convo!) {[weak self] res in
+            self?.toast = .successfullyAddedThirdParty
             print("updated with new friend added in the convo")
         }
     }
@@ -281,11 +326,13 @@ class ConvoViewModel: NSObject, ObservableObject {
         
         if userId == nil {
             print("not authenticated...can't join channel")
+            self.toast = .notAuthenticated
             return
         }
         
-        if self.selectedConvoId == nil {
+        if !self.isInCall() {
             print("not in a convo currently!")
+            self.toast = .convoNotFound
             return
         }
         
@@ -332,7 +379,7 @@ class ConvoViewModel: NSObject, ObservableObject {
                 self?.selectedConvoId = nil
                 
                 print("left convo officially in our db as well")
-                
+                self?.toast = .disconnected
             
                 // deinit the agora engine
                 if destroyInstance {
@@ -414,6 +461,7 @@ extension ConvoViewModel: AgoraRtcEngineDelegate {
         
         if userId == nil {
             print("not authenticated...can't join channel")
+            self.toast = .notAuthenticated
             return
         }
         
@@ -441,7 +489,7 @@ extension ConvoViewModel: AgoraRtcEngineDelegate {
                     
                     self?.firestoreService.updateConvo(convo: updatedConvo!) {[weak self] res in
                         print(res)
-                                                
+                        self?.toast = .successfullyJoined
                     }
                 case .error(let error):
                     print(error)
