@@ -467,13 +467,15 @@ extension CircleGridView {
     private func handleTap(gridItemIndex: Int, friendId: String) {
         print("tap gesture activated")
         
-        // if friend and I are online, start call immediately
+        // if friend and I are online, start convo immediately with them
         if self.authSessionStore.relevantUsersDict[friendId]?.userStatus == .online
             && self.authSessionStore.user?.userStatus == .online {
             self.convoVM.startConvo(friendId: friendId)
             
             return
         }
+        
+        // TODO: if I am in a call and I am adding someone else online, then make them join my convo
         
         // clearing the player to make room for this friend's convo or to deselect this user
         self.queuePlayer.removeAllItems()

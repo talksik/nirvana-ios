@@ -111,14 +111,19 @@ struct ConvoFooterView: View {
             x:0,
             y:self.convoVM.selectedConvoId == nil ? 150 : 0
         )
-        .onChange(of: self.convoVM.selectedConvoId) {newConvoId in
+        .onReceive(self.convoVM.$relevantConvos) {newConvos in
             // update meta data based on which convo was selected
+            
+            if self.convoVM.selectedConvoId == nil {
+                print("nothing to show as there is no convo selected")
+                return
+            }
             
             // reset the selected options to start fresh
             self.convoRelativeTime = ""
             
-            self.selectedConvo = self.convoVM.relevantConvos.first {convo in
-                convo.id == newConvoId
+            self.selectedConvo = newConvos.first {convo in
+                convo.id == self.convoVM.selectedConvoId
             }
             
             // get relative start time of convo

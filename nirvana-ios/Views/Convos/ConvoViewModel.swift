@@ -94,6 +94,7 @@ class ConvoViewModel: NSObject, ObservableObject {
                                 }
                                 
                                 // if convo receiver is me and I'm not in a call or this call already, then join in
+                                // TODO: also if I am added after a receiver was added, then join the call
                                 if convo!.receiverUserId == userId && !(self?.isInCall())!
                                     && convo!.receiverEndedTimestamp == nil {
                                     self?.joinConvo(convo: convo!)
@@ -217,6 +218,7 @@ class ConvoViewModel: NSObject, ObservableObject {
         
         // TODO: if the convo has more than 10 people, stop user from joining...that's too expensive...
         
+        self.selectedConvoId = convoId
         let convoAgoraToken:String = convo!.agoraToken
         let channelName:String = convo!.id!
         
