@@ -31,15 +31,15 @@ class ConvoViewModel: NSObject, ObservableObject {
         var view: AlertToast {
             switch self {
             case .disconnected:
-                return AlertToast(displayMode: .hud, type: .systemImage("hand.wave.fill", NirvanaColor.teal), title: "disconnected")
+                return AlertToast(displayMode: .hud, type: .systemImage("hand.wave.fill", Color.orange), title: "disconnected")
             case .successfullyAddedThirdParty:
-                return AlertToast(displayMode: .hud, type: .complete(Color.green), title: "added friend")
+                return AlertToast(displayMode: .hud, type: .complete(Color.green), title: "added friend to convo")
             case .cantAddThirdParty:
                 return AlertToast(displayMode: .hud, type: .error(Color.orange), title: "You are not in a call, cannot add this friend")
             case .convoNotFound:
                 return AlertToast(displayMode: .hud, type: .error(Color.orange), title: "Not a valid convo to join 😞")
             case .newRelevantConvoFound:
-                return AlertToast(displayMode: .hud, type: .systemImage("person.2.wave.2.fill", NirvanaColor.teal), title: "joined convo")
+                return AlertToast(displayMode: .hud, type: .systemImage("person.2.wave.2.fill", NirvanaColor.teal), title: "new convo happening!")
             case .successfullyJoined:
                 return AlertToast(displayMode: .hud, type: .complete(Color.green), title: "joined convo")
             case .probSettingUpConvo:
