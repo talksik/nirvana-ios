@@ -184,7 +184,6 @@ class ConvoViewModel: NSObject, ObservableObject {
                                 
                                 if relevancyScore > Self.relevancyAcceptance && convo.users.count > 1 { //offchance that it's just the one person in the convo right now, don't want to see it until there are at least 2 people
                                     print("this convo counts as relevant!!!")
-                                    self?.toast = .newRelevantConvoFound
                                     
                                     return true
                                 }
