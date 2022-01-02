@@ -67,6 +67,12 @@ extension InnerCircleViewModel {
     // sender should be current user
     // receiver is the person we are sending to
     func stopRecording(sender:User, receiver: User) {
+        if isRecording == false || audioRecorder == nil {
+            print("was not recording")
+            // no need for toast because user knows he wasn't trying to record
+            return
+        }
+        
         audioRecorder.stop()
         isRecording = false
         

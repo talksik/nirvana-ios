@@ -37,9 +37,9 @@ class ConvoViewModel: NSObject, ObservableObject {
             case .alreadyInCall:
                 return AlertToast(displayMode: .hud, type: .error(Color.orange), title: "Leave your current convo first!")
             case .friendNotOnline:
-                return AlertToast(displayMode: .alert, type: .error(Color.orange), title: "friend not online", subTitle: "send them a voice message to notify them")
+                return AlertToast(displayMode: .hud, type: .systemImage("waveform.circle.fill", NirvanaColor.teal), title: "friend not online", subTitle: "but recording a message for them")
             case .connecting:
-                return AlertToast(displayMode: .hud, type: .systemImage("sensor.tag.radiowaves.forward.fill", NirvanaColor.dimTeal), title: "Connecting")
+                return AlertToast(displayMode: .hud, type: .systemImage("sensor.tag.radiowaves.forward.fill", NirvanaColor.teal), title: "Connecting")
             case .disconnected:
                 return AlertToast(displayMode: .hud, type: .systemImage("hand.wave.fill", Color.orange), title: "bye!")
             case .successfullyAddedThirdParty:
