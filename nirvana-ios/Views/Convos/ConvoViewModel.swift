@@ -15,6 +15,8 @@ class ConvoViewModel: NSObject, ObservableObject {
     enum Toast: Identifiable {
         var id: Self { self }
         
+        case connecting
+        
         case newRelevantConvoFound
         case successfullyJoined
         case successfullyAddedThirdParty
@@ -30,6 +32,8 @@ class ConvoViewModel: NSObject, ObservableObject {
         
         var view: AlertToast {
             switch self {
+            case .connecting:
+                return AlertToast(displayMode: .hud, type: .systemImage("sensor.tag.radiowaves.forward.fill", NirvanaColor.dimTeal), title: "Connecting")
             case .disconnected:
                 return AlertToast(displayMode: .hud, type: .systemImage("hand.wave.fill", Color.orange), title: "disconnected")
             case .successfullyAddedThirdParty:
@@ -202,7 +206,7 @@ class ConvoViewModel: NSObject, ObservableObject {
      @param: friendId: the second person in the convo...the receiver
      **/
     func startConvo(friendId: String) {
-        // TODO: need to make sure the other user is online or already did in view
+        self.toast = .connecting
         
         // making sure this user is authenticated
         if let userId = AuthSessionStore.getCurrentUserId() {
@@ -257,6 +261,8 @@ class ConvoViewModel: NSObject, ObservableObject {
     Allow user to join an active convo
      */
     func joinConvo(convoId: String) {
+        self.toast = .connecting
+        
         // ensure the convo is active and includes 2 people in it currently...shouldn't be shown if not anyway
         
         // ensure that this user leaves all other channels        
