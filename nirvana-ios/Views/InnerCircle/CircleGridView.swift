@@ -149,25 +149,16 @@ struct CircleGridView: View {
                             let scale = getScale(proxy: gridProxy, itemNumber: adjustedValue, userId: friendId)
                             
                             ZStack(alignment: .topTrailing) {
+                                // bubble color
                                 Circle()
-                                    .foregroundColor(self.getBubbleTint(friendDbId: friendId)) // different color for a selected user
+                                    .foregroundColor(self.getBubbleTint(friendDbId: friendId))
                                     .blur(radius: 8)
                                     .cornerRadius(100)
                                 
-                                // this friend is online
-                                if self.authSessionStore.relevantUsersDict[friendId]?.userStatus == .online {
-                                    Circle()
-                                        .frame(width: 20, height: 20)
-                                        .foregroundColor(Color.green)
-                                        .font(.title2)
-                                        .padding(5)
-                                }
-                                else if self.haveNewMessageFromFriend(friendDbId: friendId) { // check if the last message in the conversation between me and my friend was me talking or him
-                                    Image(systemName: "arrow.down.left.circle.fill")
-                                        .foregroundColor(Color.orange)
-                                        .font(.title2)
-                                }
-//
+                                // user status
+                                UserStatusView(status: self.authSessionStore.relevantUsersDict[friendId]?.userStatus, size: 20, padding: 5)                                
+
+                                // inside avatar
                                 Image(self.authSessionStore.relevantUsersDict[friendId]?.avatar ?? Avatars.avatarSystemNames[0])
                                     .resizable()
                                     .scaledToFit()

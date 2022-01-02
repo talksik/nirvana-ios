@@ -103,22 +103,7 @@ struct CircleNavigationView: View {
                         .shadow(radius: 10)
                         .overlay(alignment: .topTrailing) {
                             // user status
-                            switch self.authSessionStore.user?.userStatus {
-                            case .online:
-                                Circle()
-                                    .frame(width: 10, height: 10)
-                                    .foregroundColor(Color.green)
-                            case .offline:
-                                Circle()
-                                    .frame(width: 10, height: 10)
-                                    .foregroundColor(Color.red)
-                            case .inConvo:
-                                Circle()
-                                    .frame(width: 10, height: 10)
-                                    .foregroundColor(Color.orange)
-                            default:
-                                EmptyView()
-                            }
+                            UserStatusView(status: self.authSessionStore.user?.userStatus, size: 10)
                         }
                 }
             }
