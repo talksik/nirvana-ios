@@ -224,7 +224,7 @@ extension AuthSessionStore {
         // TODO: THIS WON'T UPDATE VIEW since user is a reference type...can manually publish...research and learn more
         self.firestoreService.getUserRealtime(userId: currUserId!) {[weak self] realtimeUpdatedUser in
             if realtimeUpdatedUser != nil {
-                print("up to date user: \(realtimeUpdatedUser)")
+                print("up to date user")
                 self?.user = realtimeUpdatedUser
                 self?.objectWillChange.send()
                 
