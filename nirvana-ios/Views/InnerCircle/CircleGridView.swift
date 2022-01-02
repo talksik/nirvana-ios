@@ -54,6 +54,8 @@ struct CircleGridView: View {
     
     @State var animateLiveConvos = false
     
+    let maxNumAvatarsToShowInConvo = 3
+    
     var body: some View {
         // main communication hub
         // TODO: client side, sort the honeycomb from top left to bottom right
@@ -74,6 +76,10 @@ struct CircleGridView: View {
                     // live convos
                     ForEach(0..<convos.count, id: \.self) {value in
                         let currConvo = self.convoVM.relevantConvos[value]
+                        let filteredUsers = self.authSessionStore.relevantUsersDict.filter {
+                            return currConvo.users.contains($0.key)
+                        }
+                        let convoUsers: [User] = Array(filteredUsers.values)
                         
                         GeometryReader {gridProxy in
                             let scale = getScale(proxy: gridProxy, itemNumber: value, userId: nil, convoId: currConvo.id)
@@ -81,19 +87,20 @@ struct CircleGridView: View {
                             ZStack(alignment: .topTrailing) {
                                 Circle()
                                     .foregroundColor(self.getBubbleTint(convoId: currConvo.id))
-                                                                
+                                
                                 ZStack {
                                     Color.clear
-                                    ProfilePicturesOverlappedView()
+                                    ProfilePicturesOverlappedView(users: Array(convoUsers.prefix(maxNumAvatarsToShowInConvo)))
                                         .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 20)
                                 }
                                 
-                                Text("+2")
+                                Text("\(convoUsers.count)")
                                     .padding(5)
                                     .font(.caption)
                                     .foregroundColor(Color.white)
                                     .background(NirvanaColor.dimTeal)
                                     .cornerRadius(100)
+                                
                                 
         //                        ZStack(alignment: .bottom) {
         //                            Color.clear
