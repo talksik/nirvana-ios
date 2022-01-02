@@ -28,7 +28,7 @@ class ConvoViewModel: NSObject, ObservableObject {
         return self.selectedConvoId != nil
     }
     
-    static var relevancyAcceptance = 0.6
+    static var relevancyAcceptance = 0.5
     
     func initializeAgoraEngine() {
         self.agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: "c8dfd65deb5c4741bd564085627139d0", delegate: self)
@@ -124,7 +124,7 @@ class ConvoViewModel: NSObject, ObservableObject {
                                     }
                                 }
                                 
-                                let relevancyScore = Double(relevancyCount / convo.users.count)
+                                let relevancyScore = Double(relevancyCount) / Double(convo.users.count)
                                 print("relevancy score: \(relevancyScore)")
                                 
                                 if relevancyScore > Self.relevancyAcceptance {
@@ -139,17 +139,12 @@ class ConvoViewModel: NSObject, ObservableObject {
     }
     
     deinit {
-        // TODO: make sure that this gets fired if someone closes the app
+        print("deiniting and cleaning up convo view model/agora services")
+        
+        self.leaveConvo(destroyInstance: true)
         
         // deinit the firestore listener
         self.convosListener?.remove()
-        
-        // deinit the agora engine
-        print("deiniting and cleaning up convo view model/agora services")
-        
-        AgoraRtcEngineKit.destroy()
-        
-        self.leaveConvo()
     }
     
     /**
@@ -262,7 +257,7 @@ class ConvoViewModel: NSObject, ObservableObject {
     }
     
     // anyone can leave at any time
-    func leaveConvo() {
+    func leaveConvo(destroyInstance: Bool = false) {
         let userId = AuthSessionStore.getCurrentUserId()
         
         if userId == nil {
@@ -318,6 +313,12 @@ class ConvoViewModel: NSObject, ObservableObject {
                 self?.selectedConvoId = nil
                 
                 print("left convo officially in our db as well")
+                
+            
+                // deinit the agora engine
+                if destroyInstance {
+                    self?.destroyInstance()
+                }
             }
         }
     }

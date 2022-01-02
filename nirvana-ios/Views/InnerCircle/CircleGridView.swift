@@ -462,10 +462,7 @@ extension CircleGridView {
 extension CircleGridView {
     // listening to messages
     private func handleTap(gridItemIndex: Int, friendId: String) {
-        print("tap gesture activated")
-        
-        
-        // TODO: make it deselect a currently selected user if that's the case
+        print("tap gesture activated")        
         
         // if friend and I are online, and I am not in a convo, start convo immediately with them
         if self.authSessionStore.relevantUsersDict[friendId]?.userStatus == .online
