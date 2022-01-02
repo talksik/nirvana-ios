@@ -94,15 +94,20 @@ class ConvoViewModel: NSObject, ObservableObject {
                                 }
                                 
                                 // if convo receiver is me and I'm not in a call or this call already, then join in
-                                // TODO: also if I am added after a receiver was added, then join the call
                                 if convo!.receiverUserId == userId && !(self?.isInCall())!
                                     && convo!.receiverEndedTimestamp == nil {
+                                    print("I am the direct receiver...joining convo")
                                     self?.joinConvo(convo: convo!)
                                 }
-                                
                                 // if I am in a convo in which the last/loner has left, I need to leave the convo
-                                if convo!.receiverEndedTimestamp != nil && (self?.isInCall())! && convo!.users.contains(userId!) {
+                                else if convo!.receiverEndedTimestamp != nil && (self?.isInCall())! && convo!.users.contains(userId!) {
+                                    print("I am the last one now... ending the convo")
                                     self?.leaveConvo()
+                                } //also if I am added after a receiver was added and I am not already in a convo, then join the call
+                                else if convo!.users.contains(userId!) && !(self?.isInCall())! {
+                                    // should be free or online and not in another call unless it's a race condition
+                                    print("I was added onto the call because I was free...joining automatically")
+                                    self?.joinConvo(convo: convo!)
                                 }
                                 
                                 self?.allConvos.append(convo!)
@@ -227,6 +232,31 @@ class ConvoViewModel: NSObject, ObservableObject {
         self.agoraKit?.setDefaultAudioRouteToSpeakerphone(true)
         // finally join channel
         self.agoraKit?.joinChannel(byToken: convoAgoraToken, channelId: channelName, info: nil, uid: 0, joinSuccess: nil)
+    }
+    
+    func addThirdPartyToConvo(friendId: String) {
+        // recheck if this other friend that I am adding is online/free
+        
+        if !self.isInCall() {
+            print("not in a call, can't invite/force someone else...must have a selected convo")
+            return
+        }
+        
+        // get the currconvo details
+        var convo = self.relevantConvos.first {convo in
+            convo.id == self.selectedConvoId
+        }
+        if convo == nil {
+            print("convo not available")
+            return
+        }
+        
+        // update convo users array with this other friend
+        convo!.users.append(friendId)
+        
+        self.firestoreService.updateConvo(convo: convo!) {[weak self] res in
+            print("updated with new friend added in the convo")
+        }
     }
     
     // anyone can leave at any time

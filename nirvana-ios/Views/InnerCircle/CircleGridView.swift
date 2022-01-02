@@ -156,7 +156,7 @@ struct CircleGridView: View {
                                     .cornerRadius(100)
                                 
                                 // user status
-                                UserStatusView(status: self.authSessionStore.relevantUsersDict[friendId]?.userStatus, size: 20, padding: 5)                                
+                                UserStatusView(status: self.authSessionStore.relevantUsersDict[friendId]?.userStatus, size: 20, padding: 5)
 
                                 // inside avatar
                                 Image(self.authSessionStore.relevantUsersDict[friendId]?.avatar ?? Avatars.avatarSystemNames[0])
@@ -182,6 +182,12 @@ struct CircleGridView: View {
                         .gesture(
                             LongPressGesture(minimumDuration: longPressMinDuration)
                                 .onEnded {_ in // on activation of long press
+                                    // if in a call, I cannot record or select someone...strict rules on user if in a call
+                                    if self.convoVM.isInCall() {
+                                        print("can't select another friend because I am in a call...leave call first")
+                                        return
+                                    }
+                                    
                                     // stop any player still playing of a message
                                     self.queuePlayer.removeAllItems()
                                     
@@ -458,15 +464,27 @@ extension CircleGridView {
     private func handleTap(gridItemIndex: Int, friendId: String) {
         print("tap gesture activated")
         
-        // if friend and I are online, start convo immediately with them
+        // if friend and I are online, and I am not in a convo, start convo immediately with them
         if self.authSessionStore.relevantUsersDict[friendId]?.userStatus == .online
-            && self.authSessionStore.user?.userStatus == .online {
+            && self.authSessionStore.user?.userStatus == .online && !self.convoVM.isInCall() {
+            print("starting a direct convo...getting it going")
             self.convoVM.startConvo(friendId: friendId)
             
             return
+        } // if I am in a convo and I am adding someone else online, then make them join my convo
+        else if self.convoVM.isInCall() && self.authSessionStore.relevantUsersDict[friendId]?.userStatus == .online {
+            print("chaining the convo with more people...forcing someone else in")
+            
+            self.convoVM.addThirdPartyToConvo(friendId: friendId)
+            
+            return
+        } // if I am in a convo, don't allow listening to a message or expanding details of a friend in my circle
+        else if self.convoVM.isInCall() {
+            print("can't select this friend as you are in a convo")
+            return
         }
         
-        // TODO: if I am in a call and I am adding someone else online, then make them join my convo
+        
         
         // clearing the player to make room for this friend's convo or to deselect this user
         self.queuePlayer.removeAllItems()
