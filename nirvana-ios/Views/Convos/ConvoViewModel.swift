@@ -149,6 +149,7 @@ class ConvoViewModel: NSObject, ObservableObject {
                                 }
                                 
                                 // if convo receiver is me and I'm not in a call or this call already, then join in
+                                // TODO: this still triggers when I am the receiver but leaving early in a three way call
                                 if convo!.receiverUserId == userId && !(self?.isInCall())!
                                     && convo!.secondToLastUserEndedTimestamp == nil {
                                     print("I am the direct receiver...joining convo")
