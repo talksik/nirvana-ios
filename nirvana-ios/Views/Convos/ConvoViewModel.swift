@@ -84,6 +84,7 @@ class ConvoViewModel: NSObject, ObservableObject {
         return self.selectedConvoId != nil
     }
     
+    static var maxUsersInConvo = 8
     static var relevancyAcceptance = 0.5
     
     func initializeAgoraEngine() {
@@ -169,12 +170,18 @@ class ConvoViewModel: NSObject, ObservableObject {
                             
                             // only show convos in which I know a majority of the people inside
                             // use relevancyAcceptance value
+                            // TODO: handle case where it is irrelevant for me but I was added to the convo or it just became irrelevant so it disappears for me
                             self?.relevantConvos = (self?.allConvos.filter{convo in
                                 var relevancyCount = 0
                                 // go through all users in this convo
                                 for user in convo.users {
                                     if scopeUserIds.contains(user) {
                                         relevancyCount += 1
+                                    }
+                                    
+                                    // if I am already in a convo, then it is of course relevant
+                                    if user == userId {
+                                        return true
                                     }
                                 }
                                 
@@ -186,6 +193,7 @@ class ConvoViewModel: NSObject, ObservableObject {
                                     
                                     return true
                                 }
+                                
                                 return false
                             })!
                         }
@@ -249,6 +257,12 @@ class ConvoViewModel: NSObject, ObservableObject {
             self.leaveConvo()
         }
         
+        // safe case, not really possible
+        if convo.users.count >= Self.maxUsersInConvo {
+            self.toast = .maxLimitUsers
+            return
+        }
+        
         // update ui to select this one
         self.selectedConvoId = convo.id
         
@@ -278,7 +292,10 @@ class ConvoViewModel: NSObject, ObservableObject {
             return
         }
         
-        // TODO: if the convo has more than 10 people, stop user from joining...that's too expensive...
+        if convo!.users.count >= Self.maxUsersInConvo {
+            self.toast = .maxLimitUsers
+            return
+        }
         
         self.selectedConvoId = convoId
         let convoAgoraToken:String = convo!.agoraToken
@@ -307,6 +324,12 @@ class ConvoViewModel: NSObject, ObservableObject {
         if convo == nil {
             self.toast = .convoNotFound
             print("convo not available")
+            return
+        }
+        
+        // TODO: put as an environment variable
+        if convo!.users.count >= Self.maxUsersInConvo {
+            self.toast = .maxLimitUsers
             return
         }
         
