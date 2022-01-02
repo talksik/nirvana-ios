@@ -135,7 +135,6 @@ struct CircleGridView: View {
                                                ).repeatForever(autoreverses: true),
                            value: self.animateLiveConvos
                         )
-                        
                     }
                     
                     // active friends
