@@ -74,6 +74,10 @@ final class AuthSessionStore: ObservableObject, SessionStore {
         self.setupAuthListen()
     }
     
+    deinit {
+        self.deinitAllDataListeners()
+    }
+    
     // MARK: OLD for google sign in with link
     func signInOrCreateUser() {
         if GIDSignIn.sharedInstance.currentUser == nil {
