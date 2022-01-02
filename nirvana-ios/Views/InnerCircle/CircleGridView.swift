@@ -25,7 +25,7 @@ struct CircleGridView: View {
     // magic variables for grid
     // TODO: make the top left person or one horizontal person be in the center of screen...makes the top honeycomb pop
     @State var numberOfItems: Int = 12
-    private static let size: CGFloat = UIScreen.main.bounds.height*0.15 // scaling with screen size
+    private static let size: CGFloat = 130 // TODO: scaling with screen size? nahhh no need
     private static let spacingBetweenColumns: CGFloat = 0
     private static let spacingBetweenRows: CGFloat = 0
     private static let totalColumns: Int = 3 // scaling the circles and calculating column count
@@ -331,7 +331,7 @@ struct CircleGridView: View {
                     scrollReaderValue.scrollTo(self.selectedFriendIndex)
                 }
                 
-                self.animateLiveConvos = true                
+                self.animateLiveConvos = true
             }
         } // scrollview reader
     }
