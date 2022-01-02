@@ -32,7 +32,7 @@ struct ConvoFooterView: View {
                         let filteredUsers = self.authSessionStore.relevantUsersDict.filter {
                             return self.selectedConvo!.users.contains($0.key)
                         }
-                        let convoUsers: [User] = Array(filteredUsers.values)
+                        let convoUsers: [User] = Array(filteredUsers.values).sorted(by: { $0.nickname ?? "" > $1.nickname ?? "" })
                         
                         ProfilePicturesOverlappedView(indvAvatarWidth: CGFloat(35), users: convoUsers)
                             .padding(.leading, 20)
