@@ -133,6 +133,9 @@ struct CircleGridView: View {
                                 }
                                 
                             }
+                            else {
+                                self.convoVM.toast = .alreadyInCall
+                            }
                         }
 //                        .animation(
 //                            Animation.easeInOut(duration: 4).repeatForever(autoreverses: true),
@@ -183,7 +186,9 @@ struct CircleGridView: View {
                         .gesture(
                             LongPressGesture(minimumDuration: longPressMinDuration)
                                 .onEnded {_ in // on activation of long press
-                                    // if in a call, I cannot record or select someone...strict rules on user if in a call
+                                    print("activated long press!")
+                                    
+                                    // if in a convo, I don't want to have user footer show up
                                     if self.convoVM.isInCall() {
                                         print("can't select another friend because I am in a call...leave call first")
                                         return
@@ -192,7 +197,7 @@ struct CircleGridView: View {
                                     // stop any player still playing of a message
                                     self.queuePlayer.removeAllItems()
                                     
-                                    print("activated long press!")
+                                    
                                     self.selectedFriendIndex = friendId
                                     
                                     // TODO: haptics stopped working again
@@ -466,7 +471,7 @@ extension CircleGridView {
 extension CircleGridView {
     // listening to messages
     private func handleTap(gridItemIndex: Int, friendId: String) {
-        print("tap gesture activated")        
+        print("tap gesture activated")
         
         // if friend and I are online, and I am not in a convo, start convo immediately with them
         if self.authSessionStore.relevantUsersDict[friendId]?.userStatus == .online
@@ -488,8 +493,12 @@ extension CircleGridView {
             
             return
         } // if I am in a convo, don't allow listening to a message or expanding details of a friend in my circle
+        // also can't add friend who is not online
         else if self.convoVM.isInCall() {
-            print("can't select this friend as you are in a convo")
+            print("can't select this friend as you are in a convo and they are not online")
+            
+            self.convoVM.toast = .friendNotOnline
+            
             return
         }
         

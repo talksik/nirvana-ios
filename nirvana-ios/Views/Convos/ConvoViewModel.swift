@@ -27,11 +27,16 @@ class ConvoViewModel: NSObject, ObservableObject {
         case convoNotFound
         case probSettingUpConvo
         case cantAddThirdParty
+        case friendNotOnline
+        case alreadyInCall
         
         case generalError
         
         var view: AlertToast {
             switch self {
+            case .alreadyInCall:
+                return AlertToast(displayMode: .hud, type: .error(Color.orange), title: "Leave your current convo first!")
+            case .friendNotOnline:
             case .connecting:
                 return AlertToast(displayMode: .hud, type: .systemImage("sensor.tag.radiowaves.forward.fill", NirvanaColor.dimTeal), title: "Connecting")
             case .disconnected:
@@ -47,15 +52,15 @@ class ConvoViewModel: NSObject, ObservableObject {
             case .successfullyJoined:
                 return AlertToast(displayMode: .hud, type: .complete(Color.green), title: "joined convo")
             case .probSettingUpConvo:
-                return AlertToast(displayMode: .hud, type: .error(Color.red), title: "Problem setting up convo ‼️")
+                return AlertToast(displayMode: .hud, type: .error(Color.orange), title: "Problem setting up convo ‼️")
             case .maxLimitUsers:
-                return AlertToast(displayMode: .hud, type: .error(Color.red), title: "The convo is full! Sorry! 😞")
+                return AlertToast(displayMode: .hud, type: .error(Color.orange), title: "The convo is full! Sorry! 😞")
             case .notAuthenticated:
-                return AlertToast(displayMode: .hud, type: .error(Color.red), title: "Not authenticated ‼️")
+                return AlertToast(displayMode: .hud, type: .error(Color.orange), title: "Not authenticated ‼️")
             case .generalError:
-                return AlertToast(displayMode: .hud, type: .error(Color.red), title: "Something went wrong ‼️")
+                return AlertToast(displayMode: .hud, type: .error(Color.orange), title: "Something went wrong ‼️")
             default:
-                return AlertToast(displayMode: .hud, type: .error(Color.red), title: "Something went wrong ‼️")
+                return AlertToast(displayMode: .hud, type: .error(Color.orange), title: "Something went wrong ‼️")
             }
         }
     }

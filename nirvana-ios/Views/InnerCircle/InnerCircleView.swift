@@ -150,7 +150,7 @@ struct InnerCircleView: View {
             // set status of user to online
             self.authSessionStore.updateUserStatus(userStatus: .online)
         }
-        .toast(isPresenting: self.$convoViewModel.showToast) {
+        .toast(isPresenting: self.$convoViewModel.showToast, duration: 2) {
             self.convoViewModel.toast?.view ?? AlertToast(displayMode: .hud, type: .error(Color.red), title: "Something went wrong")
         }
 //        .onDisappear {
