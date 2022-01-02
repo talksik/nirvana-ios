@@ -136,6 +136,10 @@ class ConvoViewModel: NSObject, ObservableObject {
                     
                     print("the scope of users to search for convos is \(splicedArray)")
                     
+                    //deinit listener before listening again
+                    self?.convosListener?.remove()
+                    
+                    
                     // initiate convo listener to get all relevant convos
                     //  any convo that is active
                     //  and any of my active friends or I am in that convo
