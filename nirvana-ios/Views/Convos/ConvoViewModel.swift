@@ -43,6 +43,7 @@ class ConvoViewModel: NSObject, ObservableObject {
         let userId = AuthSessionStore.getCurrentUserId()
         if userId == nil {
             print("no authenticated user")
+            return
         }
         
         // get all active userfriends
