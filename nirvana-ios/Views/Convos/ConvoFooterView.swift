@@ -152,9 +152,19 @@ struct ConvoUsernames: View {
     var unknownUserCount: Int = 0
     
     var body: some View {
-        let userNames = self.users.map{$0.nickname ?? ""}.joined(separator: ", ")
-        Text(unknownUserCount > 0 ? "\(userNames), and \(unknownUserCount) other(s)": userNames)
-            .font(.footnote)
-            .foregroundColor(NirvanaColor.light)
+        if let userId = AuthSessionStore.getCurrentUserId() {
+            let userNames = self.users.map{user in
+                if user.id == userId {
+                    return "me"
+                }
+                
+                return user.nickname ?? ""
+            }.joined(separator: ", ")
+            Text(unknownUserCount > 0 ? "\(userNames), and \(unknownUserCount) other(s)": userNames)
+                .foregroundColor(NirvanaColor.light)
+        }
+        else {
+            EmptyView()
+        }
     }
 }

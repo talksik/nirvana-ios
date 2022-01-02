@@ -35,7 +35,7 @@ class ConvoViewModel: NSObject, ObservableObject {
             case .connecting:
                 return AlertToast(displayMode: .hud, type: .systemImage("sensor.tag.radiowaves.forward.fill", NirvanaColor.dimTeal), title: "Connecting")
             case .disconnected:
-                return AlertToast(displayMode: .hud, type: .systemImage("hand.wave.fill", Color.orange), title: "disconnected")
+                return AlertToast(displayMode: .hud, type: .systemImage("hand.wave.fill", Color.orange), title: "bye!")
             case .successfullyAddedThirdParty:
                 return AlertToast(displayMode: .hud, type: .complete(Color.green), title: "added friend to convo")
             case .cantAddThirdParty:
