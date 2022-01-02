@@ -139,6 +139,8 @@ class ConvoViewModel: NSObject, ObservableObject {
     }
     
     deinit {
+        // TODO: make sure that this gets fired if someone closes the app
+        
         // deinit the firestore listener
         self.convosListener?.remove()
         
