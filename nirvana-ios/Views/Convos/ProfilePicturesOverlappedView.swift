@@ -7,31 +7,33 @@
 
 import SwiftUI
 
+/**
+ @return a view that overlaps the user avatars
+ */
 struct ProfilePicturesOverlappedView: View {
-    let numberAttendees:Int = 5
     let offset:Int = 15
     
     var indvAvatarWidth: CGFloat = 50
     
+    var users: [User]
+    
     var body: some View {
         ZStack {
-            ForEach(0..<numberAttendees, id: \.self) {attendeeIndex in
-                if attendeeIndex < 3 {
-                    Image(Avatars.avatarSystemNames[attendeeIndex+1])
-                        .resizable()
-                        .scaledToFit()
-                        .background(NirvanaColor.dimTeal)
-                        .clipShape(Circle())
-                        .offset(x: CGFloat((-15 * attendeeIndex)) + 15)
-                        .frame(width: indvAvatarWidth)
-                }
+            ForEach(0..<users.count, id: \.self) {userIndex in
+                Image(users[userIndex].avatar ?? Avatars.avatarSystemNames[1])
+                    .resizable()
+                    .scaledToFit()
+                    .background(NirvanaColor.dimTeal)
+                    .clipShape(Circle())
+                    .offset(x: CGFloat((-15 * userIndex)) + 15)
+                    .frame(width: indvAvatarWidth)
             }
         }
     }
 }
 
-struct ProfilePicturesOverlappedView_Previews: PreviewProvider {
-    static var previews: some View {
-        ProfilePicturesOverlappedView()
-    }
-}
+//struct ProfilePicturesOverlappedView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ProfilePicturesOverlappedView()
+//    }
+//}

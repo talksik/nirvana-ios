@@ -25,7 +25,7 @@ struct CircleGridView: View {
     // magic variables for grid
     // TODO: make the top left person or one horizontal person be in the center of screen...makes the top honeycomb pop
     @State var numberOfItems: Int = 12
-    private static let size: CGFloat = UIScreen.main.bounds.height*0.15 // scaling with screen size
+    private static let size: CGFloat = 130 // TODO: scaling with screen size? nahhh no need
     private static let spacingBetweenColumns: CGFloat = 0
     private static let spacingBetweenRows: CGFloat = 0
     private static let totalColumns: Int = 3 // scaling the circles and calculating column count
@@ -54,6 +54,8 @@ struct CircleGridView: View {
     
     @State var animateLiveConvos = false
     
+    let maxNumAvatarsToShowInConvo = 3
+    
     var body: some View {
         // main communication hub
         // TODO: client side, sort the honeycomb from top left to bottom right
@@ -74,6 +76,10 @@ struct CircleGridView: View {
                     // live convos
                     ForEach(0..<convos.count, id: \.self) {value in
                         let currConvo = self.convoVM.relevantConvos[value]
+                        let filteredUsers = self.authSessionStore.relevantUsersDict.filter {
+                            return currConvo.users.contains($0.key)
+                        }
+                        let convoUsers: [User] = Array(filteredUsers.values)
                         
                         GeometryReader {gridProxy in
                             let scale = getScale(proxy: gridProxy, itemNumber: value, userId: nil, convoId: currConvo.id)
@@ -81,29 +87,26 @@ struct CircleGridView: View {
                             ZStack(alignment: .topTrailing) {
                                 Circle()
                                     .foregroundColor(self.getBubbleTint(convoId: currConvo.id))
-                                                                
+                                
                                 ZStack {
                                     Color.clear
-                                    ProfilePicturesOverlappedView()
+                                    ProfilePicturesOverlappedView(users: Array(convoUsers.prefix(maxNumAvatarsToShowInConvo)))
                                         .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 20)
                                 }
                                 
-                                Text("+2")
+                                // top right number or people in convo
+                                Circle()
+                                    .frame(width: 20, height: 20)
+                                    .foregroundColor(Color.green)
+                                    .font(.title2)
                                     .padding(5)
-                                    .font(.caption)
-                                    .foregroundColor(Color.white)
-                                    .background(NirvanaColor.dimTeal)
-                                    .cornerRadius(100)
-                                
-        //                        ZStack(alignment: .bottom) {
-        //                            Color.clear
-        //
-        //                            Text("kev, sarth...")
-        //                                .foregroundColor(NirvanaColor.teal)
-        //                                .font(.caption)
-        //                        }
+                                    .overlay(
+                                        Text("\(convoUsers.count)")
+                                            .foregroundColor(Color.white)
+                                            .font(.caption2)
+                                    )
                             }
-                            .scaleEffect(self.animateLiveConvos ? scale + 0.2 : scale)
+                            .scaleEffect(scale)
                             .padding(scale * 5)
                         } // geometry reader
                         .offset(
@@ -115,21 +118,26 @@ struct CircleGridView: View {
                         .onTapGesture {
                             // if not in a call already
                             if !self.convoVM.isInCall() {
-                                self.convoVM.selectedConvoId = self.convoVM.relevantConvos[value].id!
-                                self.convoVM.joinConvo()
+                                print("joining convo now")
                                 
-                                // if had selected an individual, don't want them in here anymore
-                                self.selectedFriendIndex = nil
+                                if let convoId = currConvo.id {
+                                    self.convoVM.selectedConvoId = convoId
+                                    self.convoVM.joinConvo(convoId: convoId)
+                                    
+                                    // if had selected an individual, don't want them selected here anymore
+                                    self.selectedFriendIndex = nil
+                                }
+                                else {
+                                    print("no convo id to join")
+                                }
                                 
-                                return
                             }
                         }
-                        .animation(
-                            Animation.easeInOut(duration: self.convoVM.selectedConvoId == currConvo.id ? 2 : 4
-                                               ).repeatForever(autoreverses: true),
-                           value: self.animateLiveConvos
-                        )
-                        
+//                        .animation(
+//                            Animation.easeInOut(duration: 4).repeatForever(autoreverses: true),
+//                           value: self.animateLiveConvos
+//                        )
+                        .animation(Animation.spring())
                     }
                     
                     // active friends
@@ -141,25 +149,16 @@ struct CircleGridView: View {
                             let scale = getScale(proxy: gridProxy, itemNumber: adjustedValue, userId: friendId)
                             
                             ZStack(alignment: .topTrailing) {
+                                // bubble color
                                 Circle()
-                                    .foregroundColor(self.getBubbleTint(friendDbId: friendId)) // different color for a selected user
+                                    .foregroundColor(self.getBubbleTint(friendDbId: friendId))
                                     .blur(radius: 8)
                                     .cornerRadius(100)
                                 
-                                // this friend is online
-                                if self.authSessionStore.relevantUsersDict[friendId]?.userStatus == .online {
-                                    Circle()
-                                        .frame(width: 20, height: 20)
-                                        .foregroundColor(Color.green)
-                                        .font(.title2)
-                                        .padding(5)
-                                }
-                                else if self.haveNewMessageFromFriend(friendDbId: friendId) { // check if the last message in the conversation between me and my friend was me talking or him
-                                    Image(systemName: "arrow.down.left.circle.fill")
-                                        .foregroundColor(Color.orange)
-                                        .font(.title2)
-                                }
-//
+                                // user status
+                                UserStatusView(status: self.authSessionStore.relevantUsersDict[friendId]?.userStatus, size: 20, padding: 5)
+
+                                // inside avatar
                                 Image(self.authSessionStore.relevantUsersDict[friendId]?.avatar ?? Avatars.avatarSystemNames[0])
                                     .resizable()
                                     .scaledToFit()
@@ -183,6 +182,12 @@ struct CircleGridView: View {
                         .gesture(
                             LongPressGesture(minimumDuration: longPressMinDuration)
                                 .onEnded {_ in // on activation of long press
+                                    // if in a call, I cannot record or select someone...strict rules on user if in a call
+                                    if self.convoVM.isInCall() {
+                                        print("can't select another friend because I am in a call...leave call first")
+                                        return
+                                    }
+                                    
                                     // stop any player still playing of a message
                                     self.queuePlayer.removeAllItems()
                                     
@@ -331,7 +336,7 @@ struct CircleGridView: View {
                     scrollReaderValue.scrollTo(self.selectedFriendIndex)
                 }
                 
-                self.animateLiveConvos = true                
+                self.animateLiveConvos = true
             }
         } // scrollview reader
     }
@@ -457,15 +462,34 @@ extension CircleGridView {
 extension CircleGridView {
     // listening to messages
     private func handleTap(gridItemIndex: Int, friendId: String) {
-        print("tap gesture activated")
+        print("tap gesture activated")        
         
-        // if friend and I are online, start call immediately
+        // if friend and I are online, and I am not in a convo, start convo immediately with them
         if self.authSessionStore.relevantUsersDict[friendId]?.userStatus == .online
-            && self.authSessionStore.user?.userStatus == .online {
+            && self.authSessionStore.user?.userStatus == .online && !self.convoVM.isInCall() {
+            print("starting a direct convo...getting it going")
+            
+            self.selectedFriendIndex = nil // deselect and clear up ui for the call
+            
             self.convoVM.startConvo(friendId: friendId)
             
             return
+        } // if I am in a convo and I am adding someone else online, then make them join my convo
+        else if self.convoVM.isInCall() && self.authSessionStore.relevantUsersDict[friendId]?.userStatus == .online {
+            print("chaining the convo with more people...forcing someone else in")
+            
+            self.selectedFriendIndex = nil // deselect and clear up ui for the call
+            
+            self.convoVM.addThirdPartyToConvo(friendId: friendId)
+            
+            return
+        } // if I am in a convo, don't allow listening to a message or expanding details of a friend in my circle
+        else if self.convoVM.isInCall() {
+            // TODO: show toast
+            print("can't select this friend as you are in a convo")
+            return
         }
+        
         
         // clearing the player to make room for this friend's convo or to deselect this user
         self.queuePlayer.removeAllItems()
