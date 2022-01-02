@@ -190,7 +190,8 @@ class ConvoViewModel: NSObject, ObservableObject {
         }
     }
     
-    func joinConvo(convo: Convo) {
+    /* internal control to join a convo */
+    private func joinConvo(convo: Convo) {
         // ensure that this user leaves all other channels
         if self.isInCall() {
             self.leaveConvo()
@@ -203,8 +204,7 @@ class ConvoViewModel: NSObject, ObservableObject {
         // finally join channel
         self.agoraKit?.joinChannel(byToken: convo.agoraToken, channelId: convo.id!, info: nil, uid: 0, joinSuccess: nil)
     }
-    
-    
+        
     /**
     Allow user to join an active convo
      */
@@ -263,8 +263,6 @@ class ConvoViewModel: NSObject, ObservableObject {
     
     // anyone can leave at any time
     func leaveConvo() {
-        agoraKit?.leaveChannel(nil)
-        
         let userId = AuthSessionStore.getCurrentUserId()
         
         if userId == nil {
@@ -276,6 +274,8 @@ class ConvoViewModel: NSObject, ObservableObject {
             print("not in a convo currently!")
             return
         }
+        
+        agoraKit?.leaveChannel(nil)
         
         self.firestoreService.updateUserStatus(userId: userId!, userStatus: .online) {[weak self] res in
             print(res)
