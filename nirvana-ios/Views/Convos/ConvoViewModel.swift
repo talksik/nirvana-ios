@@ -11,7 +11,7 @@ import Firebase
 
 class ConvoViewModel: NSObject, ObservableObject {
     @Published var selectedConvoId:String? = nil
-    @Published var connectionState: AgoraConnectionStateType? = nil
+    @Published var connectionState: AgoraConnectionStateType?
     
     let firestoreService = FirestoreService()
     private var db = Firestore.firestore()
@@ -19,7 +19,7 @@ class ConvoViewModel: NSObject, ObservableObject {
     
     let agoraService = AgoraService()
     // TODO: put the value in environment variables
-    lazy var agoraKit: AgoraRtcEngineKit? = AgoraRtcEngineKit.sharedEngine(withAppId: "c8dfd65deb5c4741bd564085627139d0", delegate: self)
+    var agoraKit: AgoraRtcEngineKit?
     
     private var allConvos: [Convo] = []
     @Published var relevantConvos: [Convo] = []
@@ -30,8 +30,14 @@ class ConvoViewModel: NSObject, ObservableObject {
     
     static var relevancyAcceptance = 0.6
     
+    func initializeAgoraEngine() {
+        self.agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: "c8dfd65deb5c4741bd564085627139d0", delegate: self)
+    }
+    
     override init() {
         super.init()
+        
+        initializeAgoraEngine()
         
         // start process of data collection
         let userId = AuthSessionStore.getCurrentUserId()
@@ -186,7 +192,6 @@ class ConvoViewModel: NSObject, ObservableObject {
         
         self.agoraKit?.setDefaultAudioRouteToSpeakerphone(true)
         // finally join channel
-        self.agoraKit?.delegate = self
         self.agoraKit?.joinChannel(byToken: convo.agoraToken, channelId: convo.id!, info: nil, uid: 0, joinSuccess: nil)
     }
     
@@ -218,15 +223,15 @@ class ConvoViewModel: NSObject, ObservableObject {
         let convoAgoraToken:String = convo!.agoraToken
         let channelName:String = convo!.id!
         
+        print("joining convo: \(channelName)")
+        
         self.agoraKit?.setDefaultAudioRouteToSpeakerphone(true)
         // finally join channel
-        self.agoraKit?.delegate = self
         self.agoraKit?.joinChannel(byToken: convoAgoraToken, channelId: channelName, info: nil, uid: 0, joinSuccess: nil)
     }
     
     // anyone can leave at any time
     func leaveConvo() {
-        self.agoraKit?.delegate = self
         agoraKit?.leaveChannel(nil)
         
         let userId = AuthSessionStore.getCurrentUserId()
@@ -288,6 +293,10 @@ class ConvoViewModel: NSObject, ObservableObject {
     
     func destroyInstance() {
         AgoraRtcEngineKit.destroy()
+    }
+    
+    func joinedConvoCallback() {
+        
     }
 }
 
