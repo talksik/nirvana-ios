@@ -94,23 +94,19 @@ struct CircleGridView: View {
                                         .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 20)
                                 }
                                 
-                                Text("\(convoUsers.count)")
+                                // top right number or people in convo
+                                Circle()
+                                    .frame(width: 20, height: 20)
+                                    .foregroundColor(Color.green)
+                                    .font(.title2)
                                     .padding(5)
-                                    .font(.caption)
-                                    .foregroundColor(Color.white)
-                                    .background(NirvanaColor.dimTeal)
-                                    .cornerRadius(100)
-                                
-                                
-        //                        ZStack(alignment: .bottom) {
-        //                            Color.clear
-        //
-        //                            Text("kev, sarth...")
-        //                                .foregroundColor(NirvanaColor.teal)
-        //                                .font(.caption)
-        //                        }
+                                    .overlay(
+                                        Text("\(convoUsers.count)")
+                                            .foregroundColor(Color.white)
+                                            .font(.caption2)
+                                    )
                             }
-                            .scaleEffect(self.animateLiveConvos ? scale + 0.2 : scale)
+                            .scaleEffect(scale)
                             .padding(scale * 5)
                         } // geometry reader
                         .offset(
@@ -137,11 +133,11 @@ struct CircleGridView: View {
                                 
                             }
                         }
-                        .animation(
-                            Animation.easeInOut(duration: self.convoVM.selectedConvoId == currConvo.id ? 2 : 4
-                                               ).repeatForever(autoreverses: true),
-                           value: self.animateLiveConvos
-                        )
+//                        .animation(
+//                            Animation.easeInOut(duration: 4).repeatForever(autoreverses: true),
+//                           value: self.animateLiveConvos
+//                        )
+                        .animation(Animation.spring())
                     }
                     
                     // active friends

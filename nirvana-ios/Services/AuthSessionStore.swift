@@ -227,6 +227,8 @@ extension AuthSessionStore {
                 print("up to date user: \(realtimeUpdatedUser)")
                 self?.user = realtimeUpdatedUser
                 self?.objectWillChange.send()
+                
+                self?.relevantUsersDict[currUserId!] = realtimeUpdatedUser
             }
         }
         

@@ -111,7 +111,7 @@ struct ConvoFooterView: View {
             x:0,
             y:self.convoVM.selectedConvoId == nil ? 150 : 0
         )
-        .onReceive(self.convoVM.$selectedConvoId) {newConvoId in
+        .onChange(of: self.convoVM.selectedConvoId) {newConvoId in
             // update meta data based on which convo was selected
             
             // reset the selected options to start fresh
