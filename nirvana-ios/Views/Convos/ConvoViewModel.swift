@@ -147,19 +147,13 @@ class ConvoViewModel: NSObject, ObservableObject {
                                 if convo == nil {
                                     continue
                                 }
-                                
-                                // if convo receiver is me and I'm not in a call or this call already, then join in
-                                // TODO: this still triggers when I am the receiver but leaving early in a three way call
-                                if convo!.receiverUserId == userId && !(self?.isInCall())!
-                                    && convo!.secondToLastUserEndedTimestamp == nil {
-                                    print("I am the direct receiver...joining convo")
-                                    self?.joinConvo(convo: convo!)
-                                }
-                                // if I am in a convo in which the last/loner has left, I need to leave the convo
-                                else if convo!.secondToLastUserEndedTimestamp != nil && (self?.isInCall())! && convo!.users.contains(userId!) {
+                                                                
+                                // if I am in a convo in which the second to last person has left, I need to leave the convo
+                                if convo!.secondToLastUserEndedTimestamp != nil && (self?.isInCall())! && convo!.users.contains(userId!) {
                                     print("I am the last one now... ending the convo")
                                     self?.leaveConvo()
-                                } //also if I am added after a receiver was added and I am not already in a convo, then join the call
+                                } // if I am added and I am not already in a/the convo, then join the convo
+                                // if convo receiver is me and I'm not in a call or this call already, then join in
                                 else if convo!.users.contains(userId!) && !(self?.isInCall())! {
                                     // should be free or online and not in another call unless it's a race condition
                                     print("I was added onto the call because I was free...joining automatically")
@@ -222,10 +216,9 @@ class ConvoViewModel: NSObject, ObservableObject {
                     return
                 }
                 
-                let _ = [userId] // just one user now, and that's me...but no one has joined yet
-                // only considered joined when I have officially joined the agora channel
+                let firstUsers = [userId, friendId] // adding myself and friend to the call
                 
-                let convo = Convo(id: channelName, leaderUserId: userId, receiverUserId: friendId, agoraToken: token!, state: .initialized, users: [], startedTimestamp: nil, endedTimestamp: nil)
+                let convo = Convo(id: channelName, leaderUserId: userId, receiverUserId: friendId, agoraToken: token!, state: .initialized, users: firstUsers, startedTimestamp: nil, endedTimestamp: nil)
                 
                 // create a convo/channel in db to notify the other user with proper attributes
                 self?.firestoreService.createConvo(convo: convo) {[weak self] res in
@@ -364,11 +357,12 @@ class ConvoViewModel: NSObject, ObservableObject {
             if updatedConvo!.users.count == 1 && updatedConvo!.users[0] == userId {
                 updatedConvo!.state = .complete
                 updatedConvo!.endedTimestamp = Date()
-            } // if I am second to last, the last guy is a loner
+            } // if I am second to last, the last guy is a loner and activate him to get out
             else if updatedConvo!.users.count == 2 && updatedConvo!.users.contains(userId!) {
                 updatedConvo!.secondToLastUserEndedTimestamp = Date()
             }
             
+            // remove me from the users array to omit me from the convo
             let updatedUsers: [String] = updatedConvo!.users.filter{ arrUserId in
                 return arrUserId != userId
             }
