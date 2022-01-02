@@ -115,13 +115,19 @@ struct CircleGridView: View {
                         .onTapGesture {
                             // if not in a call already
                             if !self.convoVM.isInCall() {
-                                self.convoVM.selectedConvoId = self.convoVM.relevantConvos[value].id!
-                                self.convoVM.joinConvo()
+                                print("joining convo now")
                                 
-                                // if had selected an individual, don't want them in here anymore
-                                self.selectedFriendIndex = nil
+                                if let convoId = currConvo.id {
+                                    self.convoVM.selectedConvoId = convoId
+                                    self.convoVM.joinConvo(convoId: convoId)
+                                    
+                                    // if had selected an individual, don't want them selected here anymore
+                                    self.selectedFriendIndex = nil
+                                }
+                                else {
+                                    print("no convo id to join")
+                                }
                                 
-                                return
                             }
                         }
                         .animation(

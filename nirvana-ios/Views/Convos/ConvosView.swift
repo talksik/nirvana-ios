@@ -52,7 +52,7 @@ struct ConvosView: View {
                         // if not in a call already
                         if !self.vm.isInCall() {
                             self.vm.selectedConvoId = self.vm.relevantConvos[index].id!
-                            self.vm.joinConvo()
+                            self.vm.joinConvo(convoId: currConvo.id!)
                             
                             return
                         }

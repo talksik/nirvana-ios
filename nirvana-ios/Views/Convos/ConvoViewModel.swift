@@ -200,17 +200,13 @@ class ConvoViewModel: NSObject, ObservableObject {
     /**
     Allow user to join an active convo
      */
-    func joinConvo() {
+    func joinConvo(convoId: String) {
         // ensure the convo is active and includes 2 people in it currently...shouldn't be shown if not anyway
         
-        // ensure that this user leaves all other channels
-        if self.isInCall() {
-            print("can't join another call, already in one")
-            return
-        }
+        // ensure that this user leaves all other channels        
         
         let convo = self.relevantConvos.first {convo in
-            convo.id == self.selectedConvoId
+            convo.id == convoId
         }
         
         if convo == nil {
