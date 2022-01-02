@@ -95,12 +95,12 @@ class ConvoViewModel: NSObject, ObservableObject {
                                 
                                 // if convo receiver is me and I'm not in a call or this call already, then join in
                                 if convo!.receiverUserId == userId && !(self?.isInCall())!
-                                    && convo!.receiverEndedTimestamp == nil {
+                                    && convo!.secondToLastUserEndedTimestamp == nil {
                                     print("I am the direct receiver...joining convo")
                                     self?.joinConvo(convo: convo!)
                                 }
                                 // if I am in a convo in which the last/loner has left, I need to leave the convo
-                                else if convo!.receiverEndedTimestamp != nil && (self?.isInCall())! && convo!.users.contains(userId!) {
+                                else if convo!.secondToLastUserEndedTimestamp != nil && (self?.isInCall())! && convo!.users.contains(userId!) {
                                     print("I am the last one now... ending the convo")
                                     self?.leaveConvo()
                                 } //also if I am added after a receiver was added and I am not already in a convo, then join the call
@@ -305,7 +305,7 @@ class ConvoViewModel: NSObject, ObservableObject {
                 updatedConvo!.endedTimestamp = Date()
             } // if I am second to last, the last guy is a loner
             else if updatedConvo!.users.count == 2 && updatedConvo!.users.contains(userId!) {
-                updatedConvo!.receiverEndedTimestamp = Date()
+                updatedConvo!.secondToLastUserEndedTimestamp = Date()
             }
             
             let updatedUsers: [String] = updatedConvo!.users.filter{ arrUserId in
@@ -324,11 +324,7 @@ class ConvoViewModel: NSObject, ObservableObject {
     
     func destroyInstance() {
         AgoraRtcEngineKit.destroy()
-    }
-    
-    func joinedConvoCallback() {
-        
-    }
+    }    
 }
 
 extension ConvoViewModel {
@@ -417,7 +413,10 @@ extension ConvoViewModel: AgoraRtcEngineDelegate {
                 case .success:
                     // update convo in database users array to let them know I am in now
                    
-                    updatedConvo!.users.append(userId!)
+                    // only add if I am not already in the users arr...if I was a third party, I should be in there already
+                    if !updatedConvo!.users.contains(userId!) {
+                        updatedConvo!.users.append(userId!)
+                    }
                     updatedConvo!.state = .active
                     
                     self?.firestoreService.updateConvo(convo: updatedConvo!) {[weak self] res in
