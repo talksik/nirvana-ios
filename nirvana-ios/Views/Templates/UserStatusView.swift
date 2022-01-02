@@ -20,15 +20,15 @@ struct UserStatusView: View {
                 .frame(width: size, height: size)
                 .foregroundColor(Color.green)
                 .padding(padding)
-        case .offline:
-            Circle()
-                .frame(width: size, height: size)
-                .foregroundColor(Color.red)
-                .padding(padding)
         case .inConvo:
             Circle()
                 .frame(width: size, height: size)
                 .foregroundColor(Color.orange)
+                .padding(padding)
+        case .background:
+            Circle()
+                .frame(width: size, height: size)
+                .foregroundColor(NirvanaColor.dimTeal)
                 .padding(padding)
         default:
             EmptyView()
@@ -41,3 +41,28 @@ struct UserStatusView: View {
 //        UserStatusView()
 //    }
 //}
+
+struct UserStatusTextView {
+    var status: UserStatus?
+    
+    var body: Text {
+        switch self.status {
+        case .online:
+            return Text("online")
+                .font(.caption2)
+                .foregroundColor(Color.green)
+        case .inConvo:
+            return Text("in convo")
+                .font(.caption2)
+                .foregroundColor(Color.orange)
+        case .background:
+            return Text("idle")
+                .font(.caption2)
+                .foregroundColor(NirvanaColor.dimTeal)
+        default:
+            return Text("offline")
+                .font(.caption2)
+                .foregroundColor(Color.gray)
+        }
+    }
+}

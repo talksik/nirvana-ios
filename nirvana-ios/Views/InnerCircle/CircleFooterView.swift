@@ -36,16 +36,7 @@ struct CircleFooterView: View {
                             .clipShape(Circle())
                             .overlay(alignment: .topTrailing) {
                                 // user status
-                                switch self.selectedFriend!.userStatus {
-                                case .online:
-                                    Circle()
-                                        .frame(width: 10, height: 10)
-                                        .foregroundColor(Color.green)
-                                case .offline:
-                                    EmptyView()
-                                default:
-                                    EmptyView()
-                                }
+                                UserStatusView(status: self.selectedFriend!.userStatus, size: 10)
                             }
                             .padding(5)
                             .contextMenu {
@@ -69,50 +60,34 @@ struct CircleFooterView: View {
                     // meta data of convo
                     VStack (alignment: .leading) {
                         if self.selectedFriend != nil {
-                            Text(self.selectedFriend!.nickname ?? "")
+                            Text((self.selectedFriend!.nickname ?? "") + " ")
                                 .font(.footnote)
                                 .foregroundColor(NirvanaColor.light)
-                        }
-                        if !self.convoRelativeTime.isEmpty && self.myTurn != nil {
-                            if self.myTurn! {
-                                Label("your turn", systemImage: "wave.3.right.circle.fill")
-                                    .foregroundColor(Color.orange)
-                                    .font(.caption)
-                            } else {
-                                Label("their turn", systemImage: "wave.3.right.circle.fill")
-                                    .foregroundColor(NirvanaColor.dimTeal)
-                                    .font(.caption)
+                            +
+                            UserStatusTextView(status: self.selectedFriend!.userStatus).body
+                            
+                            if !self.convoRelativeTime.isEmpty && self.myTurn != nil {
+                                if self.myTurn! {
+                                    Label("your turn", systemImage: "wave.3.right.circle.fill")
+                                        .foregroundColor(Color.orange)
+                                        .font(.caption)
+                                } else {
+                                    Label("their turn", systemImage: "wave.3.right.circle.fill")
+                                        .foregroundColor(NirvanaColor.dimTeal)
+                                        .font(.caption)
+                                }
+                                
+                                Text(self.convoRelativeTime)
+                                    .font(.caption2)
+                                    .foregroundColor(.gray)
                             }
                             
-                            Text(self.convoRelativeTime)
-                                .font(.caption2)
-                                .foregroundColor(.gray)
+                            
                         }
+                        
                     }
                     
                     Spacer()
-                    
-                    if self.selectedFriend != nil {
-                        // call button
-                        Button {
-                            print("calling user now")
-                            
-                            if self.selectedFriend?.phoneNumber != nil {
-                                let tel: String = "tel://\(self.selectedFriend!.phoneNumber!)"
-                                let strUrl: String = tel.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-                                
-                                UIApplication.shared.open(URL(string: strUrl)!, options: [:], completionHandler: nil)
-                            } else {
-                                print("phone number is nil of contact")
-                            }
-                        } label: {
-                            Label("Call", systemImage: "phone.and.waveform")
-                                .labelStyle(.iconOnly)
-                                .foregroundColor(NirvanaColor.teal)
-                                .padding()
-                                .font(.title2)
-                        }
-                    }
                 }
                 .frame(maxWidth: .infinity, maxHeight: 60) // 60 is the height of the footer control big circle
                 .background(Color.white.opacity(0.5))

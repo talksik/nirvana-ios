@@ -189,10 +189,10 @@ struct CircleGridView: View {
                                     print("activated long press!")
                                     
                                     // if in a convo, I don't want to have user footer show up
-                                    if self.convoVM.isInCall() {
-                                        print("can't select another friend because I am in a call...leave call first")
-                                        return
-                                    }
+//                                    if self.convoVM.isInCall() {
+//                                        print("can't select another friend because I am in a call...leave call first")
+//                                        return
+//                                    }
                                     
                                     // stop any player still playing of a message
                                     self.queuePlayer.removeAllItems()
