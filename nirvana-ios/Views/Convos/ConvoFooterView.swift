@@ -11,8 +11,10 @@ struct ConvoFooterView: View {
     @EnvironmentObject var convoVM: ConvoViewModel
     @EnvironmentObject var authSessionStore: AuthSessionStore
     
-    @State private var convoRelativeTime = "started 20 minutes ago"
+    @State private var convoRelativeTime = ""
     @State private var selectedConvo: Convo? = nil
+    
+    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
     var body: some View {
         
@@ -22,6 +24,11 @@ struct ConvoFooterView: View {
                 
                 HStack {
                     if self.selectedConvo != nil {
+                        // TODO: get their info for warm intros to be made
+//                        var unknownUsers = self.selectedConvo!.users.filter {userId in
+//                            return !self.authSessionStore.relevantUsersDict.keys.contains(userId)
+//                        }
+                        // the users which I have data for
                         let filteredUsers = self.authSessionStore.relevantUsersDict.filter {
                             return self.selectedConvo!.users.contains($0.key)
                         }
@@ -33,7 +40,7 @@ struct ConvoFooterView: View {
                                                                     
                         // meta data of convo
                         VStack (alignment: .leading) {
-                            ConvoUsernames(users: convoUsers)
+                            ConvoUsernames(users: convoUsers, unknownUserCount: self.selectedConvo!.users.count - convoUsers.count)
                             
                             switch self.convoVM.connectionState {
                             case .connecting:
@@ -119,17 +126,17 @@ struct ConvoFooterView: View {
                 return
             }
             
-            // reset the selected options to start fresh
-            self.convoRelativeTime = ""
-            
             self.selectedConvo = newConvos.first {convo in
                 convo.id == self.convoVM.selectedConvoId
             }
-            
-            // get relative start time of convo
-            let formatter = RelativeDateTimeFormatter()
-            formatter.unitsStyle = .full
-            self.convoRelativeTime = formatter.localizedString(for: self.selectedConvo?.startedTimestamp ?? Date(), relativeTo: Date())
+        }
+        .onReceive(timer) { _ in
+            if self.selectedConvo != nil {
+                // get relative start time of convo
+                let formatter = RelativeDateTimeFormatter()
+                formatter.unitsStyle = .full
+                self.convoRelativeTime = "started " + formatter.localizedString(for: self.selectedConvo?.startedTimestamp ?? Date(), relativeTo: Date())
+            }
         }
     }
 }
@@ -142,10 +149,11 @@ struct ConvoFooterView_Previews: PreviewProvider {
 
 struct ConvoUsernames: View {
     var users: [User]
+    var unknownUserCount: Int = 0
     
     var body: some View {
-        let userNames = self.users.map{$0.nickname ?? ""}.joined(separator: ",")
-        Text(userNames)
+        let userNames = self.users.map{$0.nickname ?? ""}.joined(separator: ", ")
+        Text(unknownUserCount > 0 ? "\(userNames), and \(unknownUserCount) other(s)": userNames)
             .font(.footnote)
             .foregroundColor(NirvanaColor.light)
     }

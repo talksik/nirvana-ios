@@ -102,7 +102,7 @@ struct CircleGridView: View {
                                     .font(.title2)
                                     .padding(5)
                                     .overlay(
-                                        Text("\(convoUsers.count)")
+                                        Text("\(currConvo.users.count)")
                                             .foregroundColor(Color.white)
                                             .font(.caption2)
                                     )
