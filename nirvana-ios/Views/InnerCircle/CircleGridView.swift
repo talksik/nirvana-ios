@@ -337,6 +337,9 @@ struct CircleGridView: View {
                 }
                 
                 self.animateLiveConvos = true
+            }// univseral alert TODO: move to inner circle view and use this pattern for all view models
+            .alert(item: self.$convoVM.error) {error in
+                error.alert
             }
         } // scrollview reader
     }
@@ -485,7 +488,6 @@ extension CircleGridView {
             return
         } // if I am in a convo, don't allow listening to a message or expanding details of a friend in my circle
         else if self.convoVM.isInCall() {
-            // TODO: show toast
             print("can't select this friend as you are in a convo")
             return
         }

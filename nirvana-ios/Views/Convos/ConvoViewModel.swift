@@ -8,10 +8,29 @@
 import Foundation
 import AgoraRtcKit
 import Firebase
+import SwiftUI
 
 class ConvoViewModel: NSObject, ObservableObject {
+    enum Error: Identifiable {
+        var id: Self { self }
+        
+        case notAuthenticated
+        case maxLimitUsers
+        case convoNotFound
+        
+        var alert: Alert {
+            switch self {
+            case .notAuthenticated:
+                return Alert(title: Text("Not Authenticated!"))
+            default:
+                return Alert(title: Text("There was a problem"))
+            }
+        }
+    }
+    
     @Published var selectedConvoId:String? = nil
     @Published var connectionState: AgoraConnectionStateType?
+    @Published var error: Error?
     
     let firestoreService = FirestoreService()
     private var db = Firestore.firestore()
@@ -464,3 +483,4 @@ extension ConvoViewModel: AgoraRtcEngineDelegate {
         self.selectedConvoId = nil
     }
 }
+
