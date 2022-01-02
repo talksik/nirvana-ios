@@ -471,6 +471,9 @@ extension CircleGridView {
         if self.authSessionStore.relevantUsersDict[friendId]?.userStatus == .online
             && self.authSessionStore.user?.userStatus == .online && !self.convoVM.isInCall() {
             print("starting a direct convo...getting it going")
+            
+            self.selectedFriendIndex = nil // deselect and clear up ui for the call
+            
             self.convoVM.startConvo(friendId: friendId)
             
             return
@@ -478,15 +481,17 @@ extension CircleGridView {
         else if self.convoVM.isInCall() && self.authSessionStore.relevantUsersDict[friendId]?.userStatus == .online {
             print("chaining the convo with more people...forcing someone else in")
             
+            self.selectedFriendIndex = nil // deselect and clear up ui for the call
+            
             self.convoVM.addThirdPartyToConvo(friendId: friendId)
             
             return
         } // if I am in a convo, don't allow listening to a message or expanding details of a friend in my circle
         else if self.convoVM.isInCall() {
+            // TODO: show toast
             print("can't select this friend as you are in a convo")
             return
         }
-        
         
         
         // clearing the player to make room for this friend's convo or to deselect this user
