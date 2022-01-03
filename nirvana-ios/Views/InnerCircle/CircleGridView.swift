@@ -357,6 +357,7 @@ struct CircleGridView: View {
                 } //lazygrid // TODO: add padding based on if we are on any cornering item to allow the bubble to enlargen
                 .padding(.trailing, Self.size / 2 + Self.spacingBetweenColumns / 2) // because of the offset of last column
                 .padding(.top, Self.size / 2 + Self.spacingBetweenRows / 2) // because we are going under the nav bar
+//                .id(UUID())
             }// scrollview
             .onAppear {
                 // scrolling to first person in grid

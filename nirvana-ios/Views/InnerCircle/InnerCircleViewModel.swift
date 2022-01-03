@@ -61,7 +61,7 @@ class InnerCircleViewModel: ObservableObject {
             case .problemSendingClip:
                 return AlertToast(displayMode: .hud, type: .error(Color.orange), title: "problem sending clip", subTitle: "please try again")
             case .startedClip:
-                return AlertToast(displayMode: .hud, type: .systemImage("waveform.circle.fill", Color.orange))
+                return AlertToast(displayMode: .hud, type: .systemImage("waveform.and.mic", Color.orange), subTitle: "you're on")
             default:
                 return AlertToast(displayMode: .hud, type: .error(Color.orange), title: "Something went wrong ‼️")
             }
@@ -116,6 +116,8 @@ extension InnerCircleViewModel {
             audioRecorder.prepareToRecord()
             audioRecorder.record()
             isRecording = true
+            
+            self.toast = .startedClip
             
             self.audioLocalUrl = filePath // setting this for later use when recording is stopped
             

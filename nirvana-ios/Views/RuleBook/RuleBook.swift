@@ -9,4 +9,6 @@ import Foundation
 
 class RuleBook {
     static let maxFriends = 8
+    static let maxUsersInConvo = 8
+    static let convoRelevancyAcceptance = 0.5 // anything above this number
 }

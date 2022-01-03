@@ -90,8 +90,6 @@ class ConvoViewModel: NSObject, ObservableObject {
         return self.selectedConvoId != nil
     }
     
-    static var maxUsersInConvo = 8
-    static var relevancyAcceptance = 0.5
     
     func initializeAgoraEngine() {
         self.agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: "c8dfd65deb5c4741bd564085627139d0", delegate: self)
@@ -198,7 +196,7 @@ class ConvoViewModel: NSObject, ObservableObject {
                                 let relevancyScore = Double(relevancyCount) / Double(convo.users.count)
                                 print("relevancy score: \(relevancyScore)")
                                 
-                                if relevancyScore > Self.relevancyAcceptance && convo.users.count > 1 { //offchance that it's just the one person in the convo right now, don't want to see it until there are at least 2 people
+                                if relevancyScore > RuleBook.convoRelevancyAcceptance && convo.users.count > 1 { //offchance that it's just the one person in the convo right now, don't want to see it until there are at least 2 people
                                     print("this convo counts as relevant!!!")
                                     
                                     return true
@@ -268,7 +266,7 @@ class ConvoViewModel: NSObject, ObservableObject {
         }
         
         // safe case, not really possible
-        if convo.users.count >= Self.maxUsersInConvo {
+        if convo.users.count >= RuleBook.maxUsersInConvo {
             self.toast = .maxLimitUsers
             return
         }
@@ -302,7 +300,7 @@ class ConvoViewModel: NSObject, ObservableObject {
             return
         }
         
-        if convo!.users.count >= Self.maxUsersInConvo {
+        if convo!.users.count >= RuleBook.maxUsersInConvo {
             self.toast = .maxLimitUsers
             return
         }
@@ -338,7 +336,7 @@ class ConvoViewModel: NSObject, ObservableObject {
         }
         
         // TODO: put as an environment variable
-        if convo!.users.count >= Self.maxUsersInConvo {
+        if convo!.users.count >= RuleBook.maxUsersInConvo {
             self.toast = .maxLimitUsers
             return
         }
