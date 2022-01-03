@@ -37,8 +37,10 @@ struct CircleFooterView: View {
                             .overlay(alignment: .topTrailing) {
                                 // user status
                                 ZStack(alignment: .topTrailing) {
-                                    ProgressBarView(progress: self.innerCircleVM.messagesListeningProgress, color: self.myTurn ?? false ? Color.orange : NirvanaColor.dimTeal)
-                                        .frame(width: 40, height: 40)
+                                    if self.myTurn ?? false {
+                                        ProgressBarView(progress: self.innerCircleVM.messagesListeningProgress, color: Color.orange)
+                                            .frame(width: 40, height: 40)
+                                    }
                                     
                                     UserStatusView(status: self.selectedFriend!.userStatus, size: 10)
                                 }
