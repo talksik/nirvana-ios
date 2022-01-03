@@ -47,9 +47,9 @@ class InnerCircleViewModel: ObservableObject {
             case .circlesPreview:
                 return AlertToast(displayMode: .hud, type: .systemImage("snowflake", NirvanaColor.dimTeal), title: "coming soon", subTitle: "group convos reinvented")
             case .removedFriend:
-                return AlertToast(displayMode: .alert, type: .complete(Color.green), title: "Done", subTitle: "removed friend")
+                return AlertToast(displayMode: .alert, type: .complete(Color.green), title: "removed friend", subTitle: "...tap to dismiss")
             case .addedFriend:
-                return AlertToast(displayMode: .alert, type: .complete(Color.green), title: "Done", subTitle: "added friend")
+                return AlertToast(displayMode: .alert, type: .complete(Color.green), title: "added friend", subTitle: "...tap to dismiss")
             case .cannotFriendYourself:
                 return AlertToast(displayMode: .hud, type: .error(Color.orange), title: "silly! 🙉", subTitle: "you cannot friend yourself")
             case .maxFriendsInCircle:
