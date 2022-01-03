@@ -143,6 +143,15 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         print("failed to register for remote notifications with error: \(error)")
     }
+    
+    /** when user kills the app process completely if it is in the background */
+    func applicationWillTerminate(_ application: UIApplication) {
+        // TODO: get user off of all live convos
+    
+        ConvoViewModel.leaveAnyConvo()
+        
+        print("user killed app, leaving convos if in any")
+    }
 }
 
 // cloud messaging

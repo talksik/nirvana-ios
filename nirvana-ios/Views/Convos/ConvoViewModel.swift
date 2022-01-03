@@ -389,26 +389,10 @@ class ConvoViewModel: NSObject, ObservableObject {
                 return
             }
             
-            var updatedConvo = convo
-            //update convo in database to show that I left...if I am the last person, also close out the channel
+            // handle edge cases
+            let updatedConvo = Self.updatedConvoOnLeaving(convo: convo!, userId: userId!)
             
-            // if I am the last one in the convo, then end the convo in the db
-            if updatedConvo!.users.count == 1 && updatedConvo!.users[0] == userId {
-                updatedConvo!.state = .complete
-                updatedConvo!.endedTimestamp = Date()
-            } // if I am second to last, the last guy is a loner and activate him to get out
-            else if updatedConvo!.users.count == 2 && updatedConvo!.users.contains(userId!) {
-                updatedConvo!.secondToLastUserEndedTimestamp = Date()
-            }
-            
-            // remove me from the users array to omit me from the convo
-            let updatedUsers: [String] = updatedConvo!.users.filter{ arrUserId in
-                return arrUserId != userId
-            }
-            
-            updatedConvo!.users = updatedUsers
-            
-            self?.firestoreService.updateConvo(convo: updatedConvo!) {[weak self] res in
+            self?.firestoreService.updateConvo(convo: updatedConvo) {[weak self] res in
                 self?.selectedConvoId = nil
                 
                 print("left convo officially in our db as well")
@@ -420,6 +404,75 @@ class ConvoViewModel: NSObject, ObservableObject {
                 }
             }
         }
+    }
+    
+    /** force leave for when the user quits a session and is in a call */
+    static func leaveAnyConvo() {
+        print("leaving any convos user may be in")
+        
+        let userId = AuthSessionStore.getCurrentUserId()
+        
+        if userId == nil {
+            print("not authenticated...can't leave any channels")
+            return
+        }
+        
+        let firestoreService = FirestoreService()
+        var db = Firestore.firestore()
+        
+        // get all live convos where I am in the users array
+        db.collection("convos").whereField("state", isEqualTo: ConvoState.active.rawValue).whereField("users", arrayContains: userId)
+            .getDocuments() {(querySnapshot, err) in
+                if let err = err {
+                    print("Error getting user's active friends: \(err)")
+                    return
+                }
+                
+                // for each...prolly just one...remove me from the list of users
+                for document in querySnapshot!.documents {
+                    var convo:Convo? = try? document.data(as: Convo.self)
+                    
+                    if convo == nil {
+                        continue
+                    }
+                    
+                    print(convo)
+                    
+                    // handle edge cases
+                    let updatedConvo = self.updatedConvoOnLeaving(convo: convo!, userId: userId!)
+                                        
+                    // send update back to firestore
+                    firestoreService.updateConvo(convo: updatedConvo) {res in
+                        print(res)
+                        
+                        AgoraRtcEngineKit.destroy()
+                    }
+                    
+                }
+            }
+    }
+    
+    static func updatedConvoOnLeaving(convo: Convo, userId: String) -> Convo {
+        var updatedConvo = convo
+        //update convo in database to show that I left...if I am the last person, also close out the channel
+        
+        // if I am the last one in the convo, then end the convo in the db
+        if updatedConvo.users.count == 1 && updatedConvo.users[0] == userId {
+            updatedConvo.state = .complete
+            updatedConvo.endedTimestamp = Date()
+        } // if I am second to last, the last guy is a loner and activate him to get out
+        else if updatedConvo.users.count == 2 && updatedConvo.users.contains(userId) {
+            updatedConvo.secondToLastUserEndedTimestamp = Date()
+        }
+        
+        // remove me from the users array to omit me from the convo
+        let updatedUsers: [String] = updatedConvo.users.filter{ arrUserId in
+            return arrUserId != userId
+        }
+        
+        updatedConvo.users = updatedUsers
+                
+        return updatedConvo
     }
     
     func destroyInstance() {

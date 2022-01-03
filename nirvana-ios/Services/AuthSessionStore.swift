@@ -276,7 +276,7 @@ extension AuthSessionStore {
                         continue
                     }
                     
-                    // create a listener for this specific user
+                    // create a listener for this specific friend if they are an active friend
                     let currFriendListener = self.db.collection("users").document(userFriend!.friendId)
                         .addSnapshotListener {documentSnapshot, error in
                             guard let document = documentSnapshot else {
