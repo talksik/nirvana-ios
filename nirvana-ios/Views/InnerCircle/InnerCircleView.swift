@@ -105,31 +105,6 @@ struct InnerCircleView: View {
             
             ConvoFooterView()
                 .environmentObject(self.convoViewModel)
-            
-            // helper for new users
-            // TODO: make it back to 1 instead of 10...testing
-            if self.authSessionStore.friendsArr.count == 1 && self.selectedFriendIndex == nil { // don't show if bottom metadata showing
-                ZStack(alignment: .bottomTrailing) {
-                    Color.clear
-
-                    Button {
-                        self.alertActive.toggle()
-                        self.alertText = "👆🏼It's simple!"
-                        self.alertSubtext = "Press and hold on a friend to send a message. \n Tap on them to listen!"
-                    } label: {
-                        Label("help!🙉", systemImage: "questionmark.circle")
-                            .font(.caption)
-                            .foregroundColor(NirvanaColor.teal)
-                            .padding(10)
-                            .background(.ultraThinMaterial)
-                            .shadow(radius: 10)
-                            .labelStyle(.titleOnly)
-                            .clipShape(Capsule())
-                    }
-                    .padding()
-                }
-                .transition(.slide)
-            }
         }
         .alert(self.alertText, isPresented: self.$alertActive) {
 
