@@ -8,8 +8,45 @@
 import Foundation
 import Contacts
 import SwiftUI
+import AlertToast
 
 class ContactsViewModel : ObservableObject {
+    @Published var toast: Toast? {
+        didSet {
+            self.showToast = true
+        }
+    }
+    @Published var showToast: Bool = false
+    
+    enum Toast: Identifiable {
+        var id: Self { self }
+        
+        case maxFriendsInCircle
+        case cannotFriendYourself
+        case addedFriend
+        case removedFriend
+        case fetchingContacts
+        
+        case generalError
+                
+        var view: AlertToast {
+            switch self {
+            case .fetchingContacts:
+                return AlertToast(displayMode: .hud, type: .systemImage("person.3.fill", NirvanaColor.dimTeal), title: "looking for friends")
+            case .removedFriend:
+                return AlertToast(displayMode: .hud, type: .complete(Color.green), title: "removed friend")
+            case .addedFriend:
+                return AlertToast(displayMode: .hud, type: .complete(Color.green), title: "added friend")
+            case .cannotFriendYourself:
+                return AlertToast(displayMode: .hud, type: .error(Color.orange), title: "silly! 🙉", subTitle: "you cannot friend yourself")
+            case .maxFriendsInCircle:
+                return AlertToast(displayMode: .hud, type: .systemImage("person.crop.circle.badge.exclamationmark.fill", Color.orange), title: "circle full!", subTitle: "tap on an existing friend and hold down on their icon in the bottom left to remove them to make space")
+            default:
+                return AlertToast(displayMode: .hud, type: .error(Color.orange), title: "Something went wrong ‼️")
+            }
+        }
+    }
+    
     @Published var showPermissionAlert = false
     @Published var contacts: [String: ContactsViewModelContact] = [:]
     
@@ -48,6 +85,8 @@ class ContactsViewModel : ObservableObject {
         fetchRequest.sortOrder = .userDefault
         
         do {
+            self.toast = .fetchingContacts
+            
             try store.enumerateContacts(with: fetchRequest) {[weak self](contact, stop) in
                 // only checking if american number or not for now
                 var cnPhoneNumber = contact.phoneNumbers.first?.value.stringValue
@@ -88,7 +127,6 @@ class ContactsViewModel : ObservableObject {
             }
         } catch  {
             print("Unable to fetch contacts. \(error)")
-            
         }
     }
     
@@ -97,6 +135,7 @@ class ContactsViewModel : ObservableObject {
         // make sure userId is not the same as friendId...don't want people friending themselves
         if userId == friendId {
             completion(ServiceState.error(ServiceError(description: "You cannot friend yourself, silly!")))
+            self.toast = .cannotFriendYourself
             return
         }
         

@@ -7,8 +7,58 @@
 
 import Foundation
 import AVFoundation
+import AlertToast
+import SwiftUI
 
 class InnerCircleViewModel: ObservableObject {
+    @Published var toast: Toast? {
+        didSet {
+            self.showToast = true
+        }
+    }
+    @Published var showToast: Bool = false
+    
+    enum Toast: Identifiable {
+        var id: Self { self }
+        
+        case startedClip
+        case problemSendingClip
+        case nothingRecorded
+        case clipSent
+        
+        case maxFriendsInCircle
+        case cannotFriendYourself
+        case addedFriend
+        case removedFriend
+        
+        case generalError
+        
+        
+        var view: AlertToast {
+            switch self {
+            case .removedFriend:
+                return AlertToast(displayMode: .hud, type: .complete(Color.green), title: "removed friend")
+            case .addedFriend:
+                return AlertToast(displayMode: .hud, type: .complete(Color.green), title: "added friend")
+            case .cannotFriendYourself:
+                return AlertToast(displayMode: .hud, type: .error(Color.orange), title: "silly! 🙉", subTitle: "you cannot friend yourself")
+            case .maxFriendsInCircle:
+                return AlertToast(displayMode: .hud, type: .systemImage("person.crop.circle.badge.exclamationmark.fill", Color.orange), title: "circle full!", subTitle: "tap on an existing friend and hold down on their icon in the bottom left to remove them to make space")
+            case .nothingRecorded:
+                return AlertToast(displayMode: .hud, type: .systemImage("exclamationmark.triangle.fill", NirvanaColor.teal), title: "nothing recorded", subTitle: "please try again")
+            case .clipSent:
+                return AlertToast(displayMode: .hud, type: .systemImage("paperplane.circle.fill", NirvanaColor.teal), title: "clip sent")
+            case .problemSendingClip:
+                return AlertToast(displayMode: .hud, type: .error(Color.orange), title: "problem sending clip", subTitle: "please try again")
+            case .startedClip:
+                return AlertToast(displayMode: .hud, type: .systemImage("waveform.circle.fill", NirvanaColor.teal), title: "clip started")
+            default:
+                return AlertToast(displayMode: .hud, type: .error(Color.orange), title: "Something went wrong ‼️")
+            }
+        }
+    }
+    
+    
     var audioRecorder : AVAudioRecorder!
     var audioPlayer : AVAudioPlayer!
     
@@ -21,7 +71,7 @@ class InnerCircleViewModel: ObservableObject {
     private let cloudStorageService = CloudStorageService()
     private let firestoreService = FirestoreService()
     private let pushNotificationService = PushNotificationService()
-    private let agoraService = AgoraService()
+    
     
     init() {
         // separate set up for listening vs recording
@@ -57,6 +107,8 @@ extension InnerCircleViewModel {
             audioRecorder.record()
             isRecording = true
             
+            self.toast = .startedClip
+            
             self.audioLocalUrl = filePath // setting this for later use when recording is stopped
             
         } catch {
@@ -81,6 +133,7 @@ extension InnerCircleViewModel {
             self.cloudStorageService.uploadLocalUrl(localFileUrl: self.audioLocalUrl!) {[weak self] audioDataUrl in
                 if audioDataUrl == nil {
                     print("there was an error in uploading file")
+                    self?.toast = .problemSendingClip
                     return
                 }
                 
@@ -90,17 +143,32 @@ extension InnerCircleViewModel {
                 self?.firestoreService.createMessage(message: newMessage) {[weak self] res in
                     print(res)
                     
-                    // sending push notification if there was a device token
-                    if receiver.deviceToken != nil && receiver.nickname != nil {
-                        self?.pushNotificationService.sendPushNotification(to: receiver.deviceToken!, title: "🌱Nirvana", body: "continue your conversation with \(sender.nickname ?? "your friend")")
+                    switch res {
+                    case .success:
+                        
+                        self?.toast = .clipSent
+                        
+                        // sending push notification if there was a device token for this friend
+                        if receiver.deviceToken != nil && receiver.nickname != nil {
+                            self?.pushNotificationService.sendPushNotification(to: receiver.deviceToken!, title: "🌱Nirvana", body: "continue your conversation with \(sender.nickname ?? "your friend")")
+                        }
+                        
+                        // delete local audio file from user's phone so that it doesn't take crazy space
+                        print("stopped recording: file about to get deleted from \(self?.getTemporaryDirectory()) with filename: \(self?.audioLocalUrl)")
+                        
+                        try? FileManager.default.removeItem(at: (self?.audioLocalUrl)!)
+                    case .error(let err):
+                        print(err)
+                        self?.toast = .problemSendingClip
+                    default:
+                        self?.toast = .problemSendingClip
                     }
-                    
-                    // delete local audio file from user's phone so that it doesn't get crazy
-                    print("stopped recording: file about to get deleted from \(self?.getTemporaryDirectory()) with filename: \(self?.audioLocalUrl)")
-                    
-                    try? FileManager.default.removeItem(at: (self?.audioLocalUrl)!)
                 }
             }
+        }
+        else {
+            print("nothing recorded, can't send")
+            self.toast = .problemSendingClip
         }
     }
     
@@ -123,11 +191,12 @@ extension InnerCircleViewModel {
 
 // handle activating or deactivating friends
 extension InnerCircleViewModel {
-    func activateOrDeactiveInboxUser(activate: Bool, userId: String, friendId: String, completion: @escaping((_ state: ServiceState) -> ()))  {
+    func activateOrDeactiveInboxUser(activate: Bool, userId: String, friendId: String)  {
         // validation
         // make sure userId is not the same as friendId...don't want people friending themselves
         if userId == friendId {
-            completion(ServiceState.error(ServiceError(description: "You cannot friend yourself, silly!")))
+            print("you cannot friend yourself")
+            self.toast = .cannotFriendYourself
             return
         }
         
@@ -135,7 +204,20 @@ extension InnerCircleViewModel {
         var userFriend = UserFriends(userId: userId, friendId: friendId, isActive: activate, lastUpdatedTimestamp: nil)
         
         self.firestoreService.createOrUpdateUserFriends(userFriend: userFriend, activateOrDeactivate: activate) {[weak self] res in
-            completion(res)
+            switch res {
+            case .success:
+                if activate {
+                    self?.toast = .addedFriend
+                }
+                else {
+                    self?.toast = .removedFriend
+                }
+            case .error(let err):
+                print(err)
+                self?.toast = .generalError
+            default:
+                self?.toast = .generalError
+            }
         }
     }
 }
@@ -145,16 +227,4 @@ extension InnerCircleViewModel {
     func updateMessageListenCount() {
         
     }
-}
-
-// everything related to calls and such
-extension InnerCircleViewModel {
-    func getAgoraToken() {
-        if let uid = AuthSessionStore.getCurrentUserId() {
-            self.agoraService.getAgoraUserTokenServer(channelName: uid)
-        }
-        else {
-            print("no user authenticated to get an agora token")
-        }
-    }    
 }

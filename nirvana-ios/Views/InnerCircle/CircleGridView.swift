@@ -131,7 +131,6 @@ struct CircleGridView: View {
                                 else {
                                     print("no convo id to join")
                                 }
-                                
                             }
                             else {
                                 self.convoVM.toast = .alreadyInCall
@@ -308,17 +307,17 @@ struct CircleGridView: View {
                                 message: Text(self.alertSubtext),
                                 primaryButton: .destructive(Text("Reject"), action: {
                                     // create user friend but a rejected one
-                                    if self.authSessionStore.friendsArr.count < 10 || self.authSessionStore.user?.phoneNumber == "+19499230445" {
-                                        self.innerCircleVM.activateOrDeactiveInboxUser(activate: false, userId: self.authSessionStore.user!.id!, friendId: inboxUserId) { res in
-                                            print(res)
-                                        }
-                                    }
+                                    self.innerCircleVM.activateOrDeactiveInboxUser(activate: false, userId: self.authSessionStore.user!.id!, friendId: inboxUserId)
                                 }),
                                 secondaryButton: .default(Text("Add"), action: {
-                                    // create user friend
-                                    self.innerCircleVM.activateOrDeactiveInboxUser(activate: true, userId: self.authSessionStore.user!.id!, friendId: inboxUserId) { res in
-                                        print(res)
+                                    // create user friend if have space in circle
+                                    // TODO: view models should be able to do this validation, need some way of view models to speak to each other
+                                    if self.authSessionStore.friendsArr.count >= 10 {
+                                        self.innerCircleVM.toast = .maxFriendsInCircle
+                                        return
                                     }
+                                    
+                                    self.innerCircleVM.activateOrDeactiveInboxUser(activate: true, userId: self.authSessionStore.user!.id!, friendId: inboxUserId)
                                 })
                             )
                         }

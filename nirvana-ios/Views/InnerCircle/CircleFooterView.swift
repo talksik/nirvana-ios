@@ -43,11 +43,9 @@ struct CircleFooterView: View {
                                 Button(role: .destructive) {
                                     print("deactivating friend...removing from circle")
                                     if self.authSessionStore.user?.id != nil && self.selectedFriendIndex != nil {
-                                        self.innerCircleVM.activateOrDeactiveInboxUser(activate: false, userId: self.authSessionStore.user!.id!, friendId: self.selectedFriendIndex!) {res in
-                                            
-                                            print(res)
-                                            self.selectedFriendIndex = nil // making this footer disappear although a view change should do this
-                                        }
+                                        self.innerCircleVM.activateOrDeactiveInboxUser(activate: false, userId: self.authSessionStore.user!.id!, friendId: self.selectedFriendIndex!)
+                                        
+                                        self.selectedFriendIndex = nil
                                     }
                                 } label: {
                                     Label("Remove from Circle", systemImage: "person.crop.circle.fill.badge.minus")

@@ -8,6 +8,7 @@
 import SwiftUI
 import Contacts
 import NavigationStack
+import AlertToast
 
 struct FindFriendsView: View {
     @EnvironmentObject var navigationStack : NavigationStack
@@ -51,6 +52,9 @@ struct FindFriendsView: View {
         .navigationViewStyle(StackNavigationViewStyle())
         .onAppear {
             self.contactsVM.fetchContacts()
+        }
+        .toast(isPresenting: self.$contactsVM.showToast) {
+            self.contactsVM.toast?.view ?? AlertToast(displayMode: .hud, type: .error(Color.red), title: "Something went wrong")
         }
     }
     
@@ -134,24 +138,28 @@ struct ListContactRow: View {
                     primaryButton: .default(Text("Cancel")),
                     secondaryButton: .default(Text("Confirm")) {
                         print("adding contact to circle")
-                        // call method in vm to get it done, then navigate to the circle
-                        if self.authSessionStore.friendsArr.count < 10 || self.authSessionStore.user?.phoneNumber == "+19499230445" {                            
-                            self.contactsVM.addOrActivateFriendToCircle(userId: self.authSessionStore.user!.id!, friendId: (contact.user!.id)!) {res in
-                                print(res)
-                                
-                                switch res {
-                                case .error(let err):
-                                    print(err)
-                                case .success(let str):
-                                    print(str)
-                                }
-                            }
+                        if self.authSessionStore.friendsArr.count >= 10 {
+                            self.contactsVM.toast = .maxFriendsInCircle
+                            return
+                        }
+                        
+                        self.contactsVM.addOrActivateFriendToCircle(userId: self.authSessionStore.user!.id!, friendId: (contact.user!.id)!) {res in
+                            print(res)
                             
-                            self.navigationStack.push(InnerCircleView())
+                            switch res {
+                            case .error(let err):
+                                print(err)
+                                self.contactsVM.toast = .generalError
+                            case .success(let str):
+                                print(str)
+                                self.contactsVM.toast = .addedFriend
+                                self.navigationStack.push(InnerCircleView())
+                            }
                         }
                     }
                 )
             }
+            
         }
         else { // invite button to text the person
             HStack(alignment: .center, spacing: 0) {

@@ -153,6 +153,9 @@ struct InnerCircleView: View {
         .toast(isPresenting: self.$convoViewModel.showToast) {
             self.convoViewModel.toast?.view ?? AlertToast(displayMode: .hud, type: .error(Color.red), title: "Something went wrong")
         }
+        .toast(isPresenting: self.$innerCircleVM.showToast) {
+            self.innerCircleVM.toast?.view ?? AlertToast(displayMode: .hud, type: .error(Color.red), title: "Something went wrong")
+        }
 //        .onDisappear {
 //            print("deiniting data listeners, but current data should still be cached!")
 //
