@@ -517,6 +517,12 @@ extension CircleGridView {
     // listening to messages
     private func handleTap(gridItemIndex: Int, friendId: String) {
         print("tap gesture activated")
+        
+        // don't want user tapping on someone if they are in a call, but they can send a message by pressing and holding
+        if self.convoVM.isInCall() {
+            self.convoVM.toast = .alreadyInCall
+            return
+        }
                         
         // clearing the player to make room for this friend's convo or to deselect this user
         self.queuePlayer.removeAllItems()
