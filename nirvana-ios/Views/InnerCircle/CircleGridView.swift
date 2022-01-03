@@ -174,7 +174,8 @@ struct CircleGridView: View {
                             x: honeycombOffSetX(adjustedValue),
                             y: 0
                         )
-                        .id(friendId) // id for scrollviewreader
+                        .blur(radius: self.getBlur(friendDbId: friendId))
+                        .id(friendId) // id for scrollviewreader TODO: not forcing an update if we add another friend...problem with the grid changing
                         .frame(height: Self.size)
                         .simultaneousGesture(
                             TapGesture()
@@ -386,6 +387,22 @@ struct CircleGridView: View {
         return false
     }
     
+    /**
+     dynamic blur control based on if we are recording to a particular friend or not
+     */
+    private func getBlur(friendDbId: String) -> CGFloat {
+        // if we have selected this user and we are recording currently, then don't want to blur this one at all
+        if self.selectedFriendIndex == friendDbId {
+            return 0
+        }
+        // if recording, and have someone selected, then want to blur everyone else
+        else if self.innerCircleVM.isRecording && friendDbId != self.selectedFriendIndex {
+            return 8
+        }
+        
+        return 0
+    }
+    
     private func getBubbleTint(friendDbId: String) -> Color {
         // TODO: check if I listened to the message before or not
         if self.haveNewMessageFromFriend(friendDbId: friendDbId) { // this friend has a message for me
@@ -423,6 +440,12 @@ extension CircleGridView {
     private func getScale(proxy: GeometryProxy, itemNumber: Int, userId: String? = nil, convoId: String? = nil) -> CGFloat {
         // if this user is selected
         if userId != nil && userId == self.selectedFriendIndex {
+            
+            // make it even bigger if we are recording
+            if self.innerCircleVM.isRecording {
+                return big + 1
+            }
+            
             return big + 0.2
         }
         

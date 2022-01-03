@@ -238,7 +238,7 @@ extension AuthSessionStore {
         
         // MARK: keeping the friends list updated
         // TODO: break into firestoreService metadata of each change...later tho since this listener will barely get changes
-        let friendsListener = db.collection("user_friends").whereField("userId", isEqualTo: currUserId).limit(to: 100)
+        let friendsListener = db.collection("user_friends").whereField("userId", isEqualTo: currUserId).order(by: "createdTimestamp", descending: false)
             .addSnapshotListener { querySnapshot, error in
                 print("friends listener activated")
                 
@@ -297,7 +297,7 @@ extension AuthSessionStore {
                                     
                                     // update current friendsArr if the friend is already there
                                     if let indexFriend = self.friendsArr.firstIndex(of: userFriend!.friendId) {
-                                        print("friend already in the friends arr, just needed to update the relevantusersdict")
+                                        print("friend already in the friends arr, prolly just a change to the friends status or profile")
                                     } else { // new friend not in array
                                         self.friendsArr.append(userFriend!.friendId)
                                     }
