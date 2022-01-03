@@ -10,6 +10,14 @@ import Firebase
 import GoogleSignIn
 import FirebaseMessaging
 
+// global print functions override
+public func print(_ object: Any...) {
+    #if DEBUG
+    Swift.print(object)
+    #endif
+}
+
+
 @main
 struct nirvana_iosApp: App {
     @StateObject var authSessionStore: AuthSessionStore = AuthSessionStore()
