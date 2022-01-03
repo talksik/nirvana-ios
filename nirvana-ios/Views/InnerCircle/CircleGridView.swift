@@ -16,9 +16,6 @@ struct CircleGridView: View {
     @EnvironmentObject var navigationStack: NavigationStack
     @EnvironmentObject var convoVM: ConvoViewModel
     
-    @State var queuePlayer = AVQueuePlayer()
-    @State var timeObserverToken: Any?
-    
     @GestureState var dragState = DragState.inactive
     
     let universalSize = UIScreen.main.bounds
@@ -158,6 +155,11 @@ struct CircleGridView: View {
                                     .blur(radius: 8)
                                     .cornerRadius(100)
                                 
+                                if self.haveNewMessageFromFriend(friendDbId: friendId) {
+                                    ProgressBarView(progress: self.selectedFriendIndex == friendId ? self.innerCircleVM.messagesListeningProgress : Float(1), color: Color.orange)
+                                }
+                                
+                                
                                 // user status
                                 UserStatusView(status: self.authSessionStore.relevantUsersDict[friendId]?.userStatus, size: 20, padding: 5)
 
@@ -191,7 +193,7 @@ struct CircleGridView: View {
                                     self.activateHaptics()
                                     
                                     // stop any player still playing of a message
-                                    self.queuePlayer.removeAllItems()
+                                    self.innerCircleVM.stopPlayingAnyAudio()
                                     
                                     // if friend and I are online, and I am not in a convo, start convo immediately with them
                                     if self.authSessionStore.relevantUsersDict[friendId]?.userStatus == .online
@@ -523,9 +525,9 @@ extension CircleGridView {
             self.convoVM.toast = .alreadyInCall
             return
         }
-                        
-        // clearing the player to make room for this friend's convo or to deselect this user
-        self.queuePlayer.removeAllItems()
+        
+        // when deselecting, want to stop playing
+        self.innerCircleVM.stopPlayingAnyAudio()
          
         // if user had previously selected user, put nil as a toggle
         if self.selectedFriendIndex == friendId {
@@ -535,17 +537,13 @@ extension CircleGridView {
             self.selectedFriendIndex = friendId
         }
         
-        // TODO: OPTIMIZATION...buffer and load all AVAssets to create AVPlayerItems before a tap happens...but this can also cause load in background if user is not playing a message right now...this isn't an optimization of the data/firestore but rather the player
-        
         // I want to play the last x messages if I was the receiver...the array is sorted from backend so that the
         // most recent comes first
         // ["sarth": [ME, HIM...]] -> play nothing
         // ["sarth": [HIM, HIM, me, him...]] -> play his two messages
         
         // traverse through reversed list of messages and add to audio player queue
-        // TODO: protect against force unwraps
-        var AVPlayerItems: [AVPlayerItem] = []
-        var AVAssets: [AVAsset] = []
+        var audioUrls: [URL] = []
         let messagesRelatedToFriend = self.authSessionStore.relevantMessagesByUserDict[friendId] ?? []
         
         if messagesRelatedToFriend.count == 0 {
@@ -553,7 +551,6 @@ extension CircleGridView {
         }
         
         for message in messagesRelatedToFriend {
-            print("message: the sender is \(message.senderId) and senttime: \(message.sentTimestamp)")
             // if it's starting to get to my messages then don't play
             if message.senderId == self.authSessionStore.user?.id {
                 break
@@ -561,88 +558,12 @@ extension CircleGridView {
             
             // only add to queue if we can convert the database url to a valid url here
             if let audioUrl = URL(string: message.audioDataUrl) {
-                let playerMessage: AVPlayerItem = AVPlayerItem(url: audioUrl)
-                let playerAsset: AVAsset = AVAsset(url: audioUrl)
-                AVAssets.append(playerAsset)
-                AVPlayerItems.append(playerMessage)
+                audioUrls.append(audioUrl)
             }
         }
         
-        // start playing if there are messages to listen to
-        if AVPlayerItems.count > 0 {
-            print("have \(AVPlayerItems.count) messages to play")
-            
-            // reverse the items because we want to listen to the most recent messages in order
-            AVPlayerItems = AVPlayerItems.reversed()
-            queuePlayer = AVQueuePlayer(items: AVPlayerItems)
-            
-            // TODO: make sure these options are viable for different scenarios
-            queuePlayer.automaticallyWaitsToMinimizeStalling = false
-            queuePlayer.playImmediately(atRate: 1)
-//                                queuePlayer.play()
-            
-            print("player queued up items!!!")
-            
-            // notify every half second
-//            let timeScale = CMTimeScale(NSEC_PER_SEC)
-//            let time = CMTime(seconds: 0.5, preferredTimescale: timeScale)
-            
-//            timeObserverToken = queuePlayer.addPeriodicTimeObserver(forInterval: time, queue: .main) {time in
-//                // update player transport UI
-//                print("periodic time observer: \(time)")
-//                // if the current playeritem is the latest one:
-//                // 1. deselect this user
-//                // 2. update databse that I listened to this
-//                if queuePlayer.currentItem == AVPlayerItems.last {
-//                    // hide the footer now...ehhh don't need to
-////                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-////                        self.selectedFriendIndex = nil
-////                    }
-//                }
-//            }
-            
-            // TODO: right now not updating all of that
-            // update the listencount and firstlistentimestamp of those messages in firestore
-            // this should update ui to show that there is no message to show
-        }
-    }
-    
-    
-    
-    func addBoundaryTimeObserver(playerAssets: [AVAsset]) {
-        var totalDuration = CMTime.zero
-        for item in playerAssets {
-            print(item.duration)
-            totalDuration = CMTimeAdd(item.duration, totalDuration)
-        }
-        print(totalDuration)
-        
-        // Divide the total duration into quarters.
-        let interval = CMTimeMultiplyByFloat64(totalDuration, multiplier: 0.95)
-        var currentTime = CMTime.zero
-        var times = [NSValue]()
-
-        // Calculate boundary times
-        while currentTime < totalDuration {
-            currentTime = currentTime + interval
-            times.append(NSValue(time:currentTime))
-        }
-
-        print(times)
-        
-        timeObserverToken = queuePlayer.addBoundaryTimeObserver(forTimes: times,
-                                                           queue: DispatchQueue.main) {
-            // Update UI
-            print("activated time boundary")
-        }
-        
-    }
-    
-    func removeBoundaryTimeObserver() {
-        if let timeObserverToken = timeObserverToken {
-            self.queuePlayer.removeTimeObserver(timeObserverToken)
-            self.timeObserverToken = nil
-        }
+        // plays everything from vm
+        self.innerCircleVM.playAssets(audioUrls: audioUrls)
     }
     
     enum DragState {

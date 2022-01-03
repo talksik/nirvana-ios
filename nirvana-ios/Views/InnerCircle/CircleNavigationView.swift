@@ -128,7 +128,6 @@ struct CircleNavigationView: View {
                                     .animation(.spring())
                             }
                     }
-                    
                 }
             }
             

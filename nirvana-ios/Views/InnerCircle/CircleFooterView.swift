@@ -36,7 +36,12 @@ struct CircleFooterView: View {
                             .clipShape(Circle())
                             .overlay(alignment: .topTrailing) {
                                 // user status
-                                UserStatusView(status: self.selectedFriend!.userStatus, size: 10)
+                                ZStack(alignment: .topTrailing) {
+                                    ProgressBarView(progress: self.innerCircleVM.messagesListeningProgress, color: self.myTurn ?? false ? Color.orange : NirvanaColor.dimTeal)
+                                        .frame(width: 40, height: 40)
+                                    
+                                    UserStatusView(status: self.selectedFriend!.userStatus, size: 10)
+                                }
                             }
                             .padding(5)
                             .contextMenu {
@@ -79,13 +84,12 @@ struct CircleFooterView: View {
                                     .font(.caption2)
                                     .foregroundColor(.gray)
                             }
-                            
-                            
                         }
                         
                     }
                     
                     Spacer()
+                    
                 }
                 .frame(maxWidth: .infinity, maxHeight: 60) // 60 is the height of the footer control big circle
                 .background(Color.white.opacity(0.5))
