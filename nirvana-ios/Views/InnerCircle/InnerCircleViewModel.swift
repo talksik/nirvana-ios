@@ -75,7 +75,8 @@ class InnerCircleViewModel: NSObject, ObservableObject {
     
     @Published var isRecording : Bool = false
     
-    @Published var messagesListeningProgress: Float = 0.0
+    @Published var messagesListeningProgress: Float = 1.0
+    static let multiplier: Float64 = 0.05
     
     let audioSession = AVAudioSession.sharedInstance()
     
@@ -250,22 +251,17 @@ extension InnerCircleViewModel {
         self.queuePlayer.removeAllItems()
     }
     
-    // TODO: print statements slowing it down?
     func playAssets(audioUrls: [URL]) {
         // clearing the player to make room for this friend's convo or to deselect this user
         self.stopPlayingAnyAudio()
         
-        var totalMessagesDurationSeconds = CMTime.zero
         var AVPlayerItems: [AVPlayerItem] = []
         for url in audioUrls {
             let asset = AVAsset(url: url)
             let playerItem = AVPlayerItem(asset: asset)
-            
-            totalMessagesDurationSeconds = CMTimeAdd(totalMessagesDurationSeconds, asset.duration)
 
             // notification for when each playeritem is done playing
 //            NotificationCenter.default.addObserver(self, selector: #selector(self.playerDidFinishPlaying(sender:)), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: playerItem)
-
             
             AVPlayerItems.append(playerItem)
         }
@@ -276,38 +272,36 @@ extension InnerCircleViewModel {
         }
         
         // start playing if there are messages to listen to
-        print("have \(AVPlayerItems.count) messages and \(totalMessagesDurationSeconds) seconds to play")
+        print("have \(AVPlayerItems.count) messages to play")
         
         // reverse the items because we want to listen to the most recent messages in order
         AVPlayerItems = AVPlayerItems.reversed()
         
         // TODO: make sure these options are viable for different scenarios
         self.queuePlayer = AVQueuePlayer(items: AVPlayerItems)
-        self.queuePlayer.automaticallyWaitsToMinimizeStalling = false
-        self.queuePlayer.playImmediately(atRate: 1)
-//                                queuePlayer.play()
+        self.queuePlayer.play()
         
         print("player queued up items!!!")
         
-        self.addBoundaryTimeObserver(totalDuration: totalMessagesDurationSeconds)
+        // reset progress
+        self.messagesListeningProgress = Float(Self.multiplier * 2)
         
-        // TODO: right now not updating all of that
-        // update the listencount and firstlistentimestamp of those messages in firestore
-        // this should update ui to show that there is no message to show
-        
+        DispatchQueue.global(qos: .background).async {
+            self.addBoundaryTimeObserver(playerItems: AVPlayerItems)
+        }
     }
     
-    func addBoundaryTimeObserver(totalDuration: CMTime) {
-        var multiplier: Float64 = 0.05
-        
-        // reset progress
-        self.messagesListeningProgress = Float(multiplier * 2)
+    func addBoundaryTimeObserver(playerItems: [AVPlayerItem]) {
+        var totalDuration = CMTime.zero
+        for item in playerItems {
+            totalDuration = CMTimeAdd(totalDuration, item.asset.duration)
+        }
         
         var times = [NSValue]()
         // Set initial time to zero
         var currentTime = CMTime.zero
         // Divide the asset's duration into quarters.
-        let interval = CMTimeMultiplyByFloat64(totalDuration, multiplier: multiplier)
+        let interval = CMTimeMultiplyByFloat64(totalDuration, multiplier: Self.multiplier)
         
         // Build boundary times based on multiplier
         while currentTime <= totalDuration {
@@ -321,7 +315,7 @@ extension InnerCircleViewModel {
         // TODO: not hitting the last one/100%
         self.queuePlayer.addBoundaryTimeObserver(forTimes: times, queue: .main) { [weak self] in
             // Update UI
-            self?.messagesListeningProgress += Float(multiplier)
+            self?.messagesListeningProgress += Float(Self.multiplier)
         }
     }
     
