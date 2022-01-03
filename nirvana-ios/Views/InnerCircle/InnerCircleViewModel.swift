@@ -37,9 +37,9 @@ class InnerCircleViewModel: ObservableObject {
         var view: AlertToast {
             switch self {
             case .removedFriend:
-                return AlertToast(displayMode: .hud, type: .complete(Color.green), title: "removed friend")
+                return AlertToast(displayMode: .alert, type: .complete(Color.green), title: "Done", subTitle: "removed friend")
             case .addedFriend:
-                return AlertToast(displayMode: .hud, type: .complete(Color.green), title: "added friend")
+                return AlertToast(displayMode: .alert, type: .complete(Color.green), title: "Done", subTitle: "added friend")
             case .cannotFriendYourself:
                 return AlertToast(displayMode: .hud, type: .error(Color.orange), title: "silly! 🙉", subTitle: "you cannot friend yourself")
             case .maxFriendsInCircle:
