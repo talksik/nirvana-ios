@@ -13,10 +13,6 @@ struct CircleNavigationView: View {
     @EnvironmentObject var navigationStack: NavigationStack
     @EnvironmentObject var authSessionStore: AuthSessionStore
     
-    @Binding var alertActive: Bool
-    @Binding var alertText: String
-    @Binding var alertSubtext: String
-    
     var body: some View {
         HStack(alignment: .center) {
             Menu {
@@ -94,17 +90,45 @@ struct CircleNavigationView: View {
                             }
                         }
                 } else {
-                    Image((self.authSessionStore.user?.avatar)!)
-                        .resizable()
-                        .scaledToFit()
-                        .background(self.innerCircleVM.isRecording ? Color.orange : Color.teal.opacity(0.5))
-                        .frame(width: 40, height: 40)
-                        .clipShape(Circle())
-                        .shadow(radius: 10)
-                        .overlay(alignment: .topTrailing) {
-                            // user status
-                            UserStatusView(status: self.authSessionStore.user?.userStatus, size: 10)
-                        }
+                    ZStack {
+                        // more animations on recording
+                        Circle()
+                            .foregroundColor(Color.orange.opacity(0.3))
+                            .frame(width: 39, height: 39)
+                            .scaleEffect(self.innerCircleVM.isRecording ? 1.3: 1)
+                            .animation(self.innerCircleVM.isRecording ? Animation.easeIn(duration: 2).repeatForever(autoreverses: true) : .default, value: self.innerCircleVM.isRecording)
+                        Circle()
+                            .foregroundColor(Color.orange.opacity(0.5))
+                            .frame(width: 39, height: 39)
+                            .scaleEffect(self.innerCircleVM.isRecording ? 1.2: 1)
+                            .animation(self.innerCircleVM.isRecording ? Animation.easeOut(duration: 2).repeatForever(autoreverses: true) : .default, value: self.innerCircleVM.isRecording)
+                        Circle()
+                            .foregroundColor(Color.orange)
+                            .frame(width: 40, height: 40)
+                            .scaleEffect(self.innerCircleVM.isRecording ? 1.1: 1)
+                            .animation(self.innerCircleVM.isRecording ? Animation.easeInOut.repeatForever(autoreverses: false) : .default, value: self.innerCircleVM.isRecording)
+                        
+                        Image((self.authSessionStore.user?.avatar)!)
+                            .resizable()
+                            .scaledToFit()
+                            .background(Color.teal.opacity(0.5))
+                            .frame(width: 40, height: 40)
+                            .clipShape(Circle())
+                            .shadow(radius: 10)
+                            .overlay(alignment: .topTrailing) {
+                                // user status
+                                UserStatusView(status: self.authSessionStore.user?.userStatus, size: 10)
+                                    .scaleEffect(self.innerCircleVM.isRecording ? 0: 1)
+                                
+                                // animation on recording
+                                Image(systemName: "waveform.circle.fill")
+                                    .scaleEffect(self.innerCircleVM.isRecording ? 1: 0)
+                                    .frame(width: 10)
+                                    .foregroundColor(Color.orange)
+                                    .animation(.spring())
+                            }
+                    }
+                    
                 }
             }
             
@@ -129,11 +153,7 @@ struct CircleNavigationView: View {
                 
                     
                     Button {
-                        self.alertActive.toggle()
-                        
-                        self.alertText = "❄️ Coming Soon!"
-                        
-                        self.alertSubtext = "Stay posted for buttery smooth convos with groups! We will be limiting you to 3 circles!"
+                        self.innerCircleVM.toast = .circlesPreview
                     } label: {
                         Label("circles", systemImage: "circle.hexagongrid")
                             .font(.caption2)
@@ -147,14 +167,26 @@ struct CircleNavigationView: View {
                     }
                     
                     Button {
-                        self.alertActive.toggle()
-                        
-                        self.alertText = "💼 Coming Soon!"
-                        
-                        self.alertSubtext = "Efficient and more authentic communication for teams! Contact us for more info."
+                        self.innerCircleVM.toast = .remoteWorkPreview
                         
                     } label: {
                         Label("work", systemImage: "suitcase")
+                            .font(.caption2)
+                            .foregroundColor(Color.gray)
+                            .padding(.vertical, 10)
+                            .padding(.horizontal, 8)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 20, style: .continuous)
+                                    .strokeBorder(Color.white.opacity(1), lineWidth: 1)
+                            )
+                    }
+                    
+                    Button {
+                        self.innerCircleVM.toast = .moreSpacesPreview
+                        
+                    } label: {
+                        Label("more spaces", systemImage: "plus")
+                            .labelStyle(.iconOnly)
                             .font(.caption2)
                             .foregroundColor(Color.gray)
                             .padding(.vertical, 10)

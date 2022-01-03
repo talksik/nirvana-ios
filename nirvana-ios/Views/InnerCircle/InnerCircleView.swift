@@ -96,7 +96,7 @@ struct InnerCircleView: View {
             ZStack(alignment: .topLeading) {
                 Color.clear
                 
-                CircleNavigationView(alertActive: self.$alertActive, alertText: self.$alertText, alertSubtext: self.$alertSubtext).environmentObject(innerCircleVM)
+                CircleNavigationView().environmentObject(innerCircleVM)
             }
             
             CircleFooterView(selectedFriendIndex: self.$selectedFriendIndex)

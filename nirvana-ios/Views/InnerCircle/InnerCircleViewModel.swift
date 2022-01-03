@@ -31,11 +31,21 @@ class InnerCircleViewModel: ObservableObject {
         case addedFriend
         case removedFriend
         
+        case circlesPreview
+        case remoteWorkPreview
+        case moreSpacesPreview
+        
         case generalError
         
         
         var view: AlertToast {
             switch self {
+            case .moreSpacesPreview:
+                return AlertToast(displayMode: .hud, type: .systemImage("command.circle", NirvanaColor.dimTeal), title: "coming soon", subTitle: "more spaces")
+            case .remoteWorkPreview:
+                return AlertToast(displayMode: .hud, type: .systemImage("suitcase.fill", NirvanaColor.dimTeal), title: "coming soon", subTitle: "remote work productivity at it's best")
+            case .circlesPreview:
+                return AlertToast(displayMode: .hud, type: .systemImage("snowflake", NirvanaColor.dimTeal), title: "coming soon", subTitle: "group convos reinvented")
             case .removedFriend:
                 return AlertToast(displayMode: .alert, type: .complete(Color.green), title: "Done", subTitle: "removed friend")
             case .addedFriend:
@@ -106,8 +116,6 @@ extension InnerCircleViewModel {
             audioRecorder.prepareToRecord()
             audioRecorder.record()
             isRecording = true
-            
-            self.toast = .startedClip
             
             self.audioLocalUrl = filePath // setting this for later use when recording is stopped
             
