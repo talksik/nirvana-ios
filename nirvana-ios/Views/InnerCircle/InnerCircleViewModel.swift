@@ -47,11 +47,11 @@ class InnerCircleViewModel: ObservableObject {
             case .nothingRecorded:
                 return AlertToast(displayMode: .hud, type: .systemImage("exclamationmark.triangle.fill", NirvanaColor.teal), title: "nothing recorded", subTitle: "please try again")
             case .clipSent:
-                return AlertToast(displayMode: .hud, type: .systemImage("paperplane.circle.fill", NirvanaColor.teal), title: "clip sent")
+                return AlertToast(displayMode: .hud, type: .systemImage("paperplane.circle.fill", NirvanaColor.teal))
             case .problemSendingClip:
                 return AlertToast(displayMode: .hud, type: .error(Color.orange), title: "problem sending clip", subTitle: "please try again")
             case .startedClip:
-                return AlertToast(displayMode: .hud, type: .systemImage("waveform.circle.fill", NirvanaColor.teal), title: "clip started")
+                return AlertToast(displayMode: .hud, type: .systemImage("waveform.circle.fill", Color.orange))
             default:
                 return AlertToast(displayMode: .hud, type: .error(Color.orange), title: "Something went wrong ‼️")
             }
