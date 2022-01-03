@@ -15,6 +15,7 @@
 		8909199C277EFDF30025F4BB /* joinSound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 8909199B277EFDF30025F4BB /* joinSound.mp3 */; };
 		8909199E278155920025F4BB /* UserStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8909199D278155920025F4BB /* UserStatusView.swift */; };
 		890919A42781845D0025F4BB /* AlertToast in Frameworks */ = {isa = PBXBuildFile; productRef = 890919A32781845D0025F4BB /* AlertToast */; };
+		890919A7278299590025F4BB /* RuleBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890919A6278299590025F4BB /* RuleBook.swift */; };
 		890C245D277BF628009B4A30 /* AgoraRtcKit in Frameworks */ = {isa = PBXBuildFile; productRef = 890C245C277BF628009B4A30 /* AgoraRtcKit */; };
 		890C2460277BF896009B4A30 /* AgoraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890C245F277BF896009B4A30 /* AgoraViewController.swift */; };
 		890C2462277BF935009B4A30 /* CallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890C2461277BF935009B4A30 /* CallView.swift */; };
@@ -105,6 +106,7 @@
 		89091998277EFDCC0025F4BB /* leaveSound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = leaveSound.mp3; sourceTree = "<group>"; };
 		8909199B277EFDF30025F4BB /* joinSound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = joinSound.mp3; sourceTree = "<group>"; };
 		8909199D278155920025F4BB /* UserStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserStatusView.swift; sourceTree = "<group>"; };
+		890919A6278299590025F4BB /* RuleBook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RuleBook.swift; sourceTree = "<group>"; };
 		890C245F277BF896009B4A30 /* AgoraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgoraViewController.swift; sourceTree = "<group>"; };
 		890C2461277BF935009B4A30 /* CallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallView.swift; sourceTree = "<group>"; };
 		890C2463277BFA97009B4A30 /* AgroRep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgroRep.swift; sourceTree = "<group>"; };
@@ -211,6 +213,14 @@
 			path = sounds;
 			sourceTree = "<group>";
 		};
+		890919A5278299490025F4BB /* RuleBook */ = {
+			isa = PBXGroup;
+			children = (
+				890919A6278299590025F4BB /* RuleBook.swift */,
+			);
+			path = RuleBook;
+			sourceTree = "<group>";
+		};
 		890C245E277BF888009B4A30 /* VoiceCallTest */ = {
 			isa = PBXGroup;
 			children = (
@@ -285,6 +295,7 @@
 		891A15F62765639B00B26659 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				890919A5278299490025F4BB /* RuleBook */,
 				89814681277D83CF00DA46CD /* Convos */,
 				896CE7032770AE3400DB474E /* Inbox */,
 				894E80BF276EFCF500624B72 /* AudioPlayer */,
@@ -632,6 +643,7 @@
 				891A160327656FC700B26659 /* HomeView.swift in Sources */,
 				896CE70927712CED00DB474E /* StringExtension.swift in Sources */,
 				89110714277166D6005797FA /* UserFriends.swift in Sources */,
+				890919A7278299590025F4BB /* RuleBook.swift in Sources */,
 				896CE70727711BAB00DB474E /* FindFriendsView.swift in Sources */,
 				891A160B2765732700B26659 /* HomeViewModel.swift in Sources */,
 				89814685277D857300DA46CD /* Convo.swift in Sources */,

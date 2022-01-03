@@ -312,7 +312,7 @@ struct CircleGridView: View {
                                 secondaryButton: .default(Text("Add"), action: {
                                     // create user friend if have space in circle
                                     // TODO: view models should be able to do this validation, need some way of view models to speak to each other
-                                    if self.authSessionStore.friendsArr.count >= 10 {
+                                    if self.authSessionStore.friendsArr.count >= RuleBook.maxFriends {
                                         self.innerCircleVM.toast = .maxFriendsInCircle
                                         return
                                     }

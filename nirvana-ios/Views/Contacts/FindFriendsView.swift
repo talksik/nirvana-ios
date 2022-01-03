@@ -22,7 +22,7 @@ struct FindFriendsView: View {
         // main content
         NavigationView {
             VStack {
-                Text("You must have someone in your phone contacts to add them. Remember: \(self.authSessionStore.friendsArr.count)/10 spots filled in your circle. 🥬")
+                Text("You must have someone in your phone contacts to add them. Remember: \(self.authSessionStore.friendsArr.count)/\(RuleBook.maxFriends) spots filled in your circle. 🥬")
                     .font(.subheadline)
                     .foregroundColor(Color.gray)
                     .padding(.horizontal)
@@ -102,7 +102,7 @@ struct ListContactRow: View {
     
     @State var showAlert = false
     @State var alertText = "🌱Confirm Arjun into Your Circle?"
-    @State var alertMessage = "Note: You can have a maximium of 12 people in your circle!"
+    @State var alertMessage = "Note: You can have a maximium of \(RuleBook.maxFriends) people in your circle!"
     
     var body: some View {
         if contact.isExisting { // add to circle
@@ -122,7 +122,11 @@ struct ListContactRow: View {
                 
                 Button {
                     print("showing alert now")
-                    // TODO: show alert if circle is full
+                    if self.authSessionStore.friendsArr.count >= RuleBook.maxFriends {
+                        self.contactsVM.toast = .maxFriendsInCircle
+                        return
+                    }
+                    
                     self.showAlert.toggle()
                     
                 } label: {
@@ -138,7 +142,7 @@ struct ListContactRow: View {
                     primaryButton: .default(Text("Cancel")),
                     secondaryButton: .default(Text("Confirm")) {
                         print("adding contact to circle")
-                        if self.authSessionStore.friendsArr.count >= 10 {
+                        if self.authSessionStore.friendsArr.count >= RuleBook.maxFriends {
                             self.contactsVM.toast = .maxFriendsInCircle
                             return
                         }
@@ -187,6 +191,7 @@ struct ListContactRow: View {
                         UIApplication.shared.open(URL(string: strUrl)!, options: [:], completionHandler: nil)
                     } else {
                         print("phone number is nil of contact")
+                        self.contactsVM.toast = .generalError
                     }
                 } label: {
                     Label("Invite", systemImage: "paperplane")
