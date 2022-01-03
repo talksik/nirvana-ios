@@ -279,6 +279,7 @@ extension InnerCircleViewModel {
         
         // TODO: make sure these options are viable for different scenarios
         self.queuePlayer = AVQueuePlayer(items: AVPlayerItems)
+        player.automaticallyWaitsToMinimizeStalling = false
         self.queuePlayer.play()
         
         print("player queued up items!!!")
