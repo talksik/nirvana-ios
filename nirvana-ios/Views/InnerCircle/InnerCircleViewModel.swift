@@ -73,7 +73,8 @@ class InnerCircleViewModel: NSObject, ObservableObject {
     var audioRecorder : AVAudioRecorder!
     
     var queuePlayer = AVQueuePlayer()
-    private var cachedPlayerItemsDict: [String: Data] = [:] // url to player item
+    private var cachedPlayerItemsDict: [String: URL] = [:] // firebase audio url to local url
+    private let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
     
     @Published var isRecording : Bool = false
     
@@ -260,17 +261,18 @@ extension InnerCircleViewModel {
         // reset progress
         self.messagesListeningProgress = Float(Self.multiplier * 2)
         
-        var AVPlayerItems: [CachingPlayerItem] = []
+        var AVPlayerItems: [AVPlayerItem] = []
         for url in audioUrls {
             // if we have a player in the cache, then play it from there
-            if self.cachedPlayerItemsDict.keys.contains(url.absoluteString), let data = self.cachedPlayerItemsDict[url.absoluteString] {
+            if self.cachedPlayerItemsDict.keys.contains(url.absoluteString), let localUrl = self.cachedPlayerItemsDict[url.absoluteString] {
                 // keep the cachedplayer item in tact as the player messes with those items
-                let cachedPlayerItem = CachingPlayerItem(data: data, mimeType: "audio/mp4", fileExtension: "m4a")
-                AVPlayerItems.append(cachedPlayerItem)
+                let asset = AVAsset(url: localUrl)
+                let playerItem = AVPlayerItem(asset: asset)
+                AVPlayerItems.append(playerItem)
                 print("playing a message from cache")
             } else {
                 let asset = AVAsset(url: url)
-                let playerItem = CachingPlayerItem(url: url)
+                let playerItem = AVPlayerItem(asset: asset)
                 AVPlayerItems.append(playerItem)
             }
         }
@@ -393,7 +395,13 @@ extension InnerCircleViewModel {
                             let task = URLSession.shared.dataTask(with: audioUrl) {[weak self] (data, response, error) in
                                 guard let data = data else { return }
                                 print(data)
-                                self?.cachedPlayerItemsDict[audioUrl.absoluteString] = data as? Data
+                                
+                                if let cacheFilePath = self?.getTemporaryDirectory().appendingPathComponent("\(UUID().uuidString).m4a") {
+                                    try? data.write(to: cacheFilePath)
+                                    
+                                    // save in local cache
+                                    self?.cachedPlayerItemsDict[audioUrl.absoluteString] = cacheFilePath
+                                }
                             }
 
                             task.resume()
