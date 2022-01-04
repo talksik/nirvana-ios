@@ -78,6 +78,7 @@ struct CircleFooterView: View {
                         
                         // friend options
                         Menu {
+                            // remove friend
                             Button(role: .destructive) {
                                 print("deactivating friend...removing from circle")
                                 if self.authSessionStore.user?.id != nil && self.selectedFriendIndex != nil {
@@ -89,15 +90,30 @@ struct CircleFooterView: View {
                                 Label("remove from circle", systemImage: "person.crop.circle.fill.badge.minus")
                             }
                             
+                            // share addy
                             Button {
                                 self.innerCircleVM.toast = .shareAddyPreview
                             } label: {
                                 Label("share addy", systemImage: "house.circle.fill")
                             }
                             
-                            
+                            // regular call
+                            Button {
+                                print("calling user now")
+                                
+                                if self.selectedFriend?.phoneNumber != nil {
+                                    let tel: String = "tel://\(self.selectedFriend!.phoneNumber!)"
+                                    let strUrl: String = tel.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+                                    
+                                    UIApplication.shared.open(URL(string: strUrl)!, options: [:], completionHandler: nil)
+                                } else {
+                                    print("phone number is nil of contact")
+                                }
+                            } label: {
+                                Label("regular phone call", systemImage: "phone.and.waveform")
+                            }
                         } label: {
-                            Label("friend options", systemImage: "leaf.circle.fill")
+                            Label("friend options", systemImage: "pawprint.circle.fill")
                                 .labelStyle(.iconOnly)
                                 .foregroundColor(NirvanaColor.dimTeal)
                                 .font(.title)
