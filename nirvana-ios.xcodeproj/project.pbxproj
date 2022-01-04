@@ -17,6 +17,7 @@
 		890919A42781845D0025F4BB /* AlertToast in Frameworks */ = {isa = PBXBuildFile; productRef = 890919A32781845D0025F4BB /* AlertToast */; };
 		890919A7278299590025F4BB /* RuleBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890919A6278299590025F4BB /* RuleBook.swift */; };
 		890919AB2782DC760025F4BB /* ProgressBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890919AA2782DC760025F4BB /* ProgressBarView.swift */; };
+		890919B1278401E00025F4BB /* woosh.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 890919B0278401E00025F4BB /* woosh.mp3 */; };
 		890C245D277BF628009B4A30 /* AgoraRtcKit in Frameworks */ = {isa = PBXBuildFile; productRef = 890C245C277BF628009B4A30 /* AgoraRtcKit */; };
 		890C2460277BF896009B4A30 /* AgoraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890C245F277BF896009B4A30 /* AgoraViewController.swift */; };
 		890C2462277BF935009B4A30 /* CallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890C2461277BF935009B4A30 /* CallView.swift */; };
@@ -109,6 +110,7 @@
 		8909199D278155920025F4BB /* UserStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserStatusView.swift; sourceTree = "<group>"; };
 		890919A6278299590025F4BB /* RuleBook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RuleBook.swift; sourceTree = "<group>"; };
 		890919AA2782DC760025F4BB /* ProgressBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressBarView.swift; sourceTree = "<group>"; };
+		890919B0278401E00025F4BB /* woosh.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = woosh.mp3; sourceTree = "<group>"; };
 		890C245F277BF896009B4A30 /* AgoraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgoraViewController.swift; sourceTree = "<group>"; };
 		890C2461277BF935009B4A30 /* CallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallView.swift; sourceTree = "<group>"; };
 		890C2463277BFA97009B4A30 /* AgroRep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgroRep.swift; sourceTree = "<group>"; };
@@ -210,6 +212,7 @@
 			isa = PBXGroup;
 			children = (
 				8909199B277EFDF30025F4BB /* joinSound.mp3 */,
+				890919B0278401E00025F4BB /* woosh.mp3 */,
 				89091998277EFDCC0025F4BB /* leaveSound.mp3 */,
 			);
 			path = sounds;
@@ -626,6 +629,7 @@
 				891A15E827653A7100B26659 /* Preview Assets.xcassets in Resources */,
 				8909199C277EFDF30025F4BB /* joinSound.mp3 in Resources */,
 				891A15E527653A7100B26659 /* Assets.xcassets in Resources */,
+				890919B1278401E00025F4BB /* woosh.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

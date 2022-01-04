@@ -148,41 +148,57 @@ extension InnerCircleViewModel {
         
         if self.audioLocalUrl != nil {
             // upload to the cloud storage
-            self.cloudStorageService.uploadLocalUrl(localFileUrl: self.audioLocalUrl!) {[weak self] audioDataUrl in
-                if audioDataUrl == nil {
-                    print("there was an error in uploading file")
-                    self?.toast = .problemSendingClip
-                    return
-                }
-                
-                let newMessage = Message(sendId: sender.id!, receivId: receiver.id!, audioDUrl: audioDataUrl!.absoluteString)
-                
-                // create a new message in firestore with the url for receiving user to automatically get notified
-                self?.firestoreService.createMessage(message: newMessage) {[weak self] res in
-                    print(res)
-                    
-                    switch res {
-                    case .success:
-                        
-                        self?.toast = .clipSent
-                        
-                        // sending push notification if there was a device token for this friend
-                        if receiver.deviceToken != nil && receiver.nickname != nil {
-                            self?.pushNotificationService.sendPushNotification(to: receiver.deviceToken!, title: "🌱Nirvana", body: "continue your conversation with \(sender.nickname ?? "your friend")")
+            DispatchQueue.global(qos: .background).async {
+                self.cloudStorageService.uploadLocalUrl(localFileUrl: self.audioLocalUrl!) {[weak self] audioDataUrl in
+                    if audioDataUrl == nil {
+                        print("there was an error in uploading file")
+                        DispatchQueue.main.async {
+                            self?.toast = .problemSendingClip
                         }
+                        return
+                    }
+                    
+                    let newMessage = Message(sendId: sender.id!, receivId: receiver.id!, audioDUrl: audioDataUrl!.absoluteString)
+                    
+                    // create a new message in firestore with the url for receiving user to automatically get notified
+                    self?.firestoreService.createMessage(message: newMessage) {[weak self] res in
+                        print(res)
                         
-                        // delete local audio file from user's phone so that it doesn't take crazy space
-                        print("stopped recording: file about to get deleted from \(self?.getTemporaryDirectory()) with filename: \(self?.audioLocalUrl)")
-                        
-                        try? FileManager.default.removeItem(at: (self?.audioLocalUrl)!)
-                    case .error(let err):
-                        print(err)
-                        self?.toast = .problemSendingClip
-                    default:
-                        self?.toast = .problemSendingClip
+                        DispatchQueue.main.async {
+                            switch res {
+                            case .success:
+                                // play woosh
+                                if let wooshFilePath = URL(string: Bundle.main.path(forResource: "woosh", ofType: "mp3") ?? "") {
+                                    print(wooshFilePath)
+                                    
+                                    self?.stopPlayingAnyAudio()
+                                    self?.queuePlayer = AVQueuePlayer(playerItem: AVPlayerItem(url: wooshFilePath))
+                                    self?.queuePlayer.automaticallyWaitsToMinimizeStalling = false
+                                    self?.queuePlayer.play()
+                                }
+                                
+                                self?.toast = .clipSent
+                                
+                                // sending push notification if there was a device token for this friend
+                                if receiver.deviceToken != nil && receiver.nickname != nil {
+                                    self?.pushNotificationService.sendPushNotification(to: receiver.deviceToken!, title: "🌱Nirvana", body: "continue your conversation with \(sender.nickname ?? "your friend")")
+                                }
+                                
+                                // delete local audio file from user's phone so that it doesn't take crazy space
+                                print("stopped recording: file about to get deleted from \(self?.getTemporaryDirectory()) with filename: \(self?.audioLocalUrl)")
+                                
+                                try? FileManager.default.removeItem(at: (self?.audioLocalUrl)!)
+                            case .error(let err):
+                                print(err)
+                                self?.toast = .problemSendingClip
+                            default:
+                                self?.toast = .problemSendingClip
+                            }
+                        }
                     }
                 }
             }
+            
         }
         else {
             print("nothing recorded, can't send")
