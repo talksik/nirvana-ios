@@ -358,11 +358,12 @@ extension InnerCircleViewModel {
         }
         
         
-        
-        // Add time observer. Observe boundary time changes on the main queue.
-        self.queuePlayer.addBoundaryTimeObserver(forTimes: times, queue: .main) { [weak self] in
-            // Update UI
-            self?.messagesListeningProgress += Float(Self.multiplier)
+        if times.count > 0 {
+            // Add time observer. Observe boundary time changes on the main queue.
+            self.queuePlayer.addBoundaryTimeObserver(forTimes: times, queue: .main) { [weak self] in
+                // Update UI
+                self?.messagesListeningProgress += Float(Self.multiplier)
+            }
         }
     }
     
