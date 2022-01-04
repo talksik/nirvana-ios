@@ -73,6 +73,7 @@ class InnerCircleViewModel: NSObject, ObservableObject {
     var audioRecorder : AVAudioRecorder!
     
     var queuePlayer = AVQueuePlayer()
+    var avplayer: AVPlayer?
     private var cachedPlayerItemsDict: [String: URL] = [:] // firebase audio url to local url
     
     @Published var isRecording : Bool = false
@@ -203,24 +204,7 @@ extension InnerCircleViewModel {
         return FileManager.default.temporaryDirectory
     }
     
-    func playWoosh() {
-        if let wooshFilePath = Bundle.main.url(forResource: "woosh", withExtension: "mp3") {
-            self.stopPlayingAnyAudio()
-            
-            print(wooshFilePath)
-            
-            let player = AVPlayer(url: wooshFilePath)
-            player.play()
-            
-//            self.queuePlayer = AVQueuePlayer(playerItem: AVPlayerItem(url: wooshFilePath))
-//            self.queuePlayer.automaticallyWaitsToMinimizeStalling = false
-//            self.queuePlayer.play()
-        }
-        else {
-            print("didn't get the ath")
-        }
-    }
-
+    
 }
 
 // handling saving device token for notifications
@@ -274,6 +258,24 @@ extension InnerCircleViewModel {
 
 // everything to do with listening to messages
 extension InnerCircleViewModel {
+    func playWoosh() {
+        if let wooshFilePath = Bundle.main.url(forResource: "woosh", withExtension: "mp3") {
+            self.stopPlayingAnyAudio()
+            
+            print(wooshFilePath)
+            
+            self.avplayer = AVPlayer(url: wooshFilePath)
+            avplayer?.play()
+            
+//            self.queuePlayer = AVQueuePlayer(playerItem: AVPlayerItem(url: wooshFilePath))
+//            self.queuePlayer.automaticallyWaitsToMinimizeStalling = false
+//            self.queuePlayer.play()
+        }
+        else {
+            print("didn't get the ath")
+        }
+    }
+    
     func stopPlayingAnyAudio() {
         self.queuePlayer.removeAllItems()
     }

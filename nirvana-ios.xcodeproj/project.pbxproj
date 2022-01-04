@@ -17,7 +17,6 @@
 		890919A42781845D0025F4BB /* AlertToast in Frameworks */ = {isa = PBXBuildFile; productRef = 890919A32781845D0025F4BB /* AlertToast */; };
 		890919A7278299590025F4BB /* RuleBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890919A6278299590025F4BB /* RuleBook.swift */; };
 		890919AB2782DC760025F4BB /* ProgressBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890919AA2782DC760025F4BB /* ProgressBarView.swift */; };
-		890919B3278424C70025F4BB /* woosh.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 890919B2278424C70025F4BB /* woosh.mp3 */; };
 		890C245D277BF628009B4A30 /* AgoraRtcKit in Frameworks */ = {isa = PBXBuildFile; productRef = 890C245C277BF628009B4A30 /* AgoraRtcKit */; };
 		890C2460277BF896009B4A30 /* AgoraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890C245F277BF896009B4A30 /* AgoraViewController.swift */; };
 		890C2462277BF935009B4A30 /* CallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890C2461277BF935009B4A30 /* CallView.swift */; };
@@ -45,6 +44,7 @@
 		892179E42765FEB8001E6C60 /* FooterControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892179E32765FEB8001E6C60 /* FooterControlsView.swift */; };
 		892179E62765FECD001E6C60 /* FooterControlsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892179E52765FECD001E6C60 /* FooterControlsViewModel.swift */; };
 		89288ECB27675B9F00E962C4 /* OnboardingTemplateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89288ECA27675B9F00E962C4 /* OnboardingTemplateView.swift */; };
+		894E41D92784BB8000A68728 /* woosh.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 894E41D82784BB8000A68728 /* woosh.mp3 */; };
 		894E80BE276ED7A700624B72 /* avatars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 894E80BD276ED7A700624B72 /* avatars.swift */; };
 		894E80C1276EFD0500624B72 /* AudioPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 894E80C0276EFD0400624B72 /* AudioPlayerView.swift */; };
 		894E80C327702E5900624B72 /* AddBasicInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 894E80C227702E5800624B72 /* AddBasicInfoViewModel.swift */; };
@@ -110,7 +110,6 @@
 		8909199D278155920025F4BB /* UserStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserStatusView.swift; sourceTree = "<group>"; };
 		890919A6278299590025F4BB /* RuleBook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RuleBook.swift; sourceTree = "<group>"; };
 		890919AA2782DC760025F4BB /* ProgressBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressBarView.swift; sourceTree = "<group>"; };
-		890919B2278424C70025F4BB /* woosh.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = woosh.mp3; sourceTree = "<group>"; };
 		890C245F277BF896009B4A30 /* AgoraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgoraViewController.swift; sourceTree = "<group>"; };
 		890C2461277BF935009B4A30 /* CallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallView.swift; sourceTree = "<group>"; };
 		890C2463277BFA97009B4A30 /* AgroRep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgroRep.swift; sourceTree = "<group>"; };
@@ -137,6 +136,7 @@
 		892179E32765FEB8001E6C60 /* FooterControlsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FooterControlsView.swift; sourceTree = "<group>"; };
 		892179E52765FECD001E6C60 /* FooterControlsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FooterControlsViewModel.swift; sourceTree = "<group>"; };
 		89288ECA27675B9F00E962C4 /* OnboardingTemplateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingTemplateView.swift; sourceTree = "<group>"; };
+		894E41D82784BB8000A68728 /* woosh.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = woosh.mp3; sourceTree = "<group>"; };
 		894E80BD276ED7A700624B72 /* avatars.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = avatars.swift; sourceTree = "<group>"; };
 		894E80C0276EFD0400624B72 /* AudioPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerView.swift; sourceTree = "<group>"; };
 		894E80C227702E5800624B72 /* AddBasicInfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddBasicInfoViewModel.swift; sourceTree = "<group>"; };
@@ -211,8 +211,8 @@
 		8909199A277EFDE50025F4BB /* sounds */ = {
 			isa = PBXGroup;
 			children = (
+				894E41D82784BB8000A68728 /* woosh.mp3 */,
 				8909199B277EFDF30025F4BB /* joinSound.mp3 */,
-				890919B2278424C70025F4BB /* woosh.mp3 */,
 				89091998277EFDCC0025F4BB /* leaveSound.mp3 */,
 			);
 			path = sounds;
@@ -629,7 +629,7 @@
 				891A15E827653A7100B26659 /* Preview Assets.xcassets in Resources */,
 				8909199C277EFDF30025F4BB /* joinSound.mp3 in Resources */,
 				891A15E527653A7100B26659 /* Assets.xcassets in Resources */,
-				890919B3278424C70025F4BB /* woosh.mp3 in Resources */,
+				894E41D92784BB8000A68728 /* woosh.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

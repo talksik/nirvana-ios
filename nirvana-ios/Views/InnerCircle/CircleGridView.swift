@@ -369,8 +369,6 @@ struct CircleGridView: View {
                 }
                 
                 self.animateLiveConvos = true
-                
-                self.innerCircleVM.playWoosh()
             }
             .onReceive(self.authSessionStore.$messagesArr) {_ in
                 // TODO: don't know if this fires if I am active and I receive a message but that's not something I am allowing right now with the continuous convo feature
@@ -382,8 +380,6 @@ struct CircleGridView: View {
             }
         } // scrollview reader
     }
-    
-    
     
     private func haveNewMessageFromFriend(friendDbId: String) -> Bool {
         if self.authSessionStore.user != nil {
