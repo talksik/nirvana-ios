@@ -157,8 +157,9 @@ struct CircleGridView: View {
                                 
                                 if self.haveNewMessageFromFriend(friendDbId: friendId) {
                                     ProgressBarView(progress: self.selectedFriendIndex == friendId ? self.innerCircleVM.messagesListeningProgress : Float(1), color: Color.orange)
+                                } else if self.selectedFriendIndex == friendId {
+                                    ProgressBarView(progress: self.innerCircleVM.toast == InnerCircleViewModel.Toast.clipSent ? Float(1) : Float(0), color: NirvanaColor.dimTeal)
                                 }
-                                
                                 
                                 // user status
                                 UserStatusView(status: self.authSessionStore.relevantUsersDict[friendId]?.userStatus, size: 20, padding: 5)
@@ -251,7 +252,7 @@ struct CircleGridView: View {
                                         // stop recording
                                         print("stopping recording")
                                         
-                                        self.selectedFriendIndex = nil
+//                                        self.selectedFriendIndex = nil
                                         
                                         self.innerCircleVM.stopRecording(sender: self.authSessionStore.user!, receiver: self.authSessionStore.relevantUsersDict[friendId]!)
                                         
