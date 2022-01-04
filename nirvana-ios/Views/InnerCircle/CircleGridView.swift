@@ -300,11 +300,11 @@ struct CircleGridView: View {
                         .frame(height: Self.size)
                         .onTapGesture {
                             // action to open alert to add this person to circle or reject
-                            let inboxFriendName = self.authSessionStore.relevantUsersDict[inboxUserId]?.nickname ?? ""
-                            let inboxFriendNumber = self.authSessionStore.relevantUsersDict[inboxUserId]?.phoneNumber
+                            let inboxFriendName: String = self.authSessionStore.relevantUsersDict[inboxUserId]?.nickname ?? ""
+                            let inboxFriendNumber: String = self.authSessionStore.relevantUsersDict[inboxUserId]?.phoneNumber ?? ""
                             
-                            self.alertText = "🌴Add to your circle?"
-                            self.alertSubtext = "\(inboxFriendName ?? "") started a convo with you... \n \(inboxFriendNumber ?? "") \n Remember: you have \(10 - activeFriends.count) spots left!"
+                            self.alertText = "🌴Add \(inboxFriendName) to your circle?"
+                            self.alertSubtext = "\(inboxFriendName) started a convo with you... \n \(inboxFriendNumber ?? "") \n Remember: you have \(10 - activeFriends.count) spots left!"
                             self.alertActive.toggle()
                         }
                         .animation(Animation.spring())
