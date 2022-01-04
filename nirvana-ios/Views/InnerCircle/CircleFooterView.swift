@@ -18,6 +18,7 @@ struct CircleFooterView: View {
     @State private var convoRelativeTime = ""
     @State private var selectedFriend: User?
     @State private var myTurn: Bool?
+    @State private var showDetails = false
     
     var body: some View {
         // TODO: do cool animations with this footer background fill in while recording or playing a message
@@ -25,8 +26,8 @@ struct CircleFooterView: View {
             VStack(alignment:.center) {
                 Spacer()
                 
-                HStack {
-                    if self.selectedFriend != nil {
+                if self.showDetails {
+                    HStack {
                         // friend avatar
                         Image(self.selectedFriend!.avatar ?? "")
                             .resizable()
@@ -46,25 +47,10 @@ struct CircleFooterView: View {
                                 }
                             }
                             .padding(5)
-                            .contextMenu {
-                                Button(role: .destructive) {
-                                    print("deactivating friend...removing from circle")
-                                    if self.authSessionStore.user?.id != nil && self.selectedFriendIndex != nil {
-                                        self.innerCircleVM.activateOrDeactiveInboxUser(activate: false, userId: self.authSessionStore.user!.id!, friendId: self.selectedFriendIndex!)
-                                        
-                                        self.selectedFriendIndex = nil
-                                    }
-                                } label: {
-                                    Label("Remove from Circle", systemImage: "person.crop.circle.fill.badge.minus")
-                                }
-                            }
+                     
+                        // meta data of convo
+                        VStack (alignment: .leading) {
                             
-                    }
-                    
-                    
-                    // meta data of convo
-                    VStack (alignment: .leading) {
-                        if self.selectedFriend != nil {
                             Text((self.selectedFriend!.nickname ?? "") + " ")
                                 .font(.footnote)
                                 .foregroundColor(NirvanaColor.light)
@@ -88,23 +74,46 @@ struct CircleFooterView: View {
                             }
                         }
                         
+                        Spacer()
+                        
+                        // friend options
+                        Menu {
+                            Button(role: .destructive) {
+                                print("deactivating friend...removing from circle")
+                                if self.authSessionStore.user?.id != nil && self.selectedFriendIndex != nil {
+                                    self.innerCircleVM.activateOrDeactiveInboxUser(activate: false, userId: self.authSessionStore.user!.id!, friendId: self.selectedFriendIndex!)
+                                    
+                                    self.selectedFriendIndex = nil
+                                }
+                            } label: {
+                                Label("remove from circle", systemImage: "person.crop.circle.fill.badge.minus")
+                            }
+                            
+                            Button {
+                                self.innerCircleVM.toast = .shareAddyPreview
+                            } label: {
+                                Label("share addy", systemImage: "house.circle.fill")
+                            }
+                            
+                            
+                        } label: {
+                            Label("friend options", systemImage: "leaf.circle.fill")
+                                .labelStyle(.iconOnly)
+                                .foregroundColor(NirvanaColor.dimTeal)
+                                .font(.title)
+                        }
+                        .frame(height: 90)
+                        .padding(.trailing, 10)
                     }
-                    
-                    Spacer()
-                    
+                    .frame(maxWidth: .infinity, maxHeight: 60) // 60 is the height of the footer control big circle
+                    .background(Color.white.opacity(0.5))
+                    .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
+                    .shadow(color: Color.black.opacity(0.25), radius: 30, x: 0, y: 20)
+                    .transition(.scale)
                 }
-                .frame(maxWidth: .infinity, maxHeight: 60) // 60 is the height of the footer control big circle
-                .background(Color.white.opacity(0.5))
-                .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
-                .shadow(color: Color.black.opacity(0.25), radius: 30, x: 0, y: 20)
             }
         }
         .padding()
-        .animation(Animation.spring(), value: self.selectedFriendIndex)
-        .offset(
-            x:0,
-            y:self.selectedFriendIndex == nil ? 150 : 0
-        )
         .onChange(of: self.selectedFriendIndex) {_ in
             self.updateLocals()
         }
@@ -115,6 +124,10 @@ struct CircleFooterView: View {
         let myId = AuthSessionStore.getCurrentUserId()
         
         // reset the selected options to start fresh
+        withAnimation {
+            self.showDetails = false
+        }
+        
         self.selectedFriend = nil
         self.myTurn = false
         self.convoRelativeTime = ""
@@ -139,6 +152,10 @@ struct CircleFooterView: View {
                 
                 // setting the state for ui to update
                 self.convoRelativeTime = self.myTurn! ? "received " + relativeDate: "sent " + relativeDate
+            }
+            
+            withAnimation {
+                self.showDetails = true
             }
         }
     }

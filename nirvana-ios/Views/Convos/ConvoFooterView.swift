@@ -100,7 +100,7 @@ struct ConvoFooterView: View {
                         } label: {
                             Label("Call", systemImage: "powerplug.fill")
                                 .labelStyle(.iconOnly)
-                                .foregroundColor(Color.orange)
+                                .foregroundColor(Color.red)
                                 .font(.title2)
                                 .padding(.trailing, 5)
                         }

@@ -36,12 +36,15 @@ class InnerCircleViewModel: NSObject, ObservableObject {
         case circlesPreview
         case remoteWorkPreview
         case moreSpacesPreview
+        case shareAddyPreview
         
         case generalError
         
         
         var view: AlertToast {
             switch self {
+            case .shareAddyPreview:
+                return AlertToast(displayMode: .hud, type: .systemImage("house.circle", NirvanaColor.dimTeal), title: "coming soon", subTitle: "share an addy for 24 hours")
             case .moreSpacesPreview:
                 return AlertToast(displayMode: .hud, type: .systemImage("command.circle", NirvanaColor.dimTeal), title: "coming soon", subTitle: "more spaces")
             case .remoteWorkPreview:
