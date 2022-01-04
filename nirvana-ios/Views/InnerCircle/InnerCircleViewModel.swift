@@ -74,7 +74,6 @@ class InnerCircleViewModel: NSObject, ObservableObject {
     
     var queuePlayer = AVQueuePlayer()
     private var cachedPlayerItemsDict: [String: URL] = [:] // firebase audio url to local url
-    private let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
     
     @Published var isRecording : Bool = false
     
