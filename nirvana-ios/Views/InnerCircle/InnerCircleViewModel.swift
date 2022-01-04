@@ -282,8 +282,6 @@ extension InnerCircleViewModel {
             return
         }
         
-        print("current state of cached audio files: \(self.cachedPlayerItemsDict)")
-        
         // start playing if there are messages to listen to
         print("have \(AVPlayerItems.count) messages to play")
         
@@ -308,6 +306,11 @@ extension InnerCircleViewModel {
             totalDuration = CMTimeAdd(totalDuration, item.asset.duration)
         }
         
+        // TODO: not hitting the last one/100%
+        // it either plays on time or there is a little lag on multiple items...
+        // offset this by adding 1 when it reaches the totalDuration as it's longer
+        totalDuration = CMTimeSubtract(totalDuration, CMTimeMakeWithSeconds(1, preferredTimescale: 1))
+        
         var times = [NSValue]()
         // Set initial time to zero
         var currentTime = CMTime.zero
@@ -320,8 +323,9 @@ extension InnerCircleViewModel {
             times.append(NSValue(time: currentTime))
         }
         
+        
+        
         // Add time observer. Observe boundary time changes on the main queue.
-        // TODO: not hitting the last one/100%
         self.queuePlayer.addBoundaryTimeObserver(forTimes: times, queue: .main) { [weak self] in
             // Update UI
             self?.messagesListeningProgress += Float(Self.multiplier)
