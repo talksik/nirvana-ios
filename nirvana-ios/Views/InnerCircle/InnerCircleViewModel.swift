@@ -71,7 +71,9 @@ class InnerCircleViewModel: NSObject, ObservableObject {
     }
         
     var audioRecorder : AVAudioRecorder!
+    
     var queuePlayer = AVQueuePlayer()
+    private var cachedPlayerItemsDict: [String: Data] = [:] // url to player item
     
     @Published var isRecording : Bool = false
     
@@ -255,21 +257,30 @@ extension InnerCircleViewModel {
         // clearing the player to make room for this friend's convo or to deselect this user
         self.stopPlayingAnyAudio()
         
-        var AVPlayerItems: [AVPlayerItem] = []
+        // reset progress
+        self.messagesListeningProgress = Float(Self.multiplier * 2)
+        
+        var AVPlayerItems: [CachingPlayerItem] = []
         for url in audioUrls {
-            let asset = AVAsset(url: url)
-            let playerItem = AVPlayerItem(asset: asset)
-
-            // notification for when each playeritem is done playing
-//            NotificationCenter.default.addObserver(self, selector: #selector(self.playerDidFinishPlaying(sender:)), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: playerItem)
-            
-            AVPlayerItems.append(playerItem)
+            // if we have a player in the cache, then play it from there
+            if self.cachedPlayerItemsDict.keys.contains(url.absoluteString), let data = self.cachedPlayerItemsDict[url.absoluteString] {
+                // keep the cachedplayer item in tact as the player messes with those items
+                let cachedPlayerItem = CachingPlayerItem(data: data, mimeType: "audio/mp4", fileExtension: "m4a")
+                AVPlayerItems.append(cachedPlayerItem)
+                print("playing a message from cache")
+            } else {
+                let asset = AVAsset(url: url)
+                let playerItem = CachingPlayerItem(url: url)
+                AVPlayerItems.append(playerItem)
+            }
         }
         
         if AVPlayerItems.count <= 0 {
             print("no messages to play...send a message to user")
             return
         }
+        
+        print("current state of cached audio files: \(self.cachedPlayerItemsDict)")
         
         // start playing if there are messages to listen to
         print("have \(AVPlayerItems.count) messages to play")
@@ -283,9 +294,6 @@ extension InnerCircleViewModel {
         self.queuePlayer.play()
         
         print("player queued up items!!!")
-        
-        // reset progress
-        self.messagesListeningProgress = Float(Self.multiplier * 2)
         
         DispatchQueue.global(qos: .background).async {
             self.addBoundaryTimeObserver(playerItems: AVPlayerItems)
@@ -357,14 +365,46 @@ extension InnerCircleViewModel {
 //            self.timeObserverToken = nil
 //        }
 //    }
+    
+    func cacheIncomingMessages(friendMessagesDict: [String: [Message]]) {
+        // need  way of making this get called whenever there are messages that come in but do all this in the background...onreceive of new messages, check if we already have it cached, and if not, then download
+        guard let userId = AuthSessionStore.getCurrentUserId() else {return}
         
+        DispatchQueue.global(qos: .background).async {
+            // get all relevant messages that the user may listen to
+            // don't want to cache all messages
+            for friendId in friendMessagesDict.keys {
+                let messagesRelatedToFriend = friendMessagesDict[friendId] ?? []
+                
+                if messagesRelatedToFriend.count == 0 {
+                    return
+                }
+                
+                for message in messagesRelatedToFriend {
+                    // if it's starting to get to my messages then don't play
+                    if message.senderId == userId {
+                        break
+                    }
+                    
+                    // only add to queue if we can convert the database url to a valid url here
+                    if let audioUrl = URL(string: message.audioDataUrl) { // check if it's a valid url
+                        if !self.cachedPlayerItemsDict.keys.contains(message.audioDataUrl) {
+                            // save to play from mem later
+                            let task = URLSession.shared.dataTask(with: audioUrl) {[weak self] (data, response, error) in
+                                guard let data = data else { return }
+                                print(data)
+                                self?.cachedPlayerItemsDict[audioUrl.absoluteString] = data as? Data
+                            }
+
+                            task.resume()
+                        }
+                    }
+                }
+            }
+        }
+        
+        // TODO: need way of deleting cache when we close app or something...can rile up the cost
+    }
 }
 
-extension InnerCircleViewModel {
-//    @objc func playerDidFinishPlaying(sender: Notification) {
-//        // Your code here
-//        print("finished playing an item")
-//
-//        self.numberofMessagesToPlay -= 1
-//    }
-}
+

@@ -368,10 +368,15 @@ struct CircleGridView: View {
                 }
                 
                 self.animateLiveConvos = true
-            }// univseral alert TODO: move to inner circle view and use this pattern for all view models
-//            .alert(item: self.$convoVM.error) {error in
-//                error.alert
-//            }            
+            }
+            .onReceive(self.authSessionStore.$messagesArr) {_ in
+                // TODO: don't know if this fires if I am active and I receive a message but that's not something I am allowing right now with the continuous convo feature
+                
+                print("new messages found!!!! on receive going to cache all messages to load them faster for you!")
+                
+                // TODO: might be including messages of inbox users? overloading memory?
+                self.innerCircleVM.cacheIncomingMessages(friendMessagesDict: self.authSessionStore.relevantMessagesByUserDict)
+            }
         } // scrollview reader
     }
     

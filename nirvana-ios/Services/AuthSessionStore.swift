@@ -33,7 +33,7 @@ final class AuthSessionStore: ObservableObject, SessionStore {
     @Published var sessionState: SessionState = SessionState.notCheckedYet
     
     // TODO: figure out which ones to publish
-    var messagesArr: [Message] = []
+    @Published var messagesArr: [Message] = []
     var userFriendsDict: [String: UserFriends] = [:] // all active and inactive relationships
     
     // transformed data for the views
@@ -337,7 +337,7 @@ extension AuthSessionStore {
                                         
                     // if this user is not already a friend, active or inactive/rejected, then get their user data and add to inbox
                     if self.userFriendsDict.keys.contains(userFriend!.userId) {
-                        print("already have this user in my circle or I rejected them \(userFriend?.userId)")
+//                        print("already have this user in my circle or I rejected them \(userFriend?.userId)")
                         continue
                     }
                     else {
@@ -383,7 +383,7 @@ extension AuthSessionStore {
                     self.messagesArr = documents.compactMap { (queryDocumentSnapshot) -> Message? in
                         do {
                             let currMessage = try queryDocumentSnapshot.data(as: Message.self)
-                            print("new message received! \(currMessage!.sentTimestamp)")
+//                            print("new message received! \(currMessage!.sentTimestamp)")
                             
                             DispatchQueue.main.async {
                                 if currMessage != nil { // not really possible but just check
