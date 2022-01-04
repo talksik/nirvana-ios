@@ -261,19 +261,21 @@ extension InnerCircleViewModel {
 extension InnerCircleViewModel {
     func playWoosh() {
         if let wooshFilePath = Bundle.main.url(forResource: "woosh", withExtension: "mp3") {
-            self.stopPlayingAnyAudio()
-            
-            print(wooshFilePath)
-            
             self.avplayer = AVPlayer(url: wooshFilePath)
             avplayer?.play()
-            
-//            self.queuePlayer = AVQueuePlayer(playerItem: AVPlayerItem(url: wooshFilePath))
-//            self.queuePlayer.automaticallyWaitsToMinimizeStalling = false
-//            self.queuePlayer.play()
         }
         else {
-            print("didn't get the ath")
+            print("didn't get the woosh sound")
+        }
+    }
+    
+    func playPop() {
+        if let popFilePath = Bundle.main.url(forResource: "pop", withExtension: "mp3") {
+            self.avplayer = AVPlayer(url: popFilePath)
+            avplayer?.play()
+        }
+        else {
+            print("didn't get the pop sound")
         }
     }
     
@@ -308,6 +310,8 @@ extension InnerCircleViewModel {
             print("no messages to play...send a message to user")
             return
         }
+        
+        self.playPop()
         
         // start playing if there are messages to listen to
         print("have \(AVPlayerItems.count) messages to play")

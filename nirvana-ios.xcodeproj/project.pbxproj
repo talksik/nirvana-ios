@@ -45,6 +45,7 @@
 		892179E62765FECD001E6C60 /* FooterControlsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892179E52765FECD001E6C60 /* FooterControlsViewModel.swift */; };
 		89288ECB27675B9F00E962C4 /* OnboardingTemplateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89288ECA27675B9F00E962C4 /* OnboardingTemplateView.swift */; };
 		894E41D92784BB8000A68728 /* woosh.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 894E41D82784BB8000A68728 /* woosh.mp3 */; };
+		894E41DB2784D4BC00A68728 /* pop.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 894E41DA2784D4BC00A68728 /* pop.mp3 */; };
 		894E80BE276ED7A700624B72 /* avatars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 894E80BD276ED7A700624B72 /* avatars.swift */; };
 		894E80C1276EFD0500624B72 /* AudioPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 894E80C0276EFD0400624B72 /* AudioPlayerView.swift */; };
 		894E80C327702E5900624B72 /* AddBasicInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 894E80C227702E5800624B72 /* AddBasicInfoViewModel.swift */; };
@@ -137,6 +138,7 @@
 		892179E52765FECD001E6C60 /* FooterControlsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FooterControlsViewModel.swift; sourceTree = "<group>"; };
 		89288ECA27675B9F00E962C4 /* OnboardingTemplateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingTemplateView.swift; sourceTree = "<group>"; };
 		894E41D82784BB8000A68728 /* woosh.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = woosh.mp3; sourceTree = "<group>"; };
+		894E41DA2784D4BC00A68728 /* pop.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = pop.mp3; sourceTree = "<group>"; };
 		894E80BD276ED7A700624B72 /* avatars.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = avatars.swift; sourceTree = "<group>"; };
 		894E80C0276EFD0400624B72 /* AudioPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerView.swift; sourceTree = "<group>"; };
 		894E80C227702E5800624B72 /* AddBasicInfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddBasicInfoViewModel.swift; sourceTree = "<group>"; };
@@ -212,6 +214,7 @@
 			isa = PBXGroup;
 			children = (
 				894E41D82784BB8000A68728 /* woosh.mp3 */,
+				894E41DA2784D4BC00A68728 /* pop.mp3 */,
 				8909199B277EFDF30025F4BB /* joinSound.mp3 */,
 				89091998277EFDCC0025F4BB /* leaveSound.mp3 */,
 			);
@@ -627,6 +630,7 @@
 				89A107E927753AB600B971FD /* GoogleService-Info.plist in Resources */,
 				89091999277EFDCC0025F4BB /* leaveSound.mp3 in Resources */,
 				891A15E827653A7100B26659 /* Preview Assets.xcassets in Resources */,
+				894E41DB2784D4BC00A68728 /* pop.mp3 in Resources */,
 				8909199C277EFDF30025F4BB /* joinSound.mp3 in Resources */,
 				891A15E527653A7100B26659 /* Assets.xcassets in Resources */,
 				894E41D92784BB8000A68728 /* woosh.mp3 in Resources */,
