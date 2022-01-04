@@ -366,7 +366,7 @@ extension AuthSessionStore {
         // limit: because each user should have most 12 friends and so would at most need 24 messages to show turns and all that...save myself from hackers here...unless a user gets 100 messages from someone, and that too at least they will be ordered
         
         // SOLUTION: composite with array
-        let messagesListener = db.collection("messages").whereField("senderIdReceiverIdComposite", arrayContains: currUserId).order(by: "sentTimestamp", descending: true).limit(to: 100)
+        let messagesListener = db.collection("messages").whereField("senderIdReceiverIdComposite", arrayContains: currUserId).order(by: "sentTimestamp", descending: true).limit(to: 500)
             .addSnapshotListener { querySnapshot, error in
                     print("messages listener activated")
                 

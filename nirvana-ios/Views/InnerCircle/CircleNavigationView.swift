@@ -169,7 +169,7 @@ struct CircleNavigationView: View {
                         self.innerCircleVM.toast = .remoteWorkPreview
                         
                     } label: {
-                        Label("work", systemImage: "suitcase")
+                        Label("teams", systemImage: "suitcase")
                             .font(.caption2)
                             .foregroundColor(Color.gray)
                             .padding(.vertical, 10)
