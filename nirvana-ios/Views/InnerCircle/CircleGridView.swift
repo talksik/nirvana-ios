@@ -55,6 +55,15 @@ struct CircleGridView: View {
     
     let maxNumAvatarsToShowInConvo = 3
     
+    enum GridItemType: String {
+        case convo
+        case activeFriend
+        case inboxUser
+        case staleState
+    }
+    
+    @State var initialGridId = "initial"
+    
     var body: some View {
         // main communication hub
         // TODO: client side, sort the honeycomb from top left to bottom right
@@ -112,7 +121,7 @@ struct CircleGridView: View {
                             x: honeycombOffSetX(value),
                             y: 0
                         )
-                        .id(currConvo.id) // id for scrollviewreader
+                        .id("\(GridItemType.convo)\(currConvo.id)") // id for scrollviewreader
                         .frame(height: Self.size)
                         .onTapGesture {
                             // if not in a call already
@@ -141,7 +150,7 @@ struct CircleGridView: View {
                         .animation(Animation.spring())
                     }
                     
-                    // active friends
+                    /* ACTIVE FRIENDS */
                     ForEach(0..<activeFriends.count, id: \.self) {value in
                         let adjustedValue = value + convos.count
                         let friendId = activeFriends[value]
@@ -151,6 +160,8 @@ struct CircleGridView: View {
                             
                             ZStack(alignment: .topTrailing) {
                                 // bubble color
+                                Text("\(adjustedValue)")
+                                
                                 Circle()
                                     .foregroundColor(self.getBubbleTint(friendDbId: friendId))
                                     .blur(radius: 8)
@@ -180,7 +191,7 @@ struct CircleGridView: View {
                             y: 0
                         )
                         .blur(radius: self.getBlur(friendDbId: friendId))
-                        .id(friendId) // id for scrollviewreader TODO: not forcing an update if we add another friend...problem with the grid changing
+                        .id("\(GridItemType.activeFriend)\(friendId)") // id for scrollviewreader
                         .frame(height: Self.size)
                         .simultaneousGesture(
                             TapGesture()
@@ -266,7 +277,7 @@ struct CircleGridView: View {
                         .animation(Animation.spring())
                     }
                     
-                    // inbox users
+                    /* INBOX USERS */
                     ForEach(0..<inboxUsers.count, id: \.self) {inboxValue in
                         let inboxUserId = inboxUsers[inboxValue]
                         let adjustedValue = inboxValue + activeFriends.count + convos.count // IMPORTANT: accounting for the active friends iterations
@@ -274,6 +285,8 @@ struct CircleGridView: View {
                             let scale = getScale(proxy: gridProxy, itemNumber: adjustedValue, userId: inboxUserId) * 0.75 // don't want inbox to match size of active
                                                         
                             ZStack(alignment: .topTrailing) {
+                                Text("\(adjustedValue)")
+                                
                                 Image(systemName: "arrow.down.left.circle.fill")
                                     .foregroundColor(Color.orange)
                                     .font(.title)
@@ -296,7 +309,7 @@ struct CircleGridView: View {
                             x: honeycombOffSetX(adjustedValue),
                             y: 0
                         )
-                        .id(inboxUserId) // id for scrollviewreader
+                        .id("\(GridItemType.inboxUser)\(inboxUserId)") // id for scrollviewreader
                         .frame(height: Self.size)
                         .onTapGesture {
                             // action to open alert to add this person to circle or reject
@@ -304,7 +317,7 @@ struct CircleGridView: View {
                             let inboxFriendNumber: String = self.authSessionStore.relevantUsersDict[inboxUserId]?.phoneNumber ?? ""
                             
                             self.alertText = "🌴Add \(inboxFriendName) to your circle?"
-                            self.alertSubtext = "\(inboxFriendName) started a convo with you... \n \(inboxFriendNumber ?? "") \n Remember: you have \(10 - activeFriends.count) spots left!"
+                            self.alertSubtext = "\(inboxFriendName) started a convo with you... \n \(inboxFriendNumber) \n Remember: you have \(10 - activeFriends.count) spots left!"
                             self.alertActive.toggle()
                         }
                         .animation(Animation.spring())
@@ -338,6 +351,8 @@ struct CircleGridView: View {
                             self.navigationStack.push(FindFriendsView())
                         } label: {
                             ZStack {
+                                Text("\(staleAdjustedValue)")
+                                
                                 Image(systemName: "person.badge.plus")
                                     .foregroundColor(NirvanaColor.dimTeal)
                                     .font(.largeTitle)
@@ -363,6 +378,7 @@ struct CircleGridView: View {
                 } //lazygrid // TODO: add padding based on if we are on any cornering item to allow the bubble to enlargen
                 .padding(.trailing, Self.size / 2 + Self.spacingBetweenColumns / 2) // because of the offset of last column
                 .padding(.top, Self.size / 2 + Self.spacingBetweenRows / 2) // because we are going under the nav bar
+                .id(initialGridId) // id for scrollviewreader
             }// scrollview
             .onAppear {
                 // scrolling to first person in grid
@@ -379,6 +395,9 @@ struct CircleGridView: View {
                 
                 // TODO: might be including messages of inbox users? overloading memory?
                 self.innerCircleVM.cacheIncomingMessages(friendMessagesDict: self.authSessionStore.relevantMessagesByUserDict)
+            }
+            .onChange(of: self.authSessionStore.friendsArr) {_ in
+                self.initialGridId = UUID().uuidString
             }
         } // scrollview reader
     }
