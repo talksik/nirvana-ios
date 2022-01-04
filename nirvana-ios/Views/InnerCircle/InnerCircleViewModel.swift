@@ -71,12 +71,14 @@ class InnerCircleViewModel: NSObject, ObservableObject {
     }
         
     var audioRecorder : AVAudioRecorder!
+    
     var queuePlayer = AVQueuePlayer()
+    private var cachedPlayerItemsDict: [String: URL] = [:] // firebase audio url to local url
     
     @Published var isRecording : Bool = false
     
     @Published var messagesListeningProgress: Float = 1.0
-    static let multiplier: Float64 = 0.05
+    static let multiplier: Float64 = 0.01
     
     let audioSession = AVAudioSession.sharedInstance()
     
@@ -255,15 +257,23 @@ extension InnerCircleViewModel {
         // clearing the player to make room for this friend's convo or to deselect this user
         self.stopPlayingAnyAudio()
         
+        // reset progress
+        self.messagesListeningProgress = Float(0)
+        
         var AVPlayerItems: [AVPlayerItem] = []
         for url in audioUrls {
-            let asset = AVAsset(url: url)
-            let playerItem = AVPlayerItem(asset: asset)
-
-            // notification for when each playeritem is done playing
-//            NotificationCenter.default.addObserver(self, selector: #selector(self.playerDidFinishPlaying(sender:)), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: playerItem)
-            
-            AVPlayerItems.append(playerItem)
+            // if we have a player in the cache, then play it from there
+            if self.cachedPlayerItemsDict.keys.contains(url.absoluteString), let localUrl = self.cachedPlayerItemsDict[url.absoluteString] {
+                // keep the cachedplayer item in tact as the player messes with those items
+                let asset = AVAsset(url: localUrl)
+                let playerItem = AVPlayerItem(asset: asset)
+                AVPlayerItems.append(playerItem)
+                print("playing a message from cache")
+            } else {
+                let asset = AVAsset(url: url)
+                let playerItem = AVPlayerItem(asset: asset)
+                AVPlayerItems.append(playerItem)
+            }
         }
         
         if AVPlayerItems.count <= 0 {
@@ -284,9 +294,6 @@ extension InnerCircleViewModel {
         
         print("player queued up items!!!")
         
-        // reset progress
-        self.messagesListeningProgress = Float(Self.multiplier * 2)
-        
         DispatchQueue.global(qos: .background).async {
             self.addBoundaryTimeObserver(playerItems: AVPlayerItems)
         }
@@ -297,6 +304,11 @@ extension InnerCircleViewModel {
         for item in playerItems {
             totalDuration = CMTimeAdd(totalDuration, item.asset.duration)
         }
+        
+        // TODO: not hitting the last one/100%
+        // it either plays on time or there is a little lag on multiple items...
+        // offset this by adding 1 when it reaches the totalDuration as it's longer
+        totalDuration = CMTimeSubtract(totalDuration, CMTimeMakeWithSeconds(1, preferredTimescale: 1))
         
         var times = [NSValue]()
         // Set initial time to zero
@@ -309,11 +321,10 @@ extension InnerCircleViewModel {
             currentTime = currentTime + interval
             times.append(NSValue(time: currentTime))
         }
-        // this last one to make sure we get a full loop
-        times.append(NSValue(time: totalDuration))
+        
+        
         
         // Add time observer. Observe boundary time changes on the main queue.
-        // TODO: not hitting the last one/100%
         self.queuePlayer.addBoundaryTimeObserver(forTimes: times, queue: .main) { [weak self] in
             // Update UI
             self?.messagesListeningProgress += Float(Self.multiplier)
@@ -357,14 +368,53 @@ extension InnerCircleViewModel {
 //            self.timeObserverToken = nil
 //        }
 //    }
+    
+    func cacheIncomingMessages(friendMessagesDict: [String: [Message]]) {
+        // TODO: not firing for some reason onreceive of new data or not including new data
+        guard let userId = AuthSessionStore.getCurrentUserId() else {return}
         
+        DispatchQueue.global(qos: .background).async {
+            // get all relevant messages that the user may listen to
+            // don't want to cache all messages
+            for friendId in friendMessagesDict.keys {
+                let messagesRelatedToFriend = friendMessagesDict[friendId] ?? []
+                
+                if messagesRelatedToFriend.count == 0 {
+                    return
+                }
+                
+                for message in messagesRelatedToFriend {
+                    // if it's starting to get to my messages then don't play
+                    if message.senderId == userId {
+                        break
+                    }
+                    
+                    // only add to queue if we can convert the database url to a valid url here
+                    if let audioUrl = URL(string: message.audioDataUrl) { // check if it's a valid url
+                        if !self.cachedPlayerItemsDict.keys.contains(message.audioDataUrl) {
+                            // save to play from mem later
+                            
+                            let task = URLSession.shared.dataTask(with: audioUrl) {[weak self] (data, response, error) in
+                                guard let data = data else { return }
+                                print(data)
+                                
+                                if let cacheFilePath = self?.getTemporaryDirectory().appendingPathComponent("\(UUID().uuidString).m4a") {
+                                    try? data.write(to: cacheFilePath)
+                                    
+                                    // save in local cache
+                                    self?.cachedPlayerItemsDict[audioUrl.absoluteString] = cacheFilePath
+                                }
+                            }
+
+                            task.resume()
+                        }
+                    }
+                }
+            }
+        }
+        
+        // TODO: need way of deleting cache when we close app or something...can rile up the cost
+    }
 }
 
-extension InnerCircleViewModel {
-//    @objc func playerDidFinishPlaying(sender: Notification) {
-//        // Your code here
-//        print("finished playing an item")
-//
-//        self.numberofMessagesToPlay -= 1
-//    }
-}
+
