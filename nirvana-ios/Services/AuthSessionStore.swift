@@ -380,42 +380,43 @@ extension AuthSessionStore {
                     //optimize this? but also saving on memory and same db reads
                     self.relevantMessagesByUserDict.removeAll()
                 
-                    self.messagesArr = documents.compactMap { (queryDocumentSnapshot) -> Message? in
-                        do {
-                            let currMessage = try queryDocumentSnapshot.data(as: Message.self)
-//                            print("new message received! \(currMessage!.sentTimestamp)")
-                            
-                            DispatchQueue.main.async {
-                                if currMessage != nil { // not really possible but just check
-                                    // if the user doesn't exist for the dictionary, then add it
-                                    // this means it's most likely someone new (never had user_friend relationship before) messaging for the user's inbox
-                                    // TODO: prolly want to make a call to get this sender user details for the inbox, but they should either be in the friendsDict or their are not a friend so won't be there
-                                    // also add in any messages where I am the sender
-                                    if currMessage!.senderId == currUserId { // if I am the sender
-                                        if self.relevantMessagesByUserDict[currMessage!.receiverId] == nil {
-                                            self.relevantMessagesByUserDict[currMessage!.receiverId] = [currMessage!]
-                                        } else {
-                                            self.relevantMessagesByUserDict[currMessage!.receiverId]?.append(currMessage!)
+                    DispatchQueue.main.async {
+                        self.messagesArr = documents.compactMap { (queryDocumentSnapshot) -> Message? in
+                            do {
+                                let currMessage = try queryDocumentSnapshot.data(as: Message.self)
+    //                            print("new message received! \(currMessage!.sentTimestamp)")
+                                
+                                DispatchQueue.main.async {
+                                    if currMessage != nil { // not really possible but just check
+                                        // if the user doesn't exist for the dictionary, then add it
+                                        // this means it's most likely someone new (never had user_friend relationship before) messaging for the user's inbox
+                                        // TODO: prolly want to make a call to get this sender user details for the inbox, but they should either be in the friendsDict or their are not a friend so won't be there
+                                        // also add in any messages where I am the sender
+                                        if currMessage!.senderId == currUserId { // if I am the sender
+                                            if self.relevantMessagesByUserDict[currMessage!.receiverId] == nil {
+                                                self.relevantMessagesByUserDict[currMessage!.receiverId] = [currMessage!]
+                                            } else {
+                                                self.relevantMessagesByUserDict[currMessage!.receiverId]?.append(currMessage!)
+                                            }
                                         }
-                                    }
-                                    else  { // if I am receiving
-                                        if self.relevantMessagesByUserDict[currMessage!.senderId] == nil {
-                                            self.relevantMessagesByUserDict[currMessage!.senderId] = [currMessage!]
-                                        } else {
-                                            self.relevantMessagesByUserDict[currMessage!.senderId]?.append(currMessage!)
+                                        else  { // if I am receiving
+                                            if self.relevantMessagesByUserDict[currMessage!.senderId] == nil {
+                                                self.relevantMessagesByUserDict[currMessage!.senderId] = [currMessage!]
+                                            } else {
+                                                self.relevantMessagesByUserDict[currMessage!.senderId]?.append(currMessage!)
+                                            }
                                         }
                                     }
                                 }
                                 
-                                self.objectWillChange.send()
+                                return currMessage
+                            } catch {
+                                print(error)
                             }
-                            
-                            return currMessage
-                        } catch {
-                            print(error)
+                            return nil
                         }
-                        return nil
-                    }                
+                    }
+                    
                 }
         
         self.listenersActive = true

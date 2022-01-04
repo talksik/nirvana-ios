@@ -79,7 +79,7 @@ class InnerCircleViewModel: NSObject, ObservableObject {
     @Published var isRecording : Bool = false
     
     @Published var messagesListeningProgress: Float = 1.0
-    static let multiplier: Float64 = 0.05
+    static let multiplier: Float64 = 0.01
     
     let audioSession = AVAudioSession.sharedInstance()
     
@@ -259,7 +259,7 @@ extension InnerCircleViewModel {
         self.stopPlayingAnyAudio()
         
         // reset progress
-        self.messagesListeningProgress = Float(Self.multiplier * 2)
+        self.messagesListeningProgress = Float(0)
         
         var AVPlayerItems: [AVPlayerItem] = []
         for url in audioUrls {
@@ -319,8 +319,6 @@ extension InnerCircleViewModel {
             currentTime = currentTime + interval
             times.append(NSValue(time: currentTime))
         }
-        // this last one to make sure we get a full loop
-        times.append(NSValue(time: totalDuration))
         
         // Add time observer. Observe boundary time changes on the main queue.
         // TODO: not hitting the last one/100%
@@ -369,7 +367,7 @@ extension InnerCircleViewModel {
 //    }
     
     func cacheIncomingMessages(friendMessagesDict: [String: [Message]]) {
-        // need  way of making this get called whenever there are messages that come in but do all this in the background...onreceive of new messages, check if we already have it cached, and if not, then download
+        // TODO: not firing for some reason onreceive of new data or not including new data
         guard let userId = AuthSessionStore.getCurrentUserId() else {return}
         
         DispatchQueue.global(qos: .background).async {
@@ -392,6 +390,7 @@ extension InnerCircleViewModel {
                     if let audioUrl = URL(string: message.audioDataUrl) { // check if it's a valid url
                         if !self.cachedPlayerItemsDict.keys.contains(message.audioDataUrl) {
                             // save to play from mem later
+                            
                             let task = URLSession.shared.dataTask(with: audioUrl) {[weak self] (data, response, error) in
                                 guard let data = data else { return }
                                 print(data)
