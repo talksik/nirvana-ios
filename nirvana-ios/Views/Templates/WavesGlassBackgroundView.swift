@@ -27,11 +27,10 @@ struct WavesGlassBackgroundView: View {
                 center: .bottom,
                 angle: .degrees(120))
             
+            // background for the glassmorphic feel
             Image("glosspink")
                 .resizable()
                 .blur(radius: 5)
-                
-                
              
             LinearGradient(gradient: Gradient(
                 colors: [NirvanaColor.white.opacity(0), NirvanaColor.white.opacity(1.0)]), startPoint: .bottom, endPoint: .top)
