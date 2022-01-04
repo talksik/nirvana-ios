@@ -121,7 +121,7 @@ struct CircleGridView: View {
                             x: honeycombOffSetX(value),
                             y: 0
                         )
-                        .id("\(GridItemType.convo)\(currConvo.id)") // id for scrollviewreader
+                        .id("\(value)") // id for scrollviewreader
                         .frame(height: Self.size)
                         .onTapGesture {
                             // if not in a call already
@@ -189,7 +189,7 @@ struct CircleGridView: View {
                             y: 0
                         )
                         .blur(radius: self.getBlur(friendDbId: friendId))
-                        .id("\(GridItemType.activeFriend)\(friendId)") // id for scrollviewreader
+                        .id("\(adjustedValue)") // id for scrollviewreader
                         .frame(height: Self.size)
                         .simultaneousGesture(
                             TapGesture()
@@ -223,17 +223,14 @@ struct CircleGridView: View {
                                         
                                         self.convoVM.addThirdPartyToConvo(friendId: friendId)
                                     } // if I am in a convo and I long press on someone not online, send a clip which can include other peoples' voice
-                                    else if self.convoVM.isInCall() {
-                                        print("recoding a message and sending to this offline friend")
-                                        
-                                        self.convoVM.toast = .friendNotOnline
-                                        
-                                        self.selectedFriendIndex = friendId
-                                        
-                                        self.record()
-                                    } //... just simply record a clip to send
                                     else {
                                         self.selectedFriendIndex = friendId
+                                        
+                                        if self.convoVM.isInCall() {
+                                            print("recoding a message and sending to this offline friend")
+                                            
+                                            self.convoVM.toast = .friendNotOnline
+                                        }
                                         
                                         self.record()
                                     }
@@ -305,7 +302,7 @@ struct CircleGridView: View {
                             x: honeycombOffSetX(adjustedValue),
                             y: 0
                         )
-                        .id("\(GridItemType.inboxUser)\(inboxUserId)") // id for scrollviewreader
+                        .id("\(adjustedValue)") // id for scrollviewreader
                         .frame(height: Self.size)
                         .onTapGesture {
                             // action to open alert to add this person to circle or reject
@@ -365,25 +362,21 @@ struct CircleGridView: View {
                         x: honeycombOffSetX(staleAdjustedValue),
                         y: 0
                     )
-                    .id(UUID().uuidString) // id for scrollviewreader
+                    .id(staleAdjustedValue) // id for scrollviewreader
                     .frame(height: Self.size)
                     .animation(Animation.spring())
                                         
                 } //lazygrid // TODO: add padding based on if we are on any cornering item to allow the bubble to enlargen
-                .padding(.trailing, Self.size / 2 + Self.spacingBetweenColumns / 2) // because of the offset of last column
-                .padding(.top, Self.size / 2 + Self.spacingBetweenRows / 2) // because we are going under the nav bar
-                .id(initialGridId) // id for scrollviewreader
+                .padding(.horizontal, Self.size + Self.spacingBetweenColumns)
+                .id(initialGridId)
             }// scrollview
             .onAppear {
-                // scrolling to first person in grid
-                if self.authSessionStore.friendsArr.count > 0 {
-                    scrollReaderValue.scrollTo(self.selectedFriendIndex)
-                }
-                
+                // scrolling to middle of grid
+                self.scrollProxy = scrollReaderValue
+                self.scrollTo(location: .centerOfGrid)
                 self.animateLiveConvos = true
             }
             .onReceive(self.authSessionStore.$messagesArr) {_ in
-                // TODO: don't know if this fires if I am active and I receive a message but that's not something I am allowing right now with the continuous convo feature
                 
                 print("new messages found!!!! on receive going to cache all messages to load them faster for you!")
                 
@@ -393,8 +386,55 @@ struct CircleGridView: View {
             .onChange(of: self.authSessionStore.friendsArr) {_ in
                 // update the grid as arrays have changed
                 self.initialGridId = UUID().uuidString
-            }
+                
+                // scrolling to middle of grid
+                if self.authSessionStore.friendsArr.count > 0 {
+                    let numItems = (activeFriends.count + inboxUsers.count + convos.count + 1)
+                    scrollReaderValue.scrollTo(numItems / 2)
+                }
+            }// just not smooth so taking out
+//            .onChange(of: self.selectedFriendIndex) {_ in
+//                self.scrollTo(location: .selectedFriend)
+//            }
         } // scrollview reader
+    }
+    
+    @State private var scrollProxy: ScrollViewProxy?
+    
+    enum ScrollToLocation {
+        case centerOfGrid
+        case firstMessage
+        case selectedFriend
+    }
+    
+    private func scrollTo(location: ScrollToLocation) {
+        if scrollProxy == nil {
+            print("can't scroll, did not provide a scrollproxy")
+            return
+        }
+        
+        let numItems = self.authSessionStore.friendsArr.count + self.authSessionStore.inboxUsersArr.count + self.convoVM.relevantConvos.count + 1 // 1 for the stale state
+        
+        switch location {
+        case .centerOfGrid:
+            self.scrollProxy!.scrollTo(numItems / 2)
+        case .firstMessage:
+            //TODO: calculate this by iterating through
+            print("not implemented to scroll")
+            self.scrollProxy!.scrollTo(1)
+        case .selectedFriend:
+            if self.selectedFriendIndex == nil {
+                print("can't scroll, no selected friend")
+                return
+            }
+            
+            if let indexOfFriend = self.authSessionStore.friendsArr.firstIndex(of: self.selectedFriendIndex!) {
+                print("scrolling to \(indexOfFriend)")
+                self.scrollProxy!.scrollTo(indexOfFriend, anchor: UnitPoint.center)
+            } else {
+                print("could not find friend to scroll to")
+            }
+        }
     }
     
     private func haveNewMessageFromFriend(friendDbId: String) -> Bool {
