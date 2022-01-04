@@ -29,7 +29,7 @@ struct WavesGlassBackgroundView: View {
             LinearGradient(gradient: Gradient(
                 colors: [NirvanaColor.white.opacity(0), NirvanaColor.white.opacity(1.0)]), startPoint: .bottom, endPoint: .top)
             
-            getWave(peakPercentage: 0.4, troughPercentage: 0.65, peakAltercation: baseLineY + 100, troughAltercation: baseLineY - 90)
+            getWave(peakPercentage: 0.4, troughPercentage: 0.65, peakAltercation: baseLineY, troughAltercation: baseLineY - 50)
                 .foregroundColor(NirvanaColor.dimTeal.opacity(0.5))
                 .blur(radius:2)
                 .offset(x: self.animateWaves ? -1*universalSize.width : 0)
@@ -38,7 +38,7 @@ struct WavesGlassBackgroundView: View {
                     value: self.animateWaves
                 )
             
-            getWave(peakPercentage: 0.2, troughPercentage: 0.75, peakAltercation: baseLineY - 50, troughAltercation: baseLineY + 100)
+            getWave(peakPercentage: 0.2, troughPercentage: 0.75, peakAltercation: baseLineY - 50, troughAltercation: baseLineY + 50)
                 .foregroundColor(Color.orange.opacity(0.3))
                 .blur(radius:2)
                 .offset(x: self.animateWaves ? -1*universalSize.width : 0)
@@ -47,7 +47,7 @@ struct WavesGlassBackgroundView: View {
                     value: self.animateWaves
                 )
             
-            getWave(peakPercentage: 0.25, troughPercentage: 0.75, peakAltercation: baseLineY + 70, troughAltercation: baseLineY - 100)
+            getWave(peakPercentage: 0.45, troughPercentage: 0.75, peakAltercation: baseLineY + 50, troughAltercation: baseLineY - 60)
                 .foregroundColor(NirvanaColor.teal.opacity(0.3))
                 .blur(radius:2)
                 .offset(x: self.animateWaves ? -1*universalSize.width : 0)
