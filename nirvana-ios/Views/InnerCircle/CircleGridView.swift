@@ -160,8 +160,6 @@ struct CircleGridView: View {
                             
                             ZStack(alignment: .topTrailing) {
                                 // bubble color
-                                Text("\(adjustedValue)")
-                                
                                 Circle()
                                     .foregroundColor(self.getBubbleTint(friendDbId: friendId))
                                     .blur(radius: 8)
@@ -285,8 +283,6 @@ struct CircleGridView: View {
                             let scale = getScale(proxy: gridProxy, itemNumber: adjustedValue, userId: inboxUserId) * 0.75 // don't want inbox to match size of active
                                                         
                             ZStack(alignment: .topTrailing) {
-                                Text("\(adjustedValue)")
-                                
                                 Image(systemName: "arrow.down.left.circle.fill")
                                     .foregroundColor(Color.orange)
                                     .font(.title)
@@ -351,8 +347,6 @@ struct CircleGridView: View {
                             self.navigationStack.push(FindFriendsView())
                         } label: {
                             ZStack {
-                                Text("\(staleAdjustedValue)")
-                                
                                 Image(systemName: "person.badge.plus")
                                     .foregroundColor(NirvanaColor.dimTeal)
                                     .font(.largeTitle)
@@ -397,6 +391,7 @@ struct CircleGridView: View {
                 self.innerCircleVM.cacheIncomingMessages(friendMessagesDict: self.authSessionStore.relevantMessagesByUserDict)
             }
             .onChange(of: self.authSessionStore.friendsArr) {_ in
+                // update the grid as arrays have changed
                 self.initialGridId = UUID().uuidString
             }
         } // scrollview reader
