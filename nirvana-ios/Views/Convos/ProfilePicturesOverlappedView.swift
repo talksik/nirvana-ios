@@ -20,7 +20,7 @@ struct ProfilePicturesOverlappedView: View {
     var body: some View {
         ZStack {
             ForEach(0..<users.count, id: \.self) {userIndex in
-                Image(users[userIndex].avatar ?? Avatars.avatarSystemNames[1])
+                Image(users[userIndex].avatar ?? SystemImages.avatars[1])
                     .resizable()
                     .scaledToFit()
                     .background(NirvanaColor.dimTeal)

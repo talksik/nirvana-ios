@@ -108,7 +108,7 @@ struct ListContactRow: View {
         if contact.isExisting { // add to circle
             // TODO: check if this contact is already in user's circle
             HStack(alignment: .center, spacing: 0) {
-                Image(contact.user?.avatar ?? Avatars.avatarSystemNames[1])
+                Image(contact.user?.avatar ?? SystemImages.avatars[1])
                     .resizable()
                     .scaledToFit()
                     .clipShape(Circle())
@@ -167,7 +167,7 @@ struct ListContactRow: View {
         }
         else { // invite button to text the person
             HStack(alignment: .center, spacing: 0) {
-                Image(Avatars.avatarSystemNames[1])
+                Image(SystemImages.avatars[1])
                     .resizable()
                     .scaledToFit()
                     .clipShape(Circle())

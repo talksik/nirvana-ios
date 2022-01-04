@@ -36,7 +36,7 @@ class AddBasicInfoViewModel : ObservableObject {
             completion()
             return
         }
-        if !Avatars.avatarSystemNames.contains(currUser.avatar!) {
+        if !SystemImages.avatars.contains(currUser.avatar!) {
             self.state = .failed("Invalid avatar selected!")
             completion()
             return

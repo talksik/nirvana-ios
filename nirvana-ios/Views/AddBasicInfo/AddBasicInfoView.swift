@@ -63,8 +63,8 @@ struct AddBasicInfoView: View {
                 // Horizontal scroll view to allow user to select the avatar he or she wants
                 ScrollView([.horizontal, .vertical], showsIndicators: false) {
                     LazyVGrid(columns: columns) {
-                        ForEach(0..<Avatars.avatarSystemNames.count, id: \.self) { index in
-                            Image(Avatars.avatarSystemNames[index])
+                        ForEach(0..<SystemImages.avatars.count, id: \.self) { index in
+                            Image(SystemImages.avatars[index])
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 50, height: 50, alignment: .center)
@@ -107,7 +107,7 @@ struct AddBasicInfoView: View {
                 // button to save information
                 Button {
                     var updatedUser = self.authSessionStore.user
-                    updatedUser?.avatar = Avatars.avatarSystemNames[self.selectedAvatarIndex]
+                    updatedUser?.avatar = SystemImages.avatars[self.selectedAvatarIndex]
                     updatedUser?.nickname = self.nickname
                     
                     print("attempting to save information \(updatedUser)")
@@ -137,7 +137,7 @@ struct AddBasicInfoView: View {
             self.nickname = self.authSessionStore.user?.nickname ?? ""
             
             if self.authSessionStore.user?.avatar != nil { // if user has previously selected an avatar
-                self.selectedAvatarIndex = Avatars.avatarSystemNames.firstIndex(of: (self.authSessionStore.user?.avatar)!) ?? 0 // 0 in case the system names doesn't have it anymore
+                self.selectedAvatarIndex = SystemImages.avatars.firstIndex(of: (self.authSessionStore.user?.avatar)!) ?? 0 // 0 in case the system names doesn't have it anymore
             }
         }
     }

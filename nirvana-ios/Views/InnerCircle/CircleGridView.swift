@@ -176,7 +176,7 @@ struct CircleGridView: View {
                                 UserStatusView(status: self.authSessionStore.relevantUsersDict[friendId]?.userStatus, size: 20, padding: 5)
 
                                 // inside avatar
-                                Image(self.authSessionStore.relevantUsersDict[friendId]?.avatar ?? Avatars.avatarSystemNames[0])
+                                Image(self.authSessionStore.relevantUsersDict[friendId]?.avatar ?? SystemImages.avatars[0])
                                     .resizable()
                                     .scaledToFit()
                                     .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 20)
@@ -289,7 +289,7 @@ struct CircleGridView: View {
                                     .blur(radius: 5)
                                     .cornerRadius(100)
                                     
-                                Image(self.authSessionStore.relevantUsersDict[inboxUserId]?.avatar ?? Avatars.avatarSystemNames[0])
+                                Image(self.authSessionStore.relevantUsersDict[inboxUserId]?.avatar ?? SystemImages.avatars[0])
                                     .resizable()
                                     .scaledToFit()
                                     .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 20)
@@ -481,7 +481,7 @@ struct CircleGridView: View {
     
     private func getBubbleTint(convoId: String?) -> Color {
         if convoId != nil && convoId == self.convoVM.selectedConvoId {
-            return NirvanaColor.teal.opacity(0.7)
+            return Color.green
         }
         
         return NirvanaColor.dimTeal.opacity(0.2)

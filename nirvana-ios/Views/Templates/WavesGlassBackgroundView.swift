@@ -15,20 +15,25 @@ struct WavesGlassBackgroundView: View {
     var isRecording: Bool = false
     
     @State var animateWaves = false
+    @State var backgroundImage = ""
     
     let recordingColors = [NirvanaColor.solidBlue, NirvanaColor.dimTeal, Color.orange.opacity(0.8), NirvanaColor.teal.opacity(0.7), NirvanaColor.teal.opacity(0.7), NirvanaColor.solidTeal.opacity(0.7), NirvanaColor.solidBlue]
     let normalColors = [NirvanaColor.solidBlue, NirvanaColor.dimTeal, Color.orange.opacity(0.4), NirvanaColor.teal.opacity(0.5), NirvanaColor.teal.opacity(0.3), NirvanaColor.solidTeal.opacity(0.3), NirvanaColor.solidBlue]
     
-    var body: some View {        
+    var body: some View {
         ZStack {
             AngularGradient(
                 gradient: Gradient(
                     colors: self.isRecording ? recordingColors : normalColors),
                 center: .bottom,
                 angle: .degrees(120))
+            
+            Image("beach2")
+                .resizable()
+                
              
             LinearGradient(gradient: Gradient(
-                colors: [NirvanaColor.white.opacity(0), NirvanaColor.white.opacity(1.0)]), startPoint: .bottom, endPoint: .top)
+                colors: [NirvanaColor.white.opacity(0.2), NirvanaColor.white.opacity(1.0)]), startPoint: .bottom, endPoint: .top)
             
             getWave(peakPercentage: 0.4, troughPercentage: 0.65, peakAltercation: baseLineY, troughAltercation: baseLineY - 50)
                 .foregroundColor(NirvanaColor.dimTeal.opacity(0.5))
@@ -62,6 +67,10 @@ struct WavesGlassBackgroundView: View {
         .onAppear() {
             // start repeat animation for waves
             self.animateWaves = true
+            
+            // randomly choose a wallpaper out of all available
+            let randomInt = Int.random(in: 0..<SystemImages.wallpapers.count)
+            self.backgroundImage = SystemImages.wallpapers[randomInt]
         }
     }
     
