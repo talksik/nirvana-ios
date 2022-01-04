@@ -14,7 +14,13 @@ struct SystemImages {
         "clouds2",
         "waves",
         "beach",
-        "beach2"
+        "beach2",
+        "beach3",
+        "flowers",
+        "mountains",
+        "snowwhite",
+        "snowwhite2",
+        "glosspink"
     ]
     
     static let avatars = [

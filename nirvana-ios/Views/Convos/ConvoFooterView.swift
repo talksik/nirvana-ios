@@ -107,7 +107,7 @@ struct ConvoFooterView: View {
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: 60) // 60 is the height of the footer control big circle
-                .background(Color.white.opacity(0.5))
+                .background(Color.white.opacity(0.8))
                 .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
                 .shadow(color: Color.black.opacity(0.25), radius: 30, x: 0, y: 20)
             }
