@@ -16,9 +16,10 @@ struct WavesGlassBackgroundView: View {
     
     @State var animateWaves = false
     
-    var body: some View {
-        let recordingColors = [NirvanaColor.solidBlue, NirvanaColor.dimTeal, Color.orange.opacity(0.8), NirvanaColor.teal.opacity(0.7), NirvanaColor.teal.opacity(0.7), NirvanaColor.solidTeal.opacity(0.7), NirvanaColor.solidBlue]
-        let normalColors = [NirvanaColor.solidBlue, NirvanaColor.dimTeal, Color.orange.opacity(0.4), NirvanaColor.teal.opacity(0.5), NirvanaColor.teal.opacity(0.3), NirvanaColor.solidTeal.opacity(0.3), NirvanaColor.solidBlue]
+    let recordingColors = [NirvanaColor.solidBlue, NirvanaColor.dimTeal, Color.orange.opacity(0.8), NirvanaColor.teal.opacity(0.7), NirvanaColor.teal.opacity(0.7), NirvanaColor.solidTeal.opacity(0.7), NirvanaColor.solidBlue]
+    let normalColors = [NirvanaColor.solidBlue, NirvanaColor.dimTeal, Color.orange.opacity(0.4), NirvanaColor.teal.opacity(0.5), NirvanaColor.teal.opacity(0.3), NirvanaColor.solidTeal.opacity(0.3), NirvanaColor.solidBlue]
+    
+    var body: some View {        
         ZStack {
             AngularGradient(
                 gradient: Gradient(
