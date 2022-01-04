@@ -63,7 +63,7 @@ class InnerCircleViewModel: NSObject, ObservableObject {
             case .problemSendingClip:
                 return AlertToast(displayMode: .hud, type: .error(Color.orange), title: "problem sending clip", subTitle: "please try again")
             case .startedClip:
-                return AlertToast(displayMode: .hud, type: .systemImage("waveform.and.mic", Color.orange), subTitle: "you're on")
+                return AlertToast(displayMode: .hud, type: .systemImage("waveform.and.mic", Color.orange))
             default:
                 return AlertToast(displayMode: .hud, type: .error(Color.orange), title: "Something went wrong ‼️")
             }
@@ -74,6 +74,7 @@ class InnerCircleViewModel: NSObject, ObservableObject {
     
     var queuePlayer = AVQueuePlayer()
     var avplayer: AVPlayer?
+    
     private var cachedPlayerItemsDict: [String: URL] = [:] // firebase audio url to local url
     
     @Published var isRecording : Bool = false

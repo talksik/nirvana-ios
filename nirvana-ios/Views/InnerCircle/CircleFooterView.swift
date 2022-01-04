@@ -105,36 +105,40 @@ struct CircleFooterView: View {
             x:0,
             y:self.selectedFriendIndex == nil ? 150 : 0
         )
-        .onChange(of: self.selectedFriendIndex) {newValue in
-            // update meta data based on which friend was selected
-            let myId = self.authSessionStore.user?.id
-            
-            // reset the selected options to start fresh
-            self.selectedFriend = nil
-            self.myTurn = false
-            self.convoRelativeTime = ""
-                        
-            // set convo moment/relative time to show
-            if newValue != nil && myId != nil {
-                self.selectedFriend = self.authSessionStore.relevantUsersDict[newValue!]
-                
-                // get the latest message's timestamp...will be the first in list now
-                let lastMessage = self.authSessionStore.relevantMessagesByUserDict[self.selectedFriend!.id!]?.first
-                if lastMessage != nil {
-                    // figure out whose turn it is
-                    self.myTurn = lastMessage!.receiverId == myId! ? true : false
-                                        
-                    // ask for the full relative date
-                    let formatter = RelativeDateTimeFormatter()
-                    formatter.unitsStyle = .full
-
-                    let relativeDate = formatter.localizedString(for: lastMessage?.sentTimestamp ?? Date(), relativeTo: Date())
-
-                    print("Relative date is: \(relativeDate)")
+        .onChange(of: self.selectedFriendIndex) {_ in
+            self.updateLocals()
+        }
+    }
+    
+    func updateLocals() {
+        // update meta data based on which friend was selected
+        let myId = AuthSessionStore.getCurrentUserId()
+        
+        // reset the selected options to start fresh
+        self.selectedFriend = nil
+        self.myTurn = false
+        self.convoRelativeTime = ""
                     
-                    // setting the state for ui to update
-                    self.convoRelativeTime = self.myTurn! ? "received " + relativeDate: "sent " + relativeDate
-                }
+        // set convo moment/relative time to show
+        if myId != nil && self.selectedFriendIndex != nil {
+            self.selectedFriend = self.authSessionStore.relevantUsersDict[self.selectedFriendIndex!]
+            
+            // get the latest message's timestamp...will be the first in list now
+            let lastMessage = self.authSessionStore.relevantMessagesByUserDict[self.selectedFriend!.id!]?.first
+            if lastMessage != nil {
+                // figure out whose turn it is
+                self.myTurn = lastMessage!.receiverId == myId! ? true : false
+                                    
+                // ask for the full relative date
+                let formatter = RelativeDateTimeFormatter()
+                formatter.unitsStyle = .full
+
+                let relativeDate = formatter.localizedString(for: lastMessage?.sentTimestamp ?? Date(), relativeTo: Date())
+
+                print("Relative date is: \(relativeDate)")
+                
+                // setting the state for ui to update
+                self.convoRelativeTime = self.myTurn! ? "received " + relativeDate: "sent " + relativeDate
             }
         }
     }

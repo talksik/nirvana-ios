@@ -34,6 +34,7 @@ struct CircleGridView: View {
         count: totalColumns)
     
     @Binding var selectedFriendIndex: String?
+    @State var lastPersonIdSentMessageTo: String?
     
     private let big:CGFloat = 1
     private let medium:CGFloat = 0.9
@@ -157,7 +158,8 @@ struct CircleGridView: View {
                                 
                                 if self.haveNewMessageFromFriend(friendDbId: friendId) {
                                     ProgressBarView(progress: self.selectedFriendIndex == friendId ? self.innerCircleVM.messagesListeningProgress : Float(1), color: Color.orange)
-                                } else if self.selectedFriendIndex == friendId {
+                                }
+                                else if friendId == self.lastPersonIdSentMessageTo {  // show that I sent a message to the last person I sent a message to
                                     ProgressBarView(progress: self.innerCircleVM.toast == InnerCircleViewModel.Toast.clipSent ? Float(1) : Float(0), color: NirvanaColor.dimTeal)
                                 }
                                 
@@ -252,7 +254,8 @@ struct CircleGridView: View {
                                         // stop recording
                                         print("stopping recording")
                                         
-//                                        self.selectedFriendIndex = nil
+                                        self.lastPersonIdSentMessageTo = self.selectedFriendIndex
+                                        self.selectedFriendIndex = nil
                                         
                                         self.innerCircleVM.stopRecording(sender: self.authSessionStore.user!, receiver: self.authSessionStore.relevantUsersDict[friendId]!)
                                         
@@ -360,7 +363,6 @@ struct CircleGridView: View {
                 } //lazygrid // TODO: add padding based on if we are on any cornering item to allow the bubble to enlargen
                 .padding(.trailing, Self.size / 2 + Self.spacingBetweenColumns / 2) // because of the offset of last column
                 .padding(.top, Self.size / 2 + Self.spacingBetweenRows / 2) // because we are going under the nav bar
-//                .id(UUID())
             }// scrollview
             .onAppear {
                 // scrolling to first person in grid
