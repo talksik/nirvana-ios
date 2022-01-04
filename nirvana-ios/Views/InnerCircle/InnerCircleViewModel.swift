@@ -168,14 +168,7 @@ extension InnerCircleViewModel {
                             switch res {
                             case .success:
                                 // play woosh
-                                if let wooshFilePath = URL(string: Bundle.main.path(forResource: "woosh", ofType: "mp3") ?? "") {
-                                    print(wooshFilePath)
-                                    
-                                    self?.stopPlayingAnyAudio()
-                                    self?.queuePlayer = AVQueuePlayer(playerItem: AVPlayerItem(url: wooshFilePath))
-                                    self?.queuePlayer.automaticallyWaitsToMinimizeStalling = false
-                                    self?.queuePlayer.play()
-                                }
+                                self?.playWoosh()
                                 
                                 self?.toast = .clipSent
                                 
@@ -210,7 +203,23 @@ extension InnerCircleViewModel {
         return FileManager.default.temporaryDirectory
     }
     
-    
+    func playWoosh() {
+        if let wooshFilePath = Bundle.main.url(forResource: "woosh", withExtension: "mp3") {
+            self.stopPlayingAnyAudio()
+            
+            print(wooshFilePath)
+            
+            let player = AVPlayer(url: wooshFilePath)
+            player.play()
+            
+//            self.queuePlayer = AVQueuePlayer(playerItem: AVPlayerItem(url: wooshFilePath))
+//            self.queuePlayer.automaticallyWaitsToMinimizeStalling = false
+//            self.queuePlayer.play()
+        }
+        else {
+            print("didn't get the ath")
+        }
+    }
 
 }
 
