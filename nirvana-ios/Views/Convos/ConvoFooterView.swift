@@ -10,6 +10,7 @@ import SwiftUI
 struct ConvoFooterView: View {
     @EnvironmentObject var convoVM: ConvoViewModel
     @EnvironmentObject var authSessionStore: AuthSessionStore
+    @EnvironmentObject var innerCircleVM: InnerCircleViewModel
     
     @State private var convoRelativeTime = ""
     @State private var selectedConvo: Convo? = nil
@@ -94,8 +95,11 @@ struct ConvoFooterView: View {
                         Button {
                             print("disconnecting user now ")
                             
+                            self.innerCircleVM.setupMessagingAudioSession()
+                            
                             self.convoVM.leaveConvo()
-                                                    
+                            
+                            
                             // show success or failure toast
                         } label: {
                             Label("Call", systemImage: "powerplug.fill")

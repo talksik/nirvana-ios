@@ -121,7 +121,7 @@ struct CircleGridView: View {
                             x: honeycombOffSetX(value),
                             y: 0
                         )
-                        .id("\(value)") // id for scrollviewreader
+//                        .id("\(value)") // id for scrollviewreader
                         .frame(height: Self.size)
                         .onTapGesture {
                             // if not in a call already

@@ -105,6 +105,7 @@ struct InnerCircleView: View {
             
             ConvoFooterView()
                 .environmentObject(self.convoViewModel)
+                .environmentObject(self.innerCircleVM)
         }
         .alert(self.alertText, isPresented: self.$alertActive) {
 

@@ -97,6 +97,13 @@ class InnerCircleViewModel: NSObject, ObservableObject {
     override init() {
         super.init()
         
+        self.setupMessagingAudioSession()
+    }
+}
+
+// audio stuff
+extension InnerCircleViewModel {
+    func setupMessagingAudioSession() {
         // separate set up for listening vs recording
         do {
             try audioSession.setCategory(.playAndRecord, mode: .default, options: [.duckOthers, .allowBluetooth, .allowBluetoothA2DP])
@@ -108,10 +115,7 @@ class InnerCircleViewModel: NSObject, ObservableObject {
             print("Can not setup the Recording")
         }
     }
-}
-
-// audio stuff
-extension InnerCircleViewModel {
+    
     func startRecording() {
         let filePath = getTemporaryDirectory().appendingPathComponent("\(UUID().uuidString).m4a")
         
